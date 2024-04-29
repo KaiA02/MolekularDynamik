@@ -77,21 +77,48 @@ void calculateF() {
   iterator = particles.begin();
 
   for (auto &p1 : particles) {
+    std::array<double, 3> newForce = {0.0, 0.0, 0.0};
+
     for (auto &p2 : particles) {
-      // @TODO: insert calculation of forces here!
+      // @DONE: insert calculation of forces here!
+      if (&p1 != &p2) {
+        double distSquared = 0.0;
+        for (int i = 0; i < 3; ++i) {
+          distSquared += std::pow(p1.getX()[i] - p2.getX()[i], 2);
+        }
+
+        double distCubed = std::pow(distSquared, 1.5);
+
+        double prefactor = (p1.getM() * p2.getM()) / distCubed;
+
+        for (int i = 0; i < 3; ++i) {
+          newForce[i] += prefactor * (p2.getX()[i] - p1.getX()[i]);
+        }
+      }
     }
+    p1.setF(newForce);
   }
 }
 
 void calculateX() {
   for (auto &p : particles) {
-    // @TODO: insert calculation of position updates here!
+    // @DONE: insert calculation of position updates here!
+    std::array<double, 3> newPosition;
+    for (int i = 0; i < 3; ++i) {
+        newPosition[i] = p.getX()[i] + delta_t * p.getV()[i] + delta_t * delta_t * (p.getF()[i] / (2 * p.getM()));
+    }
+    p.setX(newPosition);
   }
 }
 
 void calculateV() {
   for (auto &p : particles) {
-    // @TODO: insert calculation of veclocity updates here!
+    // @DONE: insert calculation of veclocity updates here!
+    std::array<double, 3> newVelocity;
+    for (int i = 0; i < 3; ++i) {
+      newVelocity[i] = p.getV()[i] + delta_t * (p.getF()[i] + p.getOldF()[i]) / (2 * p.getM()); //getOldF() ist hier vielleicht falsch
+    }
+    p.setV(newVelocity);
   }
 }
 
