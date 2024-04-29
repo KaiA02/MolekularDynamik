@@ -72,6 +72,21 @@ public:
   bool operator==(Particle &other);
 
   std::string toString() const;
+
+  //ergänzt für Assigment 1, Task 3, erste Teilaufgabe
+  void setX(const std::array<double, 3> &newPosition) {
+      x = newPosition;
+  }
+
+  void setV(const std::array<double, 3> &newVelocity) {
+      v = newVelocity;
+  }
+
+  void setF(const std::array<double, 3> &newForce) {
+      old_f = f;
+	  f = newForce;
+  }
+
 };
 
 std::ostream &operator<<(std::ostream &stream, Particle &p);
