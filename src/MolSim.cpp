@@ -73,6 +73,13 @@ int main(int argc, char *argsv[]) {
   return 0;
 }
 
+
+/**
+ * @brief the following function calculates the new forces
+ *
+ * therefore we use an interator and also for-loops
+ * to calculate the physics behind the forces
+ */
 void calculateF() {
   std::list<Particle>::iterator iterator;
   iterator = particles.begin();
@@ -101,6 +108,12 @@ void calculateF() {
   }
 }
 
+/**
+ * @brief the following function calculates the new positions
+ *
+ * therefore we use a for-loops
+ * to calculate the physics behind the positions (Velocity-Störmer-Verlet)
+ */
 void calculateX() {
   for (auto &p : particles) {
     // @DONE: insert calculation of position updates here!
@@ -112,6 +125,12 @@ void calculateX() {
   }
 }
 
+/**
+ * @brief the following function calculates the new velocities
+ *
+ * therefore we use a for-loops
+ * to calculate the physics behind the velocities (Velocity-Störmer-Verlet)
+ */
 void calculateV() {
   for (auto &p : particles) {
     // @DONE: insert calculation of veclocity updates here!
@@ -123,6 +142,13 @@ void calculateV() {
   }
 }
 
+/**
+ * @brief the following function plots the particles
+ *
+ * in this funnction the particles are plotted in xyz files and also in vtu files
+ *
+ * @param iteration is the number of iterations of the particles
+ */
 void plotParticles(int iteration) {
 
   std::string out_name("MD_vtk");

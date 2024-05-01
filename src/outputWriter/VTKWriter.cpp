@@ -52,13 +52,17 @@ void VTKWriter::initializeOutput(int numParticles) {
   vtkFile->UnstructuredGrid(unstructuredGrid);
 }
 
+/**
+ * @brief
+ * here we only commented, how binary vtk ouptup could be enabled
+ */
 void VTKWriter::writeFile(const std::string &filename, int iteration) {
   std::stringstream strstr;
   strstr << filename << "_" << std::setfill('0') << std::setw(4) << iteration << ".vtu";
 
   /* binary:
  vtkSmartPointer<vtkXMLUnstructuredGridWriter> writer = vtkSmartPointer<vtkXMLUnstructuredGridWriter>::New();
-  writer->SetFileName(strstr.str().c_str());
+ writer->SetFileName(strstr.str().c_str());
 #if VTK_MAJOR_VERSION <= 5
   writer->SetInput(vtkFile->GetOutput());
 #else
