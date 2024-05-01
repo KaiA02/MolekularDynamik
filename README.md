@@ -3,10 +3,12 @@ MolSim
 
 "GroupB"
 
-ProgrammAusführung: zuerst in cmake rein, dann:
+ProgrammAusführung: 
 
-1.cmake ..
+1. mkdir build
 
-2.make
+1. cmake ..
 
-3./MolSim
+2. make
+
+3. ./MolSim input
