@@ -9,4 +9,4 @@ ProgrammAusführung:
 2. cmake ..
 3. make
 4. ./MolSim input
-5. make doc_doxygen
+5. make doc
