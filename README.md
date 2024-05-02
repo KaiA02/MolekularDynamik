@@ -5,8 +5,8 @@ MolSim
 
 ProgrammAusführung: 
 
-1. run mkdir build
-2. cd build
-3. run cmake ..
-4. run make
-5. run ./MolSim input
+1. mkdir build && cd $_
+2. cmake ..
+3. make
+4. ./MolSim input
+5. make doc_doxygen
