@@ -60,17 +60,6 @@ void VTKWriter::writeFile(const std::string &filename, int iteration) {
   std::stringstream strstr;
   strstr << filename << "_" << std::setfill('0') << std::setw(4) << iteration << ".vtu";
 
-  /* binary:
- vtkSmartPointer<vtkXMLUnstructuredGridWriter> writer = vtkSmartPointer<vtkXMLUnstructuredGridWriter>::New();
- writer->SetFileName(strstr.str().c_str());
-#if VTK_MAJOR_VERSION <= 5
-  writer->SetInput(vtkFile->GetOutput());
-#else
-  writer->SetInputData(vtkFile->GetOutput());
-#endif
-  writer->SetDataModeToBinary(); // Set binary mode
-  writer->Write();
-  */
   std::ofstream file(strstr.str().c_str());
   VTKFile(file, *vtkFile);
   delete vtkFile;
