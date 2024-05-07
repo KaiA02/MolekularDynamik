@@ -1,6 +1,7 @@
 
 #include "FileReader.h"
 #include "outputWriter/XYZWriter.h"
+#include "outputWriter/VTKWriter.h" //Task 3
 #include "utils/ArrayUtils.h"
 
 #include <iostream>
@@ -16,24 +17,20 @@ void calculateF();
 /**
  * calculate the position for all particles
  */
-void calculateX();
+void calculateX(double delta_t);
 
 /**
  * calculate the position for all particles
  */
-void calculateV();
+void calculateV(double delta_t);
 
 /**
  * plot the particles to a xyz-file
  */
-void plotParticles(int iteration);
+void plotParticles(int iteration, int fileType);
 
-constexpr double start_time = 0;
-constexpr double end_time = 1000;
-constexpr double delta_t = 0.014;
 
-// TODO: what data structure to pick?
-std::list<Particle> particles;
+ParticleContainer particles;
 
 int main(int argc, char *argsv[]) {
 
@@ -46,6 +43,11 @@ int main(int argc, char *argsv[]) {
   FileReader fileReader;
   fileReader.readFile(particles, argsv[1]);
 
+  double start_time = std::stod(argsv[2]);
+  double end_time = std::stod(argsv[3]);
+  double delta_t = std::stod(argsv[4]);
+  int fileType = std::stoi(argsv[5]);
+
   double current_time = start_time;
 
   int iteration = 0;
@@ -53,15 +55,15 @@ int main(int argc, char *argsv[]) {
   // for this loop, we assume: current x, current f and current v are known
   while (current_time < end_time) {
     // calculate new x
-    calculateX();
+    calculateX(delta_t);
     // calculate new f
     calculateF();
     // calculate new v
-    calculateV();
+    calculateV(delta_t);
 
     iteration++;
     if (iteration % 10 == 0) {
-      plotParticles(iteration);
+      plotParticles(iteration, fileType);
     }
     std::cout << "Iteration " << iteration << " finished." << std::endl;
 
@@ -72,15 +74,19 @@ int main(int argc, char *argsv[]) {
   return 0;
 }
 
+
+/**
+ * @brief the following function calculates the new forces
+ *
+ * therefore we use an interator and also for-loops
+ * to calculate the physics behind the forces
+ */
 void calculateF() {
-  std::list<Particle>::iterator iterator;
-  iterator = particles.begin();
 
   for (auto &p1 : particles) {
     std::array<double, 3> newForce = {0.0, 0.0, 0.0};
 
     for (auto &p2 : particles) {
-      // @DONE: insert calculation of forces here!
       if (&p1 != &p2) {
         double distSquared = 0.0;
         for (int i = 0; i < 3; ++i) {
@@ -100,9 +106,14 @@ void calculateF() {
   }
 }
 
-void calculateX() {
+/**
+ * @brief the following function calculates the new positions
+ *
+ * therefore we use a for-loops
+ * to calculate the physics behind the positions (Velocity-Störmer-Verlet)
+ */
+void calculateX(double delta_t) {
   for (auto &p : particles) {
-    // @DONE: insert calculation of position updates here!
     std::array<double, 3> newPosition;
     for (int i = 0; i < 3; ++i) {
         newPosition[i] = p.getX()[i] + delta_t * p.getV()[i] + delta_t * delta_t * (p.getF()[i] / (2 * p.getM()));
@@ -111,21 +122,48 @@ void calculateX() {
   }
 }
 
-void calculateV() {
+/**
+ * @brief the following function calculates the new velocities
+ *
+ * therefore we use a for-loops
+ * to calculate the physics behind the velocities (Velocity-Störmer-Verlet)
+ */
+void calculateV(double delta_t) {
   for (auto &p : particles) {
-    // @DONE: insert calculation of veclocity updates here!
     std::array<double, 3> newVelocity;
     for (int i = 0; i < 3; ++i) {
-      newVelocity[i] = p.getV()[i] + delta_t * (p.getF()[i] + p.getOldF()[i]) / (2 * p.getM()); //getOldF() ist hier vielleicht falsch
+      newVelocity[i] = p.getV()[i] + delta_t * (p.getF()[i] + p.getOldF()[i]) / (2 * p.getM());
     }
     p.setV(newVelocity);
   }
 }
 
-void plotParticles(int iteration) {
+/**
+ * @brief the following function plots the particles
+ *
+ * in this funnction the particles are plotted in xyz files and also in vtu files
+ *
+ * @param iteration is the number of iterations of the particles
+ */
+void plotParticles(int iteration, int fileType) {
 
-  std::string out_name("MD_vtk");
+  if(fileType == 2) {
+  std::string out_name("output_xyz");
 
   outputWriter::XYZWriter writer;
   writer.plotParticles(particles, out_name, iteration);
+  }
+
+  else {
+  outputWriter::VTKWriter vtkWriter;
+  int numParticles = particles.size();
+  vtkWriter.initializeOutput(numParticles);
+
+  for (auto &particle : particles) {
+    vtkWriter.plotParticle(particle);
+  }
+
+  std::string filename = "MD_vtk";
+  vtkWriter.writeFile(filename, iteration);
+  }
 }
