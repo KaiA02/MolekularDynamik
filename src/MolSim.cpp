@@ -30,8 +30,7 @@ void calculateV(double delta_t);
 void plotParticles(int iteration, int fileType);
 
 
-// TODO: what data structure to pick?
-std::list<Particle> particles;
+ParticleContainer particles;
 
 int main(int argc, char *argsv[]) {
 

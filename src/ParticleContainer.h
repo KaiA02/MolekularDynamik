@@ -4,7 +4,10 @@
 
 #include <vector>
 #include "Particle.h"
-
+/**
+ * @brief The ParticleContainer class
+ * This class is a container for Particles. It contains a vector of Particles and a 2D vector of pairings.
+ */
 class ParticleContainer {
 public:
     ParticleContainer();
@@ -20,6 +23,12 @@ public:
      */
     void addPairing(int particleIndex1, int particleIndex2);
     const std::vector<Particle>& getParticles() const;
+	int size() const;
+
+	std::vector<Particle>::iterator begin();
+    std::vector<Particle>::iterator end();
+    std::vector<Particle>::const_iterator begin() const;
+    std::vector<Particle>::const_iterator end() const;
 
 private:
     std::vector<Particle> particles;
