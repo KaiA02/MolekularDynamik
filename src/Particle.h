@@ -73,16 +73,10 @@ public:
 
   std::string toString() const;
 
-  /** @brief deklare setter for the x
-   */
   void setX(const std::array<double, 3> &newPosition);
 
- /** @brief deklare setter for the v
-  */
   void setV(const std::array<double, 3> &newVelocity);
 
- /** @brief deklare setter for the F
-  */
   void setF(const std::array<double, 3> &newForce);
 
 };

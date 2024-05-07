@@ -81,8 +81,6 @@ int main(int argc, char *argsv[]) {
  * to calculate the physics behind the forces
  */
 void calculateF() {
-  std::list<Particle>::iterator iterator;
-  iterator = particles.begin();
 
   for (auto &p1 : particles) {
     std::array<double, 3> newForce = {0.0, 0.0, 0.0};
@@ -133,7 +131,7 @@ void calculateV() {
   for (auto &p : particles) {
     std::array<double, 3> newVelocity;
     for (int i = 0; i < 3; ++i) {
-      newVelocity[i] = p.getV()[i] + delta_t * (p.getF()[i] + p.getOldF()[i]) / (2 * p.getM()); //getOldF() ist hier vielleicht falsch
+      newVelocity[i] = p.getV()[i] + delta_t * (p.getF()[i] + p.getOldF()[i]) / (2 * p.getM());
     }
     p.setV(newVelocity);
   }
@@ -148,7 +146,7 @@ void calculateV() {
  */
 void plotParticles(int iteration) {
 
-  std::string out_name("MD_vtk");
+  std::string out_name("output_xyz");
 
   outputWriter::XYZWriter writer;
   writer.plotParticles(particles, out_name, iteration);
@@ -162,6 +160,6 @@ void plotParticles(int iteration) {
     vtkWriter.plotParticle(particle);
   }
 
-  std::string filename = "output";
+  std::string filename = "MD_vtk";
   vtkWriter.writeFile(filename, iteration);
 }

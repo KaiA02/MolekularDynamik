@@ -70,26 +70,14 @@ std::ostream &operator<<(std::ostream &stream, Particle &p) {
   return stream;
 }
 
-/** @brief implement setter for the attribute x
-   * ergänzt für Assigment 1, Task 3, erste Teilaufgabe
-   * @param only one parameter, which is an array and also the new position
-   */
 void Particle::setX(const std::array<double, 3> &newPosition) {
   x = newPosition;
 }
 
-/** @brief implement setter for the attribute v
-   * ergänzt für Assigment 1, Task 3, erste Teilaufgabe
-   * @param only one parameter, which is an array and also the new velocity
-   */
 void Particle::setV(const std::array<double, 3> &newVelocity) {
   v = newVelocity;
 }
 
-/** @brief implement setter for the attribute f
-   * ergänzt für Assigment 1, Task 3, erste Teilaufgabe
-   * @param only one parameter, which is an array and also the new force
-   */
 void Particle::setF(const std::array<double, 3> &newForce) {
   old_f = f;
   f = newForce;

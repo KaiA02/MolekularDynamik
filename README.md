@@ -3,10 +3,10 @@ MolSim
 
 "GroupB"
 
-ProgrammAusführung: 
+Program Execution: 
 
-1. mkdir build && cd $_
-2. cmake ..
-3. make
-4. ./MolSim input
-5. make doc
+mkdir build && cd $_
+cmake ..
+make
+./MolSim input
+make doc
