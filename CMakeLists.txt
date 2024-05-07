@@ -53,3 +53,25 @@ target_compile_options(MolSim
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules)
 
 include(doxygen)
+
+include(FetchContent)
+FetchContent_Declare(
+        googletest
+        URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
+)
+
+FetchContent_MakeAvailable(googletest)
+
+enable_testing()
+
+add_executable(
+        firstTest
+        src/test/firstTest.cc
+)
+target_link_libraries(
+        firstTest
+        GTest::gtest_main
+)
+
+include(GoogleTest)
+gtest_discover_tests(firstTest)
