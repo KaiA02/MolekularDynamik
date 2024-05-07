@@ -22,6 +22,9 @@ if(BUILD_DOCS)
             VERBATIM
     )
 
+    set(DOXYGEN_CONFIG_FILE "${CMAKE_BINARY_DIR}/Doxyfile")
+    configure_file(${CMAKE_SOURCE_DIR}/Doxyfile ${DOXYGEN_CONFIG_FILE} @ONLY)
+
     # Add custom target for cleaning documentation
     add_custom_target(clean-doc
             COMMAND ${CMAKE_COMMAND} -E remove_directory ${DOXYGEN_OUTPUT_DIR}
