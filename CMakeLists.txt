@@ -39,6 +39,8 @@ target_link_libraries(MolSim
         # stuff that is used in headers and source files
         PUBLIC
             xerces-c
+        PRIVATE
+            spdlog
 )
 
 # activate all compiler warnings. Clean up your code :P
@@ -77,3 +79,5 @@ target_link_libraries(
 
 include(GoogleTest)
 gtest_discover_tests(firstTest)
+
+add_subdirectory(libs/spdlog)
