@@ -12,7 +12,8 @@ if(BUILD_DOCS)
     set(DOXYGEN_OUTPUT_DIR "${CMAKE_BINARY_DIR}/docs" CACHE PATH "Path to output directory for Doxygen")
 
     # Specify existing Doxyfile
-    set(DOXYGEN_CONFIG_FILE "${CMAKE_SOURCE_DIR}/Doxyfile")
+    set(DOXYGEN_CONFIG_FILE "${CMAKE_BINARY_DIR}/Doxyfile")
+    configure_file(${CMAKE_SOURCE_DIR}/Doxyfile ${DOXYGEN_CONFIG_FILE} @ONLY)
 
     # Add custom target for building the documentation
     add_custom_target(doc
@@ -22,8 +23,6 @@ if(BUILD_DOCS)
             VERBATIM
     )
 
-    set(DOXYGEN_CONFIG_FILE "${CMAKE_BINARY_DIR}/Doxyfile")
-    configure_file(${CMAKE_SOURCE_DIR}/Doxyfile ${DOXYGEN_CONFIG_FILE} @ONLY)
 
     # Add custom target for cleaning documentation
     add_custom_target(clean-doc
