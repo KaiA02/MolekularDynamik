@@ -12,6 +12,8 @@
 #include <iostream>
 #include <sstream>
 
+#include "ParticleGenerator.h"
+
 FileReader::FileReader() = default;
 
 FileReader::~FileReader() = default;
@@ -68,3 +70,65 @@ void FileReader::readFile(ParticleContainer& particleContainer, char *filename) 
     exit(-1);
   }
 }
+
+CuboidFileReader::CuboidFileReader() = default;
+
+//CuboidFileReader::~CuboidFileReader() = default;
+
+void CuboidFileReader::readFile(ParticleContainer& particleContainer, char* filename) {
+  std::array<double, 3> x;
+  std::array<double, 3> v;
+  double m;
+  std::array<int, 3> s;
+  int num_particles = 0;
+
+  double h; //distance
+  int e; //Param lennard-jones
+  int o; //Param lennard-jones
+  double mv; //mean velocity
+
+  std::ifstream input_file(filename);
+  std::string tmp_string;
+
+  if (input_file.is_open()) {
+    // Read number of particles
+    getline(input_file, tmp_string);
+    std::istringstream numstream(tmp_string);
+    numstream >> num_particles;
+
+    // Skip empty lines and comment lines
+    while (tmp_string.empty() || tmp_string[0] == '#') {
+      getline(input_file, tmp_string);
+    }
+
+    // Read particles
+    for (int i = 0; i < num_particles; i++) {
+      // Read position and velocity
+      for (auto& xj : x) {
+        input_file >> xj;
+      }
+      for (auto& vj : v) {
+        input_file >> vj;
+      }
+      input_file >> m;
+      for (auto& vs : s) {
+        input_file >> vs;
+      }
+
+
+      // Read additional parameters
+
+      input_file >> h >> e >> o >> mv;
+
+      // Create particle and add to container
+      Particle particle(x, v, m);
+      ParticleGenerator generator(particle, s.at(0), s.at(1), s.at(2), h, mv);
+      particleContainer.addCube(generator.getCube());
+    }
+    input_file.close();
+  } else {
+    std::cerr << "Error: could not open file " << filename << std::endl;
+    exit(EXIT_FAILURE);
+  }
+}
+

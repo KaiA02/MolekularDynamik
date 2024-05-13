@@ -21,3 +21,11 @@ public:
 
   void readFile(ParticleContainer& particleContainer, char *filename);
 };
+
+class CuboidFileReader : public FileReader {
+public:
+    CuboidFileReader();
+    //virtual ~CuboidFileReader();
+    void readFile(ParticleContainer& particleContainer, char *filename);
+
+};

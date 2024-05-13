@@ -40,13 +40,21 @@ int main(int argc, char *argsv[]) {
     std::cout << "./molsym filename" << std::endl;
   }
 
-  FileReader fileReader;
-  fileReader.readFile(particles, argsv[1]);
+
 
   double start_time = std::stod(argsv[2]);
   double end_time = std::stod(argsv[3]);
   double delta_t = std::stod(argsv[4]);
   int fileType = std::stoi(argsv[5]);
+  int fileInputType = std::stoi(argsv[6]);
+
+  if(fileInputType == 1) {
+    FileReader fileReader;
+    fileReader.readFile(particles, argsv[1]);
+  } else {
+    CuboidFileReader fileReader;
+    fileReader.readFile(particles, argsv[1]);
+  }
 
   double current_time = start_time;
 

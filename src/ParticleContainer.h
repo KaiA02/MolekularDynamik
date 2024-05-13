@@ -30,6 +30,8 @@ public:
     std::vector<Particle>::const_iterator begin() const;
     std::vector<Particle>::const_iterator end() const;
 
+    void addCube(std::vector<std::vector<std::vector<Particle>>> cube);
+
 private:
     std::vector<Particle> particles;
     std::vector<std::vector<int>> pairings; // 2D vector of pairings

@@ -79,6 +79,10 @@ public:
 
   void setF(const std::array<double, 3> &newForce);
 
+ void setM(const double &newMass);
+
+ void setType(const int &newType);
+
 };
 
 std::ostream &operator<<(std::ostream &stream, Particle &p);

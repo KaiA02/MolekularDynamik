@@ -82,3 +82,10 @@ void Particle::setF(const std::array<double, 3> &newForce) {
   old_f = f;
   f = newForce;
 }
+
+void Particle::setM(const double &newMass) {
+  m = newMass;
+}
+void Particle::setType(const int &newType) {
+  type = newType;
+}
