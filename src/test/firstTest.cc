@@ -1,6 +1,6 @@
-#include "../../libs/spdlog/include/spdlog/spdlog.h"
 #include "../Particle.h"
 #include "../ParticleContainer.h"
+#include "spdlog/spdlog.h"
 #include <gtest/gtest.h>
 
 // Test case for ParticleContainer

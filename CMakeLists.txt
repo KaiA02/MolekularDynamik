@@ -40,10 +40,8 @@ target_link_libraries(MolSim
         PUBLIC
         xerces-c
         PRIVATE
-        spdlog
+        spdlog::spdlog
 )
-
-include_directories(${PROJECT_SOURCE_DIR}/libs/spdlog/include)
 
 # activate all compiler warnings. Clean up your code :P
 # depending on the compiler different flags are used
@@ -63,8 +61,14 @@ FetchContent_Declare(
         googletest
         URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
 )
+FetchContent_Declare(
+        spdlog
+        GIT_REPOSITORY https://github.com/gabime/spdlog.git
+        GIT_TAG v1.8.5
+)
 
-FetchContent_MakeAvailable(googletest)
+FetchContent_MakeAvailable(googletest
+        spdlog)
 
 enable_testing()
 
@@ -77,9 +81,8 @@ add_executable(
 target_link_libraries(
         firstTest
         GTest::gtest_main
+        spdlog::spdlog
 )
 
 include(GoogleTest)
 gtest_discover_tests(firstTest)
-
-add_subdirectory(libs/spdlog)
