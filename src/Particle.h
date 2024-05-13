@@ -78,7 +78,6 @@ public:
   void setV(const std::array<double, 3> &newVelocity);
 
   void setF(const std::array<double, 3> &newForce);
-
 };
 
 std::ostream &operator<<(std::ostream &stream, Particle &p);
