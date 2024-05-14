@@ -13,10 +13,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Install CMake and build essentials
+      - name: Install CMake and build essentials, Doxygen and Xerces
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake g++ make doxygen
+          sudo apt-get install -y cmake g++ make doxygen libxerces-c-dev
 
       - name: Build with AddressSanitizer
         run: |
