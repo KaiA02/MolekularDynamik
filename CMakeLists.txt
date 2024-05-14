@@ -78,3 +78,5 @@ target_link_libraries(
 include(GoogleTest)
 include(CTest)
 gtest_discover_tests(firstTest)
+
+set(MEMORYCHECK_COMMAND valgrind)
