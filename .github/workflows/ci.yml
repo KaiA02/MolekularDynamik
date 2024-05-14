@@ -10,27 +10,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Install CMake and build essentials
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y cmake g++ make
+      - name: Install CMake and build essentials, Doxygen and Xerces
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake g++ make doxygen libxerces-c-dev valgrind
 
-    - name: Build with AddressSanitizer
-      run: |
-        mkdir build
-        cd build
-        cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="-fsanitize=address" ..
-        make
+      - name: Build with AddressSanitizer
+        run: |
+          mkdir build
+          cd build
+          cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="-fsanitize=address" ..
+          make
 
-    - name: Memory access error check
-      run: |
-        cd build
-        ctest -T memcheck # Assuming you're using CTest for testing memory errors
+      - name: Memory access error check
+        run: |
+          cd build
+          ctest -T memcheck
 
-    - name: Unit tests
-      run: |
-        cd build
-        ctest # Assuming you're using CTest for running unit tests
+      - name: Unit tests
+        run: |
+          cd build
+          ctest --output-on-failure
