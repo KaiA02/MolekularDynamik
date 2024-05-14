@@ -28,7 +28,7 @@ jobs:
       - name: Memory access error check
         run: |
           cd build
-          ctest -T memcheck # Assuming you're using CTest for testing memory errors
+          ctest -T memcheck
 
       - name: Unit tests
         run: |
