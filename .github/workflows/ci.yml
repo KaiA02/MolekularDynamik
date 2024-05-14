@@ -24,10 +24,10 @@ jobs:
           cd build
           cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="-fsanitize=address" ..
           make
-          
-          #- name: Memory access error check
-          # run: |
-          #  cd build
+
+        #- name: Memory access error check
+        # run: |
+        #  cd build
         # ctest -T memcheck
 
       - name: Unit tests
