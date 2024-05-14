@@ -12,7 +12,6 @@
 
 ParticleGenerator::ParticleGenerator(const Particle& start, int n1, int n2, int n3, double distance, double meanVelocity) {
     std::array<double, 3> maxwellVelocity = maxwellBoltzmannDistributedVelocity(meanVelocity, 3);
-    std::cout << n1 << " " << n2 << " " << n3  << std::endl;
 
     for(int x = 0; x < n1; x++) {
         for(int y = 0; y < n2; y++) {
@@ -23,7 +22,6 @@ ParticleGenerator::ParticleGenerator(const Particle& start, int n1, int n2, int 
                 }
 
                 Particle p({start.getX()[0] + x * distance, start.getX()[1] + y * distance, start.getX()[2] + z * distance}, addedVelocity,start.getM(), start.getType());
-                std::cout << "Particle: " << p.toString() << std::endl;
                 cube.push_back(p);
 
             }

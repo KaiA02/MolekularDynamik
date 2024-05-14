@@ -129,7 +129,6 @@ void CuboidFileReader::readFileCuboid(ParticleContainer& particleContainer, char
         }
         datastream >> m;
         Particle particle(x, v, m);
-        std::cout << "Particle: " << particle.toString() << std::endl;
         ParticleGenerator generator(particle, s.at(0), s.at(1), s.at(2), 1.1225, 0.1);
         particleContainer.addCube(generator.getCube());
 

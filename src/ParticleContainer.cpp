@@ -55,12 +55,7 @@ std::vector<Particle>::const_iterator ParticleContainer::end() const {
 }
 
 void ParticleContainer::addCube(std::vector<Particle> particleCube) {
-    std::cout << particleCube.size() << ": particles are in the cube ------------------------------------------> " << std::endl;
     for(size_t x = 0; x < particleCube.size(); ++x) {
         addParticle(particleCube.at(x));
-        std::cout << particles.size() << "particles added " << std::endl;
-
-
     }
-    std::cout << particles.size() << " particles added to the container ------------------------------------------> " << std::endl;
 }

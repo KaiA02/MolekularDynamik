@@ -35,12 +35,6 @@ ParticleContainer particles;
 int main(int argc, char *argsv[]) {
 
   std::cout << "Hello from MolSim for PSE!" << std::endl;
-  if (argc != 2) {
-    std::cout << "Erroneous programme call! " << std::endl;
-    std::cout << "./molsym filename" << std::endl;
-  }
-
-
 
   double start_time = std::stod(argsv[2]);
   double end_time = std::stod(argsv[3]);
