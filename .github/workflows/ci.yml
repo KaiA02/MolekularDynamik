@@ -33,4 +33,4 @@ jobs:
       - name: Unit tests
         run: |
           cd build
-          ctest # Assuming you're using CTest for running unit tests
+          ctest --output-on-failure
