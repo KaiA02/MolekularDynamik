@@ -30,7 +30,7 @@ public:
     std::vector<Particle>::const_iterator begin() const;
     std::vector<Particle>::const_iterator end() const;
 
-    void addCube(std::vector<std::vector<std::vector<Particle>>> cube);
+    void addCube(std::vector<Particle> particleCube);
 
 private:
     std::vector<Particle> particles;

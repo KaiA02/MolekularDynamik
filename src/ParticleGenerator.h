@@ -10,11 +10,11 @@
 
 class ParticleGenerator {
 private:
-    std::vector<std::vector<std::vector<Particle>>> cube;
+    std::vector<Particle> cube;
 
 public:
-    ParticleGenerator(Particle start, int sizeX, int sizeY, int sizeZ, double distance, double meanVelocity);
-    std::vector<std::vector<std::vector<Particle>>> getCube();
+    ParticleGenerator(const Particle& start, int sizeX, int sizeY, int sizeZ, double distance, double meanVelocity);
+    std::vector<Particle> getCube();
 
 };
 

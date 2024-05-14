@@ -52,8 +52,9 @@ int main(int argc, char *argsv[]) {
     FileReader fileReader;
     fileReader.readFile(particles, argsv[1]);
   } else {
+
     CuboidFileReader fileReader;
-    fileReader.readFile(particles, argsv[1]);
+    fileReader.readFileCuboid(particles, argsv[1]);
   }
 
   double current_time = start_time;
@@ -72,9 +73,9 @@ int main(int argc, char *argsv[]) {
     iteration++;
     if (iteration % 10 == 0) {
       plotParticles(iteration, fileType);
-    }
-    std::cout << "Iteration " << iteration << " finished." << std::endl;
 
+      //std::cout << "Iteration " << iteration << " finished." << std::endl;
+    }
     current_time += delta_t;
   }
 

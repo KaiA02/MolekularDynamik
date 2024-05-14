@@ -26,6 +26,6 @@ class CuboidFileReader : public FileReader {
 public:
     CuboidFileReader();
     //virtual ~CuboidFileReader();
-    void readFile(ParticleContainer& particleContainer, char *filename);
+    void readFileCuboid(ParticleContainer& particleContainer, char *filename);
 
 };

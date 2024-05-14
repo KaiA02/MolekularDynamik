@@ -2,6 +2,8 @@
 
 #include "ParticleContainer.h"
 
+#include <iostream>
+
 // Constructor (if needed)
 ParticleContainer::ParticleContainer() {
     // Initialize any other members if necessary
@@ -52,12 +54,13 @@ std::vector<Particle>::const_iterator ParticleContainer::end() const {
     return particles.end();
 }
 
-void ParticleContainer::addCube(std::vector<std::vector<std::vector<Particle>>> cube) {
-    for(int x = 0; x < cube.size(); ++x) {
-        for(int y = 0; y < cube[0].size(); ++y) {
-            for(int z = 0; z < cube[0][0].size(); ++z) {
-                addParticle(cube[x][y][z]);
-            }
-        }
+void ParticleContainer::addCube(std::vector<Particle> particleCube) {
+    std::cout << particleCube.size() << ": particles are in the cube ------------------------------------------> " << std::endl;
+    for(size_t x = 0; x < particleCube.size(); ++x) {
+        addParticle(particleCube.at(x));
+        std::cout << particles.size() << "particles added " << std::endl;
+
+
     }
+    std::cout << particles.size() << " particles added to the container ------------------------------------------> " << std::endl;
 }

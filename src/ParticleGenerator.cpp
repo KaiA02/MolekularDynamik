@@ -3,36 +3,37 @@
 //
 
 #include "ParticleGenerator.h"
+
+#include <iostream>
+#include <ostream>
 #include <utils/MaxwellBoltzmannDistribution.h>
 
 #include <vector>
 
-ParticleGenerator::ParticleGenerator(Particle start, int n1, int n2, int n3, double distance, double meanVelocity) {
+ParticleGenerator::ParticleGenerator(const Particle& start, int n1, int n2, int n3, double distance, double meanVelocity) {
     std::array<double, 3> maxwellVelocity = maxwellBoltzmannDistributedVelocity(meanVelocity, 3);
-    for(int x = 0; x < n1; ++x) {
-        for(int y = 0; y < n2; ++y) {
-            for(int z = 0; z < n3; ++z) {
-                Particle p(0);
-                std::array<double, 3> newPosition = {start.getX()[0] + x * distance, start.getX()[1] + y * distance, start.getX()[2] + z * distance};
-                p.setX(newPosition);
+    std::cout << n1 << " " << n2 << " " << n3  << std::endl;
+
+    for(int x = 0; x < n1; x++) {
+        for(int y = 0; y < n2; y++) {
+            for(int z = 0; z < n3; z++) {
                 std::array<double, 3> addedVelocity;
                 for(int i = 0; i < 3; i++) {
                     addedVelocity[i] = start.getV()[i] + maxwellVelocity[i];
                 }
-                p.setV(addedVelocity);
 
-                p.setF(start.getF());
-                p.setM(start.getM());
-                p.setType(start.getType());
-
-                cube[x][y][z] = p;
-
+                Particle p({start.getX()[0] + x * distance, start.getX()[1] + y * distance, start.getX()[2] + z * distance}, addedVelocity,start.getM(), start.getType());
+                std::cout << "Particle: " << p.toString() << std::endl;
+                cube.push_back(p);
 
             }
+
+
         }
+
     }
 }
 
-std::vector<std::vector<std::vector<Particle>>> ParticleGenerator::getCube() {
+std::vector<Particle> ParticleGenerator::getCube() {
     return cube;
 }

@@ -10,14 +10,8 @@
 # * velocities (2 or 3 double values)
 # * mass (1 double value)
 #
-
-
-# xyz-coord     velocity        mass    Size
+# xyz-coord     velocity        size    mass
 2
-0.0 0.0 0.0     0.0 0.0 0.0     1       40 8 1
-15.0 15.0 0.0   0.0 -10.0 0.0   1       8 8 1
+15.0 15.0 0.0   0.0 -10.0 0.0   8.0 8.0 1.0   1
+0.0 0.0 0.0     0.0 0.0 0.0     40.0 8.0 1.0  1
 
-1.1225
-5
-1
-0.1
