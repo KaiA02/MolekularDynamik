@@ -1,6 +1,6 @@
 # make doc_doxygen optional if someone does not have / like doxygen
 
-option(BUILD_DOCS "Build Doxygen documentation" ON)
+option(BUILD_DOCS "Build Doxygen documentation" OFF)
 
 
 # Doxygen custom target
