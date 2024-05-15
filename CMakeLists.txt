@@ -20,7 +20,9 @@ file(GLOB_RECURSE MY_SRC
 )
 
 # create make target
-add_executable(MolSim ${MY_SRC})
+add_executable(MolSim ${MY_SRC}
+        src/ParticleGenerator.cpp
+        src/ParticleGenerator.h)
 
 # set cxx standard. You may raise this if you want.
 target_compile_features(MolSim
@@ -77,6 +79,7 @@ add_executable(
         src/test/firstTest.cc
         src/ParticleContainer.cpp
         src/Particle.cpp
+        src/ParticleGenerator.cpp
 )
 target_link_libraries(
         firstTest
@@ -85,4 +88,7 @@ target_link_libraries(
 )
 
 include(GoogleTest)
+include(CTest)
 gtest_discover_tests(firstTest)
+
+set(MEMORYCHECK_COMMAND valgrind)

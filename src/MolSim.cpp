@@ -41,7 +41,7 @@ int main(int argc, char *argsv[]) {
   }
   spdlog::default_logger()->set_level(spdlog::level::info);
   if (argc > 6){
-    std::string log_level = argsv[6];
+    std::string log_level = argsv[7];
   if (log_level == "trace") {
     spdlog::default_logger()->set_level(spdlog::level::trace);
   }
@@ -69,6 +69,16 @@ int main(int argc, char *argsv[]) {
   double end_time = std::stod(argsv[3]);
   double delta_t = std::stod(argsv[4]);
   int fileType = std::stoi(argsv[5]);
+  int fileInputType = std::stoi(argsv[6]);
+
+  if(fileInputType == 1) {
+    FileReader fileReader;
+    fileReader.readFile(particles, argsv[1]);
+  } else {
+
+    CuboidFileReader fileReader;
+    fileReader.readFileCuboid(particles, argsv[1]);
+  }
 
   double current_time = start_time;
 
@@ -89,6 +99,8 @@ int main(int argc, char *argsv[]) {
     }
     spdlog::trace("Iteration {} finished",iteration);
 
+      //std::cout << "Iteration " << iteration << " finished." << std::endl;
+    }
     current_time += delta_t;
   }
 

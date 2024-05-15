@@ -13,7 +13,7 @@
 
 Particle::Particle(int type_arg) {
   type = type_arg;
-  std::cout << "Particle generated!" << std::endl;
+  //std::cout << "Particle generated!" << std::endl;
   f = {0., 0., 0.};
   old_f = {0., 0., 0.};
 }
@@ -41,6 +41,8 @@ Particle::Particle(std::array<double, 3> x_arg, std::array<double, 3> v_arg,
 }
 
 Particle::~Particle() { spdlog::debug("Particle destroyed"); }
+}
+
 
 const std::array<double, 3> &Particle::getX() const { return x; }
 
@@ -83,3 +85,26 @@ void Particle::setF(const std::array<double, 3> &newForce) {
   old_f = f;
   f = newForce;
 }
+
+void Particle::setM(const double &newMass) {
+  m = newMass;
+}
+void Particle::setType(const int &newType) {
+  type = newType;
+}
+
+bool Particle::operator==(const Particle &other) const {
+  // Vergleiche die Attribute der beiden Partikel
+  if (this->getX() != other.getX()) return false;
+  if (this->getV() != other.getV()) return false;
+  if (this->getF() != other.getF()) return false;
+  if (this->getOldF() != other.getOldF()) return false;
+  if (this->getM() != other.getM()) return false;
+  if (this->getType() != other.getType()) return false;
+
+  // Wenn alle Attribute übereinstimmen, gib true zurück
+  return true;
+}
+
+
+
