@@ -83,6 +83,8 @@ public:
 
  void setType(const int &newType);
 
+ bool operator==(const Particle &other) const;
+
 };
 
 std::ostream &operator<<(std::ostream &stream, Particle &p);

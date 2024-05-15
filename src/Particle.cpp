@@ -89,3 +89,19 @@ void Particle::setM(const double &newMass) {
 void Particle::setType(const int &newType) {
   type = newType;
 }
+
+bool Particle::operator==(const Particle &other) const {
+  // Vergleiche die Attribute der beiden Partikel
+  if (this->getX() != other.getX()) return false;
+  if (this->getV() != other.getV()) return false;
+  if (this->getF() != other.getF()) return false;
+  if (this->getOldF() != other.getOldF()) return false;
+  if (this->getM() != other.getM()) return false;
+  if (this->getType() != other.getType()) return false;
+
+  // Wenn alle Attribute übereinstimmen, gib true zurück
+  return true;
+}
+
+
+

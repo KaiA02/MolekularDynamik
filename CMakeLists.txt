@@ -71,6 +71,7 @@ add_executable(
         src/test/firstTest.cc
         src/ParticleContainer.cpp
         src/Particle.cpp
+        src/ParticleGenerator.cpp
 )
 target_link_libraries(
         firstTest
