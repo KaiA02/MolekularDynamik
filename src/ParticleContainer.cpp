@@ -2,6 +2,8 @@
 
 #include "ParticleContainer.h"
 
+#include <iostream>
+
 // Constructor (if needed)
 ParticleContainer::ParticleContainer() {
     // Initialize any other members if necessary
@@ -50,4 +52,10 @@ std::vector<Particle>::const_iterator ParticleContainer::begin() const {
 
 std::vector<Particle>::const_iterator ParticleContainer::end() const {
     return particles.end();
+}
+
+void ParticleContainer::addCube(std::vector<Particle> particleCube) {
+    for(size_t x = 0; x < particleCube.size(); ++x) {
+        addParticle(particleCube.at(x));
+    }
 }

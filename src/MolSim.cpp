@@ -35,18 +35,21 @@ ParticleContainer particles;
 int main(int argc, char *argsv[]) {
 
   std::cout << "Hello from MolSim for PSE!" << std::endl;
-  if (argc != 2) {
-    std::cout << "Erroneous programme call! " << std::endl;
-    std::cout << "./molsym filename" << std::endl;
-  }
-
-  FileReader fileReader;
-  fileReader.readFile(particles, argsv[1]);
 
   double start_time = std::stod(argsv[2]);
   double end_time = std::stod(argsv[3]);
   double delta_t = std::stod(argsv[4]);
   int fileType = std::stoi(argsv[5]);
+  int fileInputType = std::stoi(argsv[6]);
+
+  if(fileInputType == 1) {
+    FileReader fileReader;
+    fileReader.readFile(particles, argsv[1]);
+  } else {
+
+    CuboidFileReader fileReader;
+    fileReader.readFileCuboid(particles, argsv[1]);
+  }
 
   double current_time = start_time;
 
@@ -64,9 +67,9 @@ int main(int argc, char *argsv[]) {
     iteration++;
     if (iteration % 10 == 0) {
       plotParticles(iteration, fileType);
-    }
-    std::cout << "Iteration " << iteration << " finished." << std::endl;
 
+      //std::cout << "Iteration " << iteration << " finished." << std::endl;
+    }
     current_time += delta_t;
   }
 
