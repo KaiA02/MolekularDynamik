@@ -94,7 +94,7 @@ void CuboidFileReader::readFileCuboid(ParticleContainer& particleContainer, char
     if (input_file.is_open()) {
 
       getline(input_file, tmp_string);
-      std::cout << "Read line: " << tmp_string << std::endl;
+      //std::cout << "Read line: " << tmp_string << std::endl;
 
       while (tmp_string.empty() or tmp_string[0] == '#') {
         getline(input_file, tmp_string);
@@ -106,9 +106,9 @@ void CuboidFileReader::readFileCuboid(ParticleContainer& particleContainer, char
       //numstream >> h;
       //numstream >> mv;
 
-      std::cout << "Reading " << num_particles << "." << std::endl;
+      //std::cout << "Reading " << num_particles << "." << std::endl;
       getline(input_file, tmp_string);
-      std::cout << "Read line: " << tmp_string << std::endl;
+      //std::cout << "Read line: " << tmp_string << std::endl;
 
       for (int i = 0; i < num_particles; i++) {
         std::istringstream datastream(tmp_string);
@@ -135,7 +135,7 @@ void CuboidFileReader::readFileCuboid(ParticleContainer& particleContainer, char
         particleContainer.addCube(generator.getCube());
 
         getline(input_file, tmp_string);
-        std::cout << "Read line: " << tmp_string << std::endl;
+        //std::cout << "Read line: " << tmp_string << std::endl;
       }
     } else {
       std::cout << "Error: could not open file " << filename << std::endl;

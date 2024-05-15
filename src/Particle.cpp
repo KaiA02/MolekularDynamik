@@ -40,7 +40,8 @@ Particle::Particle(std::array<double, 3> x_arg, std::array<double, 3> v_arg,
   spdlog::debug("Particle generated");
 }
 
-Particle::~Particle() { spdlog::debug("Particle destroyed"); }
+Particle::~Particle() {
+  spdlog::debug("Particle destroyed");
 }
 
 

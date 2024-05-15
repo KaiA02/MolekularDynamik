@@ -3,9 +3,6 @@
 //
 
 #include "ParticleGenerator.h"
-
-#include <iostream>
-#include <ostream>
 #include "utils//MaxwellBoltzmannDistribution.h"
 
 #include <vector>

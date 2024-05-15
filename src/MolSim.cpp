@@ -40,7 +40,7 @@ int main(int argc, char *argsv[]) {
     std::cout << "./molsym filename" << std::endl;
   }
   spdlog::default_logger()->set_level(spdlog::level::info);
-  if (argc > 6){
+  if (argc > 7){
     std::string log_level = argsv[7];
   if (log_level == "trace") {
     spdlog::default_logger()->set_level(spdlog::level::trace);
@@ -75,7 +75,6 @@ int main(int argc, char *argsv[]) {
     FileReader fileReader;
     fileReader.readFile(particles, argsv[1]);
   } else {
-
     CuboidFileReader fileReader;
     fileReader.readFileCuboid(particles, argsv[1]);
   }
@@ -99,8 +98,6 @@ int main(int argc, char *argsv[]) {
     }
     spdlog::trace("Iteration {} finished",iteration);
 
-      //std::cout << "Iteration " << iteration << " finished." << std::endl;
-    }
     current_time += delta_t;
   }
 
