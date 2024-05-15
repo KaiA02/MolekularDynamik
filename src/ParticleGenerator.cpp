@@ -10,7 +10,10 @@
 
 #include <vector>
 
-ParticleGenerator::ParticleGenerator(const Particle& start, int n1, int n2, int n3, double distance, double meanVelocity) {
+ParticleGenerator::ParticleGenerator() {}
+
+void ParticleGenerator::generateCuboid(const Particle &start, int n1, int n2, int n3,
+    double distance, double meanVelocity) {
     std::array<double, 3> maxwellVelocity = maxwellBoltzmannDistributedVelocity(meanVelocity, 3);
 
     for(int x = 0; x < n1; x++) {

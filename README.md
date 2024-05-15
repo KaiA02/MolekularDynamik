@@ -21,4 +21,4 @@ Input consist of
 6. "1" for Input like Assignment 1, "2" for Input like Cuboids
 
 
-./MolSim ../input/eingabe-cube.txt 0 100 0.0002 1 2
+./MolSim ../input/eingabe-cube.txt 0 5 0.0002 1 2

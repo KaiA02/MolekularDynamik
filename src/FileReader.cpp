@@ -129,7 +129,8 @@ void CuboidFileReader::readFileCuboid(ParticleContainer& particleContainer, char
         }
         datastream >> m;
         Particle particle(x, v, m);
-        ParticleGenerator generator(particle, s.at(0), s.at(1), s.at(2), 1.1225, 0.1);
+        ParticleGenerator generator;
+        generator.generateCuboid(particle, s.at(0), s.at(1), s.at(2), 1.1225, 0.1);
         particleContainer.addCube(generator.getCube());
 
         getline(input_file, tmp_string);

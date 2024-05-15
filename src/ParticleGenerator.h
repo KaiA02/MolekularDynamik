@@ -13,7 +13,8 @@ private:
     std::vector<Particle> cube;
 
 public:
-    ParticleGenerator(const Particle& start, int sizeX, int sizeY, int sizeZ, double distance, double meanVelocity);
+    ParticleGenerator();
+    void generateCuboid(const Particle& start, int n1, int n2, int n3, double distance, double meanVelocity);
     std::vector<Particle> getCube();
 
 };
