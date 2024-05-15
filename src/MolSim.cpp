@@ -62,8 +62,8 @@ int main(int argc, char *argsv[]) {
   }
   }
 
-  FileReader fileReader;
-  fileReader.readFile(particles, argsv[1]);
+  //FileReader fileReader;
+  //fileReader.readFile(particles, argsv[1]);
 
   double start_time = std::stod(argsv[2]);
   double end_time = std::stod(argsv[3]);
