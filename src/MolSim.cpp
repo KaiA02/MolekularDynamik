@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <list>
+#include <spdlog/spdlog.h>
 
 /**** forward declaration of the calculation functions ****/
 
@@ -33,8 +34,36 @@ void plotParticles(int iteration, int fileType);
 ParticleContainer particles;
 
 int main(int argc, char *argsv[]) {
-
   std::cout << "Hello from MolSim for PSE!" << std::endl;
+  if (argc != 2) {
+    std::cout << "Erroneous programme call! " << std::endl;
+    std::cout << "./molsym filename" << std::endl;
+  }
+  spdlog::default_logger()->set_level(spdlog::level::info);
+  if (argc > 6){
+    std::string log_level = argsv[7];
+  if (log_level == "trace") {
+    spdlog::default_logger()->set_level(spdlog::level::trace);
+  }
+  else if (log_level == "debug") {
+    spdlog::default_logger()->set_level(spdlog::level::debug);
+  }
+  else if (log_level == "warn") {
+    spdlog::default_logger()->set_level(spdlog::level::warn);
+  }
+  else if (log_level == "error") {
+    spdlog::default_logger()->set_level(spdlog::level::err);
+  }
+  else if (log_level == "info") {
+    spdlog::default_logger()->set_level(spdlog::level::info);
+  } else {
+    std::cout << "Invalid log level! " << std::endl;
+    return 1;
+  }
+  }
+
+  FileReader fileReader;
+  fileReader.readFile(particles, argsv[1]);
 
   double start_time = std::stod(argsv[2]);
   double end_time = std::stod(argsv[3]);
@@ -67,6 +96,8 @@ int main(int argc, char *argsv[]) {
     iteration++;
     if (iteration % 10 == 0) {
       plotParticles(iteration, fileType);
+    }
+    spdlog::trace("Iteration {} finished",iteration);
 
       //std::cout << "Iteration " << iteration << " finished." << std::endl;
     }
