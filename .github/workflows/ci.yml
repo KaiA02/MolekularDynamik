@@ -16,7 +16,7 @@ jobs:
       - name: Install CMake and build essentials, Doxygen and Xerces
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake g++ make doxygen libxerces-c-dev valgrind
+          sudo apt-get install -y cmake g++ make doc libxerces-c-dev valgrind
 
       - name: Build with AddressSanitizer
         run: |
