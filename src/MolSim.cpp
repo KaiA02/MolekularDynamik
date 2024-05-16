@@ -14,6 +14,7 @@
  * calculate the force for all particles
  */
 void calculateF();
+void calculateLJF();
 
 /**
  * calculate the position for all particles
@@ -35,7 +36,7 @@ ParticleContainer particles;
 
 int main(int argc, char *argsv[]) {
   std::cout << "Hello from MolSim for PSE!" << std::endl;
-  if (argc != 2) {
+  if (argc < 2) {
     std::cout << "Erroneous programme call! " << std::endl;
     std::cout << "./molsym filename" << std::endl;
   }
@@ -86,7 +87,11 @@ int main(int argc, char *argsv[]) {
     // calculate new x
     calculateX(delta_t);
     // calculate new f
+    if(fileInputType == 1) {
     calculateF();
+    } else {
+      calculateLJF();
+    }
     // calculate new v
     calculateV(delta_t);
 
@@ -132,6 +137,32 @@ void calculateF() {
       }
     }
     p1.setF(newForce);
+  }
+}
+
+
+void calculateLJF() {
+  double epsilion = 5;
+  double sigma = 1;
+  for(int i = 0; i < particles.size()-1; ++i) {
+    Particle pi = particles.getParticles().at(i);
+    for(int j = i+1; j < particles.size(); ++j) {
+      Particle pj = particles.getParticles().at(j);
+      std::array<double, 3> xiMinusxj = {pi.getX().at(0) - pj.getX().at(0), pi.getX().at(1) - pj.getX().at(1), pi.getX().at(2) - pj.getX().at(2)};
+      double distXiXj = sqrt(pow(xiMinusxj.at(0), 2) + pow(xiMinusxj.at(1), 2) + pow(xiMinusxj.at(2), 2));
+      //std::array<double, 3> f_ij = -1 * ((24*epsilion)/(pow(distXiXj,2)))*(pow((sigma)/distXiXj ,6)- 2*pow((sigma)/distXiXj ,12))*xiMinusxj;
+      std::array<double, 3> f_ij = {-1 * ((24*epsilion)/(pow(distXiXj,2)))*(pow((sigma)/distXiXj ,6)- 2*pow((sigma)/distXiXj ,12))*xiMinusxj.at(0),
+        -1 * ((24*epsilion)/(pow(distXiXj,2)))*(pow((sigma)/distXiXj ,6)- 2*pow((sigma)/distXiXj ,12))*xiMinusxj.at(1),
+        -1 * ((24*epsilion)/(pow(distXiXj,2)))*(pow((sigma)/distXiXj ,6)- 2*pow((sigma)/distXiXj ,12))*xiMinusxj.at(2)};
+      //pi.setF(pi.getF() + f_ij);
+      //pj.setF(pj.getF() + (-1*f_ij));
+      for (int k = 0; k < 3; ++k) {
+        pi.setF({pi.getF().at(k) + f_ij.at(k)});
+        pj.setF({pj.getF().at(k) - f_ij.at(k)});
+      }
+      particles.setParticle(pj, j);
+    }
+    particles.setParticle(pi, i);
   }
 }
 

@@ -22,5 +22,5 @@ Input consist of
 6. "1" for Input like Assignment 1, "2" for Input like Cuboids  
 7. (optional) log level: "off", "error", "warn", "info", "debug", "trace"
 
-
+./MolSim ../input/eingabe-sonne.txt 0 1000 0.014 1 1
 ./MolSim ../input/eingabe-cube.txt 0 5 0.0002 1 2

@@ -59,3 +59,7 @@ void ParticleContainer::addCube(std::vector<Particle> particleCube) {
         addParticle(particleCube.at(x));
     }
 }
+
+void ParticleContainer::setParticle(Particle p, int position) {
+    particles.at(position) = p;
+}

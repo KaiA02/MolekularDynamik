@@ -94,11 +94,11 @@ void CuboidFileReader::readFileCuboid(ParticleContainer& particleContainer, char
     if (input_file.is_open()) {
 
       getline(input_file, tmp_string);
-      //std::cout << "Read line: " << tmp_string << std::endl;
+      spdlog::info("Read line: {}", tmp_string);
 
       while (tmp_string.empty() or tmp_string[0] == '#') {
         getline(input_file, tmp_string);
-        //std::cout << "Read line: " << tmp_string << std::endl;
+        spdlog::info("Read line: {}", tmp_string);
       }
 
       std::istringstream numstream(tmp_string);
@@ -106,9 +106,9 @@ void CuboidFileReader::readFileCuboid(ParticleContainer& particleContainer, char
       //numstream >> h;
       //numstream >> mv;
 
-      //std::cout << "Reading " << num_particles << "." << std::endl;
+      spdlog::info("Number of particles: {}", num_particles);
       getline(input_file, tmp_string);
-      //std::cout << "Read line: " << tmp_string << std::endl;
+      spdlog::info("Read line: {}", tmp_string);
 
       for (int i = 0; i < num_particles; i++) {
         std::istringstream datastream(tmp_string);
@@ -123,9 +123,9 @@ void CuboidFileReader::readFileCuboid(ParticleContainer& particleContainer, char
           datastream >> sj;
         }
         if (datastream.eof()) {
-          std::cout
-              << "Error reading file: eof reached unexpectedly reading from line "
-              << i << std::endl;
+          spdlog::error(
+             "Error reading file: eof reached unexpectedly reading from line {}",
+             i);
           exit(-1);
         }
         datastream >> m;
@@ -135,10 +135,10 @@ void CuboidFileReader::readFileCuboid(ParticleContainer& particleContainer, char
         particleContainer.addCube(generator.getCube());
 
         getline(input_file, tmp_string);
-        //std::cout << "Read line: " << tmp_string << std::endl;
+        spdlog::info("Read line: {}", tmp_string);
       }
     } else {
-      std::cout << "Error: could not open file " << filename << std::endl;
+      spdlog::error("Error opening file: {}", filename);
       exit(-1);
     }
   }

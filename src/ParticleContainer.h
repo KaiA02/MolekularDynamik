@@ -32,6 +32,8 @@ public:
 
     void addCube(std::vector<Particle> particleCube);
 
+    void setParticle(Particle p, int position);
+
 private:
     std::vector<Particle> particles;
     std::vector<std::vector<int>> pairings; // 2D vector of pairings
