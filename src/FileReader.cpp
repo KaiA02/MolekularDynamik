@@ -55,6 +55,7 @@ void FileReader::readFile(ParticleContainer& particleContainer, char *filename) 
       for (auto &vj : v) {
         datastream >> vj;
       }
+
       if (datastream.eof()) {
         spdlog::error(
             "Error reading file: eof reached unexpectedly reading from line {}",
@@ -62,6 +63,7 @@ void FileReader::readFile(ParticleContainer& particleContainer, char *filename) 
         exit(-1);
       }
       datastream >> m;
+
       Particle particle(x, v, m);
       particleContainer.addParticle(particle);
 
@@ -86,6 +88,7 @@ void CuboidFileReader::readFileCuboid(ParticleContainer& particleContainer, char
     //double h; //distance
     std::array<double, 3> s; //size im n1 n2 n3 format
     //double mv; //meanVelocityInput
+    double distance;
 
 
     std::ifstream input_file(filename);
@@ -122,6 +125,7 @@ void CuboidFileReader::readFileCuboid(ParticleContainer& particleContainer, char
         for (auto &sj : s) {
           datastream >> sj;
         }
+        datastream >> distance;
         if (datastream.eof()) {
           spdlog::error(
              "Error reading file: eof reached unexpectedly reading from line {}",
@@ -131,7 +135,7 @@ void CuboidFileReader::readFileCuboid(ParticleContainer& particleContainer, char
         datastream >> m;
         Particle particle(x, v, m);
         ParticleGenerator generator;
-        generator.generateCuboid(particle, s.at(0), s.at(1), s.at(2), 1.1225, 0.1);
+        generator.generateCuboid(particle, s.at(0), s.at(1), s.at(2), distance, 0.1);
         particleContainer.addCube(generator.getCube());
 
         getline(input_file, tmp_string);
