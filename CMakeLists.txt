@@ -77,10 +77,11 @@ enable_testing()
 
 add_executable(
         firstTest
-        src/test/firstTest.cc
+        src/test/Tests.cc
         src/ParticleContainer.cpp
         src/Particle.cpp
         src/ParticleGenerator.cpp
+        src/Calculations.cpp
 )
 target_link_libraries(
         firstTest
