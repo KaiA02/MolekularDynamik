@@ -12,20 +12,29 @@
 #include <list>
 
 #include "ParticleContainer.h"
-
+/**
+ * @brief FileReader class
+ */
 class FileReader {
 
 public:
   FileReader();
   virtual ~FileReader();
 
-  void readFile(ParticleContainer& particleContainer, char *filename);
+  void readFile(ParticleContainer &particleContainer, char *filename);
 };
-
+/**
+ * @brief CuboidFileReader extends FileReader
+ */
 class CuboidFileReader : public FileReader {
 public:
-    CuboidFileReader();
-    //virtual ~CuboidFileReader();
-    void readFileCuboid(ParticleContainer& particleContainer, char *filename);
-
+  CuboidFileReader();
+  // virtual ~CuboidFileReader();
+  /**
+   * @brief reads a file and adds the resulting cuboid to the
+   * particleContainer
+   * @param particleContainer
+   * @param filename
+   */
+  void readFileCuboid(ParticleContainer &particleContainer, char *filename);
 };
