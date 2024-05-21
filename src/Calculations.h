@@ -10,7 +10,9 @@
  */
 class Calculations {
 private:
-  ParticleContainer &particles;
+  ParticleContainer& particles;
+  static constexpr double epsilion = 5;
+  static constexpr double sigma = 1;
 
 public:
   Calculations(ParticleContainer &other);

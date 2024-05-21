@@ -29,8 +29,11 @@ void ParticleContainer::addPairing(int particleIndex1, int particleIndex2) {
   }
 }
 
+ std::vector<Particle> &ParticleContainer::getParticles() {
+        return particles;
+}
 const std::vector<Particle> &ParticleContainer::getParticles() const {
-  return particles;
+    return particles;
 }
 
 int ParticleContainer::size() const { return particles.size(); }

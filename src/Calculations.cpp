@@ -48,7 +48,7 @@ void Calculations::calculateV(double delta_t) {
 }
 
 /**
- * @brief the following function calculates the new forces
+ * @brief the following function calculates the gravitational force
  *
  * therefore we use an interator and also for-loops
  * to calculate the physics behind the forces
@@ -78,30 +78,24 @@ void Calculations::calculateF() {
 }
 
 /**
- * @brief the following function calculates the new forces
- *
- * therefore we use the Lennard-Jones Force calcluation
+ * @brief the following function calculates the Leonard Jones force
  */
 void Calculations::calculateLJF() {
-    double epsilion = 5;
-    double sigma = 1;
     for(int i = 0; i < particles.size()-1; ++i) {
-        Particle pi = particles.getParticles().at(i);
+        Particle& pi = particles.getParticles().at(i);
         for(int j = i+1; j < particles.size(); ++j) {
-            Particle pj = particles.getParticles().at(j);
-            std::array<double, 3> xiMinusxj = {pi.getX().at(0) - pj.getX().at(0), pi.getX().at(1) - pj.getX().at(1), pi.getX().at(2) - pj.getX().at(2)};
-            double distXiXj = sqrt(pow(xiMinusxj.at(0), 2) + pow(xiMinusxj.at(1), 2) + pow(xiMinusxj.at(2), 2));
+            Particle& pj = particles.getParticles().at(j);
+            std::array<double, 3> displacement_vector = {pi.getX().at(0) - pj.getX().at(0), pi.getX().at(1) - pj.getX().at(1), pi.getX().at(2) - pj.getX().at(2)};
+            double distXiXj = sqrt(pow(displacement_vector.at(0), 2) + pow(displacement_vector.at(1), 2) + pow(displacement_vector.at(2), 2));
 
-            std::array<double, 3> f_ij = {-1 * ((24*epsilion)/(pow(distXiXj,2)))*(pow((sigma)/distXiXj ,6)- 2*pow((sigma)/distXiXj ,12))*xiMinusxj.at(0),
-              -1 * ((24*epsilion)/(pow(distXiXj,2)))*(pow((sigma)/distXiXj ,6)- 2*pow((sigma)/distXiXj ,12))*xiMinusxj.at(1),
-              -1 * ((24*epsilion)/(pow(distXiXj,2)))*(pow((sigma)/distXiXj ,6)- 2*pow((sigma)/distXiXj ,12))*xiMinusxj.at(2)};
+            std::array<double, 3> f_ij = {-1 * ((24*epsilion)/(pow(distXiXj,2)))*(pow((sigma)/distXiXj ,6)- 2*pow((sigma)/distXiXj ,12))*displacement_vector.at(0),
+              -1 * ((24*epsilion)/(pow(distXiXj,2)))*(pow((sigma)/distXiXj ,6)- 2*pow((sigma)/distXiXj ,12))*displacement_vector.at(1),
+              -1 * ((24*epsilion)/(pow(distXiXj,2)))*(pow((sigma)/distXiXj ,6)- 2*pow((sigma)/distXiXj ,12))*displacement_vector.at(2)};
 
             for (int k = 0; k < 3; ++k) {
                 pi.setF({pi.getF().at(k) + f_ij.at(k)});
                 pj.setF({pj.getF().at(k) - f_ij.at(k)});
             }
-            particles.setParticle(pj, j);
         }
-        particles.setParticle(pi, i);
     }
 }

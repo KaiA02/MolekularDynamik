@@ -24,6 +24,7 @@ public:
   second Particle in particles
    */
   void addPairing(int particleIndex1, int particleIndex2);
+  std::vector<Particle> &getParticles();
   const std::vector<Particle> &getParticles() const;
   int size() const;
 
