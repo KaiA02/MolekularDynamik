@@ -27,7 +27,7 @@ public:
    * @param meanVelocity brownian motion mean velocity
    */
   void generateCuboid(const Particle &start, int n1, int n2, int n3,
-                      double distance, double meanVelocity);
+                      double distance, double meanVelocity, int dimension);
   std::vector<Particle> getCube();
 };
 

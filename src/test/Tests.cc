@@ -31,7 +31,7 @@ TEST(ParticleGeneratorTest, GenerateCuboidTest) {
     double meanVelocity = 0.1;
     std::array<double, 3> maxwellVelocity = maxwellBoltzmannDistributedVelocity(meanVelocity, 3);
 
-    generator.generateCuboid(start, n1, n2, n3, distance, meanVelocity);
+    generator.generateCuboid(start, n1, n2, n3, distance, meanVelocity,3);
     std::vector<Particle> cubeParticles = generator.getCube();
 
     // Überprüfen, ob die Anzahl der generierten Partikel korrekt ist

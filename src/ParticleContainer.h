@@ -47,7 +47,11 @@ public:
 
 private:
   std::vector<Particle> particles;
-  std::vector<std::vector<int>> pairings; // 2D vector of pairings
+
+  // TODO: integrate pairings into calculations when number of particles gets
+  // too big (maybe use a force threshold to determine which particles are close
+  // enough to interact with each other)
+  std::vector<std::pair<int, int>> pairings;
 };
 
 #endif // PARTICLECONTAINER_H

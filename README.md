@@ -19,8 +19,9 @@ Input consist of
 3. End_Time as Double
 4. Time_Step as Double
 5. "1" for Output in vtk, "2" for Output in xyz
-6. "1" for Input like Assignment 1, "2" for Input like Cuboids  
-7. (optional) log level: "off", "error", "warn", "info", "debug", "trace"
+6. "1" for Input like Assignment 1, "2" for Input like Cuboids
+7. "1" for performance measurement
+8. (optional) log level: "off", "error", "warn", "info", "debug", "trace"
 
 ./MolSim ../input/eingabe-sonne.txt 0 1000 0.014 1 1
 ./MolSim ../input/eingabe-cube.txt 0 5 0.0002 1 2
