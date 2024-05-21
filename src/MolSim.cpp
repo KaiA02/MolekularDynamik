@@ -3,12 +3,10 @@
 #include "outputWriter/VTKWriter.h"
 #include "outputWriter/XYZWriter.h"
 
-#include <iostream>
-#include <spdlog/spdlog.h>
-
-#include "../cmake-build-debug/_deps/spdlog-src/include/spdlog/spdlog.h"
 #include "Calculations.h"
 #include <chrono>
+#include <iostream>
+#include <spdlog/spdlog.h>
 
 /**
  * plot the particles to a xyz-file
