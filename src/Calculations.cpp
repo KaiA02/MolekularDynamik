@@ -96,16 +96,14 @@ void Calculations::calculateLJF() {
                              pow(displacement_vector.at(1), 2) +
                              pow(displacement_vector.at(2), 2));
 
+      double forcefactor = ((-24 * epsilion) / pow(distance, 2)) *
+              (pow((sigma) / distance, 6) - 2 * pow((sigma) / distance, 12));
+
       std::array<double, 3> f_ij = {
-          -1 * ((24 * epsilion) / (pow(distance, 2))) *
-              (pow((sigma) / distance, 6) - 2 * pow((sigma) / distance, 12)) *
-              displacement_vector.at(0),
-          -1 * ((24 * epsilion) / (pow(distance, 2))) *
-              (pow((sigma) / distance, 6) - 2 * pow((sigma) / distance, 12)) *
-              displacement_vector.at(1),
-          -1 * ((24 * epsilion) / (pow(distance, 2))) *
-              (pow((sigma) / distance, 6) - 2 * pow((sigma) / distance, 12)) *
-              displacement_vector.at(2)};
+        forcefactor * displacement_vector.at(0),
+        forcefactor * displacement_vector.at(1),
+        forcefactor * displacement_vector.at(2)};
+
       std::array<double, 3> newForcei = {0.0, 0.0, 0.0};
       std::array<double, 3> newForcej = {0.0, 0.0, 0.0};
       for (int k = 0; k < 3; ++k) {

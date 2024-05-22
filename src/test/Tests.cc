@@ -38,27 +38,27 @@ TEST(ParticleGeneratorTest, GenerateCuboidTest) {
     ASSERT_EQ(cubeParticles.size(), n1 * n2 * n3);
 
     // Überprüfen, ob die Partikel korrekt generiert wurden
-   // for (int x = 0; x < n1; ++x) {
-    //   for (int y = 0; y < n2; ++y) {
-    //        for (int z = 0; z < n3; ++z) {
-     //           Particle expectedParticle(
-     //                   {start.getX()[0] + x * distance, start.getX()[1] + y * distance, start.getX()[2] + z * distance},
-     //                   {start.getV()[0] + maxwellVelocity[0], start.getV()[1] + maxwellVelocity[1], start.getV()[2] + maxwellVelocity[2]},
-      //                  start.getM(), start.getType());
+    //for (int x = 0; x < n1; ++x) {
+      // for (int y = 0; y < n2; ++y) {
+        //    for (int z = 0; z < n3; ++z) {
+         //       Particle expectedParticle(
+          //              {start.getX()[0] + x * distance, start.getX()[1] + y * distance, start.getX()[2] + z * distance},
+           //             {start.getV()[0] + maxwellVelocity[0], start.getV()[1] + maxwellVelocity[1], start.getV()[2] + maxwellVelocity[2]},
+            //            start.getM(), start.getType());
 
-        //        int index = x * n2 * n3 + y * n3 + z;
-         //       EXPECT_EQ(cubeParticles[index], expectedParticle);
+           //     int index = x * n2 * n3 + y * n3 + z;
+             //   EXPECT_EQ(cubeParticles[index], expectedParticle);
           //  }
-       // }
-    //}
+      //  }
+   // }
 }
 // Testfall für die calculateLJF-Methode
 TEST(CalculationsTest, TestCalculateLJF) {
 
  ParticleContainer pc;
- pc.addParticle(Particle({0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, 0, 1.0));
- pc.addParticle(Particle({1.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, 0, 1.0));
- pc.addParticle(Particle({0.0, 1.0, 0.0}, {0.0, 0.0, 0.0}, 0, 1.0));
+ pc.addParticle(Particle({0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, 0, 0));
+ pc.addParticle(Particle({1.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, 0, 0));
+ pc.addParticle(Particle({0.0, 1.0, 0.0}, {0.0, 0.0, 0.0}, 0, 0));
 
  // Berechnen der Lennard-Jones-Kräfte
  Calculations calculations(pc);
@@ -68,9 +68,11 @@ TEST(CalculationsTest, TestCalculateLJF) {
  // Hier können Sie Ihre eigenen Überprüfungen durchführen, basierend auf Ihren Erwartungen
  // Ein einfaches Beispiel: (Handcalculatedt values)
  std::array<double, 3> f0  = {-120, -120, 0.0};
- std::array<double, 3> f1  = {114.375, 5.625, 0};
+ std::array<double, 3> f1  = {114.375, 5.625, 0.0};
  std::array<double, 3> f2  = {5.625, 114.375,0.0};
- //EXPECT_EQ(pc.getParticles().at(0).getF(), f0);
- //EXPECT_EQ(pc.getParticles().at(1).getF(), f1);
- //EXPECT_EQ(pc.getParticles().at(2).getF(), f2);
+ for (int i = 0; i < 3; ++i) {
+  EXPECT_NEAR(pc.getParticles().at(0).getF()[i], f0[i], 1e-6);
+  EXPECT_NEAR(pc.getParticles().at(1).getF()[i], f1[i], 1e-6);
+  EXPECT_NEAR(pc.getParticles().at(2).getF()[i], f2[i], 1e-6);
+ }
 }

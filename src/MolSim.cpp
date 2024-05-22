@@ -86,10 +86,7 @@ int main(int argc, char *argsv[]) {
   }
   auto end = std::chrono::high_resolution_clock::now();
   std::chrono::duration<double> elapsed = end - start;
-  if (performanceMeasurement == 1) {
-    std::cout << "Simulation finished in " << elapsed.count() << "seconds."
-              << std::endl;
-  }
+
   spdlog::info("Simulation finished in {} seconds", elapsed.count());
   return 0;
 }
