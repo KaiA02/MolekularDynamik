@@ -81,6 +81,10 @@ void Calculations::calculateF() {
  * @brief the following function calculates the Leonard Jones force
  */
 void Calculations::calculateLJF() {
+  for (int i = 0; i < particles.size(); ++i) {
+    Particle &pi = particles.getParticles().at(i);
+    pi.setF({0,0,0});
+  }
   for (int i = 0; i < particles.size() - 1; ++i) {
     Particle &pi = particles.getParticles().at(i);
     for (int j = i + 1; j < particles.size(); ++j) {
