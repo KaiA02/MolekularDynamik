@@ -23,5 +23,5 @@ Input consist of
 7. "1" for performance measurement
 8. (optional) log level: "off", "error", "warn", "info", "debug", "trace"
 
-./MolSim ../input/eingabe-sonne.txt 0 1000 0.014 1 1
-./MolSim ../input/eingabe-cube.txt 0 5 0.0002 1 2
+./MolSim ../input/eingabe-sonne.txt 0 1000 0.014 1 1 0  
+./MolSim ../input/eingabe-cube.txt 0 5 0.0002 1 2 0
