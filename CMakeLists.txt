@@ -70,18 +70,24 @@ FetchContent_Declare(
         GIT_TAG v1.8.5
 )
 
-FetchContent_MakeAvailable(googletest
-        spdlog)
+FetchContent_MakeAvailable(googletest spdlog)
 
 enable_testing()
 
+# Ensure Google Test headers are included
+include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
+
 add_executable(
         firstTest
-        src/test/Tests.cc
-        src/ParticleContainer.cpp
+        src/test/ParticleContainerTests.cpp
+        src/test/CalculationsTests.cpp
+        src/test/ParticleGeneratorTests.cpp
         src/Particle.cpp
-        src/ParticleGenerator.cpp
+        src/ParticleContainer.cpp
         src/Calculations.cpp
+        src/ParticleGenerator.cpp
+        src/utils/MaxwellBoltzmannDistribution.h
+
 )
 target_link_libraries(
         firstTest
@@ -92,5 +98,8 @@ target_link_libraries(
 include(GoogleTest)
 include(CTest)
 gtest_discover_tests(firstTest)
+
+# Link Google Test libraries with the main executable
+target_link_libraries(MolSim PRIVATE GTest::gtest GTest::gtest_main)
 
 set(MEMORYCHECK_COMMAND valgrind)
