@@ -39,8 +39,6 @@ void ParticleGenerator::generateCuboid(const Particle &start, int n1, int n2,
 std::vector<Particle> ParticleGenerator::getCube() { return cube; }
 
 void ParticleGenerator::generateDisk(const Particle &center, int radius, double distance, int dimension) {
-  // Clear previous particles
-    disk.clear();
 
     // Coordinates of the center
     double centerX = center.getX()[0];
@@ -49,6 +47,7 @@ void ParticleGenerator::generateDisk(const Particle &center, int radius, double 
 
     // Initial velocity of the center
     std::array<double, 3> initialVelocity = center.getV();
+    double maxRadius = radius * distance;
 
     if (dimension == 2) {
         // 2D Disk
@@ -67,7 +66,7 @@ void ParticleGenerator::generateDisk(const Particle &center, int radius, double 
                                         std::pow(displacement_vector[2], 2));
 
                 // Check if the point is within the circle
-                if (dist <= radius * distance) {
+                if (dist <= maxRadius) {
                     // Create the particle
                     std::array<double, 3> position = {x, y, centerZ};
                     Particle p(position, initialVelocity, center.getM(), center.getType());
@@ -96,7 +95,7 @@ void ParticleGenerator::generateDisk(const Particle &center, int radius, double 
                                             std::pow(displacement_vector[2], 2));
 
                     // Check if the point is within the circle
-                    if (dist <= radius * distance) {
+                    if (dist <= maxRadius) {
                         // Create the particle
                         std::array<double, 3> position = {x, y, z};
                         Particle p(position, initialVelocity, center.getM(), center.getType());
