@@ -7,16 +7,22 @@
 
 #include "FileReader.h"
 
+#include "spdlog/spdlog.h"
+
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
 #include <sstream>
 
+#include "ParticleGenerator.h"
+
 FileReader::FileReader() = default;
 
 FileReader::~FileReader() = default;
 
-void FileReader::readFile(ParticleContainer& particleContainer, char *filename) {
+void FileReader::readFile(ParticleContainer &particleContainer,
+                          char *filename) {
+
   std::array<double, 3> x;
   std::array<double, 3> v;
   double m;
@@ -28,18 +34,18 @@ void FileReader::readFile(ParticleContainer& particleContainer, char *filename) 
   if (input_file.is_open()) {
 
     getline(input_file, tmp_string);
-    std::cout << "Read line: " << tmp_string << std::endl;
+    spdlog::info("Read line: {}", tmp_string);
 
     while (tmp_string.empty() or tmp_string[0] == '#') {
       getline(input_file, tmp_string);
-      std::cout << "Read line: " << tmp_string << std::endl;
+      spdlog::info("Read line: {}", tmp_string);
     }
 
     std::istringstream numstream(tmp_string);
     numstream >> num_particles;
-    std::cout << "Reading " << num_particles << "." << std::endl;
+    spdlog::info("Number of particles: {}", num_particles);
     getline(input_file, tmp_string);
-    std::cout << "Read line: " << tmp_string << std::endl;
+    spdlog::info("Read line: {}", tmp_string);
 
     for (int i = 0; i < num_particles; i++) {
       std::istringstream datastream(tmp_string);
@@ -50,21 +56,95 @@ void FileReader::readFile(ParticleContainer& particleContainer, char *filename) 
       for (auto &vj : v) {
         datastream >> vj;
       }
+
       if (datastream.eof()) {
-        std::cout
-            << "Error reading file: eof reached unexpectedly reading from line "
-            << i << std::endl;
+        spdlog::error(
+            "Error reading file: eof reached unexpectedly reading from line {}",
+            i);
         exit(-1);
       }
       datastream >> m;
+
       Particle particle(x, v, m);
       particleContainer.addParticle(particle);
 
       getline(input_file, tmp_string);
-      std::cout << "Read line: " << tmp_string << std::endl;
+      spdlog::info("Read line: {}", tmp_string);
     }
   } else {
-    std::cout << "Error: could not open file " << filename << std::endl;
+    spdlog::error("Error opening file: {}", filename);
+    exit(-1);
+  }
+}
+
+CuboidFileReader::CuboidFileReader() = default;
+
+// CuboidFileReader::~CuboidFileReader() = default;
+
+void CuboidFileReader::readFileCuboid(ParticleContainer &particleContainer,
+                                      char *filename) {
+  std::array<double, 3> x;
+  std::array<double, 3> v;
+  double m;
+  int num_particles = 0;
+  // double h; //distance
+  std::array<double, 3> s; // size im n1 n2 n3 format
+  // double mv; //meanVelocityInput
+  double distance;
+
+  std::ifstream input_file(filename);
+  std::string tmp_string;
+
+  if (input_file.is_open()) {
+
+    getline(input_file, tmp_string);
+    spdlog::info("Read line: {}", tmp_string);
+
+    while (tmp_string.empty() or tmp_string[0] == '#') {
+      getline(input_file, tmp_string);
+      spdlog::info("Read line: {}", tmp_string);
+    }
+
+    std::istringstream numstream(tmp_string);
+    numstream >> num_particles;
+    // numstream >> h;
+    // numstream >> mv;
+
+    spdlog::info("Number of particles: {}", num_particles);
+    getline(input_file, tmp_string);
+    spdlog::info("Read line: {}", tmp_string);
+
+    for (int i = 0; i < num_particles; i++) {
+      std::istringstream datastream(tmp_string);
+
+      for (auto &xj : x) {
+        datastream >> xj;
+      }
+      for (auto &vj : v) {
+        datastream >> vj;
+      }
+      for (auto &sj : s) {
+        datastream >> sj;
+      }
+      datastream >> distance;
+      if (datastream.eof()) {
+        spdlog::error(
+            "Error reading file: eof reached unexpectedly reading from line {}",
+            i);
+        exit(-1);
+      }
+      datastream >> m;
+      Particle particle(x, v, m);
+      ParticleGenerator generator;
+      generator.generateCuboid(particle, s.at(0), s.at(1), s.at(2), distance,
+                               0.1, 3);
+      particleContainer.addCube(generator.getCube());
+
+      getline(input_file, tmp_string);
+      spdlog::info("Read line: {}", tmp_string);
+    }
+  } else {
+    spdlog::error("Error opening file: {}", filename);
     exit(-1);
   }
 }

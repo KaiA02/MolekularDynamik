@@ -55,7 +55,9 @@ public:
       std::array<double, 3> x_arg, std::array<double, 3> v_arg, double m_arg,
       int type = 0);
 
-  virtual ~Particle();
+  ~Particle();
+
+  //virtual ~Particle();
 
   const std::array<double, 3> &getX() const;
 
@@ -78,6 +80,12 @@ public:
   void setV(const std::array<double, 3> &newVelocity);
 
   void setF(const std::array<double, 3> &newForce);
+
+ void setM(const double &newMass);
+
+ void setType(const int &newType);
+
+ bool operator==(const Particle &other) const;
 
 };
 
