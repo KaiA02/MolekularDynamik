@@ -60,6 +60,12 @@ void ParticleContainer::addCube(std::vector<Particle> particleCube) {
   }
 }
 
+void ParticleContainer::addDisk(std::vector<Particle> particleDisk) {
+  for (size_t x = 0; x < particleDisk.size(); ++x) {
+    addParticle(particleDisk.at(x));
+  }
+}
+
 void ParticleContainer::setParticle(Particle p, int position) {
   particles.at(position) = p;
 }

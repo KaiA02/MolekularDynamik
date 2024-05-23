@@ -52,9 +52,14 @@ int main(int argc, char *argsv[]) {
   if (fileInputType == 1) {
     FileReader fileReader;
     fileReader.readFile(particles, argsv[1]);
-  } else {
+  } else if(fileInputType == 2) {
     CuboidFileReader fileReader;
     fileReader.readFileCuboid(particles, argsv[1]);
+  } else if(fileInputType == 3) {
+    DiskFileReader fileReader;
+    fileReader.readFileDisk(particles, argsv[1]);
+  } else { // Handle invalid fileInputType
+    throw std::invalid_argument("Invalid fileInputType value");
   }
 
   double current_time = start_time;
