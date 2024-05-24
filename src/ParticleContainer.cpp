@@ -23,8 +23,8 @@ void ParticleContainer::addParticle(const Particle &particle) {
  * @param particleIndex2: index of the second Particle in particles
  */
 void ParticleContainer::addPairing(int particleIndex1, int particleIndex2) {
-  if (particleIndex1 >= 0 && particleIndex1 < particles.size() &&
-      particleIndex2 >= 0 && particleIndex2 < particles.size()) {
+  if (particleIndex1 >= 0 && particleIndex1 < int(particles.size()) &&
+      particleIndex2 >= 0 && particleIndex2 < int(particles.size())) {
     pairings.push_back(std::make_pair(particleIndex1, particleIndex2));
   }
 }
