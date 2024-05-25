@@ -29,11 +29,9 @@ void ParticleContainer::addPairing(int particleIndex1, int particleIndex2) {
   }
 }
 
- std::vector<Particle> &ParticleContainer::getParticles() {
-        return particles;
-}
+std::vector<Particle> &ParticleContainer::getParticles() { return particles; }
 const std::vector<Particle> &ParticleContainer::getParticles() const {
-    return particles;
+  return particles;
 }
 
 int ParticleContainer::size() const { return particles.size(); }
@@ -53,6 +51,8 @@ std::vector<Particle>::const_iterator ParticleContainer::begin() const {
 std::vector<Particle>::const_iterator ParticleContainer::end() const {
   return particles.end();
 }
+
+void ParticleContainer::resetParticles() { particles.clear(); }
 
 void ParticleContainer::addCube(std::vector<Particle> particleCube) {
   for (size_t x = 0; x < particleCube.size(); ++x) {

@@ -46,6 +46,8 @@ public:
    */
   void setParticle(Particle p, int position);
 
+  void resetParticles();
+
 private:
   std::vector<Particle> particles;
 

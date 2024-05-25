@@ -1,7 +1,7 @@
 
-#include "FileReader.h"
-#include "outputWriter/VTKWriter.h"
-#include "outputWriter/XYZWriter.h"
+#include "input/FileReader.h"
+#include "output/outputWriter/VTKWriter.h"
+#include "output/outputWriter/XYZWriter.h"
 
 #include "Calculations.h"
 #include <chrono>

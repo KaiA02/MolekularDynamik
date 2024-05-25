@@ -12,7 +12,7 @@
 #include <fstream>
 #include <list>
 
-#include "../ParticleContainer.h"
+#include "ParticleContainer.h"
 
 namespace outputWriter {
 
@@ -23,7 +23,7 @@ public:
 
   virtual ~XYZWriter();
 
-  void plotParticles(ParticleContainer& particles, const std::string &filename,
+  void plotParticles(ParticleContainer &particles, const std::string &filename,
                      int iteration);
 };
 

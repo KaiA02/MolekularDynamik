@@ -25,3 +25,7 @@ Input consist of
 
 ./MolSim ../input/eingabe-sonne.txt 0 1000 0.014 1 1 0  
 ./MolSim ../input/eingabe-cube.txt 0 5 0.0002 1 2 0
+
+create new c++ classes from xsd file:
+xsdcxx cxx-tree --std c++11 /mnt/c/Users/joshu/CLionProjects/MolekularDynamik/src/input/simulation.xsd
+

@@ -7,11 +7,11 @@
 
 #pragma once
 
-#include "Particle.h"
+#include "../Particle.h"
 
 #include <list>
 
-#include "ParticleContainer.h"
+#include "../ParticleContainer.h"
 /**
  * @brief FileReader class
  */
