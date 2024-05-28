@@ -197,30 +197,6 @@ inputType (::std::unique_ptr< inputType_type > x)
   this->inputType_.set (std::move (x));
 }
 
-const input::inputFile_type& input::
-inputFile () const
-{
-  return this->inputFile_.get ();
-}
-
-input::inputFile_type& input::
-inputFile ()
-{
-  return this->inputFile_.get ();
-}
-
-void input::
-inputFile (const inputFile_type& x)
-{
-  this->inputFile_.set (x);
-}
-
-void input::
-inputFile (::std::unique_ptr< inputFile_type > x)
-{
-  this->inputFile_.set (std::move (x));
-}
-
 const input::particles_sequence& input::
 particles () const
 {
@@ -792,14 +768,12 @@ input::
 input (const tStart_type& tStart,
        const tEnd_type& tEnd,
        const deltaT_type& deltaT,
-       const inputType_type& inputType,
-       const inputFile_type& inputFile)
+       const inputType_type& inputType)
 : ::xml_schema::type (),
   tStart_ (tStart, this),
   tEnd_ (tEnd, this),
   deltaT_ (deltaT, this),
   inputType_ (inputType, this),
-  inputFile_ (inputFile, this),
   particles_ (this),
   cuboids_ (this)
 {
@@ -814,7 +788,6 @@ input (const input& x,
   tEnd_ (x.tEnd_, f, this),
   deltaT_ (x.deltaT_, f, this),
   inputType_ (x.inputType_, f, this),
-  inputFile_ (x.inputFile_, f, this),
   particles_ (x.particles_, f, this),
   cuboids_ (x.cuboids_, f, this)
 {
@@ -829,7 +802,6 @@ input (const ::xercesc::DOMElement& e,
   tEnd_ (this),
   deltaT_ (this),
   inputType_ (this),
-  inputFile_ (this),
   particles_ (this),
   cuboids_ (this)
 {
@@ -897,20 +869,6 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
-    // inputFile
-    //
-    if (n.name () == "inputFile" && n.namespace_ ().empty ())
-    {
-      ::std::unique_ptr< inputFile_type > r (
-        inputFile_traits::create (i, f, this));
-
-      if (!inputFile_.present ())
-      {
-        this->inputFile_.set (::std::move (r));
-        continue;
-      }
-    }
-
     // particles
     //
     if (n.name () == "particles" && n.namespace_ ().empty ())
@@ -963,13 +921,6 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "inputType",
       "");
   }
-
-  if (!inputFile_.present ())
-  {
-    throw ::xsd::cxx::tree::expected_element< char > (
-      "inputFile",
-      "");
-  }
 }
 
 input* input::
@@ -989,7 +940,6 @@ operator= (const input& x)
     this->tEnd_ = x.tEnd_;
     this->deltaT_ = x.deltaT_;
     this->inputType_ = x.inputType_;
-    this->inputFile_ = x.inputFile_;
     this->particles_ = x.particles_;
     this->cuboids_ = x.cuboids_;
   }

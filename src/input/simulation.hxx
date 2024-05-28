@@ -31,8 +31,8 @@
 // in the accompanying FLOSSE file.
 //
 
-#ifndef CXX_MNT_C_USERS_JOSHU_CLION_PROJECTS_MOLEKULAR_DYNAMIK_SRC_INPUT_SIMULATION_HXX
-#define CXX_MNT_C_USERS_JOSHU_CLION_PROJECTS_MOLEKULAR_DYNAMIK_SRC_INPUT_SIMULATION_HXX
+#ifndef SIMULATION_HXX
+#define SIMULATION_HXX
 
 #ifndef XSD_CXX11
 #define XSD_CXX11
@@ -404,23 +404,6 @@ class input: public ::xml_schema::type
   void
   inputType (::std::unique_ptr< inputType_type > p);
 
-  // inputFile
-  //
-  typedef ::xml_schema::string inputFile_type;
-  typedef ::xsd::cxx::tree::traits< inputFile_type, char > inputFile_traits;
-
-  const inputFile_type&
-  inputFile () const;
-
-  inputFile_type&
-  inputFile ();
-
-  void
-  inputFile (const inputFile_type& x);
-
-  void
-  inputFile (::std::unique_ptr< inputFile_type > p);
-
   // particles
   //
   typedef ::particles particles_type;
@@ -460,8 +443,7 @@ class input: public ::xml_schema::type
   input (const tStart_type&,
          const tEnd_type&,
          const deltaT_type&,
-         const inputType_type&,
-         const inputFile_type&);
+         const inputType_type&);
 
   input (const ::xercesc::DOMElement& e,
          ::xml_schema::flags f = 0,
@@ -493,7 +475,6 @@ class input: public ::xml_schema::type
   ::xsd::cxx::tree::one< tEnd_type > tEnd_;
   ::xsd::cxx::tree::one< deltaT_type > deltaT_;
   ::xsd::cxx::tree::one< inputType_type > inputType_;
-  ::xsd::cxx::tree::one< inputFile_type > inputFile_;
   particles_sequence particles_;
   cuboids_sequence cuboids_;
 };
@@ -1044,4 +1025,4 @@ simulation_ (::xml_schema::dom::unique_ptr< ::xercesc::DOMDocument > d,
 //
 // End epilogue.
 
-#endif // CXX_MNT_C_USERS_JOSHU_CLION_PROJECTS_MOLEKULAR_DYNAMIK_SRC_INPUT_SIMULATION_HXX
+#endif // SIMULATION_HXX

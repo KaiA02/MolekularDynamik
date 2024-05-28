@@ -12,8 +12,14 @@
 class XMLReader {
 public:
   XMLReader(const std::string &filePath);
-
   void readXML(ParticleContainer &particleContainer);
+  std::string getInputType();
+  std::array<double, 3> getTime();
+  std::string getOutputType();
+  std::string getBaseName();
+  int getWriteFrequency();
+  xml_schema::boolean getPerformanceMeasurement();
+  std::string getLogLevel();
 
 private:
   std::unique_ptr<simulation> sim;

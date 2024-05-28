@@ -34,7 +34,8 @@ void XMLReader::readXML(ParticleContainer &particleContainer) {
     particleContainer.resetParticles();
     for (int i = 0; i < in.cuboids().size(); i++) {
       ParticleGenerator pg;
-      for (auto particle : particles) {
+      for (int j = i; j < in.particles().size(); j++) {
+        Particle particle = particles[j];
         pg.generateCuboid(particle, in.cuboids()[i].n1(), in.cuboids()[i].n2(),
                           in.cuboids()[i].n3(), in.cuboids()[i].distance(),
                           in.cuboids()[i].meanVelocity(),
@@ -43,4 +44,34 @@ void XMLReader::readXML(ParticleContainer &particleContainer) {
       particleContainer.addCube(pg.getCube());
     }
   }
+}
+
+std::array<double, 3> XMLReader::getTime() {
+  std::array<double, 3> time;
+  time[0] = sim->input().tStart();
+  time[1] = sim->input().tEnd();
+  time[2] = sim->input().deltaT();
+  return time;
+}
+
+std::string XMLReader::getInputType() { return sim->input().inputType(); }
+
+std::string XMLReader::getOutputType() { return sim->output().outputType(); }
+
+std::string XMLReader::getBaseName() { return sim->output().baseName(); }
+
+int XMLReader::getWriteFrequency() { return sim->output().writeFrequency(); }
+
+xml_schema::boolean XMLReader::getPerformanceMeasurement() {
+  if (sim->config().performanceMeasurement().present()) {
+    return sim->config().performanceMeasurement().get();
+  }
+  return false;
+}
+
+std::string XMLReader::getLogLevel() {
+  if (sim->config().logLevel().present()) {
+    return sim->config().logLevel().get();
+  }
+  return "info";
 }
