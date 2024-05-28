@@ -34,13 +34,12 @@ void XMLReader::readXML(ParticleContainer &particleContainer) {
     particleContainer.resetParticles();
     for (int i = 0; i < in.cuboids().size(); i++) {
       ParticleGenerator pg;
-      for (int j = i; j < in.particles().size(); j++) {
-        Particle particle = particles[j];
-        pg.generateCuboid(particle, in.cuboids()[i].n1(), in.cuboids()[i].n2(),
-                          in.cuboids()[i].n3(), in.cuboids()[i].distance(),
-                          in.cuboids()[i].meanVelocity(),
-                          in.cuboids()[i].dimension());
-      }
+      Particle particle = particles[i];
+      pg.generateCuboid(particle, in.cuboids()[i].n1(), in.cuboids()[i].n2(),
+                        in.cuboids()[i].n3(), in.cuboids()[i].distance(),
+                        in.cuboids()[i].meanVelocity(),
+                        in.cuboids()[i].dimension());
+
       particleContainer.addCube(pg.getCube());
     }
   }
@@ -75,3 +74,9 @@ std::string XMLReader::getLogLevel() {
   }
   return "info";
 }
+
+int XMLReader::getNumberOfParticles() {
+  return sim->input().particles().size();
+}
+int XMLReader::getNumberOfCuboids() { return sim->input().cuboids().size(); }
+// int XMLReader::getNumberOfSpheres(){ return sim->input().spheres().size();}

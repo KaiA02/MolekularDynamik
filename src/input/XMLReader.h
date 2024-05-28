@@ -20,6 +20,8 @@ public:
   int getWriteFrequency();
   xml_schema::boolean getPerformanceMeasurement();
   std::string getLogLevel();
+  int getNumberOfParticles();
+  int getNumberOfCuboids();
 
 private:
   std::unique_ptr<simulation> sim;

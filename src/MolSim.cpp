@@ -62,12 +62,13 @@ int main(int argc, char *argsv[]) {
   double current_time = start_time;
 
   int iteration = 0;
-  spdlog::info(
-      "Simulation started with parameters: start_time: {}, end_time: "
-      "{}, delta_t: {}, inputType: {}, outputType: {}, baseName: {}, "
-      "logLevel: {}, performanceMeasurement: {} , Number of particles: {}",
-      start_time, end_time, delta_t, inputType, outputType, baseName, logLevel,
-      performanceMeasurement, particles.size());
+  spdlog::info("Simulation started with parameters: start_time: {}, end_time: "
+               "{}, delta_t: {}, inputType: {}, outputType: {}, baseName: {}, "
+               "logLevel: {}, performanceMeasurement: {} , Number of "
+               "particles: {}, Number of cuboids: {} ",
+               start_time, end_time, delta_t, inputType, outputType, baseName,
+               logLevel, performanceMeasurement, particles.size(),
+               xmlReader.getNumberOfCuboids());
   // for this loop, we assume: current x, current f and current v are known
   while (current_time < end_time) {
     // calculate new x
