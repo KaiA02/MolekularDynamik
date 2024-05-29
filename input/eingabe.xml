@@ -1,0 +1,58 @@
+<simulation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="../src/input/simulation.xsd">
+    <input>
+        <tStart>0.0</tStart>
+        <tEnd>10.0</tEnd>
+        <deltaT>0.002</deltaT>
+        <inputType>LJF</inputType>
+        <particles>
+            <x>15.0</x>
+            <y>15.0</y>
+            <z>0.0</z>
+            <velocityX>0.0</velocityX>
+            <velocityY>-10.0</velocityY>
+            <velocityZ>0.0</velocityZ>
+            <mass>1</mass>
+        </particles>
+        <particles>
+            <x>0.0</x>
+            <y>0.0</y>
+            <z>0.0</z>
+            <velocityX>0.0</velocityX>
+            <velocityY>0.0</velocityY>
+            <velocityZ>0.0</velocityZ>
+            <mass>1</mass>
+
+            <!-- Add more particle elements as needed -->
+        </particles>
+        <cuboids>
+
+            <n1>8.0</n1>
+            <n2>8.0</n2>
+            <n3>1.0</n3>
+            <distance>1.1225</distance>
+            <meanVelocity>0.1</meanVelocity>
+            <dimension>3.0</dimension>
+        </cuboids>
+        <cuboids>
+
+            <n1>40.0</n1>
+            <n2>8.0</n2>
+            <n3>1.0</n3>
+            <distance>1.1225</distance>
+            <meanVelocity>0.1</meanVelocity>
+            <dimension>3.0</dimension>
+
+            <!-- Add more cuboid elements as needed -->
+        </cuboids>
+    </input>
+    <output>
+        <baseName>simulation_output</baseName>
+        <writeFrequency>100</writeFrequency>
+        <outputType>vtk</outputType>
+    </output>
+    <config>
+        <performanceMeasurement>false</performanceMeasurement>
+        <logLevel>info</logLevel>
+    </config>
+</simulation>
