@@ -64,8 +64,8 @@ int main(int argc, char *argsv[]) {
   int iteration = 0;
   spdlog::info("Simulation started with parameters: start_time: {}, end_time: "
                "{}, delta_t: {}, inputType: {}, outputType: {}, baseName: {}, "
-               "logLevel: {}, performanceMeasurement: {} , Number of "
-               "particles: {}, Number of cuboids: {} ",
+               "logLevel: {}, performanceMeasurement: {} , {}"
+               "particles, {} cuboids, 0 disks ",
                start_time, end_time, delta_t, inputType, outputType, baseName,
                logLevel, performanceMeasurement, particles.size(),
                xmlReader.getNumberOfCuboids());

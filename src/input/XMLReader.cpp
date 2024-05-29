@@ -35,10 +35,14 @@ void XMLReader::readXML(ParticleContainer &particleContainer) {
     for (int i = 0; i < in.cuboids().size(); i++) {
       ParticleGenerator pg;
       Particle particle = particles[i];
+      int dimension = in.cuboids()[i].dimension();
+      int n3 = in.cuboids()[i].n3();
+      if (dimension == 2) {
+        n3 = 1;
+      }
       pg.generateCuboid(particle, in.cuboids()[i].n1(), in.cuboids()[i].n2(),
-                        in.cuboids()[i].n3(), in.cuboids()[i].distance(),
-                        in.cuboids()[i].meanVelocity(),
-                        in.cuboids()[i].dimension());
+                        n3, in.cuboids()[i].distance(),
+                        in.cuboids()[i].meanVelocity(), dimension);
 
       particleContainer.addCube(pg.getCube());
     }
