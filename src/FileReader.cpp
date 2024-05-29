@@ -173,6 +173,7 @@ void DiskFileReader::readFileDisk(ParticleContainer &particleContainer,
   int num_particles = 0;
   int radius;
   double distance;
+  int dimension;
 
   std::ifstream input_file(filename);
   std::string tmp_string;
@@ -207,6 +208,7 @@ void DiskFileReader::readFileDisk(ParticleContainer &particleContainer,
       }
       datastream >> radius;
       datastream >> distance;
+      datastream >> dimension;
       if (datastream.eof()) {
         spdlog::error(
             "Error reading file: eof reached unexpectedly reading from line {}",
@@ -216,7 +218,7 @@ void DiskFileReader::readFileDisk(ParticleContainer &particleContainer,
       datastream >> m;
       Particle particle(x, v, m);
       ParticleGenerator generator;
-      generator.generateDisk(particle, radius, distance, 2);
+      generator.generateDisk(particle, radius, distance, dimension);
       particleContainer.addDisk(generator.getDisk());
 
       getline(input_file, tmp_string);
