@@ -31,8 +31,8 @@
 // in the accompanying FLOSSE file.
 //
 
-#ifndef SIMULATION_HXX
-#define SIMULATION_HXX
+#ifndef CXX_MNT_C_USERS_JOSHU_CLION_PROJECTS_MOLEKULAR_DYNAMIK_SRC_INPUT_SIMULATION_HXX
+#define CXX_MNT_C_USERS_JOSHU_CLION_PROJECTS_MOLEKULAR_DYNAMIK_SRC_INPUT_SIMULATION_HXX
 
 #ifndef XSD_CXX11
 #define XSD_CXX11
@@ -232,6 +232,7 @@ class output;
 class config;
 class particles;
 class cuboids;
+class disk;
 
 #include <memory>    // ::std::unique_ptr
 #include <limits>    // std::numeric_limits
@@ -438,6 +439,23 @@ class input: public ::xml_schema::type
   void
   cuboids (const cuboids_sequence& s);
 
+  // disk
+  //
+  typedef ::disk disk_type;
+  typedef ::xsd::cxx::tree::sequence< disk_type > disk_sequence;
+  typedef disk_sequence::iterator disk_iterator;
+  typedef disk_sequence::const_iterator disk_const_iterator;
+  typedef ::xsd::cxx::tree::traits< disk_type, char > disk_traits;
+
+  const disk_sequence&
+  disk () const;
+
+  disk_sequence&
+  disk ();
+
+  void
+  disk (const disk_sequence& s);
+
   // Constructors.
   //
   input (const tStart_type&,
@@ -477,6 +495,7 @@ class input: public ::xml_schema::type
   ::xsd::cxx::tree::one< inputType_type > inputType_;
   particles_sequence particles_;
   cuboids_sequence cuboids_;
+  disk_sequence disk_;
 };
 
 class output: public ::xml_schema::type
@@ -919,6 +938,88 @@ class cuboids: public ::xml_schema::type
   ::xsd::cxx::tree::one< dimension_type > dimension_;
 };
 
+class disk: public ::xml_schema::type
+{
+  public:
+  // radius
+  //
+  typedef ::xml_schema::double_ radius_type;
+  typedef ::xsd::cxx::tree::traits< radius_type, char, ::xsd::cxx::tree::schema_type::double_ > radius_traits;
+
+  const radius_type&
+  radius () const;
+
+  radius_type&
+  radius ();
+
+  void
+  radius (const radius_type& x);
+
+  // distance
+  //
+  typedef ::xml_schema::double_ distance_type;
+  typedef ::xsd::cxx::tree::traits< distance_type, char, ::xsd::cxx::tree::schema_type::double_ > distance_traits;
+
+  const distance_type&
+  distance () const;
+
+  distance_type&
+  distance ();
+
+  void
+  distance (const distance_type& x);
+
+  // dimension
+  //
+  typedef ::xml_schema::double_ dimension_type;
+  typedef ::xsd::cxx::tree::traits< dimension_type, char, ::xsd::cxx::tree::schema_type::double_ > dimension_traits;
+
+  const dimension_type&
+  dimension () const;
+
+  dimension_type&
+  dimension ();
+
+  void
+  dimension (const dimension_type& x);
+
+  // Constructors.
+  //
+  disk (const radius_type&,
+        const distance_type&,
+        const dimension_type&);
+
+  disk (const ::xercesc::DOMElement& e,
+        ::xml_schema::flags f = 0,
+        ::xml_schema::container* c = 0);
+
+  disk (const disk& x,
+        ::xml_schema::flags f = 0,
+        ::xml_schema::container* c = 0);
+
+  virtual disk*
+  _clone (::xml_schema::flags f = 0,
+          ::xml_schema::container* c = 0) const;
+
+  disk&
+  operator= (const disk& x);
+
+  virtual 
+  ~disk ();
+
+  // Implementation.
+  //
+  protected:
+  void
+  parse (::xsd::cxx::xml::dom::parser< char >&,
+         ::xml_schema::flags);
+
+  protected:
+  ::xsd::cxx::tree::one< radius_type > radius_;
+  ::xsd::cxx::tree::one< distance_type > distance_;
+  ::xsd::cxx::tree::one< dimension_type > dimension_;
+};
+
 #include <iosfwd>
 
 #include <xercesc/sax/InputSource.hpp>
@@ -1025,4 +1126,4 @@ simulation_ (::xml_schema::dom::unique_ptr< ::xercesc::DOMDocument > d,
 //
 // End epilogue.
 
-#endif // SIMULATION_HXX
+#endif // CXX_MNT_C_USERS_JOSHU_CLION_PROJECTS_MOLEKULAR_DYNAMIK_SRC_INPUT_SIMULATION_HXX

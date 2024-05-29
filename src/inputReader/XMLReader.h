@@ -22,6 +22,7 @@ public:
   std::string getLogLevel();
   int getNumberOfParticles();
   int getNumberOfCuboids();
+  int getNumberOfDisks();
 
 private:
   std::unique_ptr<simulation> sim;

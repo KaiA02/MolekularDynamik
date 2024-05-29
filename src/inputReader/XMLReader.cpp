@@ -5,6 +5,8 @@
 #include "ParticleContainer.h"
 #include "ParticleGenerator.h"
 #include "simulation.hxx"
+#include "spdlog/spdlog.h"
+
 #include <fstream>
 #include <iostream>
 #include <memory>
@@ -20,21 +22,16 @@ XMLReader::XMLReader(const std::string &filePath) {
 void XMLReader::readXML(ParticleContainer &particleContainer) {
   input in = sim->input();
   std::vector<Particle> particles;
+  std::vector<std::vector<Particle>> cubes;
+  particleContainer.resetParticles();
   for (int i = 0; i < in.particles().size(); i++) {
-    Particle p(
+    ParticleGenerator pg;
+    Particle particle(
         {in.particles()[i].x(), in.particles()[i].y(), in.particles()[i].z()},
         {in.particles()[i].velocityX(), in.particles()[i].velocityY(),
          in.particles()[i].velocityZ()},
         in.particles()[i].mass());
-    particleContainer.addParticle(p);
-    particles.push_back(p);
-  }
-  if (in.cuboids().size() > 0) {
-    std::vector<std::vector<Particle>> cubes;
-    particleContainer.resetParticles();
-    for (int i = 0; i < in.cuboids().size(); i++) {
-      ParticleGenerator pg;
-      Particle particle = particles[i];
+    if (i < in.cuboids().size()) {
       int dimension = in.cuboids()[i].dimension();
       int n3 = in.cuboids()[i].n3();
       if (dimension == 2) {
@@ -45,6 +42,14 @@ void XMLReader::readXML(ParticleContainer &particleContainer) {
                         in.cuboids()[i].meanVelocity(), dimension);
 
       particleContainer.addCube(pg.getCube());
+    } else if (i < in.disk().size()) {
+      spdlog::debug("Disk generation");
+      int dimension = in.disk()[i].dimension();
+      pg.generateDisk(particle, in.disk()[i].radius(), in.disk()[i].distance(),
+                      dimension);
+      particleContainer.addDisk(pg.getDisk());
+    } else {
+      particleContainer.addParticle(particle);
     }
   }
 }
@@ -83,4 +88,6 @@ int XMLReader::getNumberOfParticles() {
   return sim->input().particles().size();
 }
 int XMLReader::getNumberOfCuboids() { return sim->input().cuboids().size(); }
+
+int XMLReader::getNumberOfDisks() { return sim->input().disk().size(); }
 // int XMLReader::getNumberOfSpheres(){ return sim->input().spheres().size();}

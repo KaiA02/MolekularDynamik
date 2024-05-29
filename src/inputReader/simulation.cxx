@@ -233,6 +233,24 @@ cuboids (const cuboids_sequence& s)
   this->cuboids_ = s;
 }
 
+const input::disk_sequence& input::
+disk () const
+{
+  return this->disk_;
+}
+
+input::disk_sequence& input::
+disk ()
+{
+  return this->disk_;
+}
+
+void input::
+disk (const disk_sequence& s)
+{
+  this->disk_ = s;
+}
+
 
 // output
 // 
@@ -604,6 +622,64 @@ dimension (const dimension_type& x)
 }
 
 
+// disk
+// 
+
+const disk::radius_type& disk::
+radius () const
+{
+  return this->radius_.get ();
+}
+
+disk::radius_type& disk::
+radius ()
+{
+  return this->radius_.get ();
+}
+
+void disk::
+radius (const radius_type& x)
+{
+  this->radius_.set (x);
+}
+
+const disk::distance_type& disk::
+distance () const
+{
+  return this->distance_.get ();
+}
+
+disk::distance_type& disk::
+distance ()
+{
+  return this->distance_.get ();
+}
+
+void disk::
+distance (const distance_type& x)
+{
+  this->distance_.set (x);
+}
+
+const disk::dimension_type& disk::
+dimension () const
+{
+  return this->dimension_.get ();
+}
+
+disk::dimension_type& disk::
+dimension ()
+{
+  return this->dimension_.get ();
+}
+
+void disk::
+dimension (const dimension_type& x)
+{
+  this->dimension_.set (x);
+}
+
+
 #include <xsd/cxx/xml/dom/parsing-source.hxx>
 
 // simulation
@@ -775,7 +851,8 @@ input (const tStart_type& tStart,
   deltaT_ (deltaT, this),
   inputType_ (inputType, this),
   particles_ (this),
-  cuboids_ (this)
+  cuboids_ (this),
+  disk_ (this)
 {
 }
 
@@ -789,7 +866,8 @@ input (const input& x,
   deltaT_ (x.deltaT_, f, this),
   inputType_ (x.inputType_, f, this),
   particles_ (x.particles_, f, this),
-  cuboids_ (x.cuboids_, f, this)
+  cuboids_ (x.cuboids_, f, this),
+  disk_ (x.disk_, f, this)
 {
 }
 
@@ -803,7 +881,8 @@ input (const ::xercesc::DOMElement& e,
   deltaT_ (this),
   inputType_ (this),
   particles_ (this),
-  cuboids_ (this)
+  cuboids_ (this),
+  disk_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -891,6 +970,17 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       continue;
     }
 
+    // disk
+    //
+    if (n.name () == "disk" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< disk_type > r (
+        disk_traits::create (i, f, this));
+
+      this->disk_.push_back (::std::move (r));
+      continue;
+    }
+
     break;
   }
 
@@ -942,6 +1032,7 @@ operator= (const input& x)
     this->inputType_ = x.inputType_;
     this->particles_ = x.particles_;
     this->cuboids_ = x.cuboids_;
+    this->disk_ = x.disk_;
   }
 
   return *this;
@@ -1621,6 +1712,141 @@ operator= (const cuboids& x)
 
 cuboids::
 ~cuboids ()
+{
+}
+
+// disk
+//
+
+disk::
+disk (const radius_type& radius,
+      const distance_type& distance,
+      const dimension_type& dimension)
+: ::xml_schema::type (),
+  radius_ (radius, this),
+  distance_ (distance, this),
+  dimension_ (dimension, this)
+{
+}
+
+disk::
+disk (const disk& x,
+      ::xml_schema::flags f,
+      ::xml_schema::container* c)
+: ::xml_schema::type (x, f, c),
+  radius_ (x.radius_, f, this),
+  distance_ (x.distance_, f, this),
+  dimension_ (x.dimension_, f, this)
+{
+}
+
+disk::
+disk (const ::xercesc::DOMElement& e,
+      ::xml_schema::flags f,
+      ::xml_schema::container* c)
+: ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
+  radius_ (this),
+  distance_ (this),
+  dimension_ (this)
+{
+  if ((f & ::xml_schema::flags::base) == 0)
+  {
+    ::xsd::cxx::xml::dom::parser< char > p (e, true, false, false);
+    this->parse (p, f);
+  }
+}
+
+void disk::
+parse (::xsd::cxx::xml::dom::parser< char >& p,
+       ::xml_schema::flags f)
+{
+  for (; p.more_content (); p.next_content (false))
+  {
+    const ::xercesc::DOMElement& i (p.cur_element ());
+    const ::xsd::cxx::xml::qualified_name< char > n (
+      ::xsd::cxx::xml::dom::name< char > (i));
+
+    // radius
+    //
+    if (n.name () == "radius" && n.namespace_ ().empty ())
+    {
+      if (!radius_.present ())
+      {
+        this->radius_.set (radius_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // distance
+    //
+    if (n.name () == "distance" && n.namespace_ ().empty ())
+    {
+      if (!distance_.present ())
+      {
+        this->distance_.set (distance_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // dimension
+    //
+    if (n.name () == "dimension" && n.namespace_ ().empty ())
+    {
+      if (!dimension_.present ())
+      {
+        this->dimension_.set (dimension_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    break;
+  }
+
+  if (!radius_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "radius",
+      "");
+  }
+
+  if (!distance_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "distance",
+      "");
+  }
+
+  if (!dimension_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "dimension",
+      "");
+  }
+}
+
+disk* disk::
+_clone (::xml_schema::flags f,
+        ::xml_schema::container* c) const
+{
+  return new class disk (*this, f, c);
+}
+
+disk& disk::
+operator= (const disk& x)
+{
+  if (this != &x)
+  {
+    static_cast< ::xml_schema::type& > (*this) = x;
+    this->radius_ = x.radius_;
+    this->distance_ = x.distance_;
+    this->dimension_ = x.dimension_;
+  }
+
+  return *this;
+}
+
+disk::
+~disk ()
 {
 }
 

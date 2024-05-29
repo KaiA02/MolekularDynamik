@@ -65,10 +65,10 @@ int main(int argc, char *argsv[]) {
   spdlog::info("Simulation started with parameters: start_time: {}, end_time: "
                "{}, delta_t: {}, inputType: {}, outputType: {}, baseName: {}, "
                "logLevel: {}, performanceMeasurement: {}, {} "
-               "particles, {} cuboids, 0 disks ",
+               "particles, {} cuboids, {} disks ",
                start_time, end_time, delta_t, inputType, outputType, baseName,
                logLevel, performanceMeasurement, particles.size(),
-               xmlReader.getNumberOfCuboids());
+               xmlReader.getNumberOfCuboids(), xmlReader.getNumberOfDisks());
   // for this loop, we assume: current x, current f and current v are known
   while (current_time < end_time) {
     // calculate new x
