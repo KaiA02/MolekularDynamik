@@ -1,10 +1,10 @@
 
-#include "input/FileReader.h"
-#include "output/outputWriter/VTKWriter.h"
-#include "output/outputWriter/XYZWriter.h"
+#include "inputReader/FileReader.h"
+#include "outputWriter/VTKWriter.h"
+#include "outputWriter/XYZWriter.h"
 
 #include "Calculations.h"
-#include "input/XMLReader.h"
+#include "inputReader/XMLReader.h"
 
 #include <chrono>
 #include <filesystem>
@@ -64,7 +64,7 @@ int main(int argc, char *argsv[]) {
   int iteration = 0;
   spdlog::info("Simulation started with parameters: start_time: {}, end_time: "
                "{}, delta_t: {}, inputType: {}, outputType: {}, baseName: {}, "
-               "logLevel: {}, performanceMeasurement: {} , {}"
+               "logLevel: {}, performanceMeasurement: {}, {} "
                "particles, {} cuboids, 0 disks ",
                start_time, end_time, delta_t, inputType, outputType, baseName,
                logLevel, performanceMeasurement, particles.size(),
