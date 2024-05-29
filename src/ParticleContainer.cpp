@@ -23,17 +23,15 @@ void ParticleContainer::addParticle(const Particle &particle) {
  * @param particleIndex2: index of the second Particle in particles
  */
 void ParticleContainer::addPairing(int particleIndex1, int particleIndex2) {
-  if (particleIndex1 >= 0 && particleIndex1 < particles.size() &&
-      particleIndex2 >= 0 && particleIndex2 < particles.size()) {
+  if (particleIndex1 >= 0 && particleIndex1 < int(particles.size()) &&
+      particleIndex2 >= 0 && particleIndex2 < int(particles.size())) {
     pairings.push_back(std::make_pair(particleIndex1, particleIndex2));
   }
 }
 
- std::vector<Particle> &ParticleContainer::getParticles() {
-        return particles;
-}
+std::vector<Particle> &ParticleContainer::getParticles() { return particles; }
 const std::vector<Particle> &ParticleContainer::getParticles() const {
-    return particles;
+  return particles;
 }
 
 int ParticleContainer::size() const { return particles.size(); }
@@ -54,9 +52,17 @@ std::vector<Particle>::const_iterator ParticleContainer::end() const {
   return particles.end();
 }
 
+void ParticleContainer::resetParticles() { particles.clear(); }
+
 void ParticleContainer::addCube(std::vector<Particle> particleCube) {
   for (size_t x = 0; x < particleCube.size(); ++x) {
     addParticle(particleCube.at(x));
+  }
+}
+
+void ParticleContainer::addDisk(std::vector<Particle> particleDisk) {
+  for (size_t x = 0; x < particleDisk.size(); ++x) {
+    addParticle(particleDisk.at(x));
   }
 }
 

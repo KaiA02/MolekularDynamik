@@ -24,7 +24,12 @@ add_executable(MolSim ${MY_SRC}
         src/ParticleGenerator.cpp
         src/ParticleGenerator.h
         src/Calculations.cpp
-        src/Calculations.h)
+        src/Calculations.h
+        src/inputReader/XMLReader.cpp
+        src/inputReader/XMLReader.h
+        src/inputReader/simulation.cxx
+        src/inputReader/simulation.hxx
+)
 
 # set cxx standard. You may raise this if you want.
 target_compile_features(MolSim

@@ -1,0 +1,69 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="simulation">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="input">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="tStart" type="xs:double"/>
+                            <xs:element name="tEnd" type="xs:double"/>
+                            <xs:element name="deltaT" type="xs:double"/>
+                            <xs:element name="inputType" type="xs:string"/>
+                            <xs:element name="particles" maxOccurs="unbounded" minOccurs="1">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="x" type="xs:double"/>
+                                        <xs:element name="y" type="xs:double"/>
+                                        <xs:element name="z" type="xs:double"/>
+                                        <xs:element name="velocityX" type="xs:double"/>
+                                        <xs:element name="velocityY" type="xs:double"/>
+                                        <xs:element name="velocityZ" type="xs:double"/>
+                                        <xs:element name="mass" type="xs:double"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="cuboids" maxOccurs="unbounded" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="n1" type="xs:double"/>
+                                        <xs:element name="n2" type="xs:double"/>
+                                        <xs:element name="n3" type="xs:double"/>
+                                        <xs:element name="distance" type="xs:double"/>
+                                        <xs:element name="meanVelocity" type="xs:double"/>
+                                        <xs:element name="dimension" type="xs:double"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="disk" maxOccurs="unbounded" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="radius" type="xs:double"/>
+                                        <xs:element name="distance" type="xs:double"/>
+                                        <xs:element name="dimension" type="xs:double"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="output">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="baseName" type="xs:string"/>
+                            <xs:element name="writeFrequency" type="xs:int"/>
+                            <xs:element name="outputType" type="xs:string"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="config">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="performanceMeasurement" type="xs:boolean" minOccurs="0"/>
+                            <xs:element name="logLevel" type="xs:string" minOccurs="0"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
