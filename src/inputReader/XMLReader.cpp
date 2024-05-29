@@ -21,9 +21,6 @@ XMLReader::XMLReader(const std::string &filePath) {
 }
 void XMLReader::readXML(ParticleContainer &particleContainer) {
   input in = sim->input();
-  std::vector<Particle> particles;
-  std::vector<std::vector<Particle>> cubes;
-  particleContainer.resetParticles();
   for (int i = 0; i < in.particles().size(); i++) {
     ParticleGenerator pg;
     Particle particle(
@@ -37,13 +34,14 @@ void XMLReader::readXML(ParticleContainer &particleContainer) {
       if (dimension == 2) {
         n3 = 1;
       }
+      spdlog::debug("generating Cube");
       pg.generateCuboid(particle, in.cuboids()[i].n1(), in.cuboids()[i].n2(),
                         n3, in.cuboids()[i].distance(),
                         in.cuboids()[i].meanVelocity(), dimension);
 
       particleContainer.addCube(pg.getCube());
     } else if (i < in.disk().size()) {
-      spdlog::debug("Disk generation");
+      spdlog::debug("generating Disk");
       int dimension = in.disk()[i].dimension();
       pg.generateDisk(particle, in.disk()[i].radius(), in.disk()[i].distance(),
                       dimension);

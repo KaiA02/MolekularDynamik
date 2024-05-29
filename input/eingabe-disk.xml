@@ -3,7 +3,7 @@
     <input>
         <tStart>0.0</tStart>
         <tEnd>10.0</tEnd>
-        <deltaT>0.05</deltaT>
+        <deltaT>0.005</deltaT>
         <inputType>LFJ</inputType>
         <particles>
             <x>60.0</x>
@@ -26,6 +26,6 @@
         <outputType>vtk</outputType>
     </output>
     <config>
-        <logLevel>debug</logLevel>
+        <logLevel>info</logLevel>
     </config>
 </simulation>
