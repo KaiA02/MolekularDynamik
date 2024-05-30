@@ -4,6 +4,8 @@
 
 #include "Particle.h"
 #include <vector>
+
+#include "LinkedCell/Cell.h"
 /**
  * @brief The ParticleContainer class
  * This class is a container for Particles. It contains a vector of Particles
@@ -61,6 +63,19 @@ private:
   // too big (maybe use a force threshold to determine which particles are close
   // enough to interact with each other)
   std::vector<std::pair<int, int>> pairings;
+};
+class LCParticleContainer: public ParticleContainer {
+private:
+ std::vector<Cell> cells;
+ std::array<double, 3> cell_size;
+
+public:
+ //input CellSize in x,y,z and Strategy for handling particles out of border
+ void realocateParticles(int handle_out_of_border);
+ std::vector<Particle> getParticleInNeighbourhood(Cell c);
+ Cell& getCellById(std::array<int, 3> id);
+ //input: Domain Size in x,y,z and r_cutoff
+ void generateCells(int size_x, int size_y, int size_z, double r_cutoff);
 };
 
 #endif // PARTICLECONTAINER_H

@@ -92,6 +92,9 @@ add_executable(
         src/Calculations.cpp
         src/ParticleGenerator.cpp
         src/utils/MaxwellBoltzmannDistribution.h
+        src/LinkedCell/Cell.cpp
+        src/LinkedCell/Cell.h
+
 
 )
 target_link_libraries(
