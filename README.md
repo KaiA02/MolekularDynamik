@@ -22,7 +22,7 @@ XML input-file consists of
 6. (optional) performance measurement: true or false
 7. (optional) log level: "off", "error", "warn", "info", "debug", "trace"
 
-./MolSim ../input/eingabe.xml
+./MolSim ../input/eingabe-sonne.xml
 
 create new c++ classes from xsd file:
 xsdcxx cxx-tree --std c++11 /mnt/c/Users/joshu/CLionProjects/MolekularDynamik/src/input/simulation.xsd
@@ -30,3 +30,6 @@ xsdcxx cxx-tree --std c++11 /mnt/c/Users/joshu/CLionProjects/MolekularDynamik/sr
 ./MolSim ../input/eingabe-sonne.txt 0 1000 0.014 1 1 0  
 ./MolSim ../input/eingabe-cube.txt 0 5 0.0002 1 2 0  
 ./MolSim ../input/eingabe-disk.txt 0 10 0.00005 1 3 0
+
+We need to add this Code in the filereader to initialize our Particle Container and set everything up.
+first initialize LCParticleContainer particleContainer(), then particleContainer.generateCells(domainSize from Input file and r_cutoff), then add particleContainer.handleLJFCalculations() to MolSim

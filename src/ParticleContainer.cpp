@@ -5,6 +5,8 @@
 #include <cmath>
 #include <iostream>
 
+#include "Calculations.h"
+
 // Constructor (if needed)
 ParticleContainer::ParticleContainer() {
   // Initialize any other members if necessary
@@ -114,6 +116,7 @@ void LCParticleContainer::realocateParticles(int handle_out_of_border) {
       std::array<int, 3> wrong_id = {-1,-1,-1};
       if(c.getId() != wrong_id) {
         //adds p to right cell in case it is not out of the boundarys
+        p.setF({0.0,0.0,0.0});
         c.addParticle(p);
       }
     }
@@ -136,8 +139,17 @@ void LCParticleContainer::generateCells(int size_x, int size_y, int size_z, doub
     }
   }
   cell_size={cell_size_x,cell_size_y,cell_size_z};
-
 }
+
+void LCParticleContainer::handleLJFCalculation() {
+  realocateParticles(1);
+  for(auto& c:cells) {
+    std::vector<Particle> neighbourhood = getParticleInNeighbourhood(c);
+    Calculations calc{};
+    calc.LCcalculateLJF(neighbourhood);
+  }
+}
+
 
 
 

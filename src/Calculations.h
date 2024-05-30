@@ -15,6 +15,7 @@ private:
   static constexpr double sigma = 1;
 
 public:
+  Calculations();
   Calculations(ParticleContainer &other);
   /**
    *@brief calculate the force for all particles
@@ -24,6 +25,7 @@ public:
    * @brief calculate the Lennard-Jones-Force for all particles
    */
   void calculateLJF();
+  void LCcalculateLJF(std::vector<Particle>& other);
   /**
    * @brief calculate the position for all particles
    */
