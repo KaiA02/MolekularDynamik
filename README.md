@@ -1,18 +1,18 @@
-MolSim
-===
+# MolSim
+=========
 
 "GroupB"
 
-Program Execution:
+## Program Execution:
 
-mkdir build && cd $_  
-cmake ..  
-make  
-ctest  
-./MolSim XML-input-file  
-make doc
+1. mkdir build && cd $_
+2. cmake ..
+3. make
+4. ctest
+5. ./MolSim XML-input-file (e.g ./MolSim ../input/eingabe-sonne.xml)
+6. make doc
 
-XML input-file consists of
+## XML input-file consists of:
 
 1. Start_time as Double
 2. End_Time as Double
@@ -22,14 +22,20 @@ XML input-file consists of
 6. (optional) performance measurement: true or false
 7. (optional) log level: "off", "error", "warn", "info", "debug", "trace"
 
-./MolSim ../input/eingabe-sonne.xml
 
-create new c++ classes from xsd file:
+## Quick start guide:
+1. adapt inputFile to your need
+2. follow Steps described in Program Execution
+3. open Paraview
+4. open generated outputFiles in Paraview and add a Glyph to the Data
+5. run Simulation
+
+
+## create new c++ classes from xsd file:
 xsdcxx cxx-tree --std c++11 /mnt/c/Users/joshu/CLionProjects/MolekularDynamik/src/input/simulation.xsd
 
-./MolSim ../input/eingabe-sonne.txt 0 1000 0.014 1 1 0  
-./MolSim ../input/eingabe-cube.txt 0 5 0.0002 1 2 0  
-./MolSim ../input/eingabe-disk.txt 0 10 0.00005 1 3 0
 
-We need to add this Code in the filereader to initialize our Particle Container and set everything up.
-first initialize LCParticleContainer particleContainer(), then particleContainer.generateCells(domainSize from Input file and r_cutoff), then add particleContainer.handleLJFCalculations() to MolSim
+
+
+
+
