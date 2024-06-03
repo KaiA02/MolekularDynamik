@@ -74,11 +74,12 @@ public:
  //allocates Particle to right cell and resets the forces to zero
  void realocateParticles(int handle_out_of_border);
  std::vector<Particle> getParticleInNeighbourhood(Cell c);
- Cell& getCellById(std::array<int, 3> id);
+ Cell* getCellById(std::array<int, 3> id);
  //input: Domain Size in x,y,z and r_cutoff
  void generateCells(int size_x, int size_y, int size_z, double r_cutoff);
  //handles LJFCalcualtion for all Cells;
  void handleLJFCalculation();
+ void addParticle(Particle p);
 };
 
 #endif // PARTICLECONTAINER_H

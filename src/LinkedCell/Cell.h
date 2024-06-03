@@ -16,5 +16,6 @@ public:
     std::vector<Particle> getParticles();
     void addParticle(Particle p);
     std::array<int, 3> getId();
+    void emptyCell();
 };
 #endif //CELL_H

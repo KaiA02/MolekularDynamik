@@ -94,6 +94,8 @@ add_executable(
         src/utils/MaxwellBoltzmannDistribution.h
         src/LinkedCell/Cell.cpp
         src/LinkedCell/Cell.h
+        src/test/LCParticleContainerTest.cpp
+        src/test/CellTest.cpp
 
 
 )

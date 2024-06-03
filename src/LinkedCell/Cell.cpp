@@ -15,5 +15,8 @@ std::vector<Particle> Cell::getParticles() {
 void Cell::addParticle(Particle p) {
     particles.push_back(p);
 }
+void Cell::emptyCell() {
+    particles = {};
+}
 
 
