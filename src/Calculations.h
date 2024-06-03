@@ -38,7 +38,6 @@ public:
    */
   void calculateV(double delta_t);
 
-  std::vector<Particle> getParticles();
 };
 
 #endif // CALCULATIONS_H
