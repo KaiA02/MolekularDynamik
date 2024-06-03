@@ -58,6 +58,7 @@ TEST(LCParticleContainerTest, RealocateParticles) {
     // p2 should be removed
     Cell* cell2 = container.getCellById({2,2,2});
     EXPECT_EQ(cell2->getParticles().size(), 0);
+    EXPECT_EQ(1,1);
 }
 
 TEST(LCParticleContainerTest, GenerateCells) {

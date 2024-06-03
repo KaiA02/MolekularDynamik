@@ -71,6 +71,7 @@ void ParticleContainer::setParticle(Particle p, int position) {
 std::vector<Particle> LCParticleContainer::getParticleInNeighbourhood(Cell cell) {
   std::array<int, 3> id = cell.getId();
   std::vector<Particle> neigbourhood;
+  int particleCount=0;
   for(auto& cell : cells) {
     int x = sqrt(int(std::pow(cell.getId().at(0) - id.at(0), 2)));
     int y = sqrt(int(std::pow(cell.getId().at(1) - id.at(1), 2)));
@@ -78,9 +79,11 @@ std::vector<Particle> LCParticleContainer::getParticleInNeighbourhood(Cell cell)
     if(x <= 1 && y <= 1 && z <= 1) {
       for(auto& p: cell.getParticles()) {
         neigbourhood.push_back(p);
+        particleCount++;
       }
     }
   }
+  spdlog::info("neighbourhood has {} particles", particleCount);
   return neigbourhood;
 }
 Cell* LCParticleContainer::getCellById(std::array<int, 3> id) {
@@ -110,6 +113,7 @@ void LCParticleContainer::realocateParticles(int handle_out_of_border) {
       int y = floor(p.getX().at(1)/cell_size.at(1));
       int z = floor(p.getX().at(2)/cell_size.at(2));
       Cell* c = getCellById({x,y,z});
+
       if(c != nullptr) {
         // adds p to the right cell in case it is not out of the boundaries
         p.setF({0.0,0.0,0.0});
@@ -124,7 +128,13 @@ void LCParticleContainer::generateCells(int size_x, int size_y, int size_z, doub
   if(r_cutoff>0) {
     int count_x = floor(size_x / r_cutoff);
     int count_y = floor(size_y / r_cutoff);
-    int count_z = floor(size_z / r_cutoff);
+    int count_z = 0;
+    if(size_z < r_cutoff) {
+      count_z = 1;
+    } else {
+      count_z = floor(size_z / r_cutoff);
+    }
+
     if(count_x > 0 && count_y > 0 && count_z >= 0){
       double cell_size_x = size_x / count_x;
       double cell_size_y = size_y / count_y;
@@ -133,14 +143,17 @@ void LCParticleContainer::generateCells(int size_x, int size_y, int size_z, doub
         cell_size_z = size_z / count_z;
       }
       cells.clear(); // Clear existing cells before generating new ones
+      //spdlog::info("highest Cell Index is {}, {}, {}", count_x, count_y, count_z);
       for(int x = 0; x < count_x; x++) {
         for(int y = 0; y < count_y; y++) {
           for(int z = 0; z < count_z; z++) {
             cells.push_back(Cell({x, y, z})); // Add generated cells to cells vector
+
           }
         }
       }
       cell_size = {cell_size_x, cell_size_y, cell_size_z};
+      //spdlog::info("We generated {} cells", cells.size());
     } else {
       spdlog::info("negative value detected in: generate Cells(count_x etc.) {}, {}, {}", count_x, count_y, count_z);
     }
@@ -151,6 +164,7 @@ void LCParticleContainer::generateCells(int size_x, int size_y, int size_z, doub
 
 void LCParticleContainer::handleLJFCalculation() {
   realocateParticles(1);
+  spdlog::trace("Container has {} cells", cells.size());
   for(auto& c:cells) {
     std::vector<Particle> neighbourhood = getParticleInNeighbourhood(c);
     LCParticleContainer container;
