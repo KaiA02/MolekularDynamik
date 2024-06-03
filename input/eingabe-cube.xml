@@ -34,7 +34,7 @@
 
             <n1>8.0</n1>
             <n2>8.0</n2>
-            <n3>1.0</n3>
+            <n3>5.0</n3>
             <distance>1.1225</distance>
             <meanVelocity>0.1</meanVelocity>
             <dimension>3.0</dimension>
@@ -43,7 +43,7 @@
 
             <n1>40.0</n1>
             <n2>8.0</n2>
-            <n3>1.0</n3>
+            <n3>5.0</n3>
             <distance>1.1225</distance>
             <meanVelocity>0.1</meanVelocity>
             <dimension>3.0</dimension>

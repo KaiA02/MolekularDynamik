@@ -91,6 +91,7 @@ int main(int argc, char *argsv[]) {
     } else {
       if(particleContainerType == "LC") {
         //std::cout << "right claculation is choosen" << std::endl;
+        //particles -> handleLJFCalculation();
       } else {
         calculations.calculateLJF();
       }

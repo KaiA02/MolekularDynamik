@@ -44,6 +44,12 @@ public:
      * @return number of particles
      */
     virtual int size() const = 0;
+
+    virtual std::vector<Particle>::iterator begin() =0;
+    virtual std::vector<Particle>::iterator end() =0;
+    virtual std::vector<Particle>::const_iterator begin() const =0;
+    virtual std::vector<Particle>::const_iterator end() const =0;
+
 protected:
  std::vector<Particle> particles;
 };
@@ -64,10 +70,10 @@ public:
     const std::vector<Particle> &getParticles() const override;
     int size() const override;
 
-    std::vector<Particle>::iterator begin();
-    std::vector<Particle>::iterator end();
-    std::vector<Particle>::const_iterator begin() const;
-    std::vector<Particle>::const_iterator end() const;
+    std::vector<Particle>::iterator begin() override;
+    std::vector<Particle>::iterator end() override;
+    std::vector<Particle>::const_iterator begin() const override;
+    std::vector<Particle>::const_iterator end() const override;
 
 
     /**
