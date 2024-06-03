@@ -31,8 +31,8 @@
 // in the accompanying FLOSSE file.
 //
 
-#ifndef SIMULATION_HXX
-#define SIMULATION_HXX
+#ifndef CXX__SIMULATION_HXX
+#define CXX__SIMULATION_HXX
 
 #ifndef XSD_CXX11
 #define XSD_CXX11
@@ -360,7 +360,6 @@ class input: public ::xml_schema::type
   void
   tStart (const tStart_type& x);
 
-
   // tEnd
   //
   typedef ::xml_schema::double_ tEnd_type;
@@ -406,14 +405,22 @@ class input: public ::xml_schema::type
   void
   inputType (::std::unique_ptr< inputType_type > p);
 
-    // particleContainerType
-    typedef ::xml_schema::string particleContainerType_type;
-    typedef ::xsd::cxx::tree::traits<particleContainerType_type, char> particleContainerType_traits;
+  // particleContainerType
+  //
+  typedef ::xml_schema::string particleContainerType_type;
+  typedef ::xsd::cxx::tree::traits< particleContainerType_type, char > particleContainerType_traits;
 
-    const particleContainerType_type& particleContainerType() const;
-    particleContainerType_type& particleContainerType();
-    void particleContainerType(const particleContainerType_type& x);
-    void particleContainerType(::std::unique_ptr<particleContainerType_type> p);
+  const particleContainerType_type&
+  particleContainerType () const;
+
+  particleContainerType_type&
+  particleContainerType ();
+
+  void
+  particleContainerType (const particleContainerType_type& x);
+
+  void
+  particleContainerType (::std::unique_ptr< particleContainerType_type > p);
 
   // particles
   //
@@ -471,7 +478,7 @@ class input: public ::xml_schema::type
   input (const tStart_type&,
          const tEnd_type&,
          const deltaT_type&,
-         const inputType_type&
+         const inputType_type&,
          const particleContainerType_type&);
 
   input (const ::xercesc::DOMElement& e,
@@ -504,7 +511,7 @@ class input: public ::xml_schema::type
   ::xsd::cxx::tree::one< tEnd_type > tEnd_;
   ::xsd::cxx::tree::one< deltaT_type > deltaT_;
   ::xsd::cxx::tree::one< inputType_type > inputType_;
-    ::xsd::cxx::tree::one< particleContainerType_type > particleContainerType_;
+  ::xsd::cxx::tree::one< particleContainerType_type > particleContainerType_;
   particles_sequence particles_;
   cuboids_sequence cuboids_;
   disk_sequence disk_;
@@ -1138,4 +1145,4 @@ simulation_ (::xml_schema::dom::unique_ptr< ::xercesc::DOMDocument > d,
 //
 // End epilogue.
 
-#endif
+#endif // CXX__SIMULATION_HXX

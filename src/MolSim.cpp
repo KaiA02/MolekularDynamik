@@ -89,7 +89,12 @@ int main(int argc, char *argsv[]) {
       calculations.calculateF();
       spdlog::trace("Simple calculation finished");
     } else {
-      calculations.calculateLJF();
+      if(particleContainerType == "LC") {
+        std::cout << "right claculation is choosen" << std::endl;
+      } else {
+        calculations.calculateLJF();
+      }
+
     }
     // calculate new v
     calculations.calculateV(delta_t);
@@ -137,7 +142,7 @@ void plotParticles(int iteration, std::string outputType, std::string baseName,
     int numParticles = particles->size();
     vtkWriter.initializeOutput(numParticles);
 
-    for (auto &particle : particles) {
+    for (auto &particle : particles->getParticles()) {
       vtkWriter.plotParticle(particle);
     }
 

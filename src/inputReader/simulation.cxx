@@ -197,6 +197,30 @@ inputType (::std::unique_ptr< inputType_type > x)
   this->inputType_.set (std::move (x));
 }
 
+const input::particleContainerType_type& input::
+particleContainerType () const
+{
+  return this->particleContainerType_.get ();
+}
+
+input::particleContainerType_type& input::
+particleContainerType ()
+{
+  return this->particleContainerType_.get ();
+}
+
+void input::
+particleContainerType (const particleContainerType_type& x)
+{
+  this->particleContainerType_.set (x);
+}
+
+void input::
+particleContainerType (::std::unique_ptr< particleContainerType_type > x)
+{
+  this->particleContainerType_.set (std::move (x));
+}
+
 const input::particles_sequence& input::
 particles () const
 {
@@ -844,12 +868,14 @@ input::
 input (const tStart_type& tStart,
        const tEnd_type& tEnd,
        const deltaT_type& deltaT,
-       const inputType_type& inputType)
+       const inputType_type& inputType,
+       const particleContainerType_type& particleContainerType)
 : ::xml_schema::type (),
   tStart_ (tStart, this),
   tEnd_ (tEnd, this),
   deltaT_ (deltaT, this),
   inputType_ (inputType, this),
+  particleContainerType_ (particleContainerType, this),
   particles_ (this),
   cuboids_ (this),
   disk_ (this)
@@ -865,6 +891,7 @@ input (const input& x,
   tEnd_ (x.tEnd_, f, this),
   deltaT_ (x.deltaT_, f, this),
   inputType_ (x.inputType_, f, this),
+  particleContainerType_ (x.particleContainerType_, f, this),
   particles_ (x.particles_, f, this),
   cuboids_ (x.cuboids_, f, this),
   disk_ (x.disk_, f, this)
@@ -880,6 +907,7 @@ input (const ::xercesc::DOMElement& e,
   tEnd_ (this),
   deltaT_ (this),
   inputType_ (this),
+  particleContainerType_ (this),
   particles_ (this),
   cuboids_ (this),
   disk_ (this)
@@ -948,6 +976,20 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // particleContainerType
+    //
+    if (n.name () == "particleContainerType" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< particleContainerType_type > r (
+        particleContainerType_traits::create (i, f, this));
+
+      if (!particleContainerType_.present ())
+      {
+        this->particleContainerType_.set (::std::move (r));
+        continue;
+      }
+    }
+
     // particles
     //
     if (n.name () == "particles" && n.namespace_ ().empty ())
@@ -1011,6 +1053,13 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "inputType",
       "");
   }
+
+  if (!particleContainerType_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "particleContainerType",
+      "");
+  }
 }
 
 input* input::
@@ -1030,6 +1079,7 @@ operator= (const input& x)
     this->tEnd_ = x.tEnd_;
     this->deltaT_ = x.deltaT_;
     this->inputType_ = x.inputType_;
+    this->particleContainerType_ = x.particleContainerType_;
     this->particles_ = x.particles_;
     this->cuboids_ = x.cuboids_;
     this->disk_ = x.disk_;
