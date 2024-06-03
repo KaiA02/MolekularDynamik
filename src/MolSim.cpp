@@ -27,7 +27,7 @@ int main(int argc, char *argsv[]) {
   std::array<double, 3> times = xmlReader.getTime();
   std::string outputType = xmlReader.getOutputType();
   std::string baseName = xmlReader.getBaseName();
-  int writeFrequency = xmlReader.getWriteFrequency();
+  //int writeFrequency = xmlReader.getWriteFrequency();
   xml_schema::boolean performanceMeasurement =
       xmlReader.getPerformanceMeasurement();
   std::string logLevel = xmlReader.getLogLevel();
@@ -88,14 +88,13 @@ int main(int argc, char *argsv[]) {
     if (inputType == "SF") {
       calculations.calculateF();
       spdlog::trace("Simple calculation finished");
-    } else {
-      if(particleContainerType == "LC") {
+    } else if(particleContainerType == "LC") {
         particles->handleLJFCalculation();
-      } else {
+      spdlog::trace("used hanldeLJFCalculation()");
+    } else {
         calculations.calculateLJF();
-      }
-
     }
+
     // calculate new v
     calculations.calculateV(delta_t);
 

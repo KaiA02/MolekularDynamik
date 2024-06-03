@@ -83,6 +83,7 @@ void XMLReader::readXML_LC(LCParticleContainer &particleContainer) {
       particleContainer.addParticle(particle);
     }
   }
+  particleContainer.generateCells(in.domainSizeX(), in.domainSizeY(), in.domainSizeZ(), in.r_cutoff());
 }
 
 std::array<double, 3> XMLReader::getTime() {
