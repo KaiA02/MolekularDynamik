@@ -22,7 +22,7 @@ XMLReader::XMLReader(const std::string &filePath) {
 
 void XMLReader::readXML(ParticleContainer &particleContainer) {
   input in = sim->input();
-  for (int i = 0; i < in.particles().size(); i++) {
+  for (size_t i = 0; i < in.particles().size(); i++) {
     ParticleGenerator pg;
     Particle particle(
         {in.particles()[i].x(), in.particles()[i].y(), in.particles()[i].z()},
@@ -54,7 +54,7 @@ void XMLReader::readXML(ParticleContainer &particleContainer) {
 }
 void XMLReader::readXML_LC(LCParticleContainer &particleContainer) {
   input in = sim->input();
-  for (int i = 0; i < in.particles().size(); i++) {
+  for (size_t i = 0; i < in.particles().size(); i++) {
     ParticleGenerator pg;
     Particle particle(
         {in.particles()[i].x(), in.particles()[i].y(), in.particles()[i].z()},

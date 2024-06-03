@@ -422,6 +422,62 @@ class input: public ::xml_schema::type
   void
   particleContainerType (::std::unique_ptr< particleContainerType_type > p);
 
+  // r_cutoff
+  //
+  typedef ::xml_schema::double_ r_cutoff_type;
+  typedef ::xsd::cxx::tree::traits< r_cutoff_type, char, ::xsd::cxx::tree::schema_type::double_ > r_cutoff_traits;
+
+  const r_cutoff_type&
+  r_cutoff () const;
+
+  r_cutoff_type&
+  r_cutoff ();
+
+  void
+  r_cutoff (const r_cutoff_type& x);
+
+  // domainSizeX
+  //
+  typedef ::xml_schema::int_ domainSizeX_type;
+  typedef ::xsd::cxx::tree::traits< domainSizeX_type, char > domainSizeX_traits;
+
+  const domainSizeX_type&
+  domainSizeX () const;
+
+  domainSizeX_type&
+  domainSizeX ();
+
+  void
+  domainSizeX (const domainSizeX_type& x);
+
+  // domainSizeY
+  //
+  typedef ::xml_schema::int_ domainSizeY_type;
+  typedef ::xsd::cxx::tree::traits< domainSizeY_type, char > domainSizeY_traits;
+
+  const domainSizeY_type&
+  domainSizeY () const;
+
+  domainSizeY_type&
+  domainSizeY ();
+
+  void
+  domainSizeY (const domainSizeY_type& x);
+
+  // domainSizeZ
+  //
+  typedef ::xml_schema::int_ domainSizeZ_type;
+  typedef ::xsd::cxx::tree::traits< domainSizeZ_type, char > domainSizeZ_traits;
+
+  const domainSizeZ_type&
+  domainSizeZ () const;
+
+  domainSizeZ_type&
+  domainSizeZ ();
+
+  void
+  domainSizeZ (const domainSizeZ_type& x);
+
   // particles
   //
   typedef ::particles particles_type;
@@ -479,7 +535,11 @@ class input: public ::xml_schema::type
          const tEnd_type&,
          const deltaT_type&,
          const inputType_type&,
-         const particleContainerType_type&);
+         const particleContainerType_type&,
+         const r_cutoff_type&,
+         const domainSizeX_type&,
+         const domainSizeY_type&,
+         const domainSizeZ_type&);
 
   input (const ::xercesc::DOMElement& e,
          ::xml_schema::flags f = 0,
@@ -512,6 +572,10 @@ class input: public ::xml_schema::type
   ::xsd::cxx::tree::one< deltaT_type > deltaT_;
   ::xsd::cxx::tree::one< inputType_type > inputType_;
   ::xsd::cxx::tree::one< particleContainerType_type > particleContainerType_;
+  ::xsd::cxx::tree::one< r_cutoff_type > r_cutoff_;
+  ::xsd::cxx::tree::one< domainSizeX_type > domainSizeX_;
+  ::xsd::cxx::tree::one< domainSizeY_type > domainSizeY_;
+  ::xsd::cxx::tree::one< domainSizeZ_type > domainSizeZ_;
   particles_sequence particles_;
   cuboids_sequence cuboids_;
   disk_sequence disk_;

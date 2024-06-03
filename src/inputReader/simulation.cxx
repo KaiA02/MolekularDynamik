@@ -221,6 +221,78 @@ particleContainerType (::std::unique_ptr< particleContainerType_type > x)
   this->particleContainerType_.set (std::move (x));
 }
 
+const input::r_cutoff_type& input::
+r_cutoff () const
+{
+  return this->r_cutoff_.get ();
+}
+
+input::r_cutoff_type& input::
+r_cutoff ()
+{
+  return this->r_cutoff_.get ();
+}
+
+void input::
+r_cutoff (const r_cutoff_type& x)
+{
+  this->r_cutoff_.set (x);
+}
+
+const input::domainSizeX_type& input::
+domainSizeX () const
+{
+  return this->domainSizeX_.get ();
+}
+
+input::domainSizeX_type& input::
+domainSizeX ()
+{
+  return this->domainSizeX_.get ();
+}
+
+void input::
+domainSizeX (const domainSizeX_type& x)
+{
+  this->domainSizeX_.set (x);
+}
+
+const input::domainSizeY_type& input::
+domainSizeY () const
+{
+  return this->domainSizeY_.get ();
+}
+
+input::domainSizeY_type& input::
+domainSizeY ()
+{
+  return this->domainSizeY_.get ();
+}
+
+void input::
+domainSizeY (const domainSizeY_type& x)
+{
+  this->domainSizeY_.set (x);
+}
+
+const input::domainSizeZ_type& input::
+domainSizeZ () const
+{
+  return this->domainSizeZ_.get ();
+}
+
+input::domainSizeZ_type& input::
+domainSizeZ ()
+{
+  return this->domainSizeZ_.get ();
+}
+
+void input::
+domainSizeZ (const domainSizeZ_type& x)
+{
+  this->domainSizeZ_.set (x);
+}
+
 const input::particles_sequence& input::
 particles () const
 {
@@ -869,13 +941,21 @@ input (const tStart_type& tStart,
        const tEnd_type& tEnd,
        const deltaT_type& deltaT,
        const inputType_type& inputType,
-       const particleContainerType_type& particleContainerType)
+       const particleContainerType_type& particleContainerType,
+       const r_cutoff_type& r_cutoff,
+       const domainSizeX_type& domainSizeX,
+       const domainSizeY_type& domainSizeY,
+       const domainSizeZ_type& domainSizeZ)
 : ::xml_schema::type (),
   tStart_ (tStart, this),
   tEnd_ (tEnd, this),
   deltaT_ (deltaT, this),
   inputType_ (inputType, this),
   particleContainerType_ (particleContainerType, this),
+  r_cutoff_ (r_cutoff, this),
+  domainSizeX_ (domainSizeX, this),
+  domainSizeY_ (domainSizeY, this),
+  domainSizeZ_ (domainSizeZ, this),
   particles_ (this),
   cuboids_ (this),
   disk_ (this)
@@ -892,6 +972,10 @@ input (const input& x,
   deltaT_ (x.deltaT_, f, this),
   inputType_ (x.inputType_, f, this),
   particleContainerType_ (x.particleContainerType_, f, this),
+  r_cutoff_ (x.r_cutoff_, f, this),
+  domainSizeX_ (x.domainSizeX_, f, this),
+  domainSizeY_ (x.domainSizeY_, f, this),
+  domainSizeZ_ (x.domainSizeZ_, f, this),
   particles_ (x.particles_, f, this),
   cuboids_ (x.cuboids_, f, this),
   disk_ (x.disk_, f, this)
@@ -908,6 +992,10 @@ input (const ::xercesc::DOMElement& e,
   deltaT_ (this),
   inputType_ (this),
   particleContainerType_ (this),
+  r_cutoff_ (this),
+  domainSizeX_ (this),
+  domainSizeY_ (this),
+  domainSizeZ_ (this),
   particles_ (this),
   cuboids_ (this),
   disk_ (this)
@@ -990,6 +1078,50 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // r_cutoff
+    //
+    if (n.name () == "r_cutoff" && n.namespace_ ().empty ())
+    {
+      if (!r_cutoff_.present ())
+      {
+        this->r_cutoff_.set (r_cutoff_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // domainSizeX
+    //
+    if (n.name () == "domainSizeX" && n.namespace_ ().empty ())
+    {
+      if (!domainSizeX_.present ())
+      {
+        this->domainSizeX_.set (domainSizeX_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // domainSizeY
+    //
+    if (n.name () == "domainSizeY" && n.namespace_ ().empty ())
+    {
+      if (!domainSizeY_.present ())
+      {
+        this->domainSizeY_.set (domainSizeY_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // domainSizeZ
+    //
+    if (n.name () == "domainSizeZ" && n.namespace_ ().empty ())
+    {
+      if (!domainSizeZ_.present ())
+      {
+        this->domainSizeZ_.set (domainSizeZ_traits::create (i, f, this));
+        continue;
+      }
+    }
+
     // particles
     //
     if (n.name () == "particles" && n.namespace_ ().empty ())
@@ -1060,6 +1192,34 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "particleContainerType",
       "");
   }
+
+  if (!r_cutoff_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "r_cutoff",
+      "");
+  }
+
+  if (!domainSizeX_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "domainSizeX",
+      "");
+  }
+
+  if (!domainSizeY_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "domainSizeY",
+      "");
+  }
+
+  if (!domainSizeZ_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "domainSizeZ",
+      "");
+  }
 }
 
 input* input::
@@ -1080,6 +1240,10 @@ operator= (const input& x)
     this->deltaT_ = x.deltaT_;
     this->inputType_ = x.inputType_;
     this->particleContainerType_ = x.particleContainerType_;
+    this->r_cutoff_ = x.r_cutoff_;
+    this->domainSizeX_ = x.domainSizeX_;
+    this->domainSizeY_ = x.domainSizeY_;
+    this->domainSizeZ_ = x.domainSizeZ_;
     this->particles_ = x.particles_;
     this->cuboids_ = x.cuboids_;
     this->disk_ = x.disk_;
