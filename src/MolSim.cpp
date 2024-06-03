@@ -90,7 +90,7 @@ int main(int argc, char *argsv[]) {
       spdlog::trace("Simple calculation finished");
     } else {
       if(particleContainerType == "LC") {
-        //std::cout << "right claculation is choosen" << std::endl;
+        particles->handleLJFCalculation();
       } else {
         calculations.calculateLJF();
       }

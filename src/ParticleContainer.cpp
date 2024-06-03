@@ -45,6 +45,9 @@ std::vector<Particle>::const_iterator ParticleContainer::end() const {
     return particles.end();
 }
 
+void ParticleContainer::handleLJFCalculation() {
+}
+
 void ParticleContainer::resetParticles() {
     particles.clear();
 }
@@ -138,7 +141,7 @@ void LCParticleContainer::handleLJFCalculation() {
   realocateParticles(1);
   for(auto& c:cells) {
     std::vector<Particle> neighbourhood = getParticleInNeighbourhood(c);
-    ParticleContainer container;
+    LCParticleContainer container;
     Calculations calc(container);
     calc.LCcalculateLJF(neighbourhood);
   }

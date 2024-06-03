@@ -114,9 +114,9 @@ void Calculations::calculateLJF() {
   }
 }
 void Calculations::LCcalculateLJF(std::vector<Particle>& other) {
-  for (int i = 0; i < other.size() - 1; ++i) {
+  for (size_t i = 0; i < other.size() - 1; ++i) {
     Particle &pi = other.at(i);
-    for (int j = i + 1; j < other.size(); ++j) {
+    for (size_t j = i + 1; j < other.size(); ++j) {
       Particle &pj = other.at(j);
       std::array<double, 3> displacement_vector = {
         pi.getX().at(0) - pj.getX().at(0), pi.getX().at(1) - pj.getX().at(1),
