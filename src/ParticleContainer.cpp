@@ -1,76 +1,68 @@
-// ParticleContainer.cpp
-
 #include "ParticleContainer.h"
-
 #include <cmath>
 #include <iostream>
-
 #include "Calculations.h"
+#include "LinkedCell/Cell.h"
 
-// Constructor (if needed)
+// Constructor for ParticleContainer
 ParticleContainer::ParticleContainer() {
-  // Initialize any other members if necessary
+    // Initialize any other members if necessary
 }
 
 /**
  * @param particle: Particle that will be added to the vector
  */
 void ParticleContainer::addParticle(const Particle &particle) {
-  particles.push_back(particle);
-  pairings.emplace_back(); // Initialize an empty pairing list for this particle
+    particles.push_back(particle);
 }
 
-/**
- * @brief add a Pairing to the 2d-vector pairings
- * @param particleIndex1: index of the first Particle in particles
- * @param particleIndex2: index of the second Particle in particles
- */
-void ParticleContainer::addPairing(int particleIndex1, int particleIndex2) {
-  if (particleIndex1 >= 0 && particleIndex1 < int(particles.size()) &&
-      particleIndex2 >= 0 && particleIndex2 < int(particles.size())) {
-    pairings.push_back(std::make_pair(particleIndex1, particleIndex2));
-  }
+
+std::vector<Particle> &ParticleContainer::getParticles() {
+    return particles;
 }
 
-std::vector<Particle> &ParticleContainer::getParticles() { return particles; }
 const std::vector<Particle> &ParticleContainer::getParticles() const {
-  return particles;
+    return particles;
 }
 
-int ParticleContainer::size() const { return particles.size(); }
+int ParticleContainer::size() const {
+    return particles.size();
+}
 
 std::vector<Particle>::iterator ParticleContainer::begin() {
-  return particles.begin();
+    return particles.begin();
 }
 
 std::vector<Particle>::iterator ParticleContainer::end() {
-  return particles.end();
+    return particles.end();
 }
 
 std::vector<Particle>::const_iterator ParticleContainer::begin() const {
-  return particles.begin();
+    return particles.begin();
 }
 
 std::vector<Particle>::const_iterator ParticleContainer::end() const {
-  return particles.end();
+    return particles.end();
 }
 
-void ParticleContainer::resetParticles() { particles.clear(); }
+void ParticleContainer::resetParticles() {
+    particles.clear();
+}
 
 void ParticleContainer::addCube(std::vector<Particle> particleCube) {
-  for (size_t x = 0; x < particleCube.size(); ++x) {
-    addParticle(particleCube.at(x));
-  }
+    for (size_t x = 0; x < particleCube.size(); ++x) {
+        addParticle(particleCube.at(x));
+    }
 }
 
 void ParticleContainer::addDisk(std::vector<Particle> particleDisk) {
-  for (size_t x = 0; x < particleDisk.size(); ++x) {
-    addParticle(particleDisk.at(x));
-  }
+    for (size_t x = 0; x < particleDisk.size(); ++x) {
+        addParticle(particleDisk.at(x));
+    }
 }
 
 void ParticleContainer::setParticle(Particle p, int position) {
-  particles.at(position) = p;
+    particles.at(position) = p;
 }
 std::vector<Particle> LCParticleContainer::getParticleInNeighbourhood(Cell cell) {
   std::array<int, 3> id = cell.getId();

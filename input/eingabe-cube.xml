@@ -5,6 +5,7 @@
         <tEnd>10.0</tEnd>
         <deltaT>0.002</deltaT>
         <inputType>LJF</inputType>
+        <particleContainerType>LC</particleContainerType>
         <particles>
             <x>15.0</x>
             <y>15.0</y>

@@ -5,18 +5,21 @@
 #ifndef CALCULATIONS_H
 #define CALCULATIONS_H
 #include "ParticleContainer.h"
+
+
 /**
  * @brief Calculations class
  */
 class Calculations {
 private:
-  ParticleContainer& particles;
+  BaseParticleContainer &particles;
   static constexpr double epsilion = 5;
   static constexpr double sigma = 1;
 
 public:
   Calculations();
-  Calculations(ParticleContainer &other);
+  Calculations(BaseParticleContainer &particles);
+
   /**
    *@brief calculate the force for all particles
    */
@@ -35,7 +38,7 @@ public:
    */
   void calculateV(double delta_t);
 
-  ParticleContainer &getParticles();
+  std::vector<Particle> getParticles();
 };
 
 #endif // CALCULATIONS_H

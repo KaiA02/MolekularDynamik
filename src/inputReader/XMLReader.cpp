@@ -19,7 +19,40 @@ XMLReader::XMLReader(const std::string &filePath) {
     throw;
   }
 }
+
 void XMLReader::readXML(ParticleContainer &particleContainer) {
+  input in = sim->input();
+  for (int i = 0; i < in.particles().size(); i++) {
+    ParticleGenerator pg;
+    Particle particle(
+        {in.particles()[i].x(), in.particles()[i].y(), in.particles()[i].z()},
+        {in.particles()[i].velocityX(), in.particles()[i].velocityY(),
+         in.particles()[i].velocityZ()},
+        in.particles()[i].mass());
+    if (i < in.cuboids().size()) {
+      int dimension = in.cuboids()[i].dimension();
+      int n3 = in.cuboids()[i].n3();
+      if (dimension == 2) {
+        n3 = 1;
+      }
+      spdlog::debug("generating Cube");
+      pg.generateCuboid(particle, in.cuboids()[i].n1(), in.cuboids()[i].n2(),
+                        n3, in.cuboids()[i].distance(),
+                        in.cuboids()[i].meanVelocity(), dimension);
+
+      particleContainer.addCube(pg.getCube());
+    } else if (i < in.disk().size()) {
+      spdlog::debug("generating Disk");
+      int dimension = in.disk()[i].dimension();
+      pg.generateDisk(particle, in.disk()[i].radius(), in.disk()[i].distance(),
+                      dimension);
+      particleContainer.addDisk(pg.getDisk());
+    } else {
+      particleContainer.addParticle(particle);
+    }
+  }
+}
+void XMLReader::readXML_LC(LCParticleContainer &particleContainer) {
   input in = sim->input();
   for (int i = 0; i < in.particles().size(); i++) {
     ParticleGenerator pg;
@@ -61,6 +94,8 @@ std::array<double, 3> XMLReader::getTime() {
 }
 
 std::string XMLReader::getInputType() { return sim->input().inputType(); }
+
+std::string XMLReader::getParticleContainerType() { return sim->input().particleContainerType(); }
 
 std::string XMLReader::getOutputType() { return sim->output().outputType(); }
 

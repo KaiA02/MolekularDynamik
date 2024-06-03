@@ -9,9 +9,9 @@
 #include "Particle.h"
 #include "ParticleContainer.h"
 
-Calculations::Calculations(ParticleContainer &other) : particles(other) {}
+Calculations::Calculations(BaseParticleContainer &other) : particles(other) {}
 
-ParticleContainer &Calculations::getParticles() { return particles; }
+std::vector<Particle> Calculations::getParticles() { return particles.getParticles(); }
 
 /**
  * @brief the following function calculates the new positions
@@ -20,7 +20,7 @@ ParticleContainer &Calculations::getParticles() { return particles; }
  * to calculate the physics behind the positions (Velocity-Störmer-Verlet)
  */
 void Calculations::calculateX(double delta_t) {
-  for (auto &p : particles) {
+  for (auto &p : getParticles()) {
     std::array<double, 3> newPosition;
     for (int i = 0; i < 3; ++i) {
       newPosition[i] = p.getX()[i] + delta_t * p.getV()[i] +
@@ -37,7 +37,7 @@ void Calculations::calculateX(double delta_t) {
  * to calculate the physics behind the velocities (Velocity-Störmer-Verlet)
  */
 void Calculations::calculateV(double delta_t) {
-  for (auto &p : particles) {
+  for (auto &p : getParticles()) {
     std::array<double, 3> newVelocity;
     for (int i = 0; i < 3; ++i) {
       newVelocity[i] = p.getV()[i] + delta_t * (p.getF()[i] + p.getOldF()[i]) /
@@ -54,10 +54,10 @@ void Calculations::calculateV(double delta_t) {
  * to calculate the physics behind the forces
  */
 void Calculations::calculateF() {
-  for (auto &p1 : particles) {
+  for (auto &p1 : getParticles()) {
     std::array<double, 3> newForce = {0.0, 0.0, 0.0};
 
-    for (auto &p2 : particles) {
+    for (auto &p2 : getParticles()) {
       if (&p1 != &p2) {
         double distSquared = 0.0;
         for (int i = 0; i < 3; ++i) {
@@ -81,14 +81,14 @@ void Calculations::calculateF() {
  * @brief the following function calculates the Leonard Jones force
  */
 void Calculations::calculateLJF() {
-  for (int i = 0; i < particles.size(); ++i) {
-    Particle &pi = particles.getParticles().at(i);
+  for (int i = 0; i < getParticles().size(); ++i) {
+    Particle &pi = getParticles().at(i);
     pi.setF({0,0,0});
   }
-  for (int i = 0; i < particles.size() - 1; ++i) {
-    Particle &pi = particles.getParticles().at(i);
-    for (int j = i + 1; j < particles.size(); ++j) {
-      Particle &pj = particles.getParticles().at(j);
+  for (int i = 0; i < getParticles().size() - 1; ++i) {
+    Particle &pi = getParticles().at(i);
+    for (int j = i + 1; j < getParticles().size(); ++j) {
+      Particle &pj = getParticles().at(j);
       std::array<double, 3> displacement_vector = {
           pi.getX().at(0) - pj.getX().at(0), pi.getX().at(1) - pj.getX().at(1),
           pi.getX().at(2) - pj.getX().at(2)};

@@ -15,15 +15,14 @@
  * plot the particles to a xyz-file
  */
 void plotParticles(int iteration, std::string outputType, std::string baseName,
-                   std::string outputPath);
+                   std::string outputPath, std::unique_ptr<BaseParticleContainer>& particles);
 
-ParticleContainer particles;
-Calculations calculations(particles);
 
 int main(int argc, char *argsv[]) {
   XMLReader xmlReader(argsv[1]);
   auto start = std::chrono::high_resolution_clock::now();
-  xmlReader.readXML(particles);
+
+  std::string particleContainerType = xmlReader.getParticleContainerType();
   std::string inputType = xmlReader.getInputType();
   std::array<double, 3> times = xmlReader.getTime();
   std::string outputType = xmlReader.getOutputType();
@@ -62,12 +61,24 @@ int main(int argc, char *argsv[]) {
   double current_time = start_time;
 
   int iteration = 0;
+
+  std::unique_ptr<BaseParticleContainer> particles;
+  if (particleContainerType == "LC") {
+    particles = std::make_unique<LCParticleContainer>();
+    xmlReader.readXML_LC(static_cast<LCParticleContainer&>(*particles));
+  } else {
+    particles = std::make_unique<ParticleContainer>();
+    xmlReader.readXML(static_cast<ParticleContainer&>(*particles));
+  }
+
+  Calculations calculations(*particles);
+
   spdlog::info("Simulation started with parameters: start_time: {}, end_time: "
                "{}, delta_t: {}, inputType: {}, outputType: {}, baseName: {}, "
                "logLevel: {}, performanceMeasurement: {}, {} "
                "particles, {} cuboids, {} disks ",
                start_time, end_time, delta_t, inputType, outputType, baseName,
-               logLevel, performanceMeasurement, particles.size(),
+               logLevel, performanceMeasurement, particles->size(),
                xmlReader.getNumberOfCuboids(), xmlReader.getNumberOfDisks());
   // for this loop, we assume: current x, current f and current v are known
   while (current_time < end_time) {
@@ -86,7 +97,7 @@ int main(int argc, char *argsv[]) {
     iteration++;
     if (!performanceMeasurement) {
       if (iteration % 10 == 0) {
-        plotParticles(iteration, outputType, baseName, "../output");
+        plotParticles(iteration, outputType, baseName, "../output", particles);
       }
       spdlog::trace("Iteration {} finished", iteration);
     }
@@ -109,7 +120,7 @@ int main(int argc, char *argsv[]) {
  * @param iteration is the number of iterations of the particles
  */
 void plotParticles(int iteration, std::string outputType, std::string baseName,
-                   std::string outputPath) {
+                   std::string outputPath, std::unique_ptr<BaseParticleContainer>& particles) {
   std::filesystem::path dir(outputPath);
   if (!std::filesystem::exists(dir)) {
     std::filesystem::create_directories(dir);
@@ -118,12 +129,12 @@ void plotParticles(int iteration, std::string outputType, std::string baseName,
   if (outputType == "xyz") {
 
     outputWriter::XYZWriter writer;
-    writer.plotParticles(particles, out_name, iteration);
+    writer.plotParticles(*particles, out_name, iteration);
   }
 
   else {
     outputWriter::VTKWriter vtkWriter;
-    int numParticles = particles.size();
+    int numParticles = particles->size();
     vtkWriter.initializeOutput(numParticles);
 
     for (auto &particle : particles) {

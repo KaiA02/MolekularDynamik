@@ -13,6 +13,8 @@ class XMLReader {
 public:
   XMLReader(const std::string &filePath);
   void readXML(ParticleContainer &particleContainer);
+  void readXML_LC(LCParticleContainer &particleContainer);
+  std::string getParticleContainerType();
   std::string getInputType();
   std::array<double, 3> getTime();
   std::string getOutputType();
