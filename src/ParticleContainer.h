@@ -112,9 +112,9 @@ public:
  //handles LJFCalcualtion for all Cells;
  void handleLJFCalculation() override;
  void addParticle(Particle p);
- bool addParticleToCell(const Particle p);
+ bool addParticleToCell(Particle& p);
  std::vector<Particle>& getParticles();
- void addMultipleParticles(std::vector<Particle> newParticles);
+ void addMultipleParticles(std::vector<Particle>& newParticles);
  std::vector<Cell> getCells();
  bool cellExists(std::array<int, 3>);
 private:

@@ -3,27 +3,35 @@
 //
 
 #include "Cell.h"
-
 #include "spdlog/spdlog.h"
 
 Cell::Cell(std::array<int, 3> init_id) {
     id = init_id;
 }
+
+std::vector<Particle*>& Cell::getParticles() {
+    return particles;
+}
 std::array<int, 3> Cell::getId() {
     return id;
 }
-std::vector<Particle>& Cell::getParticles() {
-    return particles;
-}
-void Cell::addParticle(const Particle& p) {
-    particles.push_back(p);
 
+
+void Cell::addParticle(Particle* p) {
+    size_t pre = particles.size();
+    particles.push_back(p);
+    size_t post = particles.size();
+    if(pre == post) {
+        spdlog::info("error ist the same when added--------------------------------");
+    }
 }
+
 void Cell::emptyCell() {
-    particles = {};
+    particles.clear();
 }
+
 bool Cell::isEmpty() {
-    return particles.size() == 0;
+    return particles.empty();
 }
 
 

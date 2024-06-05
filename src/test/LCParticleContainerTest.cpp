@@ -11,9 +11,9 @@ TEST(LCParticleContainerTest, GetParticleInNeighbourhood) {
     Particle p1({0.5, 0.5, 0.5}, {0.0, 0.0, 0.0}, 1, 1); // Inside cell (0,0,0)
     Particle p2({1.5, 0.5, 0.5}, {0.0, 0.0, 0.0}, 1, 1); // Inside cell (1,0,0)
     Particle p3({2.5, 0.5, 0.5}, {0.0, 0.0, 0.0}, 1, 1); // Inside cell (2,0,0)
-    container.getCellById({0,0,0}).addParticle(p1);
-    container.getCellById({1,0,0}).addParticle(p2);
-    container.getCellById({2,0,0}).addParticle(p3);
+    container.getCellById({0,0,0}).addParticle(&p1);
+    container.getCellById({1,0,0}).addParticle(&p2);
+    container.getCellById({2,0,0}).addParticle(&p3);
 
     // Check neighbourhood for cell (1,0,0)
     Cell c = container.getCellById({1,0,0});
@@ -41,8 +41,8 @@ TEST(LCParticleContainerTest, RealocateParticles) {
     // Add particles
     Particle p1({0.5, 0.5, 0.5}, {0.0, 0.0, 0.0}, 1, 1); // Inside grid
     Particle p2({3.5, 3.5, 3.5}, {0.0, 0.0, 0.0}, 1, 1); // Outside grid
-    container.getCellById({0,0,0}).addParticle(p1);
-    container.getCellById({2,2,2}).addParticle(p2);
+    container.getCellById({0,0,0}).addParticle(&p1);
+    container.getCellById({2,2,2}).addParticle(&p2);
 
     container.realocateParticles(1);
 
@@ -50,7 +50,7 @@ TEST(LCParticleContainerTest, RealocateParticles) {
     Cell cell = container.getCellById({0,0,0});
     EXPECT_EQ(cell.getParticles().size(), 1);
     std::array<double, 3> res1 = {0.5, 0.5, 0.5};
-    EXPECT_EQ(cell.getParticles().at(0).getX(), res1);
+    EXPECT_EQ(cell.getParticles().at(0)->getX(), res1);
 
     // p2 should be removed
     Cell cell2 = container.getCellById({2,2,2});
@@ -82,7 +82,7 @@ TEST(LCParticleContainerTest, AddParticle) {
     container.addParticle(p1);
     Cell cell = container.getCellById({0, 0, 0});
     EXPECT_EQ(cell.getParticles().size(), 1);
-    EXPECT_EQ(cell.getParticles().at(0).getX(), p1.getX());
+    EXPECT_EQ(cell.getParticles().at(0)->getX(), p1.getX());
 
     // Add a particle out of bounds
     Particle p2({3.5, 3.5, 3.5}, {0.0, 0.0, 0.0}, 1, 1); // Outside grid
@@ -95,7 +95,7 @@ TEST(LCParticleContainerTest, AddParticle) {
             for (int z = 0; z < 3; ++z) {
                 Cell c = container.getCellById({x, y, z});
                 for (const auto& particle : c.getParticles()) {
-                    EXPECT_NE(particle.getX(), p2.getX());
+                    EXPECT_NE(particle->getX(), p2.getX());
                 }
             }
         }

@@ -16,6 +16,7 @@ private:
   static constexpr double epsilion = 5;
   static constexpr double sigma = 1;
 
+
 public:
   Calculations();
   Calculations(BaseParticleContainer &particles);
@@ -28,7 +29,8 @@ public:
    * @brief calculate the Lennard-Jones-Force for all particles
    */
   void calculateLJF();
-  void LCcalculateLJF(std::vector<Particle>& other);
+  void LCcalculateLJF(std::vector<Particle*>& center,std::vector<Particle>& other);
+  void calculateLJFcenter(std::vector<Particle*>& center);
   /**
    * @brief calculate the position for all particles
    */
@@ -37,6 +39,7 @@ public:
    *@brief calculate the velocity for all particles
    */
   void calculateV(double delta_t);
+
 
 };
 

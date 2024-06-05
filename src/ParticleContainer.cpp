@@ -68,6 +68,7 @@ void ParticleContainer::addMultipleParticles(std::vector<Particle> particleCube)
 void ParticleContainer::setParticle(Particle p, int position) {
     particles.at(position) = p;
 }
+
 std::vector<Particle> LCParticleContainer::getParticleInNeighbourhood(std::array<int, 3> id) {
   std::vector<Particle> neigbourhood;
   int particleCount=0;
@@ -79,9 +80,11 @@ std::vector<Particle> LCParticleContainer::getParticleInNeighbourhood(std::array
         if(y <= 1 && y >= -1) {
           int z = cell.getId().at(2) - id.at(2);
           if(z <= 1 && z >= -1) {
-            for(auto &p: cell.getParticles()) {
-              neigbourhood.push_back(p);
+            if(x!=0 || y!=0 || z!=0){
+            for(auto p: cell.getParticles()) {
+              neigbourhood.push_back(*p);
               particleCount++;
+            }
             }
           }
         }
@@ -98,6 +101,7 @@ std::vector<Particle> LCParticleContainer::getParticleInNeighbourhood(std::array
   }
 
 }
+
 Cell& LCParticleContainer::getCellById(std::array<int, 3> id) {
   if(cells.size() != 0) {
     for(auto &c : cells) {
@@ -110,37 +114,23 @@ Cell& LCParticleContainer::getCellById(std::array<int, 3> id) {
 
 void LCParticleContainer::realocateParticles(int handle_out_of_border) {
   if(handle_out_of_border == 1) {
-    std::vector<Particle> all_particles_in_cells;
     spdlog::info("we have {} cells and {} particles", cells.size(), getParticles().size());
-    int emptyCellCounter = 0;
-    for(auto c:cells) {
-      if(!c.isEmpty()) {
-        for(auto p : c.getParticles()) {
-          all_particles_in_cells.push_back(p);
-        }
-      } else {
-       emptyCellCounter++;
-      }
-    }
-    spdlog::info("{} empty cells", emptyCellCounter);
     for(auto& c:cells) {
       c.emptyCell();
     }
-    particles = {};
-    spdlog::debug(" all Particles count is {}", all_particles_in_cells.size());
-    for(auto& p : all_particles_in_cells) {
+    for(auto p : particles) {
       int x = floor(p.getX().at(0)/cell_size.at(0));
       int y = floor(p.getX().at(1)/cell_size.at(1));
       int z = floor(p.getX().at(2)/cell_size.at(2));
       if(cellExists({x,y,z})) {
         p.setF({0.0,0.0,0.0});
-        getCellById({x,y,z}).addParticle(p);
-        spdlog::info("found right cell");
-        particles.push_back(p);
+        getCellById({x,y,z}).addParticle(&p);
+        //particles.push_back(p);
       }
     }
   }
 }
+
 void LCParticleContainer::fillCellsWithParticles() {
   for(auto p: particles) {
     addParticleToCell(p);
@@ -184,38 +174,38 @@ void LCParticleContainer::handleLJFCalculation() {
   int empty_counter = 0;
   for(auto& c:cells) {
     if(!c.isEmpty()) {
-      spdlog::info("cell is not empty------------");
       std::vector<Particle> neighbourhood = getParticleInNeighbourhood(c.getId());
-      spdlog::info("calculated Neigbours");
       LCParticleContainer container;
       Calculations calc(container);
-      calc.LCcalculateLJF(neighbourhood);
-      spdlog::info("calculated LJF for Neigbours");
+      calc.LCcalculateLJF(c.getParticles(), neighbourhood);
+
     } else {
       empty_counter ++;
     }
   }
   spdlog::debug("there where {} empty cells", empty_counter);
 }
-bool LCParticleContainer::addParticleToCell(const Particle p) {
+
+bool LCParticleContainer::addParticleToCell(Particle& p) {
   int x = int(floor(p.getX().at(0) / cell_size.at(0)));
   int y = int(floor(p.getX().at(1) / cell_size.at(1)));
   int z = int(floor(p.getX().at(2) / cell_size.at(2)));
   if(cellExists({x,y,z})) {
-    getCellById({x, y, z}).addParticle(p);
+    getCellById({x, y, z}).addParticle(&p);
     return true;
   } else {
     return false;
   }
 }
+
 std::vector<Particle>& LCParticleContainer::getParticles() {
   return particles;
 }
-void LCParticleContainer::addMultipleParticles(std::vector<Particle> newParticles) {
+
+void LCParticleContainer::addMultipleParticles(std::vector<Particle>& newParticles) {
   int addedCounter = 0;
-  int notAddedCounter = 0;
   //spdlog::info("size of new Particles {}", newParticles.size());
-  for(auto p: newParticles) {
+  for(auto &p: newParticles) {
     particles.push_back(p);
     bool added = addParticleToCell(p);
     if(added) {
@@ -226,13 +216,16 @@ void LCParticleContainer::addMultipleParticles(std::vector<Particle> newParticle
   }
   spdlog::info("{} particles added to Cells", addedCounter);
 }
+
 void LCParticleContainer::addParticle(Particle p) {
   particles.push_back(p);
   addParticleToCell(p);
 }
+
 std::vector<Cell> LCParticleContainer::getCells() {
   return cells;
 }
+
 bool LCParticleContainer::cellExists(std::array<int, 3> id) {
   for(auto c: cells) {
 

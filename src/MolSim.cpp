@@ -99,9 +99,6 @@ int main(int argc, char *argsv[]) {
       }
     } else if(particleContainerType == "LC") {
       lcParticles.handleLJFCalculation();
-
-
-
     } else {
         normCalculations.calculateLJF();
     }
