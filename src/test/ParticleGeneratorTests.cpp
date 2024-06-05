@@ -13,7 +13,7 @@ TEST(ParticleGeneratorTest, GenerateCuboidTest) {
    // std::array<double, 3> maxwellVelocity = maxwellBoltzmannDistributedVelocity(meanVelocity, 3);
 
     generator.generateCuboid(start, n1, n2, n3, distance, meanVelocity,3);
-    std::vector<Particle> cubeParticles = generator.getCube();
+    std::vector<Particle> cubeParticles = generator.getAllParticles();
 
     // Check whether the number of particles generated is correct
     ASSERT_EQ(cubeParticles.size(), n1 * n2 * n3);
@@ -43,7 +43,7 @@ TEST(ParticleGeneratorTest, Generate2DDiskTest) {
     int dimension = 2;
 
     generator.generateDisk(center, radius, distance, dimension);
-    std::vector<Particle> disk = generator.getDisk();
+    std::vector<Particle> disk = generator.getAllParticles();
 
     // The expected number of particles in a 2D disk with radius 2 is 13 (1 + 4 + 8)
     ASSERT_EQ(disk.size(), 13);
@@ -68,7 +68,7 @@ TEST(ParticleGeneratorTest, Generate3DDiskTest) {
     int dimension = 3;
 
     generator.generateDisk(center, radius, distance, dimension);
-    std::vector<Particle> disk = generator.getDisk();
+    std::vector<Particle> disk = generator.getAllParticles();
 
     // The expected number of particles in a 3D disk with radius 1 is 7 (1 + 6)
     ASSERT_EQ(disk.size(), 7);

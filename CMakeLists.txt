@@ -96,7 +96,7 @@ add_executable(
         src/LinkedCell/Cell.h
         src/test/LCParticleContainerTest.cpp
         src/test/CellTest.cpp
-        src/images/RunTimeComparison.cpp
+        src/RunTimeComparison/RTCAss3Task2.cpp
 
 
 )
