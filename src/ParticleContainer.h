@@ -1,6 +1,8 @@
 #ifndef PARTICLECONTAINER_H
 #define PARTICLECONTAINER_H
 
+#include <optional>
+
 #include "Particle.h"
 #include <vector>
 #include "LinkedCell/Cell.h"
@@ -110,10 +112,11 @@ public:
  //handles LJFCalcualtion for all Cells;
  void handleLJFCalculation() override;
  void addParticle(Particle p);
- void addParticleToCell(const Particle p);
+ bool addParticleToCell(const Particle p);
  std::vector<Particle>& getParticles();
  void addMultipleParticles(std::vector<Particle> newParticles);
  std::vector<Cell> getCells();
+ bool cellExists(std::array<int, 3>);
 private:
  std::vector<Cell> cells;
  std::array<double, 3> cell_size;

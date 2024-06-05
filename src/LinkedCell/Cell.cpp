@@ -3,6 +3,9 @@
 //
 
 #include "Cell.h"
+
+#include "spdlog/spdlog.h"
+
 Cell::Cell(std::array<int, 3> init_id) {
     id = init_id;
 }
@@ -14,6 +17,7 @@ std::vector<Particle>& Cell::getParticles() {
 }
 void Cell::addParticle(const Particle& p) {
     particles.push_back(p);
+
 }
 void Cell::emptyCell() {
     particles = {};

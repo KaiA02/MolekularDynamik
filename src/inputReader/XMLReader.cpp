@@ -74,6 +74,7 @@ void XMLReader::readXML_LC(LCParticleContainer &particleContainer) {
       pg.generateCuboid(particle, in.cuboids()[i].n1(), in.cuboids()[i].n2(),
                         n3, in.cuboids()[i].distance(),
                         in.cuboids()[i].meanVelocity(), dimension);
+
       particleContainer.addMultipleParticles(pg.getAllParticles());
       spdlog::info("added {} particles to the generator", pg.getAllParticles().size());
       spdlog::info("there are {} particles in the container now", particleContainer.getParticles().size());

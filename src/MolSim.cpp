@@ -15,7 +15,7 @@
  * plot the particles to a xyz-file
  */
 void plotParticles(int iteration, std::string outputType, std::string baseName,
-                   std::string outputPath, std::unique_ptr<BaseParticleContainer>& particles);
+                   std::string outputPath, LCParticleContainer& particles);
 
 
 int main(int argc, char *argsv[]) {
@@ -63,7 +63,6 @@ int main(int argc, char *argsv[]) {
   int iteration = 0;
   LCParticleContainer lcParticles;
   ParticleContainer normParticles;
-  std::unique_ptr<BaseParticleContainer> particles;
   if (particleContainerType == "LC") {
     xmlReader.readXML_LC(lcParticles);
     spdlog::info("read it!");
@@ -80,7 +79,7 @@ int main(int argc, char *argsv[]) {
                "logLevel: {}, performanceMeasurement: {}, {} "
                "particles, {} cuboids, {} disks ",
                start_time, end_time, delta_t, inputType, outputType, baseName,
-               logLevel, performanceMeasurement, particles->size(),
+               logLevel, performanceMeasurement, lcParticles.getParticles().size(),
                xmlReader.getNumberOfCuboids(), xmlReader.getNumberOfDisks());
   // for this loop, we assume: current x, current f and current v are known
   while (current_time < end_time) {
@@ -99,9 +98,8 @@ int main(int argc, char *argsv[]) {
         normCalculations.calculateF();
       }
     } else if(particleContainerType == "LC") {
-      spdlog::info("will handle calculus");
       lcParticles.handleLJFCalculation();
-      spdlog::info("done");
+
 
 
     } else {
@@ -120,7 +118,7 @@ int main(int argc, char *argsv[]) {
     iteration++;
     if (!performanceMeasurement) {
       if (iteration % 10 == 0) {
-        plotParticles(iteration, outputType, baseName, "../output", particles);
+        plotParticles(iteration, outputType, baseName, "../output", lcParticles);
       }
     }
 
@@ -142,7 +140,7 @@ int main(int argc, char *argsv[]) {
  * @param iteration is the number of iterations of the particles
  */
 void plotParticles(int iteration, std::string outputType, std::string baseName,
-                   std::string outputPath, std::unique_ptr<BaseParticleContainer>& particles) {
+                   std::string outputPath, LCParticleContainer& particles) {
   std::filesystem::path dir(outputPath);
   if (!std::filesystem::exists(dir)) {
     std::filesystem::create_directories(dir);
@@ -151,15 +149,15 @@ void plotParticles(int iteration, std::string outputType, std::string baseName,
   if (outputType == "xyz") {
 
     outputWriter::XYZWriter writer;
-    writer.plotParticles(*particles, out_name, iteration);
+    writer.plotParticles(particles, out_name, iteration);
   }
 
   else {
     outputWriter::VTKWriter vtkWriter;
-    int numParticles = particles->size();
+    int numParticles = particles.getParticles().size();
     vtkWriter.initializeOutput(numParticles);
 
-    for (auto &particle : particles->getParticles()) {
+    for (auto &particle : particles.getParticles()) {
       vtkWriter.plotParticle(particle);
     }
 
