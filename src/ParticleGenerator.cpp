@@ -30,13 +30,13 @@ void ParticleGenerator::generateCuboid(const Particle &start, int n1, int n2,
                     start.getX()[1] + y * distance,
                     start.getX()[2] + z * distance},
                    addedVelocity, start.getM(), start.getType());
-        cube.push_back(p);
+          allParticles.push_back(p);
       }
     }
   }
 }
 
-std::vector<Particle> ParticleGenerator::getCube() { return cube; }
+std::vector<Particle>& ParticleGenerator::getAllParticles() { return allParticles; }
 
 void ParticleGenerator::generateDisk(const Particle &center, int radius, double distance, int dimension) {
 
@@ -72,7 +72,7 @@ void ParticleGenerator::generateDisk(const Particle &center, int radius, double 
                     Particle p(position, initialVelocity, center.getM(), center.getType());
 
                     // Add the particle to the list
-                    disk.push_back(p);
+                    allParticles.push_back(p);
                 }
             }
         }
@@ -101,7 +101,7 @@ void ParticleGenerator::generateDisk(const Particle &center, int radius, double 
                         Particle p(position, initialVelocity, center.getM(), center.getType());
 
                         // Add the particle to the list
-                        disk.push_back(p);
+                        allParticles.push_back(p);
                     }
                 }
             }
@@ -111,5 +111,3 @@ void ParticleGenerator::generateDisk(const Particle &center, int radius, double 
         throw std::invalid_argument("Dimension must be 2 or 3");
     }
 }
-
-std::vector<Particle> ParticleGenerator::getDisk() { return disk;}

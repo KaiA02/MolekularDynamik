@@ -148,7 +148,7 @@ void CuboidFileReader::readFileCuboid(ParticleContainer &particleContainer,
         generator.generateCuboid(particle, s.at(0), s.at(1), s.at(2), distance,
                                   0.1, dimension);
       }
-      particleContainer.addCube(generator.getCube());
+      particleContainer.addMultipleParticles(generator.getAllParticles());
 
       getline(input_file, tmp_string);
       if(i != num_particles - 1){
@@ -219,7 +219,7 @@ void DiskFileReader::readFileDisk(ParticleContainer &particleContainer,
       Particle particle(x, v, m);
       ParticleGenerator generator;
       generator.generateDisk(particle, radius, distance, dimension);
-      particleContainer.addDisk(generator.getDisk());
+      particleContainer.addMultipleParticles(generator.getAllParticles());
 
       getline(input_file, tmp_string);
       if(i != num_particles - 1){

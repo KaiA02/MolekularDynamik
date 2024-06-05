@@ -40,20 +40,22 @@ void XMLReader::readXML(ParticleContainer &particleContainer) {
                         n3, in.cuboids()[i].distance(),
                         in.cuboids()[i].meanVelocity(), dimension);
 
-      particleContainer.addCube(pg.getCube());
+      particleContainer.addMultipleParticles(pg.getAllParticles());
     } else if (i < in.disk().size()) {
       spdlog::debug("generating Disk");
       int dimension = in.disk()[i].dimension();
       pg.generateDisk(particle, in.disk()[i].radius(), in.disk()[i].distance(),
                       dimension);
-      particleContainer.addDisk(pg.getDisk());
+      particleContainer.addMultipleParticles(pg.getAllParticles());
     } else {
       particleContainer.addParticle(particle);
     }
   }
+
 }
 void XMLReader::readXML_LC(LCParticleContainer &particleContainer) {
   input in = sim->input();
+  particleContainer.generateCells(in.domainSizeX(), in.domainSizeY(), in.domainSizeZ(), in.r_cutoff());
   for (size_t i = 0; i < in.particles().size(); i++) {
     ParticleGenerator pg;
     Particle particle(
@@ -61,7 +63,8 @@ void XMLReader::readXML_LC(LCParticleContainer &particleContainer) {
         {in.particles()[i].velocityX(), in.particles()[i].velocityY(),
          in.particles()[i].velocityZ()},
         in.particles()[i].mass());
-    if (i < in.cuboids().size()) {
+    particle.setType(i);
+    if (i < in.cuboids().size()) { //case its a cube
       int dimension = in.cuboids()[i].dimension();
       int n3 = in.cuboids()[i].n3();
       if (dimension == 2) {
@@ -71,19 +74,24 @@ void XMLReader::readXML_LC(LCParticleContainer &particleContainer) {
       pg.generateCuboid(particle, in.cuboids()[i].n1(), in.cuboids()[i].n2(),
                         n3, in.cuboids()[i].distance(),
                         in.cuboids()[i].meanVelocity(), dimension);
-
-      particleContainer.addCube(pg.getCube());
-    } else if (i < in.disk().size()) {
-      spdlog::debug("generating Disk");
+      particleContainer.addMultipleParticles(pg.getAllParticles());
+      spdlog::info("added {} particles to the generator", pg.getAllParticles().size());
+      spdlog::info("there are {} particles in the container now", particleContainer.getParticles().size());
+    } else if (i < in.disk().size()) { //case its a disk
+      //spdlog::debug("generating Disk");
       int dimension = in.disk()[i].dimension();
       pg.generateDisk(particle, in.disk()[i].radius(), in.disk()[i].distance(),
                       dimension);
-      particleContainer.addDisk(pg.getDisk());
-    } else {
+      particleContainer.addMultipleParticles(pg.getAllParticles());
+      //spdlog::info("added {} particles to the container", particleContainer.getParticles().size());
+    } else { //case its a single particle
       particleContainer.addParticle(particle);
     }
+
+
   }
   particleContainer.generateCells(in.domainSizeX(), in.domainSizeY(), in.domainSizeZ(), in.r_cutoff());
+  //particleContainer.realocateParticles(1);
 }
 
 std::array<double, 3> XMLReader::getTime() {

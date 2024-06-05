@@ -9,14 +9,18 @@ Cell::Cell(std::array<int, 3> init_id) {
 std::array<int, 3> Cell::getId() {
     return id;
 }
-std::vector<Particle> Cell::getParticles() {
+std::vector<Particle>& Cell::getParticles() {
     return particles;
 }
-void Cell::addParticle(Particle p) {
+void Cell::addParticle(const Particle& p) {
     particles.push_back(p);
 }
 void Cell::emptyCell() {
     particles = {};
 }
+bool Cell::isEmpty() {
+    return particles.size() == 0;
+}
+
 
 

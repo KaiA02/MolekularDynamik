@@ -8,6 +8,7 @@
 
 #include "Particle.h"
 #include "ParticleContainer.h"
+#include "spdlog/spdlog.h"
 
 Calculations::Calculations(BaseParticleContainer &other) : particles(other) {}
 
@@ -114,33 +115,37 @@ void Calculations::calculateLJF() {
   }
 }
 void Calculations::LCcalculateLJF(std::vector<Particle>& other) {
-  for (size_t i = 0; i < other.size() - 1; ++i) {
-    Particle &pi = other.at(i);
-    for (size_t j = i + 1; j < other.size(); ++j) {
-      Particle &pj = other.at(j);
-      std::array<double, 3> displacement_vector = {
-        pi.getX().at(0) - pj.getX().at(0), pi.getX().at(1) - pj.getX().at(1),
-        pi.getX().at(2) - pj.getX().at(2)};
-      double distance = sqrt(pow(displacement_vector.at(0), 2) +
-                             pow(displacement_vector.at(1), 2) +
-                             pow(displacement_vector.at(2), 2));
+  if(other.size() <= 0) {
+    //spdlog::info("zero particles in neighbourhood");
+  } else {
+    for (size_t i = 0; i < other.size() - 1; ++i) {
+      Particle &pi = other.at(i);
+      for (size_t j = i + 1; j < other.size(); ++j) {
+        Particle &pj = other.at(j);
+        std::array<double, 3> displacement_vector = {
+          pi.getX().at(0) - pj.getX().at(0), pi.getX().at(1) - pj.getX().at(1),
+          pi.getX().at(2) - pj.getX().at(2)};
+        double distance = sqrt(pow(displacement_vector.at(0), 2) +
+                               pow(displacement_vector.at(1), 2) +
+                               pow(displacement_vector.at(2), 2));
 
-      double forcefactor = ((-24 * epsilion) / pow(distance, 2)) *
-              (pow((sigma) / distance, 6) - 2 * pow((sigma) / distance, 12));
+        double forcefactor = ((-24 * epsilion) / pow(distance, 2)) *
+                (pow((sigma) / distance, 6) - 2 * pow((sigma) / distance, 12));
 
-      std::array<double, 3> f_ij = {
-        forcefactor * displacement_vector.at(0),
-        forcefactor * displacement_vector.at(1),
-        forcefactor * displacement_vector.at(2)};
+        std::array<double, 3> f_ij = {
+          forcefactor * displacement_vector.at(0),
+          forcefactor * displacement_vector.at(1),
+          forcefactor * displacement_vector.at(2)};
 
-      std::array<double, 3> newForcei = {0.0, 0.0, 0.0};
-      std::array<double, 3> newForcej = {0.0, 0.0, 0.0};
-      for (int k = 0; k < 3; ++k) {
-        newForcei.at(k) = pi.getF().at(k) + (f_ij.at(k)/2);
-        newForcej.at(k) = pj.getF().at(k) - (f_ij.at(k)/2);
+        std::array<double, 3> newForcei = {0.0, 0.0, 0.0};
+        std::array<double, 3> newForcej = {0.0, 0.0, 0.0};
+        for (int k = 0; k < 3; ++k) {
+          newForcei.at(k) = pi.getF().at(k) + (f_ij.at(k)/2);
+          newForcej.at(k) = pj.getF().at(k) - (f_ij.at(k)/2);
+        }
+        pi.setF(newForcei);
+        pj.setF(newForcej);
       }
-      pi.setF(newForcei);
-      pj.setF(newForcej);
     }
   }
 }

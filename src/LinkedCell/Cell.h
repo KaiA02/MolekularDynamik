@@ -13,9 +13,10 @@ private:
     std::array<int, 3> id;
 public:
     Cell(std::array<int, 3> id);
-    std::vector<Particle> getParticles();
-    void addParticle(Particle p);
+    std::vector<Particle>& getParticles();
+    void addParticle(const Particle& p);
     std::array<int, 3> getId();
     void emptyCell();
+    bool isEmpty();
 };
 #endif //CELL_H

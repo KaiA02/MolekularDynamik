@@ -61,18 +61,20 @@ int main(int argc, char *argsv[]) {
   double current_time = start_time;
 
   int iteration = 0;
-
+  LCParticleContainer lcParticles;
+  ParticleContainer normParticles;
   std::unique_ptr<BaseParticleContainer> particles;
   if (particleContainerType == "LC") {
-    particles = std::make_unique<LCParticleContainer>();
-    xmlReader.readXML_LC(static_cast<LCParticleContainer&>(*particles));
+    xmlReader.readXML_LC(lcParticles);
+    spdlog::info("read it!");
+    spdlog::info("there are {} particles in the Simulation", lcParticles.getParticles().size());
+    spdlog::info("there are {} Cells in the Simulation", lcParticles.getCells().size());
   } else {
-    particles = std::make_unique<ParticleContainer>();
-    xmlReader.readXML(static_cast<ParticleContainer&>(*particles));
+    xmlReader.readXML(normParticles);
   }
 
-  Calculations calculations(*particles);
-
+  Calculations normCalculations(normParticles);
+  Calculations lcCaluclations(lcParticles);
   spdlog::info("Simulation started with parameters: start_time: {}, end_time: "
                "{}, delta_t: {}, inputType: {}, outputType: {}, baseName: {}, "
                "logLevel: {}, performanceMeasurement: {}, {} "
@@ -83,27 +85,43 @@ int main(int argc, char *argsv[]) {
   // for this loop, we assume: current x, current f and current v are known
   while (current_time < end_time) {
     // calculate new x
-    calculations.calculateX(delta_t);
+    if(particleContainerType == "LC") {
+      lcCaluclations.calculateX(delta_t);
+    } else {
+      normCalculations.calculateX(delta_t);
+    }
+
     // calculate new f
     if (inputType == "SF") {
-      calculations.calculateF();
-      spdlog::trace("Simple calculation finished");
+      if(particleContainerType == "LC") {
+        lcCaluclations.calculateF();
+      } else {
+        normCalculations.calculateF();
+      }
     } else if(particleContainerType == "LC") {
-        particles->handleLJFCalculation();
-      spdlog::trace("used hanldeLJFCalculation()");
+      spdlog::info("will handle calculus");
+      lcParticles.handleLJFCalculation();
+      spdlog::info("done");
+
+
     } else {
-        calculations.calculateLJF();
+        normCalculations.calculateLJF();
     }
 
     // calculate new v
-    calculations.calculateV(delta_t);
+    if(particleContainerType == "LC") {
+      lcCaluclations.calculateV(delta_t);
+    } else {
+      normCalculations.calculateV(delta_t);
+    }
+
+
 
     iteration++;
     if (!performanceMeasurement) {
       if (iteration % 10 == 0) {
         plotParticles(iteration, outputType, baseName, "../output", particles);
       }
-      spdlog::trace("Iteration {} finished", iteration);
     }
 
     current_time += delta_t;

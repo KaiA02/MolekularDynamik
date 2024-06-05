@@ -12,8 +12,7 @@
  */
 class ParticleGenerator {
 private:
-  std::vector<Particle> cube;
-  std::vector<Particle> disk;
+  std::vector<Particle> allParticles;
 
 public:
   ParticleGenerator();
@@ -29,7 +28,7 @@ public:
    */
   void generateCuboid(const Particle &start, int n1, int n2, int n3,
                       double distance, double meanVelocity, int dimension);
-  std::vector<Particle> getCube();
+  std::vector<Particle>& getAllParticles();
 
     /**
       * @brief Generate a disk of particles with the radius and a cutoff value, from a
@@ -40,7 +39,6 @@ public:
       */
     void generateDisk(const Particle &center, int radius,
                         double distance, int dimension);
-    std::vector<Particle> getDisk();
 };
 
 #endif // PARTICLEGENERATOR_H
