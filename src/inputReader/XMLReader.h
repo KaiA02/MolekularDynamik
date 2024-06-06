@@ -9,10 +9,21 @@
 #include "simulation.hxx"
 #include <iostream>
 
+/**
+   *@brief class XMLReader is used to read the xml files
+   */
 class XMLReader {
 public:
   XMLReader(const std::string &filePath);
+  /**
+   *@brief forms the input of the xml files into content
+   *@param particleContainer used for the normal ParticleContainer
+   */
   void readXML(ParticleContainer &particleContainer);
+    /**
+   *@brief forms the input of the xml files into content
+   *@param particleContainer used for the Linked-Cell ParticleContainer
+   */
   void readXML_LC(LCParticleContainer &particleContainer);
   std::string getParticleContainerType();
   std::string getInputType();

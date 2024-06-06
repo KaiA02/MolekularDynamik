@@ -36,6 +36,7 @@ public:
       * @param center center particle with inital velocity
       * @param radius is the radius from the center on
       * @param distance distance between the particles
+      * @param dimension defines the dimension
       */
     void generateDisk(const Particle &center, int radius,
                         double distance, int dimension);

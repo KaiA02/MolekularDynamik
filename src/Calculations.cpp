@@ -12,12 +12,7 @@
 
 Calculations::Calculations(BaseParticleContainer &other) : particles(other) {}
 
-/**
- * @brief the following function calculates the new positions
- *
- * therefore we use a for-loops
- * to calculate the physics behind the positions (Velocity-Störmer-Verlet)
- */
+
 void Calculations::calculateX(double delta_t) {
   for (auto &p : particles) {
     std::array<double, 3> newPosition;
@@ -29,12 +24,7 @@ void Calculations::calculateX(double delta_t) {
   }
 }
 
-/**
- * @brief the following function calculates the new velocities
- *
- * therefore we use a for-loops
- * to calculate the physics behind the velocities (Velocity-Störmer-Verlet)
- */
+
 void Calculations::calculateV(double delta_t) {
   for (auto &p : particles) {
     std::array<double, 3> newVelocity;
@@ -46,12 +36,6 @@ void Calculations::calculateV(double delta_t) {
   }
 }
 
-/**
- * @brief the following function calculates the gravitational force
- *
- * therefore we use an interator and also for-loops
- * to calculate the physics behind the forces
- */
 void Calculations::calculateF() {
   for (auto &p1 : particles) {
     std::array<double, 3> newForce = {0.0, 0.0, 0.0};
@@ -76,9 +60,6 @@ void Calculations::calculateF() {
   }
 }
 
-/**
- * @brief the following function calculates the Leonard Jones force
- */
 void Calculations::calculateLJF() {
   for (int i = 0; i < particles.size(); ++i) {
     Particle &pi = particles.getParticles().at(i);
@@ -101,6 +82,8 @@ void Calculations::calculateLJF() {
     }
   }
 }
+
+
 void Calculations::LCcalculateLJF(std::vector<Particle*> &center, std::vector<Particle> &other) {
   if (center.size() > 1) {
     calculateLJFcenter(center);
@@ -123,10 +106,9 @@ void Calculations::LCcalculateLJF(std::vector<Particle*> &center, std::vector<Pa
     }
   }
 }
+
+
 void Calculations::calculateLJFcenter(std::vector<Particle *> &center) {
-  //for (auto &p : center) {
-  //  p->setF({0, 0, 0});
-  //} falsche Stelle
   for (int i = 0; i < center.size() - 1; ++i) {
     Particle *pi = center.at(i);
     for (int j = i + 1; j < center.size(); ++j) {

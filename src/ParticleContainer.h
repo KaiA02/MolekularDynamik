@@ -65,6 +65,9 @@ class ParticleContainer : public BaseParticleContainer {
 public:
     ParticleContainer();
 
+ /**
+ * @param particle: Particle that will be added to the vector
+ */
     void addParticle(const Particle &particle) override;
     void setParticle(Particle p, int position) override;
     void resetParticles() override;
@@ -101,22 +104,62 @@ public:
  */
 class LCParticleContainer : public ParticleContainer {
 public:
- //input CellSize in x,y,z and Strategy for handling particles out of border
- //allocates Particle to right cell and resets the forces to zero
+
+ /**
+  *@brief realocates the particles to their new cells and also
+  *implements the outflow boundary (managing the deltion of particles out of the domain)
+ */
  void realocateParticles(int handle_out_of_border);
+
+ /**
+  *@brief adds the particles to the cells
+ */
  void fillCellsWithParticles();
+
+ /**
+  *@brief returns all particles of neighbouring cells
+  *@param id id from the celss
+ */
  std::vector<Particle> getParticleInNeighbourhood(std::array<int, 3> id);
  Cell& getCellById(std::array<int, 3> id);
- //input: Domain Size in x,y,z and r_cutoff
+ /**
+  *@brief generate all cells with according size
+  *@param size_x size of x axis
+  *@param size_y size of y axis
+  *@param size_z size of z axis
+  *@param r_cutoff  cutoff value for cells
+ */
  void generateCells(int size_x, int size_y, int size_z, double r_cutoff);
- //handles LJFCalcualtion for all Cells;
+
+ /**
+  *@brief calls realocateParticle() and calculates LJF for all cells
+ */
  void handleLJFCalculation() override;
+ /**
+  *@brief adds the particle to all particles
+  *and calls addParticleToCell(p)
+ */
  void addParticle(Particle p);
+ /**
+ *@brief adds the particle to the according cell
+ *returns true, if particle is correct added
+*/
  bool addParticleToCell(Particle& p);
  std::vector<Particle>& getParticles();
+ /**
+ *@brief adds all new Particles to the existing particle list
+ *@param newParticles vector of new Particles
+*/
  void addMultipleParticles(std::vector<Particle>& newParticles);
  std::vector<Cell> getCells();
- bool cellExists(std::array<int, 3>);
+ /**
+  *@brief checks if the cell exists
+  *@param id from according cell
+ */
+ bool cellExists(std::array<int, 3> id);
+ /**
+  *@brief only for programmers to debug
+ */
  void countParticlesInCells();
 private:
  std::vector<Cell> cells;

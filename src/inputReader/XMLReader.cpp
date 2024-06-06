@@ -20,6 +20,7 @@ XMLReader::XMLReader(const std::string &filePath) {
   }
 }
 
+
 void XMLReader::readXML(ParticleContainer &particleContainer) {
   input in = sim->input();
   for (size_t i = 0; i < in.particles().size(); i++) {
@@ -55,6 +56,8 @@ void XMLReader::readXML(ParticleContainer &particleContainer) {
   }
 
 }
+
+
 void XMLReader::readXML_LC(LCParticleContainer &particleContainer) {
   input in = sim->input();
   for (size_t i = 0; i < in.particles().size(); i++) {

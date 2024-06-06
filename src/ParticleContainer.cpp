@@ -10,9 +10,6 @@ ParticleContainer::ParticleContainer() {
   // Initialize any other members if necessary
 }
 
-/**
- * @param particle: Particle that will be added to the vector
- */
 void ParticleContainer::addParticle(const Particle &particle) {
   particles.push_back(particle);
 }
