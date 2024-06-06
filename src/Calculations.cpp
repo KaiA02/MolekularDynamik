@@ -82,26 +82,13 @@ void Calculations::calculateF() {
 void Calculations::calculateLJF() {
   for (int i = 0; i < particles.size(); ++i) {
     Particle &pi = particles.getParticles().at(i);
-    pi.setF({0,0,0});
+    pi.setF({0, 0, 0});
   }
   for (int i = 0; i < particles.size() - 1; ++i) {
     Particle &pi = particles.getParticles().at(i);
     for (int j = i + 1; j < particles.size(); ++j) {
       Particle &pj = particles.getParticles().at(j);
-      std::array<double, 3> displacement_vector = {
-          pi.getX().at(0) - pj.getX().at(0), pi.getX().at(1) - pj.getX().at(1),
-          pi.getX().at(2) - pj.getX().at(2)};
-      double distance = sqrt(pow(displacement_vector.at(0), 2) +
-                             pow(displacement_vector.at(1), 2) +
-                             pow(displacement_vector.at(2), 2));
-
-      double forcefactor = ((-24 * epsilion) / pow(distance, 2)) *
-              (pow((sigma) / distance, 6) - 2 * pow((sigma) / distance, 12));
-
-      std::array<double, 3> f_ij = {
-        forcefactor * displacement_vector.at(0),
-        forcefactor * displacement_vector.at(1),
-        forcefactor * displacement_vector.at(2)};
+      std::array<double, 3> f_ij = calculateLJF(&pi, &pj);
 
       std::array<double, 3> newForcei = {0.0, 0.0, 0.0};
       std::array<double, 3> newForcej = {0.0, 0.0, 0.0};
@@ -114,70 +101,44 @@ void Calculations::calculateLJF() {
     }
   }
 }
-void Calculations::LCcalculateLJF(std::vector<Particle*>& center, std::vector<Particle>& other) {
+void Calculations::LCcalculateLJF(std::vector<Particle *> &center,
+                                  std::vector<Particle> &other) {
   spdlog::info("center size is {}", center.size());
-  if(center.size() > 1) {
+  if (center.size() > 1) {
     calculateLJFcenter(center);
     spdlog::info("other size is {}", other.size());
-    if(other.size() > 0) {
+    if (other.size() > 0) {
       for (size_t i = 0; i < center.size(); ++i) {
         Particle *pi = center.at(i);
         for (size_t j = 0; j < other.size(); ++j) {
           Particle &pj = other.at(j);
-          std::array<double, 3> displacement_vector = {
-            pi->getX().at(0) - pj.getX().at(0), pi->getX().at(1) - pj.getX().at(1),
-            pi->getX().at(2) - pj.getX().at(2)};
-          double distance = sqrt(pow(displacement_vector.at(0), 2) +
-                                 pow(displacement_vector.at(1), 2) +
-                                 pow(displacement_vector.at(2), 2));
-          spdlog::info("{} distance", distance);
-          double forcefactor = ((-24 * epsilion) / pow(distance, 2)) *
-                  (pow((sigma) / distance, 6) - 2 * pow((sigma) / distance, 12));
-          spdlog::info("{} forcefactor", forcefactor);
-          std::array<double, 3> f_ij = {
-            forcefactor * displacement_vector.at(0),
-            forcefactor * displacement_vector.at(1),
-            forcefactor * displacement_vector.at(2)};
+          std::array<double, 3> f_ij = calculateLJF(pi, &pj);
 
           std::array<double, 3> newForcei = {0.0, 0.0, 0.0};
-          //std::array<double, 3> newForcej = {0.0, 0.0, 0.0};
+          // std::array<double, 3> newForcej = {0.0, 0.0, 0.0};
           for (int k = 0; k < 3; ++k) {
-            newForcei.at(k) = pi->getF().at(k) + (f_ij.at(k)/2);
-            //newForcej.at(k) = pj.getF().at(k) - (f_ij.at(k)/2);
+            newForcei.at(k) = pi->getF().at(k) + f_ij.at(k);
+            // newForcej.at(k) = pj.getF().at(k) - (f_ij.at(k)/2);
           }
           pi->setF(newForcei);
-          //pj.setF(newForcej);
-          spdlog::info("force is {} {} {}", newForcei.at(0),newForcei.at(1),newForcei.at(2));
+          // pj.setF(newForcej);
+          spdlog::info("force is {} {} {}", newForcei.at(0), newForcei.at(1),
+                       newForcei.at(2));
         }
       }
     }
   }
   spdlog::info("calculated LJF for Neigbours");
 }
-void Calculations::calculateLJFcenter(std::vector<Particle*>& center) {
-  for (int i = 0; i < center.size(); ++i) {
-    Particle *pi = center.at(i);
-    pi->setF({0,0,0});
+void Calculations::calculateLJFcenter(std::vector<Particle *> &center) {
+  for (auto &p : center) {
+    p->setF({0, 0, 0});
   }
   for (int i = 0; i < center.size() - 1; ++i) {
     Particle *pi = center.at(i);
     for (int j = i + 1; j < center.size(); ++j) {
       Particle *pj = center.at(j);
-      std::array<double, 3> displacement_vector = {
-        pi->getX().at(0) - pj->getX().at(0), pi->getX().at(1) - pj->getX().at(1),
-        pi->getX().at(2) - pj->getX().at(2)};
-      double distance = sqrt(pow(displacement_vector.at(0), 2) +
-                             pow(displacement_vector.at(1), 2) +
-                             pow(displacement_vector.at(2), 2));
-
-      double forcefactor = ((-24 * epsilion) / pow(distance, 2)) *
-              (pow((sigma) / distance, 6) - 2 * pow((sigma) / distance, 12));
-
-      std::array<double, 3> f_ij = {
-        forcefactor * displacement_vector.at(0),
-        forcefactor * displacement_vector.at(1),
-        forcefactor * displacement_vector.at(2)};
-
+      std::array<double, 3> f_ij = calculateLJF(pi, pj);
       std::array<double, 3> newForcei = {0.0, 0.0, 0.0};
       std::array<double, 3> newForcej = {0.0, 0.0, 0.0};
       for (int k = 0; k < 3; ++k) {
@@ -188,4 +149,22 @@ void Calculations::calculateLJFcenter(std::vector<Particle*>& center) {
       pj->setF(newForcej);
     }
   }
+}
+
+std::array<double, 3> Calculations::calculateLJF(Particle *p1, Particle *p2) {
+  std::array<double, 3> displacement_vector = {
+      p1->getX().at(0) - p2->getX().at(0), p1->getX().at(1) - p2->getX().at(1),
+      p1->getX().at(2) - p2->getX().at(2)};
+  double distance = sqrt(pow(displacement_vector.at(0), 2) +
+                         pow(displacement_vector.at(1), 2) +
+                         pow(displacement_vector.at(2), 2));
+
+  double forcefactor =
+      ((-24 * epsilion) / pow(distance, 2)) *
+      (pow((sigma) / distance, 6) - 2 * pow((sigma) / distance, 12));
+
+  std::array<double, 3> f_ij = {forcefactor * displacement_vector.at(0),
+                                forcefactor * displacement_vector.at(1),
+                                forcefactor * displacement_vector.at(2)};
+  return f_ij;
 }

@@ -6,7 +6,6 @@
 #define CALCULATIONS_H
 #include "ParticleContainer.h"
 
-
 /**
  * @brief Calculations class
  */
@@ -15,7 +14,6 @@ private:
   BaseParticleContainer &particles;
   static constexpr double epsilion = 5;
   static constexpr double sigma = 1;
-
 
 public:
   Calculations();
@@ -29,8 +27,9 @@ public:
    * @brief calculate the Lennard-Jones-Force for all particles
    */
   void calculateLJF();
-  void LCcalculateLJF(std::vector<Particle*>& center,std::vector<Particle>& other);
-  void calculateLJFcenter(std::vector<Particle*>& center);
+  void LCcalculateLJF(std::vector<Particle *> &center,
+                      std::vector<Particle> &other);
+  void calculateLJFcenter(std::vector<Particle *> &center);
   /**
    * @brief calculate the position for all particles
    */
@@ -40,7 +39,7 @@ public:
    */
   void calculateV(double delta_t);
 
-
+  std::array<double, 3> calculateLJF(Particle *p1, Particle *p2);
 };
 
 #endif // CALCULATIONS_H
