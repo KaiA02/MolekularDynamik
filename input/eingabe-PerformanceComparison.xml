@@ -10,6 +10,12 @@
         <domainSizeX>180</domainSizeX>
         <domainSizeY>90</domainSizeY>
         <domainSizeZ>1</domainSizeZ>
+        <boundary1Type>no</boundary1Type>
+        <boundary2Type>no</boundary2Type>
+        <boundary3Type>no</boundary3Type>
+        <boundary4Type>no</boundary4Type>
+        <boundary5Type>no</boundary5Type>
+        <boundary6Type>no</boundary6Type>
         <particles>
             <x>20.0</x>
             <y>20.0</y>
