@@ -81,16 +81,15 @@ void XMLReader::readXML_LC(LCParticleContainer &particleContainer) {
       spdlog::info("added {} particles to the generator", pg.getAllParticles().size());
       spdlog::info("there are {} particles in the container now", particleContainer.getParticles().size());
     } else if (i < in.disk().size()) { //case its a disk
-      //spdlog::debug("generating Disk");
       int dimension = in.disk()[i].dimension();
       pg.generateDisk(particle, in.disk()[i].radius(), in.disk()[i].distance(),
                       dimension);
       particleContainer.addMultipleParticles(pg.getAllParticles());
-      //spdlog::info("added {} particles to the container", particleContainer.getParticles().size());
     } else { //case its a single particle
       particleContainer.addParticle(particle);
     }
   }
+  particleContainer.fillCellsWithParticles();
 }
 
 std::array<double, 3> XMLReader::getTime() {

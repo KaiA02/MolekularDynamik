@@ -124,9 +124,9 @@ void Calculations::LCcalculateLJF(std::vector<Particle*> &center, std::vector<Pa
   }
 }
 void Calculations::calculateLJFcenter(std::vector<Particle *> &center) {
-  for (auto &p : center) {
-    p->setF({0, 0, 0});
-  }
+  //for (auto &p : center) {
+  //  p->setF({0, 0, 0});
+  //} falsche Stelle
   for (int i = 0; i < center.size() - 1; ++i) {
     Particle *pi = center.at(i);
     for (int j = i + 1; j < center.size(); ++j) {
