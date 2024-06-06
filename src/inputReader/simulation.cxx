@@ -293,6 +293,150 @@ domainSizeZ (const domainSizeZ_type& x)
   this->domainSizeZ_.set (x);
 }
 
+const input::boundary1Type_type& input::
+boundary1Type () const
+{
+  return this->boundary1Type_.get ();
+}
+
+input::boundary1Type_type& input::
+boundary1Type ()
+{
+  return this->boundary1Type_.get ();
+}
+
+void input::
+boundary1Type (const boundary1Type_type& x)
+{
+  this->boundary1Type_.set (x);
+}
+
+void input::
+boundary1Type (::std::unique_ptr< boundary1Type_type > x)
+{
+  this->boundary1Type_.set (std::move (x));
+}
+
+const input::boundary2Type_type& input::
+boundary2Type () const
+{
+  return this->boundary2Type_.get ();
+}
+
+input::boundary2Type_type& input::
+boundary2Type ()
+{
+  return this->boundary2Type_.get ();
+}
+
+void input::
+boundary2Type (const boundary2Type_type& x)
+{
+  this->boundary2Type_.set (x);
+}
+
+void input::
+boundary2Type (::std::unique_ptr< boundary2Type_type > x)
+{
+  this->boundary2Type_.set (std::move (x));
+}
+
+const input::boundary3Type_type& input::
+boundary3Type () const
+{
+  return this->boundary3Type_.get ();
+}
+
+input::boundary3Type_type& input::
+boundary3Type ()
+{
+  return this->boundary3Type_.get ();
+}
+
+void input::
+boundary3Type (const boundary3Type_type& x)
+{
+  this->boundary3Type_.set (x);
+}
+
+void input::
+boundary3Type (::std::unique_ptr< boundary3Type_type > x)
+{
+  this->boundary3Type_.set (std::move (x));
+}
+
+const input::boundary4Type_type& input::
+boundary4Type () const
+{
+  return this->boundary4Type_.get ();
+}
+
+input::boundary4Type_type& input::
+boundary4Type ()
+{
+  return this->boundary4Type_.get ();
+}
+
+void input::
+boundary4Type (const boundary4Type_type& x)
+{
+  this->boundary4Type_.set (x);
+}
+
+void input::
+boundary4Type (::std::unique_ptr< boundary4Type_type > x)
+{
+  this->boundary4Type_.set (std::move (x));
+}
+
+const input::boundary5Type_type& input::
+boundary5Type () const
+{
+  return this->boundary5Type_.get ();
+}
+
+input::boundary5Type_type& input::
+boundary5Type ()
+{
+  return this->boundary5Type_.get ();
+}
+
+void input::
+boundary5Type (const boundary5Type_type& x)
+{
+  this->boundary5Type_.set (x);
+}
+
+void input::
+boundary5Type (::std::unique_ptr< boundary5Type_type > x)
+{
+  this->boundary5Type_.set (std::move (x));
+}
+
+const input::boundary6Type_type& input::
+boundary6Type () const
+{
+  return this->boundary6Type_.get ();
+}
+
+input::boundary6Type_type& input::
+boundary6Type ()
+{
+  return this->boundary6Type_.get ();
+}
+
+void input::
+boundary6Type (const boundary6Type_type& x)
+{
+  this->boundary6Type_.set (x);
+}
+
+void input::
+boundary6Type (::std::unique_ptr< boundary6Type_type > x)
+{
+  this->boundary6Type_.set (std::move (x));
+}
+
 const input::particles_sequence& input::
 particles () const
 {
@@ -945,7 +1089,13 @@ input (const tStart_type& tStart,
        const r_cutoff_type& r_cutoff,
        const domainSizeX_type& domainSizeX,
        const domainSizeY_type& domainSizeY,
-       const domainSizeZ_type& domainSizeZ)
+       const domainSizeZ_type& domainSizeZ,
+       const boundary1Type_type& boundary1Type,
+       const boundary2Type_type& boundary2Type,
+       const boundary3Type_type& boundary3Type,
+       const boundary4Type_type& boundary4Type,
+       const boundary5Type_type& boundary5Type,
+       const boundary6Type_type& boundary6Type)
 : ::xml_schema::type (),
   tStart_ (tStart, this),
   tEnd_ (tEnd, this),
@@ -956,6 +1106,12 @@ input (const tStart_type& tStart,
   domainSizeX_ (domainSizeX, this),
   domainSizeY_ (domainSizeY, this),
   domainSizeZ_ (domainSizeZ, this),
+  boundary1Type_ (boundary1Type, this),
+  boundary2Type_ (boundary2Type, this),
+  boundary3Type_ (boundary3Type, this),
+  boundary4Type_ (boundary4Type, this),
+  boundary5Type_ (boundary5Type, this),
+  boundary6Type_ (boundary6Type, this),
   particles_ (this),
   cuboids_ (this),
   disk_ (this)
@@ -976,6 +1132,12 @@ input (const input& x,
   domainSizeX_ (x.domainSizeX_, f, this),
   domainSizeY_ (x.domainSizeY_, f, this),
   domainSizeZ_ (x.domainSizeZ_, f, this),
+  boundary1Type_ (x.boundary1Type_, f, this),
+  boundary2Type_ (x.boundary2Type_, f, this),
+  boundary3Type_ (x.boundary3Type_, f, this),
+  boundary4Type_ (x.boundary4Type_, f, this),
+  boundary5Type_ (x.boundary5Type_, f, this),
+  boundary6Type_ (x.boundary6Type_, f, this),
   particles_ (x.particles_, f, this),
   cuboids_ (x.cuboids_, f, this),
   disk_ (x.disk_, f, this)
@@ -996,6 +1158,12 @@ input (const ::xercesc::DOMElement& e,
   domainSizeX_ (this),
   domainSizeY_ (this),
   domainSizeZ_ (this),
+  boundary1Type_ (this),
+  boundary2Type_ (this),
+  boundary3Type_ (this),
+  boundary4Type_ (this),
+  boundary5Type_ (this),
+  boundary6Type_ (this),
   particles_ (this),
   cuboids_ (this),
   disk_ (this)
@@ -1122,6 +1290,90 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // boundary1Type
+    //
+    if (n.name () == "boundary1Type" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< boundary1Type_type > r (
+        boundary1Type_traits::create (i, f, this));
+
+      if (!boundary1Type_.present ())
+      {
+        this->boundary1Type_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // boundary2Type
+    //
+    if (n.name () == "boundary2Type" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< boundary2Type_type > r (
+        boundary2Type_traits::create (i, f, this));
+
+      if (!boundary2Type_.present ())
+      {
+        this->boundary2Type_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // boundary3Type
+    //
+    if (n.name () == "boundary3Type" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< boundary3Type_type > r (
+        boundary3Type_traits::create (i, f, this));
+
+      if (!boundary3Type_.present ())
+      {
+        this->boundary3Type_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // boundary4Type
+    //
+    if (n.name () == "boundary4Type" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< boundary4Type_type > r (
+        boundary4Type_traits::create (i, f, this));
+
+      if (!boundary4Type_.present ())
+      {
+        this->boundary4Type_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // boundary5Type
+    //
+    if (n.name () == "boundary5Type" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< boundary5Type_type > r (
+        boundary5Type_traits::create (i, f, this));
+
+      if (!boundary5Type_.present ())
+      {
+        this->boundary5Type_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // boundary6Type
+    //
+    if (n.name () == "boundary6Type" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< boundary6Type_type > r (
+        boundary6Type_traits::create (i, f, this));
+
+      if (!boundary6Type_.present ())
+      {
+        this->boundary6Type_.set (::std::move (r));
+        continue;
+      }
+    }
+
     // particles
     //
     if (n.name () == "particles" && n.namespace_ ().empty ())
@@ -1220,6 +1472,48 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "domainSizeZ",
       "");
   }
+
+  if (!boundary1Type_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "boundary1Type",
+      "");
+  }
+
+  if (!boundary2Type_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "boundary2Type",
+      "");
+  }
+
+  if (!boundary3Type_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "boundary3Type",
+      "");
+  }
+
+  if (!boundary4Type_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "boundary4Type",
+      "");
+  }
+
+  if (!boundary5Type_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "boundary5Type",
+      "");
+  }
+
+  if (!boundary6Type_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "boundary6Type",
+      "");
+  }
 }
 
 input* input::
@@ -1244,6 +1538,12 @@ operator= (const input& x)
     this->domainSizeX_ = x.domainSizeX_;
     this->domainSizeY_ = x.domainSizeY_;
     this->domainSizeZ_ = x.domainSizeZ_;
+    this->boundary1Type_ = x.boundary1Type_;
+    this->boundary2Type_ = x.boundary2Type_;
+    this->boundary3Type_ = x.boundary3Type_;
+    this->boundary4Type_ = x.boundary4Type_;
+    this->boundary5Type_ = x.boundary5Type_;
+    this->boundary6Type_ = x.boundary6Type_;
     this->particles_ = x.particles_;
     this->cuboids_ = x.cuboids_;
     this->disk_ = x.disk_;

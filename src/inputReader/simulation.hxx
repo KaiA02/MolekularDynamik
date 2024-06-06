@@ -31,8 +31,8 @@
 // in the accompanying FLOSSE file.
 //
 
-#ifndef CXX__SIMULATION_HXX
-#define CXX__SIMULATION_HXX
+#ifndef CXX_MNT_C_USERS_JH_CLION_PROJECTS_MOL_SIM_RETRY_SRC_INPUT_READER_SIMULATION_HXX
+#define CXX_MNT_C_USERS_JH_CLION_PROJECTS_MOL_SIM_RETRY_SRC_INPUT_READER_SIMULATION_HXX
 
 #ifndef XSD_CXX11
 #define XSD_CXX11
@@ -478,6 +478,108 @@ class input: public ::xml_schema::type
   void
   domainSizeZ (const domainSizeZ_type& x);
 
+  // boundary1Type
+  //
+  typedef ::xml_schema::string boundary1Type_type;
+  typedef ::xsd::cxx::tree::traits< boundary1Type_type, char > boundary1Type_traits;
+
+  const boundary1Type_type&
+  boundary1Type () const;
+
+  boundary1Type_type&
+  boundary1Type ();
+
+  void
+  boundary1Type (const boundary1Type_type& x);
+
+  void
+  boundary1Type (::std::unique_ptr< boundary1Type_type > p);
+
+  // boundary2Type
+  //
+  typedef ::xml_schema::string boundary2Type_type;
+  typedef ::xsd::cxx::tree::traits< boundary2Type_type, char > boundary2Type_traits;
+
+  const boundary2Type_type&
+  boundary2Type () const;
+
+  boundary2Type_type&
+  boundary2Type ();
+
+  void
+  boundary2Type (const boundary2Type_type& x);
+
+  void
+  boundary2Type (::std::unique_ptr< boundary2Type_type > p);
+
+  // boundary3Type
+  //
+  typedef ::xml_schema::string boundary3Type_type;
+  typedef ::xsd::cxx::tree::traits< boundary3Type_type, char > boundary3Type_traits;
+
+  const boundary3Type_type&
+  boundary3Type () const;
+
+  boundary3Type_type&
+  boundary3Type ();
+
+  void
+  boundary3Type (const boundary3Type_type& x);
+
+  void
+  boundary3Type (::std::unique_ptr< boundary3Type_type > p);
+
+  // boundary4Type
+  //
+  typedef ::xml_schema::string boundary4Type_type;
+  typedef ::xsd::cxx::tree::traits< boundary4Type_type, char > boundary4Type_traits;
+
+  const boundary4Type_type&
+  boundary4Type () const;
+
+  boundary4Type_type&
+  boundary4Type ();
+
+  void
+  boundary4Type (const boundary4Type_type& x);
+
+  void
+  boundary4Type (::std::unique_ptr< boundary4Type_type > p);
+
+  // boundary5Type
+  //
+  typedef ::xml_schema::string boundary5Type_type;
+  typedef ::xsd::cxx::tree::traits< boundary5Type_type, char > boundary5Type_traits;
+
+  const boundary5Type_type&
+  boundary5Type () const;
+
+  boundary5Type_type&
+  boundary5Type ();
+
+  void
+  boundary5Type (const boundary5Type_type& x);
+
+  void
+  boundary5Type (::std::unique_ptr< boundary5Type_type > p);
+
+  // boundary6Type
+  //
+  typedef ::xml_schema::string boundary6Type_type;
+  typedef ::xsd::cxx::tree::traits< boundary6Type_type, char > boundary6Type_traits;
+
+  const boundary6Type_type&
+  boundary6Type () const;
+
+  boundary6Type_type&
+  boundary6Type ();
+
+  void
+  boundary6Type (const boundary6Type_type& x);
+
+  void
+  boundary6Type (::std::unique_ptr< boundary6Type_type > p);
+
   // particles
   //
   typedef ::particles particles_type;
@@ -539,7 +641,13 @@ class input: public ::xml_schema::type
          const r_cutoff_type&,
          const domainSizeX_type&,
          const domainSizeY_type&,
-         const domainSizeZ_type&);
+         const domainSizeZ_type&,
+         const boundary1Type_type&,
+         const boundary2Type_type&,
+         const boundary3Type_type&,
+         const boundary4Type_type&,
+         const boundary5Type_type&,
+         const boundary6Type_type&);
 
   input (const ::xercesc::DOMElement& e,
          ::xml_schema::flags f = 0,
@@ -576,6 +684,12 @@ class input: public ::xml_schema::type
   ::xsd::cxx::tree::one< domainSizeX_type > domainSizeX_;
   ::xsd::cxx::tree::one< domainSizeY_type > domainSizeY_;
   ::xsd::cxx::tree::one< domainSizeZ_type > domainSizeZ_;
+  ::xsd::cxx::tree::one< boundary1Type_type > boundary1Type_;
+  ::xsd::cxx::tree::one< boundary2Type_type > boundary2Type_;
+  ::xsd::cxx::tree::one< boundary3Type_type > boundary3Type_;
+  ::xsd::cxx::tree::one< boundary4Type_type > boundary4Type_;
+  ::xsd::cxx::tree::one< boundary5Type_type > boundary5Type_;
+  ::xsd::cxx::tree::one< boundary6Type_type > boundary6Type_;
   particles_sequence particles_;
   cuboids_sequence cuboids_;
   disk_sequence disk_;
@@ -1209,4 +1323,4 @@ simulation_ (::xml_schema::dom::unique_ptr< ::xercesc::DOMDocument > d,
 //
 // End epilogue.
 
-#endif // CXX__SIMULATION_HXX
+#endif // CXX_MNT_C_USERS_JH_CLION_PROJECTS_MOL_SIM_RETRY_SRC_INPUT_READER_SIMULATION_HXX

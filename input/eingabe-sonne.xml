@@ -10,6 +10,12 @@
         <domainSizeX>0</domainSizeX>
         <domainSizeY>0</domainSizeY>
         <domainSizeZ>0</domainSizeZ>
+        <boundary1Type>no</boundary1Type>
+        <boundary2Type>no</boundary2Type>
+        <boundary3Type>no</boundary3Type>
+        <boundary4Type>no</boundary4Type>
+        <boundary5Type>no</boundary5Type>
+        <boundary6Type>no</boundary6Type>
         <particles>
             <x>0.0</x>
             <y>0.0</y>
