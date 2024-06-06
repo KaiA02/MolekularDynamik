@@ -29,6 +29,7 @@ void XMLReader::readXML(ParticleContainer &particleContainer) {
         {in.particles()[i].velocityX(), in.particles()[i].velocityY(),
          in.particles()[i].velocityZ()},
         in.particles()[i].mass());
+    particle.setType(i);
     if (i < in.cuboids().size()) {
       int dimension = in.cuboids()[i].dimension();
       int n3 = in.cuboids()[i].n3();
@@ -49,6 +50,7 @@ void XMLReader::readXML(ParticleContainer &particleContainer) {
       particleContainer.addMultipleParticles(pg.getAllParticles());
     } else {
       particleContainer.addParticle(particle);
+
     }
   }
 

@@ -14,8 +14,10 @@
 /**
  * plot the particles to a xyz-file
  */
-void plotParticles(int iteration, std::string outputType, std::string baseName,
+void plotParticlesLC(int iteration, std::string outputType, std::string baseName,
                    std::string outputPath, LCParticleContainer& particles);
+void plotParticles(int iteration, std::string outputType, std::string baseName,
+                   std::string outputPath, ParticleContainer& particles);
 
 
 int main(int argc, char *argsv[]) {
@@ -115,7 +117,12 @@ int main(int argc, char *argsv[]) {
     iteration++;
     if (!performanceMeasurement) {
       if (iteration % 10 == 0) {
-        plotParticles(iteration, outputType, baseName, "../output", lcParticles);
+        if(particleContainerType =="LC") {
+          plotParticlesLC(iteration, outputType, baseName, "../output", lcParticles);
+        } else {
+          plotParticles(iteration, outputType, baseName, "../output", normParticles);
+        }
+
       }
     }
 
@@ -136,8 +143,34 @@ int main(int argc, char *argsv[]) {
  *
  * @param iteration is the number of iterations of the particles
  */
-void plotParticles(int iteration, std::string outputType, std::string baseName,
+void plotParticlesLC(int iteration, std::string outputType, std::string baseName,
                    std::string outputPath, LCParticleContainer& particles) {
+  std::filesystem::path dir(outputPath);
+  if (!std::filesystem::exists(dir)) {
+    std::filesystem::create_directories(dir);
+  }
+  std::string out_name = outputPath + "/" + baseName;
+  if (outputType == "xyz") {
+
+    outputWriter::XYZWriter writer;
+    writer.plotParticles(particles, out_name, iteration);
+  }
+
+  else {
+    outputWriter::VTKWriter vtkWriter;
+    int numParticles = particles.getParticles().size();
+    vtkWriter.initializeOutput(numParticles);
+
+    for (auto &particle : particles.getParticles()) {
+      vtkWriter.plotParticle(particle);
+    }
+
+    std::string filename = out_name;
+    vtkWriter.writeFile(filename, iteration);
+  }
+}
+void plotParticles(int iteration, std::string outputType, std::string baseName,
+                   std::string outputPath, ParticleContainer& particles) {
   std::filesystem::path dir(outputPath);
   if (!std::filesystem::exists(dir)) {
     std::filesystem::create_directories(dir);
