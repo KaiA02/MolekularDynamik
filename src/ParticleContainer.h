@@ -161,7 +161,6 @@ public:
  void countParticlesInCells();
 
 
- std::vector<Particle> getHaloParticles();
  std::vector<Particle*> getBoundaryParticles();
  void handleBoundaryAction();
  std::vector<int> getInfluencingBoundarys(Particle*);

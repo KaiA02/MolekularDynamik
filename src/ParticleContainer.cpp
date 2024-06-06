@@ -297,16 +297,3 @@ std::vector<int> LCParticleContainer::getInfluencingBoundarys(Particle * p) {
   return result;
 }
 
-std::vector<Particle> LCParticleContainer::getHaloParticles() {
-  // returns the particles that are outside of the domain
-  std::vector<Particle> haloParticles;
-  for (auto &p : particles) {
-    int x = floor(p.getX().at(0) / cell_size.at(0));
-    int y = floor(p.getX().at(1) / cell_size.at(1));
-    int z = floor(std::abs(p.getX().at(2)) / cell_size.at(2));
-    if (!cellExists({x, y, z})) {
-      haloParticles.push_back(p);
-    }
-  }
-  return haloParticles;
-}
