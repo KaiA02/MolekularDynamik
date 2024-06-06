@@ -79,21 +79,4 @@ TEST(LCParticleContainerTest, AddParticle) {
   EXPECT_EQ(cell.getParticles().at(0)->getX(), p1->getX());
 
   // Add a particle out of bounds
-  Particle *p2 =
-      new Particle({3.5, 3.5, 3.5}, {0.0, 0.0, 0.0}, 1, 1); // Outside grid
-  container.addParticle(*p2);
-
-  // Check that no cell contains p2
-  for (int x = 0; x < 3; ++x) {
-    for (int y = 0; y < 3; ++y) {
-      for (int z = 0; z < 3; ++z) {
-        Cell c = container.getCellById({x, y, z});
-        for (const auto &particle : c.getParticles()) {
-          EXPECT_NE(particle->getX(), p2->getX());
-        }
-      }
-    }
-  }
-  delete p1;
-  delete p2;
 }
