@@ -1,4 +1,5 @@
 #include "ParticleContainer.h"
+#include "Boundary.h"
 #include "Calculations.h"
 #include "LinkedCell/Cell.h"
 #include "spdlog/spdlog.h"
@@ -46,7 +47,8 @@ void ParticleContainer::handleLJFCalculation() {}
 
 void ParticleContainer::resetParticles() { particles.clear(); }
 
-void ParticleContainer::addMultipleParticles(std::vector<Particle> particleCube) {
+void ParticleContainer::addMultipleParticles(
+    std::vector<Particle> particleCube) {
   for (size_t x = 0; x < particleCube.size(); ++x) {
     addParticle(particleCube.at(x));
   }
@@ -83,7 +85,7 @@ LCParticleContainer::getParticleInNeighbourhood(std::array<int, 3> id) {
   if (particleCount <= 0) {
     return {};
   } else {
-    //spdlog::info("there was a neigbourhood of {} particles", particleCount);
+    // spdlog::info("there was a neigbourhood of {} particles", particleCount);
     return neigbourhood;
   }
 }
@@ -100,11 +102,12 @@ Cell &LCParticleContainer::getCellById(std::array<int, 3> id) {
 
 void LCParticleContainer::realocateParticles(int handle_out_of_border) {
   if (handle_out_of_border == 1) {
-    //spdlog::info("we have {} cells and {} particles", cells.size(),getParticles().size());
+    // spdlog::info("we have {} cells and {} particles",
+    // cells.size(),getParticles().size());
     for (auto &c : cells) {
       c.emptyCell();
     }
-        for (auto &p : particles) {
+    for (auto &p : particles) {
       int x = floor(p.getX().at(0) / cell_size.at(0));
       int y = floor(p.getX().at(1) / cell_size.at(1));
       int z = floor(std::abs(p.getX().at(2)) / cell_size.at(2));
@@ -124,7 +127,8 @@ void LCParticleContainer::fillCellsWithParticles() {
   }
 }
 
-void LCParticleContainer::generateCells(int size_x, int size_y, int size_z, double r_cutoff) {
+void LCParticleContainer::generateCells(int size_x, int size_y, int size_z,
+                                        double r_cutoff) {
   if (r_cutoff > 0) {
     int count_x = floor(size_x / (r_cutoff));
     int count_y = floor(size_y / (r_cutoff));
@@ -196,7 +200,8 @@ bool LCParticleContainer::addParticleToCell(Particle &p) {
 
 std::vector<Particle> &LCParticleContainer::getParticles() { return particles; }
 
-void LCParticleContainer::addMultipleParticles(std::vector<Particle> &newParticles) {
+void LCParticleContainer::addMultipleParticles(
+    std::vector<Particle> &newParticles) {
   for (auto &p : newParticles) {
     particles.push_back(p);
   }
@@ -221,11 +226,37 @@ bool LCParticleContainer::cellExists(std::array<int, 3> id) {
 
 void LCParticleContainer::countParticlesInCells() {
   int counter = 0;
-  for(auto c: cells) {
-    for(auto p: c.getParticles()) {
-      counter ++;
+  for (auto c : cells) {
+    for (auto p : c.getParticles()) {
+      counter++;
     }
   }
   spdlog::info("there are {} particles in all the cells", counter);
-} //just for debugging
+} // just for debugging
 
+std::vector<Particle>
+LCParticleContainer::getBoundaryParticles(Boundary boundary) {
+  std::vector<Particle> boundaryParticles;
+  for (auto &c : cells) {
+    if (boundary.isCellOnBoundary(c)) {
+      for (auto &p : c.getParticles()) {
+        boundaryParticles.push_back(*p);
+      }
+    }
+  }
+  return boundaryParticles;
+}
+
+std::vector<Particle> LCParticleContainer::getHaloParticles() {
+  // returns the particles that are outside of the domain
+  std::vector<Particle> haloParticles;
+  for (auto &p : particles) {
+    int x = floor(p.getX().at(0) / cell_size.at(0));
+    int y = floor(p.getX().at(1) / cell_size.at(1));
+    int z = floor(std::abs(p.getX().at(2)) / cell_size.at(2));
+    if (!cellExists({x, y, z})) {
+      haloParticles.push_back(p);
+    }
+  }
+  return haloParticles;
+}

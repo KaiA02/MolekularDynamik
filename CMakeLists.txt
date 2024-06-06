@@ -29,6 +29,8 @@ add_executable(MolSim ${MY_SRC}
         src/inputReader/XMLReader.h
         src/inputReader/simulation.cxx
         src/inputReader/simulation.hxx
+        src/Boundary.cpp
+        src/Boundary.h
 )
 
 # set cxx standard. You may raise this if you want.
