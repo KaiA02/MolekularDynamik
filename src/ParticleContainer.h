@@ -102,27 +102,6 @@ public:
  */
 class LCParticleContainer : public ParticleContainer {
 public:
-  // input CellSize in x,y,z and Strategy for handling particles out of border
-  // allocates Particle to right cell and resets the forces to zero
-  void realocateParticles(int handle_out_of_border);
-  void fillCellsWithParticles();
-  std::vector<Particle> getParticleInNeighbourhood(std::array<int, 3> id);
-  Cell &getCellById(std::array<int, 3> id);
-  // input: Domain Size in x,y,z and r_cutoff
-  void generateCells(int size_x, int size_y, int size_z, double r_cutoff);
-  // handles LJFCalcualtion for all Cells;
-  void handleLJFCalculation() override;
-  void addParticle(Particle p);
-  bool addParticleToCell(Particle &p);
-  std::vector<Particle> &getParticles();
-  void addMultipleParticles(std::vector<Particle> &newParticles);
-  std::vector<Cell> getCells();
-  bool cellExists(std::array<int, 3>);
-  void countParticlesInCells();
-  std::vector<Particle> getBoundaryParticles(Boundary boundary);
-  std::vector<Particle> getHaloParticles();
-
-
  /**
   *@brief realocates the particles to their new cells and also
   *implements the outflow boundary (managing the deltion of particles out of the domain)
@@ -179,6 +158,9 @@ public:
   *@brief only for programmers to debug
  */
  void countParticlesInCells();
+
+ std::vector<Particle> getBoundaryParticles(Boundary boundary);
+ std::vector<Particle> getHaloParticles();
 private:
   std::vector<Cell> cells;
   std::array<double, 3> cell_size;
