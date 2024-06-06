@@ -67,9 +67,7 @@ int main(int argc, char *argsv[]) {
   ParticleContainer normParticles;
   if (particleContainerType == "LC") {
     xmlReader.readXML_LC(lcParticles);
-    spdlog::info("read it!");
-    spdlog::info("there are {} particles in the Simulation", lcParticles.getParticles().size());
-    spdlog::info("there are {} Cells in the Simulation", lcParticles.getCells().size());
+    spdlog::warn("there are {} particles and {} cells in the Simulation", lcParticles.getParticles().size(), lcParticles.getCells().size());
   } else {
     xmlReader.readXML(normParticles);
   }
