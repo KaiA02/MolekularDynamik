@@ -139,10 +139,10 @@ void LCParticleContainer::generateCells(int size_x, int size_y, int size_z, doub
       if (count_z == 1) {
         cell_size_z = r_cutoff;
       }
-      spdlog::warn("Cellcounts: {} {} {}", count_x, count_y, count_z);
-      spdlog::warn("Cellsize: {} {} {}", cell_size_x, cell_size_y, cell_size_z);
-      spdlog::warn("Domainsize: {} {} {}", size_x, size_y, size_z);
-      spdlog::warn("r_cutoff: {}", r_cutoff);
+      spdlog::info("Cellcounts: {} {} {}", count_x, count_y, count_z);
+      spdlog::info("Cellsize: {} {} {}", cell_size_x, cell_size_y, cell_size_z);
+      spdlog::info("Domainsize: {} {} {}", size_x, size_y, size_z);
+      spdlog::info("r_cutoff: {}", r_cutoff);
       cells.clear(); // Clear existing cells before generating new ones
       for (int x = 0; x < count_x; x++) {
         for (int y = 0; y < count_y; y++) {
@@ -226,6 +226,6 @@ void LCParticleContainer::countParticlesInCells() {
       counter ++;
     }
   }
-  spdlog::warn("there are {} particles in all the cells", counter);
+  spdlog::info("there are {} particles in all the cells", counter);
 } //just for debugging
 

@@ -3,7 +3,7 @@
     <input>
         <tStart>0.0</tStart>
         <tEnd>20.0</tEnd>
-        <deltaT>0.005</deltaT>
+        <deltaT>0.0005</deltaT>
         <inputType>LJF</inputType>
         <particleContainerType>LC</particleContainerType>
         <r_cutoff>3.0</r_cutoff>
