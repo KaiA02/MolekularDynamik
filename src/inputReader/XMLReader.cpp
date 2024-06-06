@@ -90,11 +90,7 @@ void XMLReader::readXML_LC(LCParticleContainer &particleContainer) {
     } else { //case its a single particle
       particleContainer.addParticle(particle);
     }
-
-
   }
-  particleContainer.generateCells(in.domainSizeX(), in.domainSizeY(), in.domainSizeZ(), in.r_cutoff());
-  //particleContainer.realocateParticles(1);
 }
 
 std::array<double, 3> XMLReader::getTime() {

@@ -101,34 +101,27 @@ void Calculations::calculateLJF() {
     }
   }
 }
-void Calculations::LCcalculateLJF(std::vector<Particle *> &center,
-                                  std::vector<Particle> &other) {
-  spdlog::info("center size is {}", center.size());
+void Calculations::LCcalculateLJF(std::vector<Particle*> &center, std::vector<Particle> &other) {
   if (center.size() > 1) {
     calculateLJFcenter(center);
-    spdlog::info("other size is {}", other.size());
-    if (other.size() > 0) {
-      for (size_t i = 0; i < center.size(); ++i) {
-        Particle *pi = center.at(i);
-        for (size_t j = 0; j < other.size(); ++j) {
-          Particle &pj = other.at(j);
-          std::array<double, 3> f_ij = calculateLJF(pi, &pj);
-
-          std::array<double, 3> newForcei = {0.0, 0.0, 0.0};
-          // std::array<double, 3> newForcej = {0.0, 0.0, 0.0};
-          for (int k = 0; k < 3; ++k) {
-            newForcei.at(k) = pi->getF().at(k) + f_ij.at(k);
-            // newForcej.at(k) = pj.getF().at(k) - (f_ij.at(k)/2);
-          }
-          pi->setF(newForcei);
-          // pj.setF(newForcej);
-          spdlog::info("force is {} {} {}", newForcei.at(0), newForcei.at(1),
-                       newForcei.at(2));
+  }
+  if (other.size() > 0) {
+    for (size_t i = 0; i < center.size(); ++i) {
+      Particle *pi = center.at(i);
+      for (size_t j = 0; j < other.size(); ++j) {
+        Particle &pj = other.at(j);
+        std::array<double, 3> f_ij = calculateLJF(pi, &pj);
+        std::array<double, 3> newForcei = {0.0, 0.0, 0.0};
+        //std::array<double, 3> newForcej = {0.0, 0.0, 0.0};
+        for (int k = 0; k < 3; ++k) {
+          newForcei.at(k) = pi->getF().at(k) + f_ij.at(k);
+          // newForcej.at(k) = pj.getF().at(k) - (f_ij.at(k)/2);
         }
+        pi->setF(newForcei);
+        // pj.setF(newForcej);
       }
     }
   }
-  spdlog::info("calculated LJF for Neigbours");
 }
 void Calculations::calculateLJFcenter(std::vector<Particle *> &center) {
   for (auto &p : center) {
