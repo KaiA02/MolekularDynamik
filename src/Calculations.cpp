@@ -37,10 +37,11 @@ void Calculations::calculateV(double delta_t) {
 }
 
 void Calculations::calculateF() {
-  for (auto &p1 : particles) {
+  for (size_t k = 0; k < particles.size(); k++) {
+    Particle &p1 = particles.getParticles().at(k);
     std::array<double, 3> newForce = {0.0, 0.0, 0.0};
-
-    for (auto &p2 : particles) {
+    for (size_t j = 0; j < particles.size(); j++) {
+      Particle &p2 = particles.getParticles().at(j);
       if (&p1 != &p2) {
         double distSquared = 0.0;
         for (int i = 0; i < 3; ++i) {
@@ -57,6 +58,7 @@ void Calculations::calculateF() {
       }
     }
     p1.setF(newForce);
+
   }
 }
 

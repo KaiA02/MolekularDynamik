@@ -311,12 +311,6 @@ boundary1Type (const boundary1Type_type& x)
   this->boundary1Type_.set (x);
 }
 
-void input::
-boundary1Type (::std::unique_ptr< boundary1Type_type > x)
-{
-  this->boundary1Type_.set (std::move (x));
-}
-
 const input::boundary2Type_type& input::
 boundary2Type () const
 {
@@ -333,12 +327,6 @@ void input::
 boundary2Type (const boundary2Type_type& x)
 {
   this->boundary2Type_.set (x);
-}
-
-void input::
-boundary2Type (::std::unique_ptr< boundary2Type_type > x)
-{
-  this->boundary2Type_.set (std::move (x));
 }
 
 const input::boundary3Type_type& input::
@@ -359,12 +347,6 @@ boundary3Type (const boundary3Type_type& x)
   this->boundary3Type_.set (x);
 }
 
-void input::
-boundary3Type (::std::unique_ptr< boundary3Type_type > x)
-{
-  this->boundary3Type_.set (std::move (x));
-}
-
 const input::boundary4Type_type& input::
 boundary4Type () const
 {
@@ -381,12 +363,6 @@ void input::
 boundary4Type (const boundary4Type_type& x)
 {
   this->boundary4Type_.set (x);
-}
-
-void input::
-boundary4Type (::std::unique_ptr< boundary4Type_type > x)
-{
-  this->boundary4Type_.set (std::move (x));
 }
 
 const input::boundary5Type_type& input::
@@ -407,12 +383,6 @@ boundary5Type (const boundary5Type_type& x)
   this->boundary5Type_.set (x);
 }
 
-void input::
-boundary5Type (::std::unique_ptr< boundary5Type_type > x)
-{
-  this->boundary5Type_.set (std::move (x));
-}
-
 const input::boundary6Type_type& input::
 boundary6Type () const
 {
@@ -429,12 +399,6 @@ void input::
 boundary6Type (const boundary6Type_type& x)
 {
   this->boundary6Type_.set (x);
-}
-
-void input::
-boundary6Type (::std::unique_ptr< boundary6Type_type > x)
-{
-  this->boundary6Type_.set (std::move (x));
 }
 
 const input::particles_sequence& input::
@@ -1294,12 +1258,9 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
     //
     if (n.name () == "boundary1Type" && n.namespace_ ().empty ())
     {
-      ::std::unique_ptr< boundary1Type_type > r (
-        boundary1Type_traits::create (i, f, this));
-
       if (!boundary1Type_.present ())
       {
-        this->boundary1Type_.set (::std::move (r));
+        this->boundary1Type_.set (boundary1Type_traits::create (i, f, this));
         continue;
       }
     }
@@ -1308,12 +1269,9 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
     //
     if (n.name () == "boundary2Type" && n.namespace_ ().empty ())
     {
-      ::std::unique_ptr< boundary2Type_type > r (
-        boundary2Type_traits::create (i, f, this));
-
       if (!boundary2Type_.present ())
       {
-        this->boundary2Type_.set (::std::move (r));
+        this->boundary2Type_.set (boundary2Type_traits::create (i, f, this));
         continue;
       }
     }
@@ -1322,12 +1280,9 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
     //
     if (n.name () == "boundary3Type" && n.namespace_ ().empty ())
     {
-      ::std::unique_ptr< boundary3Type_type > r (
-        boundary3Type_traits::create (i, f, this));
-
       if (!boundary3Type_.present ())
       {
-        this->boundary3Type_.set (::std::move (r));
+        this->boundary3Type_.set (boundary3Type_traits::create (i, f, this));
         continue;
       }
     }
@@ -1336,12 +1291,9 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
     //
     if (n.name () == "boundary4Type" && n.namespace_ ().empty ())
     {
-      ::std::unique_ptr< boundary4Type_type > r (
-        boundary4Type_traits::create (i, f, this));
-
       if (!boundary4Type_.present ())
       {
-        this->boundary4Type_.set (::std::move (r));
+        this->boundary4Type_.set (boundary4Type_traits::create (i, f, this));
         continue;
       }
     }
@@ -1350,12 +1302,9 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
     //
     if (n.name () == "boundary5Type" && n.namespace_ ().empty ())
     {
-      ::std::unique_ptr< boundary5Type_type > r (
-        boundary5Type_traits::create (i, f, this));
-
       if (!boundary5Type_.present ())
       {
-        this->boundary5Type_.set (::std::move (r));
+        this->boundary5Type_.set (boundary5Type_traits::create (i, f, this));
         continue;
       }
     }
@@ -1364,12 +1313,9 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
     //
     if (n.name () == "boundary6Type" && n.namespace_ ().empty ())
     {
-      ::std::unique_ptr< boundary6Type_type > r (
-        boundary6Type_traits::create (i, f, this));
-
       if (!boundary6Type_.present ())
       {
-        this->boundary6Type_.set (::std::move (r));
+        this->boundary6Type_.set (boundary6Type_traits::create (i, f, this));
         continue;
       }
     }

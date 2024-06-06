@@ -60,6 +60,7 @@ void XMLReader::readXML(ParticleContainer &particleContainer) {
 
 void XMLReader::readXML_LC(LCParticleContainer &particleContainer) {
   input in = sim->input();
+  particleContainer.setBoundarys({in.boundary1Type(), in.boundary2Type(), in.boundary3Type(), in.boundary4Type(), in.boundary5Type(), in.boundary6Type()});
   for (size_t i = 0; i < in.particles().size(); i++) {
     ParticleGenerator pg;
     Particle particle(

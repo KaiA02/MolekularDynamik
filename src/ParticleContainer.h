@@ -3,58 +3,57 @@
 
 #include <optional>
 
-#include "Boundary.h"
-#include "LinkedCell/Cell.h"
 #include "Particle.h"
 #include <vector>
+#include "LinkedCell/Cell.h"
 
 /**
  * @brief The BaseParticleContainer class
- * This class is a base container for Particles. It contains a vector of
- * Particles and provides basic operations for managing Particles.
+ * This class is a base container for Particles. It contains a vector of Particles
+ * and provides basic operations for managing Particles.
  */
 class BaseParticleContainer {
 public:
-  virtual ~BaseParticleContainer() = default;
-  /**
-   * @brief add a Particle to the vector
-   * @param particle Particle to add
-   */
-  virtual void addParticle(const Particle &particle) = 0;
-  virtual std::vector<Cell> getCells() = 0;
-  /**
-   * @brief replaces a particle in the vector particles at index position
-   * @param p new Particle
-   * @param position index in particles
-   */
-  virtual void setParticle(Particle p, int position) = 0;
+    virtual ~BaseParticleContainer() = default;
+     /**
+     * @brief add a Particle to the vector
+     * @param particle Particle to add
+     */
+    virtual void addParticle(const Particle &particle) = 0;
+    virtual std::vector<Cell> getCells() = 0;
+    /**
+     * @brief replaces a particle in the vector particles at index position
+     * @param p new Particle
+     * @param position index in particles
+     */
+    virtual void setParticle(Particle p, int position) = 0;
 
-  /**
-   * @brief resets all particles in the container
-   */
-  virtual void resetParticles() = 0;
+    /**
+     * @brief resets all particles in the container
+     */
+    virtual void resetParticles() = 0;
 
-  /**
-   * @brief gets all particles in the container
-   * @return reference to vector of particles
-   */
-  virtual std::vector<Particle> &getParticles() = 0;
-  virtual const std::vector<Particle> &getParticles() const = 0;
+    /**
+     * @brief gets all particles in the container
+     * @return reference to vector of particles
+     */
+    virtual std::vector<Particle>& getParticles() = 0;
+    virtual const std::vector<Particle> &getParticles() const = 0;
 
-  /**
-   * @brief gets the number of particles in the container
-   * @return number of particles
-   */
-  virtual int size() const = 0;
+    /**
+     * @brief gets the number of particles in the container
+     * @return number of particles
+     */
+    virtual int size() const = 0;
 
-  virtual std::vector<Particle>::iterator begin() = 0;
-  virtual std::vector<Particle>::iterator end() = 0;
-  virtual std::vector<Particle>::const_iterator begin() const = 0;
-  virtual std::vector<Particle>::const_iterator end() const = 0;
-  virtual void handleLJFCalculation() = 0;
+   virtual std::vector<Particle>::iterator begin() = 0;
+   virtual std::vector<Particle>::iterator end() = 0;
+   virtual std::vector<Particle>::const_iterator begin() const = 0;
+   virtual std::vector<Particle>::const_iterator end() const = 0;
+   virtual void handleLJFCalculation() = 0;
 
 protected:
-  std::vector<Particle> particles;
+ std::vector<Particle> particles;
 };
 
 /**
@@ -106,7 +105,7 @@ public:
   *@brief realocates the particles to their new cells and also
   *implements the outflow boundary (managing the deltion of particles out of the domain)
  */
- void realocateParticles(int handle_out_of_border);
+ void realocateParticles();
 
  /**
   *@brief adds the particles to the cells
@@ -118,6 +117,7 @@ public:
   *@param id id from the celss
  */
  std::vector<Particle> getParticleInNeighbourhood(std::array<int, 3> id);
+
  Cell& getCellById(std::array<int, 3> id);
  /**
   *@brief generate all cells with according size
@@ -128,6 +128,7 @@ public:
  */
  void generateCells(int size_x, int size_y, int size_z, double r_cutoff);
 
+ void setBoundarys(std::array<int, 6> in);
  /**
   *@brief calls realocateParticle() and calculates LJF for all cells
  */
@@ -159,11 +160,19 @@ public:
  */
  void countParticlesInCells();
 
- std::vector<Particle> getBoundaryParticles(Boundary boundary);
+
  std::vector<Particle> getHaloParticles();
+ std::vector<Particle*> getBoundaryParticles();
+ void handleBoundaryAction();
+ std::vector<int> getInfluencingBoundarys(Particle*);
+
 private:
-  std::vector<Cell> cells;
-  std::array<double, 3> cell_size;
+ std::vector<Cell> cells;
+ std::array<double, 3> cell_size;
+ std::array<int, 3> cell_count;
+ std::array<int, 6> boundary_types;
+
+
 };
 
 #endif // PARTICLECONTAINER_H

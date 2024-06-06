@@ -32,9 +32,10 @@
 
 
 ## create new c++ classes from xsd file:
-xsdcxx cxx-tree --std c++11 /mnt/c/Users/joshu/CLionProjects/MolekularDynamik/src/input/simulation.xsd
+xsdcxx cxx-tree --std c++11 /mnt/c/Users/joshu/CLionProjects/MolekularDynamik/src/input/simulation.xsd d
 
-
+## explaination for realocateParticles in LCParticleContainer
+input: is an array of for integers that represent all 6 boundarys. each Integer can be 1(outflow boundary) or 2(refelcting boundary)
 
 
 

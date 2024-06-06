@@ -44,7 +44,7 @@ TEST(LCParticleContainerTest, RealocateParticles) {
     container.getCellById({0,0,0}).addParticle(&p1);
     container.getCellById({2,2,2}).addParticle(&p2);
 
-    container.realocateParticles(1);
+    container.realocateParticles();
 
     // p1 should be reallocated
     Cell cell = container.getCellById({0,0,0});

@@ -480,7 +480,7 @@ class input: public ::xml_schema::type
 
   // boundary1Type
   //
-  typedef ::xml_schema::string boundary1Type_type;
+  typedef ::xml_schema::int_ boundary1Type_type;
   typedef ::xsd::cxx::tree::traits< boundary1Type_type, char > boundary1Type_traits;
 
   const boundary1Type_type&
@@ -492,12 +492,9 @@ class input: public ::xml_schema::type
   void
   boundary1Type (const boundary1Type_type& x);
 
-  void
-  boundary1Type (::std::unique_ptr< boundary1Type_type > p);
-
   // boundary2Type
   //
-  typedef ::xml_schema::string boundary2Type_type;
+  typedef ::xml_schema::int_ boundary2Type_type;
   typedef ::xsd::cxx::tree::traits< boundary2Type_type, char > boundary2Type_traits;
 
   const boundary2Type_type&
@@ -509,12 +506,9 @@ class input: public ::xml_schema::type
   void
   boundary2Type (const boundary2Type_type& x);
 
-  void
-  boundary2Type (::std::unique_ptr< boundary2Type_type > p);
-
   // boundary3Type
   //
-  typedef ::xml_schema::string boundary3Type_type;
+  typedef ::xml_schema::int_ boundary3Type_type;
   typedef ::xsd::cxx::tree::traits< boundary3Type_type, char > boundary3Type_traits;
 
   const boundary3Type_type&
@@ -526,12 +520,9 @@ class input: public ::xml_schema::type
   void
   boundary3Type (const boundary3Type_type& x);
 
-  void
-  boundary3Type (::std::unique_ptr< boundary3Type_type > p);
-
   // boundary4Type
   //
-  typedef ::xml_schema::string boundary4Type_type;
+  typedef ::xml_schema::int_ boundary4Type_type;
   typedef ::xsd::cxx::tree::traits< boundary4Type_type, char > boundary4Type_traits;
 
   const boundary4Type_type&
@@ -543,12 +534,9 @@ class input: public ::xml_schema::type
   void
   boundary4Type (const boundary4Type_type& x);
 
-  void
-  boundary4Type (::std::unique_ptr< boundary4Type_type > p);
-
   // boundary5Type
   //
-  typedef ::xml_schema::string boundary5Type_type;
+  typedef ::xml_schema::int_ boundary5Type_type;
   typedef ::xsd::cxx::tree::traits< boundary5Type_type, char > boundary5Type_traits;
 
   const boundary5Type_type&
@@ -560,12 +548,9 @@ class input: public ::xml_schema::type
   void
   boundary5Type (const boundary5Type_type& x);
 
-  void
-  boundary5Type (::std::unique_ptr< boundary5Type_type > p);
-
   // boundary6Type
   //
-  typedef ::xml_schema::string boundary6Type_type;
+  typedef ::xml_schema::int_ boundary6Type_type;
   typedef ::xsd::cxx::tree::traits< boundary6Type_type, char > boundary6Type_traits;
 
   const boundary6Type_type&
@@ -576,9 +561,6 @@ class input: public ::xml_schema::type
 
   void
   boundary6Type (const boundary6Type_type& x);
-
-  void
-  boundary6Type (::std::unique_ptr< boundary6Type_type > p);
 
   // particles
   //

@@ -90,6 +90,8 @@ int main(int argc, char *argsv[]) {
       } else {
         lcParticles.handleLJFCalculation();
       }
+      //add boundary handling here;
+      lcParticles.handleBoundaryAction();
       lcCaluclations.calculateV(delta_t);
       iteration++;
       if (!performanceMeasurement) {
