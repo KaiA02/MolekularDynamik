@@ -100,11 +100,11 @@ Cell &LCParticleContainer::getCellById(std::array<int, 3> id) {
 
 void LCParticleContainer::realocateParticles(int handle_out_of_border) {
   if (handle_out_of_border == 1) {
-    spdlog::debug("we have {} cells and {} particles", cells.size(),
-                 getParticles().size());
+    //spdlog::info("we have {} cells and {} particles", cells.size(),getParticles().size());
     for (auto &c : cells) {
       c.emptyCell();
     }
+    int counter = 0;
     for (auto &p : particles) {
       int x = floor(p.getX().at(0) / cell_size.at(0));
       int y = floor(p.getX().at(1) / cell_size.at(1));
@@ -113,8 +113,10 @@ void LCParticleContainer::realocateParticles(int handle_out_of_border) {
         p.setF({0.0, 0.0, 0.0});
         getCellById({x, y, z}).addParticle(&p);
         // particles.push_back(p);
+        counter++;
       }
     }
+    spdlog::info("{} particles added", counter);
   }
 }
 
@@ -163,7 +165,9 @@ void LCParticleContainer::generateCells(int size_x, int size_y, int size_z,
 }
 
 void LCParticleContainer::handleLJFCalculation() {
+  countParticlesInCells();
   realocateParticles(1);
+  countParticlesInCells();
   int empty_counter = 0;
   for (auto &c : cells) {
     if (!c.isEmpty()) {
@@ -218,3 +222,14 @@ bool LCParticleContainer::cellExists(std::array<int, 3> id) {
   }
   return false;
 };
+
+void LCParticleContainer::countParticlesInCells() {
+  int counter = 0;
+  for(auto c: cells) {
+    for(auto p: c.getParticles()) {
+      counter ++;
+    }
+  }
+  spdlog::info("there are {} particles in all the cells", counter);
+} //just for debugging
+

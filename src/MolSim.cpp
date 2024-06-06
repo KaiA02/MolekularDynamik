@@ -84,53 +84,43 @@ int main(int argc, char *argsv[]) {
                logLevel, performanceMeasurement, lcParticles.getParticles().size(),
                xmlReader.getNumberOfCuboids(), xmlReader.getNumberOfDisks());
   // for this loop, we assume: current x, current f and current v are known
-  while (current_time < end_time) {
-    // calculate new x
-    if(particleContainerType == "LC") {
+  if(particleContainerType == "LC") {
+    while(current_time < end_time) {
       lcCaluclations.calculateX(delta_t);
-    } else {
-      normCalculations.calculateX(delta_t);
-    }
-
-    // calculate new f
-    if (inputType == "SF") {
-      if(particleContainerType == "LC") {
-        lcCaluclations.calculateF();
+      if(inputType == "SF") {
+        lcCaluclations.calculateLJF();
       } else {
-        normCalculations.calculateF();
+        lcParticles.handleLJFCalculation();
       }
-    } else if(particleContainerType == "LC") {
-      lcParticles.handleLJFCalculation();
-    } else {
-        normCalculations.calculateLJF();
-    }
-
-    // calculate new v
-    if(particleContainerType == "LC") {
       lcCaluclations.calculateV(delta_t);
-    } else {
-      normCalculations.calculateV(delta_t);
-    }
-
-
-
-    iteration++;
-    if (!performanceMeasurement) {
-      if (iteration % 10 == 0) {
-        if(particleContainerType =="LC") {
+      iteration++;
+      if (!performanceMeasurement) {
+        if (iteration % 10 == 0) {
           plotParticlesLC(iteration, outputType, baseName, "../output", lcParticles);
-        } else {
+        }
+      }
+      current_time += delta_t;
+    }
+  } else {
+    while(current_time < end_time) {
+      normCalculations.calculateX(delta_t);
+      if(inputType == "SF") {
+        normCalculations.calculateF();
+      } else {
+        normCalculations.calculateLJF();
+      }
+      normCalculations.calculateV(delta_t);
+      iteration++;
+      if (!performanceMeasurement) {
+        if (iteration % 10 == 0) {
           plotParticles(iteration, outputType, baseName, "../output", normParticles);
         }
-
       }
+      current_time += delta_t;
     }
-
-    current_time += delta_t;
   }
   auto end = std::chrono::high_resolution_clock::now();
   std::chrono::duration<double> elapsed = end - start;
-
   spdlog::info("Simulation finished in {} seconds", elapsed.count());
   return 0;
 }

@@ -57,7 +57,6 @@ void XMLReader::readXML(ParticleContainer &particleContainer) {
 }
 void XMLReader::readXML_LC(LCParticleContainer &particleContainer) {
   input in = sim->input();
-  particleContainer.generateCells(in.domainSizeX(), in.domainSizeY(), in.domainSizeZ(), in.r_cutoff());
   for (size_t i = 0; i < in.particles().size(); i++) {
     ParticleGenerator pg;
     Particle particle(
@@ -79,7 +78,7 @@ void XMLReader::readXML_LC(LCParticleContainer &particleContainer) {
 
       particleContainer.addMultipleParticles(pg.getAllParticles());
       spdlog::info("added {} particles to the generator", pg.getAllParticles().size());
-      spdlog::info("there are {} particles in the container now", particleContainer.getParticles().size());
+
     } else if (i < in.disk().size()) { //case its a disk
       int dimension = in.disk()[i].dimension();
       pg.generateDisk(particle, in.disk()[i].radius(), in.disk()[i].distance(),
@@ -89,7 +88,10 @@ void XMLReader::readXML_LC(LCParticleContainer &particleContainer) {
       particleContainer.addParticle(particle);
     }
   }
+  spdlog::info("there are {} particles in the container now", particleContainer.getParticles().size());
+  particleContainer.generateCells(in.domainSizeX(), in.domainSizeY(), in.domainSizeZ(), in.r_cutoff());
   particleContainer.fillCellsWithParticles();
+  particleContainer.countParticlesInCells();
 }
 
 std::array<double, 3> XMLReader::getTime() {

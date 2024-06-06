@@ -117,6 +117,7 @@ public:
  void addMultipleParticles(std::vector<Particle>& newParticles);
  std::vector<Cell> getCells();
  bool cellExists(std::array<int, 3>);
+ void countParticlesInCells();
 private:
  std::vector<Cell> cells;
  std::array<double, 3> cell_size;
