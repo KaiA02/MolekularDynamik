@@ -10,21 +10,27 @@
         <domainSizeX>180</domainSizeX>
         <domainSizeY>90</domainSizeY>
         <domainSizeZ>1</domainSizeZ>
+        <boundary1Type>no</boundary1Type>
+        <boundary2Type>no</boundary2Type>
+        <boundary3Type>no</boundary3Type>
+        <boundary4Type>no</boundary4Type>
+        <boundary5Type>no</boundary5Type>
+        <boundary6Type>no</boundary6Type>
         <particles>
-            <x>15.0</x>
-            <y>15.0</y>
+            <x>20.0</x>
+            <y>20.0</y>
             <z>0.0</z>
             <velocityX>0.0</velocityX>
-            <velocityY>-10.0</velocityY>
+            <velocityY>0.0</velocityY>
             <velocityZ>0.0</velocityZ>
             <mass>1</mass>
         </particles>
         <particles>
-            <x>0.0</x>
-            <y>0.0</y>
+            <x>70.0</x>
+            <y>60.0</y>
             <z>0.0</z>
             <velocityX>0.0</velocityX>
-            <velocityY>0.0</velocityY>
+            <velocityY>-10.0</velocityY>
             <velocityZ>0.0</velocityZ>
             <mass>1</mass>
 
@@ -32,8 +38,8 @@
         </particles>
         <cuboids>
 
-            <n1>8.0</n1>
-            <n2>8.0</n2>
+            <n1>100.0</n1>
+            <n2>20.0</n2>
             <n3>1.0</n3>
             <distance>1.1225</distance>
             <meanVelocity>0.1</meanVelocity>
@@ -41,8 +47,8 @@
         </cuboids>
         <cuboids>
 
-            <n1>40.0</n1>
-            <n2>8.0</n2>
+            <n1>20.0</n1>
+            <n2>20.0</n2>
             <n3>1.0</n3>
             <distance>1.1225</distance>
             <meanVelocity>0.1</meanVelocity>
@@ -58,6 +64,6 @@
     </output>
     <config>
         <performanceMeasurement>false</performanceMeasurement>
-        <logLevel>info</logLevel>
+        <logLevel>warn</logLevel>
     </config>
 </simulation>

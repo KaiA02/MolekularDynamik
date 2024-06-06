@@ -22,7 +22,6 @@ void plotParticles(int iteration, std::string outputType, std::string baseName,
 
 int main(int argc, char *argsv[]) {
   XMLReader xmlReader(argsv[1]);
-  auto start = std::chrono::high_resolution_clock::now();
 
   std::string particleContainerType = xmlReader.getParticleContainerType();
   std::string inputType = xmlReader.getInputType();
@@ -67,9 +66,7 @@ int main(int argc, char *argsv[]) {
   ParticleContainer normParticles;
   if (particleContainerType == "LC") {
     xmlReader.readXML_LC(lcParticles);
-    spdlog::info("read it!");
-    spdlog::info("there are {} particles in the Simulation", lcParticles.getParticles().size());
-    spdlog::info("there are {} Cells in the Simulation", lcParticles.getCells().size());
+    spdlog::info("there are {} particles and {} cells in the Simulation", lcParticles.getParticles().size(), lcParticles.getCells().size());
   } else {
     xmlReader.readXML(normParticles);
   }
@@ -83,6 +80,7 @@ int main(int argc, char *argsv[]) {
                start_time, end_time, delta_t, inputType, outputType, baseName,
                logLevel, performanceMeasurement, lcParticles.getParticles().size(),
                xmlReader.getNumberOfCuboids(), xmlReader.getNumberOfDisks());
+  auto start = std::chrono::high_resolution_clock::now();
   // for this loop, we assume: current x, current f and current v are known
   if(particleContainerType == "LC") {
     while(current_time < end_time) {
@@ -121,7 +119,7 @@ int main(int argc, char *argsv[]) {
   }
   auto end = std::chrono::high_resolution_clock::now();
   std::chrono::duration<double> elapsed = end - start;
-  spdlog::info("Simulation finished in {} seconds", elapsed.count());
+  spdlog::warn("Simulation finished in {} seconds", elapsed.count());
   return 0;
 }
 

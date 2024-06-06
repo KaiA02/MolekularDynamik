@@ -14,6 +14,12 @@
                             <xs:element name="domainSizeX" type="xs:int"/>
                             <xs:element name="domainSizeY" type="xs:int"/>
                             <xs:element name="domainSizeZ" type="xs:int"/>
+                            <xs:element name="boundary1Type" type="xs:string"/>
+                            <xs:element name="boundary2Type" type="xs:string"/>
+                            <xs:element name="boundary3Type" type="xs:string"/>
+                            <xs:element name="boundary4Type" type="xs:string"/>
+                            <xs:element name="boundary5Type" type="xs:string"/>
+                            <xs:element name="boundary6Type" type="xs:string"/>
                             <xs:element name="particles" maxOccurs="unbounded" minOccurs="1">
                                 <xs:complexType>
                                     <xs:sequence>
