@@ -5,11 +5,11 @@
         <tEnd>10.0</tEnd>
         <deltaT>0.0005</deltaT>
         <inputType>LJF</inputType>
-        <particleContainerType>no</particleContainerType>
+        <particleContainerType>LC</particleContainerType>
         <r_cutoff>3.0</r_cutoff>
-        <domainSizeX>0</domainSizeX>
-        <domainSizeY>0</domainSizeY>
-        <domainSizeZ>0</domainSizeZ>
+        <domainSizeX>90</domainSizeX>
+        <domainSizeY>90</domainSizeY>
+        <domainSizeZ>3</domainSizeZ>
         <boundary1Type>1</boundary1Type>
         <boundary2Type>1</boundary2Type>
         <boundary3Type>1</boundary3Type>

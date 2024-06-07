@@ -163,7 +163,7 @@ public:
 
  std::vector<Particle*> getBoundaryParticles();
  void handleBoundaryAction();
- std::vector<int> getInfluencingBoundarys(Particle*);
+ std::array<double, 6> getInfluencingBoundarysWithDistance(Particle*);
 
 private:
  std::vector<Cell> cells;
