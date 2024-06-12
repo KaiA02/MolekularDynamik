@@ -258,111 +258,116 @@ void LCParticleContainer::handleBoundaryAction() {
     for(auto p: boundaryparticles) {
       std::array<double, 6> bounds = getInfluencingBoundarysWithDistance(p);
       std::array<double, 6> compare = {-1.0, -1.0, -1.0, -1.0, -1.0, -1.0};
-      if(bounds != compare)
-        for(int i = 0; i < 6; i++){
-          // generate halo Particle
-          if(bounds.at(i) != -1.0 && bounds.at(i) <= (pow(2, 1/6)/2)){
-            if( i == 0 ){ //Boundary to YZ Plane
-              std::array<double, 3> x_arg = {-bounds.at(i), p->getX().at(1), p->getX().at(2)};
-              std::array<double, 3> v_arg = {-1*(p->getV().at(0)), p->getV().at(1), p->getV().at(2)};
-              double m_arg = p->getM();
-              int type_arg = p->getType();
-              Particle* haloParticle = new Particle(x_arg, v_arg, m_arg, type_arg);
-              //haloParticle->setX(x_arg);
-              //haloParticle->setV(v_arg);
-              //haloParticle->setM(m_arg);
-              //haloParticle->setType(type_arg);
-              LCParticleContainer container;
-              Calculations calc(container);
-              std::array<double, 3> force = calc.calculateLJF(haloParticle, p);
-              std::array<double, 3> addedForce;
-              for(int k = 0; k < 3; k++) {
-                addedForce[k] = p->getF()[k] - force[k];
-              }
-              p->setF(addedForce);
+      if(bounds != compare) {
+        for(int i = 0; i < 6; i++) {
+          if(boundary_types[i] == 2){
+            // generate halo Particle
+            if(bounds.at(i) != -1.0 && bounds.at(i) <= (pow(2, 1/6)/2)){
+              if( i == 0 ){ //Boundary to YZ Plane
+                std::array<double, 3> x_arg = {-bounds.at(i), p->getX().at(1), p->getX().at(2)};
+                std::array<double, 3> v_arg = {-1*(p->getV().at(0)), p->getV().at(1), p->getV().at(2)};
+                double m_arg = p->getM();
+                int type_arg = p->getType();
+                Particle* haloParticle = new Particle(x_arg, v_arg, m_arg, type_arg);
+                LCParticleContainer container;
+                Calculations calc(container);
+                std::array<double, 3> force = calc.calculateLJF(haloParticle, p);
+                std::array<double, 3> addedForce;
+                for(int k = 0; k < 3; k++) {
+                  addedForce[k] = p->getF()[k] - force[k];
+                }
+                p->setF(addedForce);
 
-            } else if ( i == 1 ) { //Boundary to other YZ Plane
-              std::array<double, 3> x_arg = {cell_size.at(0)*cell_count.at(0) + bounds.at(i), p->getX().at(1), p->getX().at(2)};
-              std::array<double, 3> v_arg = {-1*(p->getV().at(0)), p->getV().at(1), p->getV().at(2)};
-              double m_arg = p->getM();
-              int type_arg = p->getType();
+              } else if ( i == 1 ) { //Boundary to other YZ Plane
+                std::array<double, 3> x_arg = {cell_size.at(0)*cell_count.at(0) + bounds.at(i), p->getX().at(1), p->getX().at(2)};
+                std::array<double, 3> v_arg = {-1*(p->getV().at(0)), p->getV().at(1), p->getV().at(2)};
+                double m_arg = p->getM();
+                int type_arg = p->getType();
 
-              Particle* haloParticle = new Particle(x_arg, v_arg, m_arg, type_arg);
-              LCParticleContainer container;
-              Calculations calc(container);
-              std::array<double, 3> force = calc.calculateLJF(haloParticle, p);
-              std::array<double, 3> addedForce;
-              for(int k = 0; k < 3; k++) {
-                addedForce[k] = p->getF()[k] + force[k];
-              }
-              p->setF(addedForce);
-            } else if ( i == 2 ) { //Boundary to XZ Plane
-              std::array<double, 3> x_arg = {p->getX().at(0), -bounds.at(1), p->getX().at(2)};
-              std::array<double, 3> v_arg = {p->getV().at(0), -1*(p->getV().at(1)), p->getV().at(2)};
-              double m_arg = p->getM();
-              int type_arg = p->getType();
-              Particle* haloParticle = new Particle(x_arg, v_arg, m_arg, type_arg);
-              LCParticleContainer container;
-              Calculations calc(container);
-              std::array<double, 3> force = calc.calculateLJF(haloParticle, p);
-              std::array<double, 3> addedForce;
-              for(int k = 0; k < 3; k++) {
-                addedForce[k] = p->getF()[k] + force[k];
-              }
-              p->setF(addedForce);
-            } else if ( i == 3 ) { //Boundary to other XZ Plane
-              std::array<double, 3> x_arg = {p->getX().at(0), cell_size.at(1)*cell_count.at(1) + bounds.at(i), p->getX().at(2)};
-              std::array<double, 3> v_arg = {p->getV().at(0), -1*(p->getV().at(1)), p->getV().at(2)};
-              double m_arg = p->getM();
-              int type_arg = p->getType();
+                Particle* haloParticle = new Particle(x_arg, v_arg, m_arg, type_arg);
+                LCParticleContainer container;
+                Calculations calc(container);
+                std::array<double, 3> force = calc.calculateLJF(haloParticle, p);
+                std::array<double, 3> addedForce;
+                for(int k = 0; k < 3; k++) {
+                  addedForce[k] = p->getF()[k] + force[k];
+                }
+                p->setF(addedForce);
+              } else if ( i == 2 ) { //Boundary to XZ Plane
+                std::array<double, 3> x_arg = {p->getX().at(0), -bounds.at(1), p->getX().at(2)};
+                std::array<double, 3> v_arg = {p->getV().at(0), -1*(p->getV().at(1)), p->getV().at(2)};
+                double m_arg = p->getM();
+                int type_arg = p->getType();
+                Particle* haloParticle = new Particle(x_arg, v_arg, m_arg, type_arg);
+                LCParticleContainer container;
+                Calculations calc(container);
+                std::array<double, 3> force = calc.calculateLJF(haloParticle, p);
+                std::array<double, 3> addedForce;
+                for(int k = 0; k < 3; k++) {
+                  addedForce[k] = p->getF()[k] + force[k];
+                }
+                p->setF(addedForce);
+              } else if ( i == 3 ) { //Boundary to other XZ Plane
+                std::array<double, 3> x_arg = {p->getX().at(0), cell_size.at(1)*cell_count.at(1) + bounds.at(i), p->getX().at(2)};
+                std::array<double, 3> v_arg = {p->getV().at(0), -1*(p->getV().at(1)), p->getV().at(2)};
+                double m_arg = p->getM();
+                int type_arg = p->getType();
 
-              Particle* haloParticle = new Particle(x_arg, v_arg, m_arg, type_arg);
-              LCParticleContainer container;
-              Calculations calc(container);
-              std::array<double, 3> force = calc.calculateLJF(haloParticle, p);
-              std::array<double, 3> addedForce;
-              for(int k = 0; k < 3; k++) {
-                addedForce[k] = p->getF()[k] + force[k];
-              }
-              p->setF(addedForce);
-            } else if ( i == 4 ) { //Boundary to XY Plane
-              std::array<double, 3> x_arg = {p->getX().at(0), p->getX().at(1), -bounds.at(2)};
-              std::array<double, 3> v_arg = {p->getV().at(0), p->getV().at(1), -1*(p->getV().at(2))};
-              double m_arg = p->getM();
-              int type_arg = p->getType();
-              Particle* haloParticle = new Particle(x_arg, v_arg, m_arg, type_arg);
-              LCParticleContainer container;
-              Calculations calc(container);
-              std::array<double, 3> force = calc.calculateLJF(haloParticle, p);
-              std::array<double, 3> addedForce;
-              for(int k = 0; k < 3; k++) {
-                addedForce[k] = p->getF()[k] + force[k];
-              }
-              p->setF(addedForce);
-            } else { // i == 5      //Boundary to other XY Plane
-              std::array<double, 3> x_arg = {p->getX().at(0),p->getX().at(1), cell_size.at(2)*cell_count.at(2) + bounds.at(i)};
-              std::array<double, 3> v_arg = {p->getV().at(0), -p->getV().at(1), -1*(p->getV().at(2))};
-              double m_arg = p->getM();
-              int type_arg = p->getType();
+                Particle* haloParticle = new Particle(x_arg, v_arg, m_arg, type_arg);
+                LCParticleContainer container;
+                Calculations calc(container);
+                std::array<double, 3> force = calc.calculateLJF(haloParticle, p);
+                std::array<double, 3> addedForce;
+                for(int k = 0; k < 3; k++) {
+                  addedForce[k] = p->getF()[k] + force[k];
+                }
+                p->setF(addedForce);
+              } else if ( i == 4 ) { //Boundary to XY Plane
+                std::array<double, 3> x_arg = {p->getX().at(0), p->getX().at(1), -bounds.at(2)};
+                std::array<double, 3> v_arg = {p->getV().at(0), p->getV().at(1), -1*(p->getV().at(2))};
+                double m_arg = p->getM();
+                int type_arg = p->getType();
+                Particle* haloParticle = new Particle(x_arg, v_arg, m_arg, type_arg);
+                LCParticleContainer container;
+                Calculations calc(container);
+                std::array<double, 3> force = calc.calculateLJF(haloParticle, p);
+                std::array<double, 3> addedForce;
+                for(int k = 0; k < 3; k++) {
+                  addedForce[k] = p->getF()[k] + force[k];
+                }
+                p->setF(addedForce);
+              } else { // i == 5      //Boundary to other XY Plane
+                std::array<double, 3> x_arg = {p->getX().at(0),p->getX().at(1), cell_size.at(2)*cell_count.at(2) + bounds.at(i)};
+                std::array<double, 3> v_arg = {p->getV().at(0), -p->getV().at(1), -1*(p->getV().at(2))};
+                double m_arg = p->getM();
+                int type_arg = p->getType();
 
-              Particle* haloParticle = new Particle(x_arg, v_arg, m_arg, type_arg);
-              LCParticleContainer container;
-              Calculations calc(container);
-              std::array<double, 3> force = calc.calculateLJF(haloParticle, p);
-              std::array<double, 3> addedForce;
-              for(int k = 0; k < 3; k++) {
-                addedForce[k] = p->getF()[k] + force[k];
+                Particle* haloParticle = new Particle(x_arg, v_arg, m_arg, type_arg);
+                LCParticleContainer container;
+                Calculations calc(container);
+                std::array<double, 3> force = calc.calculateLJF(haloParticle, p);
+                std::array<double, 3> addedForce;
+                for(int k = 0; k < 3; k++) {
+                  addedForce[k] = p->getF()[k] + force[k];
+                }
+                p->setF(addedForce);
               }
-              p->setF(addedForce);
-            }
-            //Particle has same absolute velocity but
-            //eg. boundary is XY, then velocity in x and y are same but in z is -z;
-            //Particle has same x and y position but z is same distance from boundary but reversed
-            //Particle has no force
-          }
-        }
-      }
-    }
+              //Particle has same absolute velocity but
+              //eg. boundary is XY, then velocity in x and y are same but in z is -z;
+              //Particle has same x and y position but z is same distance from boundary but reversed
+              //Particle has no force
+
+            } // if(bounds.at(i) != -1.0 && bounds.at(i) <= (pow(2, 1/6)/2)){
+
+          } // for(int i = 0; i < 6; i++){
+
+          }// if(boundary_types[i] == 2){
+
+        }// if(bounds != compare) {
+
+      }// for(auto p: boundaryparticles) {
+
+    }//if(boundaryparticles.size()>0) {
   }
 
 
