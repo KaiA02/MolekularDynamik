@@ -41,10 +41,10 @@ void Calculations::calculateV(double delta_t) {
 }
 
 void Calculations::calculateF() {
-  for (size_t k = 0; k < particles.size(); k++) {
+  for (int k = 0; k < particles.size(); k++) {
     Particle &p1 = particles.getParticles().at(k);
     std::array<double, 3> newForce = {0.0, 0.0, 0.0};
-    for (size_t j = 0; j < particles.size(); j++) {
+    for (int j = 0; j < particles.size(); j++) {
       Particle &p2 = particles.getParticles().at(j);
       if (&p1 != &p2) {
         double distSquared = 0.0;
@@ -75,7 +75,8 @@ void Calculations::calculateLJF() {
     Particle &pi = particles.getParticles().at(i);
     for (int j = i + 1; j < particles.size(); ++j) {
       Particle &pj = particles.getParticles().at(j);
-      std::array<double, 3> f_ij = calculateLJF(&pi, &pj);
+      double fake_r_cutoff = 10000000000000000;
+      std::array<double, 3> f_ij = calculateLJF(&pi, &pj, fake_r_cutoff);
 
       std::array<double, 3> newForcei = {0.0, 0.0, 0.0};
       std::array<double, 3> newForcej = {0.0, 0.0, 0.0};
@@ -90,14 +91,14 @@ void Calculations::calculateLJF() {
 }
 
 
-void Calculations::LCcalculateLJF(std::vector<Particle*> &center, std::vector<Particle*> &other) {
+void Calculations::LCcalculateLJF(std::vector<Particle*> &center, std::vector<Particle*> &other, double r_cutoff) {
   if (center.size() > 1) {
-    calculateLJFcenter(center);
+    calculateLJFcenter(center, r_cutoff);
   }
   if (other.size() > 0) {
    for(auto pi : center) {
       for(auto pj : center) {
-        std::array<double, 3> f_ij = calculateLJF(pi, pj);
+        std::array<double, 3> f_ij = calculateLJF(pi, pj, r_cutoff);
         std::array<double, 3> newForcei = {0.0, 0.0, 0.0};
         //std::array<double, 3> newForcej = {0.0, 0.0, 0.0};
         for (int k = 0; k < 3; ++k) {
@@ -112,12 +113,12 @@ void Calculations::LCcalculateLJF(std::vector<Particle*> &center, std::vector<Pa
 }
 
 
-void Calculations::calculateLJFcenter(std::vector<Particle *> &center) {
-  for (int i = 0; i < center.size() - 1; ++i) {
+void Calculations::calculateLJFcenter(std::vector<Particle *> &center, double r_cutoff) {
+  for (size_t i = 0; i < center.size() - 1; ++i) {
     Particle *pi = center.at(i);
-    for (int j = i + 1; j < center.size(); ++j) {
+    for (size_t j = i + 1; j < center.size(); ++j) {
       Particle *pj = center.at(j);
-      std::array<double, 3> f_ij = calculateLJF(pi, pj);
+      std::array<double, 3> f_ij = calculateLJF(pi, pj, r_cutoff);
       std::array<double, 3> newForcei = {0.0, 0.0, 0.0};
       std::array<double, 3> newForcej = {0.0, 0.0, 0.0};
       for (int k = 0; k < 3; ++k) {
@@ -130,15 +131,15 @@ void Calculations::calculateLJFcenter(std::vector<Particle *> &center) {
   }
 }
 
-std::array<double, 3> Calculations::calculateLJF(Particle *p1, Particle *p2) {
+std::array<double, 3> Calculations::calculateLJF(Particle *p1, Particle *p2, double r_cutoff) {
   std::array<double, 3> displacement_vector = {
       p1->getX().at(0) - p2->getX().at(0), p1->getX().at(1) - p2->getX().at(1),
       p1->getX().at(2) - p2->getX().at(2)};
   double distance = sqrt(pow(displacement_vector.at(0), 2) +
                          pow(displacement_vector.at(1), 2) +
                          pow(displacement_vector.at(2), 2));
-
-  double forcefactor =
+  if(distance <= r_cutoff) {
+   double forcefactor =
       ((-24 * epsilion) / pow(distance, 2)) *
       (pow((sigma) / distance, 6) - 2 * pow((sigma) / distance, 12));
 
@@ -146,4 +147,7 @@ std::array<double, 3> Calculations::calculateLJF(Particle *p1, Particle *p2) {
                                 forcefactor * displacement_vector.at(1),
                                 forcefactor * displacement_vector.at(2)};
   return f_ij;
+  } else {
+    return {0.0,0.0,0.0};
+  }
 }

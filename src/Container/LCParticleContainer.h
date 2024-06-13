@@ -77,12 +77,14 @@ public:
  std::vector<Particle*> getBoundaryParticles();
  void handleBoundaryAction();
  std::array<double, 6> getInfluencingBoundarysWithDistance(Particle*);
+ double getR_cutoff();
 
 private:
  std::vector<Cell> cells;
  std::array<double, 3> cell_size;
  std::array<int, 3> cell_count;
  std::array<int, 6> boundary_types;
+ double r_cutoff;
 
 
 };

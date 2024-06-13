@@ -41,14 +41,14 @@ public:
    *@param other are the particles in the neighbour cell
    */
   void LCcalculateLJF(std::vector<Particle *> &center,
-                      std::vector<Particle*> &other);
+                      std::vector<Particle*> &other, double r_cutoff);
  /**
    *@brief calculate the Lennard-Jones-Force in the center particles
    *(escpecially used for LC)
    *called by Calculations::LCcalculateLJF(center, other)
    *@param center is the paramter used in the method above
    */
-  void calculateLJFcenter(std::vector<Particle *> &center);
+  void calculateLJFcenter(std::vector<Particle *> &center, double r_cutoff);
  /**
 * @brief the following function calculates the new positions
 *
@@ -68,7 +68,7 @@ public:
    *@brief calculate the Lennard-Jones-Force between two particles
    *(escpecially used for LC)
    */
- std::array<double, 3> calculateLJF(Particle *p1, Particle *p2);
+ std::array<double, 3> calculateLJF(Particle *p1, Particle *p2, double r_cutoff);
 };
 
 #endif // CALCULATIONS_H

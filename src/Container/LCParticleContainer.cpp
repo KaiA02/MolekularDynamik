@@ -9,6 +9,10 @@ LCParticleContainer::LCParticleContainer() {
 void LCParticleContainer::setBoundarys(std::array<int, 6> in) {
     boundary_types = in;
 }
+double LCParticleContainer::getR_cutoff() {
+  return r_cutoff;
+}
+
 
 std::vector<Particle*>
 LCParticleContainer::getParticleInNeighbourhood(std::array<int, 3> id) {
@@ -80,7 +84,8 @@ void LCParticleContainer::fillCellsWithParticles() {
   }
 }
 
-void LCParticleContainer::generateCells(int size_x, int size_y, int size_z, double r_cutoff) {
+void LCParticleContainer::generateCells(int size_x, int size_y, int size_z, double r_cutoff_input) {
+  r_cutoff = r_cutoff_input;
   if (r_cutoff > 0) {
     cell_count[0] = floor(size_x / (r_cutoff));
     cell_count[1] = floor(size_y / (r_cutoff));
@@ -117,7 +122,7 @@ void LCParticleContainer::handleLJFCalculation() {
       std::vector<Particle*> neighbourhood =
           getParticleInNeighbourhood(c.getId());
       Calculations calc(this);
-      calc.LCcalculateLJF(c.getParticles(), neighbourhood);
+      calc.LCcalculateLJF(c.getParticles(), neighbourhood, r_cutoff);
 
     } else {
       empty_counter++;
@@ -200,7 +205,7 @@ void LCParticleContainer::handleBoundaryAction() {
                 double m_arg = p->getM();
                 int type_arg = p->getType();
                 Particle haloParticle = Particle(x_arg, v_arg, m_arg, type_arg);
-                std::array<double, 3> force = calc.calculateLJF(&haloParticle, p);
+                std::array<double, 3> force = calc.calculateLJF(&haloParticle, p, r_cutoff);
                 std::array<double, 3> addedForce;
                 for(int k = 0; k < 3; k++) {
                   addedForce[k] = p->getF()[k] - force[k];
@@ -214,7 +219,7 @@ void LCParticleContainer::handleBoundaryAction() {
                 int type_arg = p->getType();
 
                 Particle haloParticle = Particle(x_arg, v_arg, m_arg, type_arg);
-                std::array<double, 3> force = calc.calculateLJF(&haloParticle, p);
+                std::array<double, 3> force = calc.calculateLJF(&haloParticle, p , r_cutoff);
                 std::array<double, 3> addedForce;
                 for(int k = 0; k < 3; k++) {
                   addedForce[k] = p->getF()[k] + force[k];
@@ -226,7 +231,7 @@ void LCParticleContainer::handleBoundaryAction() {
                 double m_arg = p->getM();
                 int type_arg = p->getType();
                 Particle haloParticle = Particle(x_arg, v_arg, m_arg, type_arg);
-                std::array<double, 3> force = calc.calculateLJF(&haloParticle, p);
+                std::array<double, 3> force = calc.calculateLJF(&haloParticle, p, r_cutoff);
                 std::array<double, 3> addedForce;
                 for(int k = 0; k < 3; k++) {
                   addedForce[k] = p->getF()[k] + force[k];
@@ -239,7 +244,7 @@ void LCParticleContainer::handleBoundaryAction() {
                 int type_arg = p->getType();
 
                 Particle haloParticle = Particle(x_arg, v_arg, m_arg, type_arg);
-                std::array<double, 3> force = calc.calculateLJF(&haloParticle, p);
+                std::array<double, 3> force = calc.calculateLJF(&haloParticle, p, r_cutoff);
                 std::array<double, 3> addedForce;
                 for(int k = 0; k < 3; k++) {
                   addedForce[k] = p->getF()[k] + force[k];
@@ -251,7 +256,7 @@ void LCParticleContainer::handleBoundaryAction() {
                 double m_arg = p->getM();
                 int type_arg = p->getType();
                 Particle haloParticle = Particle(x_arg, v_arg, m_arg, type_arg);
-                std::array<double, 3> force = calc.calculateLJF(&haloParticle, p);
+                std::array<double, 3> force = calc.calculateLJF(&haloParticle, p, r_cutoff);
                 std::array<double, 3> addedForce;
                 for(int k = 0; k < 3; k++) {
                   addedForce[k] = p->getF()[k] + force[k];
@@ -264,7 +269,7 @@ void LCParticleContainer::handleBoundaryAction() {
                 int type_arg = p->getType();
 
                 Particle haloParticle = Particle(x_arg, v_arg, m_arg, type_arg);
-                std::array<double, 3> force = calc.calculateLJF(&haloParticle, p);
+                std::array<double, 3> force = calc.calculateLJF(&haloParticle, p, r_cutoff);
                 std::array<double, 3> addedForce;
                 for(int k = 0; k < 3; k++) {
                   addedForce[k] = p->getF()[k] + force[k];
