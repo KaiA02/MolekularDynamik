@@ -45,7 +45,7 @@ public:
  /**
   *@brief calls realocateParticle() and calculates LJF for all cells
  */
- void handleLJFCalculation() override;
+ void handleLJFCalculation();
  /**
   *@brief adds the particle to all particles
   *and calls addParticleToCell(p)

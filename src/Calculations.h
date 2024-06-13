@@ -4,6 +4,7 @@
 
 #ifndef CALCULATIONS_H
 #define CALCULATIONS_H
+#include "Container/LCParticleContainer.h"
 #include "Container/ParticleContainer.h"
 
 /**
@@ -11,15 +12,17 @@
  */
 class Calculations {
 private:
-  BaseParticleContainer &particles;
+  ParticleContainer &particles;
   static constexpr double epsilion = 5;
   static constexpr double sigma = 1;
 
 public:
   Calculations();
-  Calculations(BaseParticleContainer &particles);
+  Calculations(ParticleContainer &particles);
 
- /**
+ Calculations(LCParticleContainer * particles);
+
+  /**
  * @brief the following function calculates the gravitational force
  *
  * therefore we use an interator and also for-loops

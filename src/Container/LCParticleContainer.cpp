@@ -116,8 +116,7 @@ void LCParticleContainer::handleLJFCalculation() {
     if (!c.isEmpty()) {
       std::vector<Particle*> neighbourhood =
           getParticleInNeighbourhood(c.getId());
-      LCParticleContainer container;
-      Calculations calc(container);
+      Calculations calc(this);
       calc.LCcalculateLJF(c.getParticles(), neighbourhood);
 
     } else {
@@ -187,6 +186,7 @@ std::vector<Particle *> LCParticleContainer::getBoundaryParticles() {
 }
 
 void LCParticleContainer::handleBoundaryAction() {
+  Calculations calc(this);
   std::vector<Particle*> boundaryparticles = getBoundaryParticles();
     for(auto p: boundaryparticles) {
       std::array<double, 6> bounds = getInfluencingBoundarysWithDistance(p);
@@ -200,8 +200,6 @@ void LCParticleContainer::handleBoundaryAction() {
                 double m_arg = p->getM();
                 int type_arg = p->getType();
                 Particle haloParticle = Particle(x_arg, v_arg, m_arg, type_arg);
-                LCParticleContainer container;
-                Calculations calc(container);
                 std::array<double, 3> force = calc.calculateLJF(&haloParticle, p);
                 std::array<double, 3> addedForce;
                 for(int k = 0; k < 3; k++) {
@@ -216,8 +214,6 @@ void LCParticleContainer::handleBoundaryAction() {
                 int type_arg = p->getType();
 
                 Particle haloParticle = Particle(x_arg, v_arg, m_arg, type_arg);
-                LCParticleContainer container;
-                Calculations calc(container);
                 std::array<double, 3> force = calc.calculateLJF(&haloParticle, p);
                 std::array<double, 3> addedForce;
                 for(int k = 0; k < 3; k++) {
@@ -230,8 +226,6 @@ void LCParticleContainer::handleBoundaryAction() {
                 double m_arg = p->getM();
                 int type_arg = p->getType();
                 Particle haloParticle = Particle(x_arg, v_arg, m_arg, type_arg);
-                LCParticleContainer container;
-                Calculations calc(container);
                 std::array<double, 3> force = calc.calculateLJF(&haloParticle, p);
                 std::array<double, 3> addedForce;
                 for(int k = 0; k < 3; k++) {
@@ -245,8 +239,6 @@ void LCParticleContainer::handleBoundaryAction() {
                 int type_arg = p->getType();
 
                 Particle haloParticle = Particle(x_arg, v_arg, m_arg, type_arg);
-                LCParticleContainer container;
-                Calculations calc(container);
                 std::array<double, 3> force = calc.calculateLJF(&haloParticle, p);
                 std::array<double, 3> addedForce;
                 for(int k = 0; k < 3; k++) {
@@ -259,8 +251,6 @@ void LCParticleContainer::handleBoundaryAction() {
                 double m_arg = p->getM();
                 int type_arg = p->getType();
                 Particle haloParticle = Particle(x_arg, v_arg, m_arg, type_arg);
-                LCParticleContainer container;
-                Calculations calc(container);
                 std::array<double, 3> force = calc.calculateLJF(&haloParticle, p);
                 std::array<double, 3> addedForce;
                 for(int k = 0; k < 3; k++) {
@@ -274,8 +264,6 @@ void LCParticleContainer::handleBoundaryAction() {
                 int type_arg = p->getType();
 
                 Particle haloParticle = Particle(x_arg, v_arg, m_arg, type_arg);
-                LCParticleContainer container;
-                Calculations calc(container);
                 std::array<double, 3> force = calc.calculateLJF(&haloParticle, p);
                 std::array<double, 3> addedForce;
                 for(int k = 0; k < 3; k++) {

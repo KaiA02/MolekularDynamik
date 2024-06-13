@@ -10,7 +10,11 @@
 #include "Container/ParticleContainer.h"
 #include "spdlog/spdlog.h"
 
-Calculations::Calculations(BaseParticleContainer &other) : particles(other) {}
+
+Calculations::Calculations(ParticleContainer &other) : particles(other) {}
+
+Calculations::Calculations(LCParticleContainer *other): particles(*other) {
+}
 
 
 void Calculations::calculateX(double delta_t) {

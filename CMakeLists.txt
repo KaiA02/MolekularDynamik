@@ -100,7 +100,6 @@ add_executable(
         src/Container/LCParticleContainer.cpp
         src/Container/LCParticleContainer.h
         src/Container/ParticleContainer.h
-        src/Container/BaseParticleContainer.h
 
 
 )
