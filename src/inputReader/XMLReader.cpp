@@ -2,7 +2,7 @@
 // Created by joshu on 25.05.2024.
 //
 #include "XMLReader.h"
-#include "ParticleContainer.h"
+#include "../Container/ParticleContainer.h"
 #include "ParticleGenerator.h"
 #include "simulation.hxx"
 #include "spdlog/spdlog.h"
@@ -10,6 +10,8 @@
 #include <fstream>
 #include <iostream>
 #include <memory>
+
+#include "Container/LCParticleContainer.h"
 
 XMLReader::XMLReader(const std::string &filePath) {
   try {

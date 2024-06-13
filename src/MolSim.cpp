@@ -11,6 +11,8 @@
 #include <iostream>
 #include <spdlog/spdlog.h>
 
+#include "Container/LCParticleContainer.h"
+
 /**
  * plot the particles to a xyz-file
  */
@@ -85,7 +87,7 @@ int main(int argc, char *argsv[]) {
   if(particleContainerType == "LC") {
     while(current_time < end_time) {
       lcCaluclations.calculateX(delta_t);
-      if(inputType == "SF") {
+      if(inputType == "SF") { //SF stands for simple force
         lcCaluclations.calculateLJF();
       } else {
         lcParticles.handleLJFCalculation();
@@ -103,7 +105,7 @@ int main(int argc, char *argsv[]) {
   } else {
     while(current_time < end_time) {
       normCalculations.calculateX(delta_t);
-      if(inputType == "SF") {
+      if(inputType == "SF") { //SF stands for simple force
         normCalculations.calculateF();
       } else {
         normCalculations.calculateLJF();

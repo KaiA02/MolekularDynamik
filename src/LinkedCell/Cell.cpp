@@ -21,8 +21,9 @@ void Cell::addParticle(Particle* p) {
     size_t pre = particles.size();
     particles.push_back(p);
     size_t post = particles.size();
+    //only for debug
     if(pre == post) {
-        spdlog::info("error ist the same when added--------------------------------");
+        spdlog::debug("error ist the same when added--------------------------------");
     }
 }
 

@@ -9,15 +9,15 @@
    */
 class Cell {
 private:
-    std::vector<Particle*> particles; // Change to a vector of Particle pointers
+    std::vector<Particle*> particles;
     std::array<int, 3> id;
 public:
     Cell(std::array<int, 3> id);
-    std::vector<Particle*>& getParticles(); // Return a reference to the vector of Particle pointers
+    std::vector<Particle*>& getParticles();
     /**
    *@brief adds particles to cell
    */
-    void addParticle(Particle* p); // Change the parameter to a Particle pointer
+    void addParticle(Particle* p);
     std::array<int, 3> getId();
     /**
    *@brief clears all cells

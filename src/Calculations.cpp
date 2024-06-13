@@ -7,7 +7,7 @@
 #include <cmath>
 
 #include "Particle.h"
-#include "ParticleContainer.h"
+#include "Container/ParticleContainer.h"
 #include "spdlog/spdlog.h"
 
 Calculations::Calculations(BaseParticleContainer &other) : particles(other) {}
@@ -86,16 +86,14 @@ void Calculations::calculateLJF() {
 }
 
 
-void Calculations::LCcalculateLJF(std::vector<Particle*> &center, std::vector<Particle> &other) {
+void Calculations::LCcalculateLJF(std::vector<Particle*> &center, std::vector<Particle*> &other) {
   if (center.size() > 1) {
     calculateLJFcenter(center);
   }
   if (other.size() > 0) {
-    for (size_t i = 0; i < center.size(); ++i) {
-      Particle *pi = center.at(i);
-      for (size_t j = 0; j < other.size(); ++j) {
-        Particle &pj = other.at(j);
-        std::array<double, 3> f_ij = calculateLJF(pi, &pj);
+   for(auto pi : center) {
+      for(auto pj : center) {
+        std::array<double, 3> f_ij = calculateLJF(pi, pj);
         std::array<double, 3> newForcei = {0.0, 0.0, 0.0};
         //std::array<double, 3> newForcej = {0.0, 0.0, 0.0};
         for (int k = 0; k < 3; ++k) {

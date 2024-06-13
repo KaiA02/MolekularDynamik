@@ -1,68 +1,18 @@
-#include "ParticleContainer.h"
-#include "Calculations.h"
-#include "LinkedCell/Cell.h"
-#include "spdlog/spdlog.h"
+#include "LCParticleContainer.h"
 #include <cmath>
-#include <iostream>
+#include "spdlog/spdlog.h"
+#include "../Calculations.h"
 
-// Constructor for ParticleContainer
-ParticleContainer::ParticleContainer() {
-  // Initialize any other members if necessary
-}
-
-/**
- * @param particle: Particle that will be added to the vector
- */
-void ParticleContainer::addParticle(const Particle &particle) {
-  particles.push_back(particle);
-}
-
-std::vector<Particle> &ParticleContainer::getParticles() { return particles; }
-
-const std::vector<Particle> &ParticleContainer::getParticles() const {
-  return particles;
-}
-std::vector<Cell> ParticleContainer::getCells() { return {}; }
-
-int ParticleContainer::size() const { return particles.size(); }
-
-std::vector<Particle>::iterator ParticleContainer::begin() {
-  return particles.begin();
-}
-
-std::vector<Particle>::iterator ParticleContainer::end() {
-  return particles.end();
-}
-
-std::vector<Particle>::const_iterator ParticleContainer::begin() const {
-  return particles.begin();
-}
-
-std::vector<Particle>::const_iterator ParticleContainer::end() const {
-  return particles.end();
-}
-
-void ParticleContainer::handleLJFCalculation() {}
-
-void ParticleContainer::resetParticles() { particles.clear(); }
-
-void ParticleContainer::addMultipleParticles(std::vector<Particle> particleCube) {
-  for (size_t x = 0; x < particleCube.size(); ++x) {
-    addParticle(particleCube.at(x));
-  }
+LCParticleContainer::LCParticleContainer() {
 }
 
 void LCParticleContainer::setBoundarys(std::array<int, 6> in) {
-  boundary_types = in;
+    boundary_types = in;
 }
 
-void ParticleContainer::setParticle(Particle p, int position) {
-  particles.at(position) = p;
-}
-
-std::vector<Particle>
+std::vector<Particle*>
 LCParticleContainer::getParticleInNeighbourhood(std::array<int, 3> id) {
-  std::vector<Particle> neigbourhood;
+  std::vector<Particle*> neigbourhood;
   int particleCount = 0;
   for (auto &cell : cells) {
     if (cell.getParticles().size() > 0) {
@@ -74,7 +24,7 @@ LCParticleContainer::getParticleInNeighbourhood(std::array<int, 3> id) {
           if (z <= 1 && z >= -1) {
             if (x != 0 || y != 0 || z != 0) {
               for (auto p : cell.getParticles()) {
-                neigbourhood.push_back(*p);
+                neigbourhood.push_back(p);
                 particleCount++;
               }
             }
@@ -83,27 +33,26 @@ LCParticleContainer::getParticleInNeighbourhood(std::array<int, 3> id) {
       }
     }
   }
-  // spdlog::info("neighbourhood has {} particles", particleCount);
   if (particleCount <= 0) {
     return {};
   } else {
-    //spdlog::info("there was a neigbourhood of {} particles", particleCount);
     return neigbourhood;
   }
 }
 
-Cell &LCParticleContainer::getCellById(std::array<int, 3> id) {
+Cell* LCParticleContainer::getCellById(std::array<int, 3> id) {
   if (cells.size() != 0) {
     for (auto &c : cells) {
       if (c.getId() == id) {
-        return c;
+        return &c;
       }
     }
   }
+  return nullptr;
 }
 
+
 void LCParticleContainer::realocateParticles() {
-  //spdlog::info("we have {} cells and {} particles", cells.size(),getParticles().size());
   for (auto &c : cells) {
     c.emptyCell();
   }
@@ -114,8 +63,8 @@ void LCParticleContainer::realocateParticles() {
     int z = floor(std::abs(p.getX().at(2)) / cell_size.at(2));
     p.setF({0.0, 0.0, 0.0});
     if (cellExists({x, y, z})) {
-      getCellById({x, y, z}).addParticle(&p);
       updatedParticles.push_back(p);
+      getCellById({x, y, z})->addParticle(&updatedParticles.back());
     } else {
         //when exiting at boundary 1, do what boundary 1 wants
           //case outflow: do not add Particle to List
@@ -146,10 +95,6 @@ void LCParticleContainer::generateCells(int size_x, int size_y, int size_z, doub
       if (cell_count[2] == 1) {
         cell_size_z = r_cutoff;
       }
-      spdlog::info("Cellcounts: {} {} {}", cell_count[0], cell_count[1], cell_count[2]);
-      spdlog::info("Cellsize: {} {} {}", cell_size_x, cell_size_y, cell_size_z);
-      spdlog::info("Domainsize: {} {} {}", size_x, size_y, size_z);
-      spdlog::info("r_cutoff: {}", r_cutoff);
       cells.clear(); // Clear existing cells before generating new ones
       for (int x = 0; x < cell_count[0]; x++) {
         for (int y = 0; y < cell_count[1]; y++) {
@@ -160,24 +105,16 @@ void LCParticleContainer::generateCells(int size_x, int size_y, int size_z, doub
         }
       }
       cell_size = {cell_size_x, cell_size_y, cell_size_z};
-    } else {
-      spdlog::info(
-          "negative value detected in: generate Cells(count_x etc.) {}, {}, {}",
-          cell_count[0], cell_count[1], cell_count[2]);
     }
-  } else {
-    spdlog::info("negative value detected in: generate Cells(r_cutoff) {}",
-                 r_cutoff);
   }
 }
 
 void LCParticleContainer::handleLJFCalculation() {
-  std::array<int, 6> boundarys = {1,1,1,1,1,1};
   realocateParticles();
   int empty_counter = 0;
   for (auto &c : cells) {
     if (!c.isEmpty()) {
-      std::vector<Particle> neighbourhood =
+      std::vector<Particle*> neighbourhood =
           getParticleInNeighbourhood(c.getId());
       LCParticleContainer container;
       Calculations calc(container);
@@ -187,7 +124,6 @@ void LCParticleContainer::handleLJFCalculation() {
       empty_counter++;
     }
   }
-  spdlog::debug("there where {} empty cells", empty_counter);
 }
 
 bool LCParticleContainer::addParticleToCell(Particle &p) {
@@ -195,7 +131,7 @@ bool LCParticleContainer::addParticleToCell(Particle &p) {
   int y = int(floor(p.getX().at(1) / cell_size.at(1)));
   int z = int(floor(p.getX().at(2) / cell_size.at(2)));
   if (cellExists({x, y, z})) {
-    getCellById({x, y, z}).addParticle(&p);
+    getCellById({x, y, z})->addParticle(&p);
     return true;
   } else {
     return false;
@@ -234,7 +170,6 @@ void LCParticleContainer::countParticlesInCells() {
       counter ++;
     }
   }
-  spdlog::info("there are {} particles in all the cells", counter);
 } //just for debugging
 std::vector<Particle *> LCParticleContainer::getBoundaryParticles() {
   std::vector<Particle*> result;
@@ -242,23 +177,19 @@ std::vector<Particle *> LCParticleContainer::getBoundaryParticles() {
     for(int y = 0; y < cell_count[1]; y++) {
       //for(int z = 0; z < cell_count[2]; z++) {
         if(x==0 || x==(cell_count[0]-1) || y==0 || y==(cell_count[1]-1) ) { // || z==0 || z==(cell_count[2]-1)
-          for(auto p : getCellById({x,y,0}).getParticles()) {
+          for(auto p : getCellById({x,y,0})->getParticles()) {
             result.push_back(p);
           }
         }
       }
-    //}
   }
   return result;
 }
 
 void LCParticleContainer::handleBoundaryAction() {
   std::vector<Particle*> boundaryparticles = getBoundaryParticles();
-  if(boundaryparticles.size()>0) {
     for(auto p: boundaryparticles) {
       std::array<double, 6> bounds = getInfluencingBoundarysWithDistance(p);
-      std::array<double, 6> compare = {-1.0, -1.0, -1.0, -1.0, -1.0, -1.0};
-      if(bounds != compare) {
         for(int i = 0; i < 6; i++) {
           if(boundary_types[i] == 2){
             // generate halo Particle
@@ -268,10 +199,10 @@ void LCParticleContainer::handleBoundaryAction() {
                 std::array<double, 3> v_arg = {-1*(p->getV().at(0)), p->getV().at(1), p->getV().at(2)};
                 double m_arg = p->getM();
                 int type_arg = p->getType();
-                Particle* haloParticle = new Particle(x_arg, v_arg, m_arg, type_arg);
+                Particle haloParticle = Particle(x_arg, v_arg, m_arg, type_arg);
                 LCParticleContainer container;
                 Calculations calc(container);
-                std::array<double, 3> force = calc.calculateLJF(haloParticle, p);
+                std::array<double, 3> force = calc.calculateLJF(&haloParticle, p);
                 std::array<double, 3> addedForce;
                 for(int k = 0; k < 3; k++) {
                   addedForce[k] = p->getF()[k] - force[k];
@@ -284,10 +215,10 @@ void LCParticleContainer::handleBoundaryAction() {
                 double m_arg = p->getM();
                 int type_arg = p->getType();
 
-                Particle* haloParticle = new Particle(x_arg, v_arg, m_arg, type_arg);
+                Particle haloParticle = Particle(x_arg, v_arg, m_arg, type_arg);
                 LCParticleContainer container;
                 Calculations calc(container);
-                std::array<double, 3> force = calc.calculateLJF(haloParticle, p);
+                std::array<double, 3> force = calc.calculateLJF(&haloParticle, p);
                 std::array<double, 3> addedForce;
                 for(int k = 0; k < 3; k++) {
                   addedForce[k] = p->getF()[k] + force[k];
@@ -298,10 +229,10 @@ void LCParticleContainer::handleBoundaryAction() {
                 std::array<double, 3> v_arg = {p->getV().at(0), -1*(p->getV().at(1)), p->getV().at(2)};
                 double m_arg = p->getM();
                 int type_arg = p->getType();
-                Particle* haloParticle = new Particle(x_arg, v_arg, m_arg, type_arg);
+                Particle haloParticle = Particle(x_arg, v_arg, m_arg, type_arg);
                 LCParticleContainer container;
                 Calculations calc(container);
-                std::array<double, 3> force = calc.calculateLJF(haloParticle, p);
+                std::array<double, 3> force = calc.calculateLJF(&haloParticle, p);
                 std::array<double, 3> addedForce;
                 for(int k = 0; k < 3; k++) {
                   addedForce[k] = p->getF()[k] + force[k];
@@ -313,10 +244,10 @@ void LCParticleContainer::handleBoundaryAction() {
                 double m_arg = p->getM();
                 int type_arg = p->getType();
 
-                Particle* haloParticle = new Particle(x_arg, v_arg, m_arg, type_arg);
+                Particle haloParticle = Particle(x_arg, v_arg, m_arg, type_arg);
                 LCParticleContainer container;
                 Calculations calc(container);
-                std::array<double, 3> force = calc.calculateLJF(haloParticle, p);
+                std::array<double, 3> force = calc.calculateLJF(&haloParticle, p);
                 std::array<double, 3> addedForce;
                 for(int k = 0; k < 3; k++) {
                   addedForce[k] = p->getF()[k] + force[k];
@@ -327,10 +258,10 @@ void LCParticleContainer::handleBoundaryAction() {
                 std::array<double, 3> v_arg = {p->getV().at(0), p->getV().at(1), -1*(p->getV().at(2))};
                 double m_arg = p->getM();
                 int type_arg = p->getType();
-                Particle* haloParticle = new Particle(x_arg, v_arg, m_arg, type_arg);
+                Particle haloParticle = Particle(x_arg, v_arg, m_arg, type_arg);
                 LCParticleContainer container;
                 Calculations calc(container);
-                std::array<double, 3> force = calc.calculateLJF(haloParticle, p);
+                std::array<double, 3> force = calc.calculateLJF(&haloParticle, p);
                 std::array<double, 3> addedForce;
                 for(int k = 0; k < 3; k++) {
                   addedForce[k] = p->getF()[k] + force[k];
@@ -342,10 +273,10 @@ void LCParticleContainer::handleBoundaryAction() {
                 double m_arg = p->getM();
                 int type_arg = p->getType();
 
-                Particle* haloParticle = new Particle(x_arg, v_arg, m_arg, type_arg);
+                Particle haloParticle = Particle(x_arg, v_arg, m_arg, type_arg);
                 LCParticleContainer container;
                 Calculations calc(container);
-                std::array<double, 3> force = calc.calculateLJF(haloParticle, p);
+                std::array<double, 3> force = calc.calculateLJF(&haloParticle, p);
                 std::array<double, 3> addedForce;
                 for(int k = 0; k < 3; k++) {
                   addedForce[k] = p->getF()[k] + force[k];
@@ -363,13 +294,9 @@ void LCParticleContainer::handleBoundaryAction() {
 
           }// if(boundary_types[i] == 2){
 
-        }// if(bounds != compare) {
-
       }// for(auto p: boundaryparticles) {
 
-    }//if(boundaryparticles.size()>0) {
-  }
-
+}
 
 std::array<double, 6> LCParticleContainer::getInfluencingBoundarysWithDistance(Particle * p) {
   std::array<double, 6> result = {-1.0, -1.0, -1.0, -1.0, -1.0, -1.0};
@@ -403,4 +330,3 @@ std::array<double, 6> LCParticleContainer::getInfluencingBoundarysWithDistance(P
   }
   return result;
 }
-

@@ -88,7 +88,7 @@ add_executable(
         src/test/CalculationsTests.cpp
         src/test/ParticleGeneratorTests.cpp
         src/Particle.cpp
-        src/ParticleContainer.cpp
+        src/Container/ParticleContainer.cpp
         src/Calculations.cpp
         src/ParticleGenerator.cpp
         src/utils/MaxwellBoltzmannDistribution.h
@@ -97,6 +97,10 @@ add_executable(
         src/test/LCParticleContainerTest.cpp
         src/test/CellTest.cpp
         src/RunTimeComparison/RTCAss3Task2.cpp
+        src/Container/LCParticleContainer.cpp
+        src/Container/LCParticleContainer.h
+        src/Container/ParticleContainer.h
+        src/Container/BaseParticleContainer.h
 
 
 )

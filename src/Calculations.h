@@ -4,7 +4,7 @@
 
 #ifndef CALCULATIONS_H
 #define CALCULATIONS_H
-#include "ParticleContainer.h"
+#include "Container/ParticleContainer.h"
 
 /**
  * @brief Calculations class
@@ -38,7 +38,7 @@ public:
    *@param other are the particles in the neighbour cell
    */
   void LCcalculateLJF(std::vector<Particle *> &center,
-                      std::vector<Particle> &other);
+                      std::vector<Particle*> &other);
  /**
    *@brief calculate the Lennard-Jones-Force in the center particles
    *(escpecially used for LC)
@@ -52,20 +52,20 @@ public:
 * therefore we use a for-loops
 * to calculate the physics behind the positions (Velocity-Störmer-Verlet)
 */
-  void calculateX(double delta_t);
+ void calculateX(double delta_t);
  /**
 * @brief the following function calculates the new velocities
 *
 * therefore we use a for-loops
 * to calculate the physics behind the velocities (Velocity-Störmer-Verlet)
 */
-  void calculateV(double delta_t);
+ void calculateV(double delta_t);
 
  /**
    *@brief calculate the Lennard-Jones-Force between two particles
    *(escpecially used for LC)
    */
-  std::array<double, 3> calculateLJF(Particle *p1, Particle *p2);
+ std::array<double, 3> calculateLJF(Particle *p1, Particle *p2);
 };
 
 #endif // CALCULATIONS_H
