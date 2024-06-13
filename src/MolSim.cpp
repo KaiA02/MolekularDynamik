@@ -33,7 +33,7 @@ int main(int argc, char *argsv[]) {
       xmlReader.getPerformanceMeasurement();
   std::string logLevel = xmlReader.getLogLevel();
 
-  std::cout << "Hello from MolSim for PSE!" << std::endl;
+  //std::cout << "Hello from MolSim for PSE!" << std::endl;
   if (argc < 2) {
     std::cout << "Erroneous programme call! " << std::endl;
     std::cout << "./molsym filename" << std::endl;
@@ -66,14 +66,13 @@ int main(int argc, char *argsv[]) {
   ParticleContainer normParticles;
   if (particleContainerType == "LC") {
     xmlReader.readXML_LC(lcParticles);
-    spdlog::info("there are {} particles and {} cells in the Simulation", lcParticles.getParticles().size(), lcParticles.getCells().size());
   } else {
     xmlReader.readXML(normParticles);
   }
 
   Calculations normCalculations(normParticles);
   Calculations lcCaluclations(lcParticles);
-  spdlog::info("Simulation started with parameters: start_time: {}, end_time: "
+  spdlog::warn("Simulation started with parameters: start_time: {}, end_time: "
                "{}, delta_t: {}, inputType: {}, outputType: {}, baseName: {}, "
                "logLevel: {}, performanceMeasurement: {}, {} "
                "particles, {} cuboids, {} disks ",
@@ -84,11 +83,13 @@ int main(int argc, char *argsv[]) {
   // for this loop, we assume: current x, current f and current v are known
   if(particleContainerType == "LC") {
     while(current_time < end_time) {
+      //spdlog::warn("iteration: {}", current_time / delta_t);
       lcCaluclations.calculateX(delta_t);
       if(inputType == "SF") {
         lcCaluclations.calculateLJF();
       } else {
         lcParticles.handleLJFCalculation();
+
       }
       lcParticles.handleBoundaryAction();
       lcCaluclations.calculateV(delta_t);

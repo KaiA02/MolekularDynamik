@@ -118,7 +118,7 @@ public:
  */
  std::vector<Particle> getParticleInNeighbourhood(std::array<int, 3> id);
 
- Cell& getCellById(std::array<int, 3> id);
+ Cell* getCellById(std::array<int, 3> id);
  /**
   *@brief generate all cells with according size
   *@param size_x size of x axis
@@ -164,6 +164,8 @@ public:
  std::vector<Particle*> getBoundaryParticles();
  void handleBoundaryAction();
  std::array<double, 6> getInfluencingBoundarysWithDistance(Particle*);
+ std::array<int,3> findOponentCellID(std::array<int,3>id);
+ std::array<double, 3> findOponentXYZ(std::array<double, 3> XYZ);
 
 private:
  std::vector<Cell> cells;

@@ -11,8 +11,13 @@ class Cell {
 private:
     std::vector<Particle*> particles; // Change to a vector of Particle pointers
     std::array<int, 3> id;
+    bool halo_cell;
+    Cell* oposition;
 public:
-    Cell(std::array<int, 3> id);
+    Cell(std::array<int, 3> id, bool halo);
+    void setOposition(Cell* op);
+    Cell* getOposition();
+    bool isHalo();
     std::vector<Particle*>& getParticles(); // Return a reference to the vector of Particle pointers
     /**
    *@brief adds particles to cell

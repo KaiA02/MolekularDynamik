@@ -4,6 +4,7 @@
 #include "spdlog/spdlog.h"
 #include <cmath>
 #include <iostream>
+#include <omp.h>
 
 // Constructor for ParticleContainer
 ParticleContainer::ParticleContainer() {
@@ -92,14 +93,15 @@ LCParticleContainer::getParticleInNeighbourhood(std::array<int, 3> id) {
   }
 }
 
-Cell &LCParticleContainer::getCellById(std::array<int, 3> id) {
+Cell* LCParticleContainer::getCellById(std::array<int, 3> id) {
   if (cells.size() != 0) {
-    for (auto &c : cells) {
+    for (auto& c : cells) {
       if (c.getId() == id) {
-        return c;
+        return &c;
       }
     }
   }
+  return nullptr;
 }
 
 void LCParticleContainer::realocateParticles() {
@@ -108,13 +110,14 @@ void LCParticleContainer::realocateParticles() {
     c.emptyCell();
   }
   std::vector<Particle> updatedParticles;
+  #pragma omp parallel for
   for (auto &p : particles) {
     int x = floor(p.getX().at(0) / cell_size.at(0));
     int y = floor(p.getX().at(1) / cell_size.at(1));
     int z = floor(std::abs(p.getX().at(2)) / cell_size.at(2));
     p.setF({0.0, 0.0, 0.0});
     if (cellExists({x, y, z})) {
-      getCellById({x, y, z}).addParticle(&p);
+      getCellById({x,y,z})->addParticle(&p);
       updatedParticles.push_back(p);
     } else {
         //when exiting at boundary 1, do what boundary 1 wants
@@ -151,11 +154,21 @@ void LCParticleContainer::generateCells(int size_x, int size_y, int size_z, doub
       spdlog::info("Domainsize: {} {} {}", size_x, size_y, size_z);
       spdlog::info("r_cutoff: {}", r_cutoff);
       cells.clear(); // Clear existing cells before generating new ones
-      for (int x = 0; x < cell_count[0]; x++) {
-        for (int y = 0; y < cell_count[1]; y++) {
-          for (int z = 0; z < cell_count[2]; z++) {
-            cells.push_back(
-                Cell({x, y, z})); // Add generated cells to cells vector
+      for (int x = -1; x < cell_count[0] +1; x++) {
+        for (int y = -1; y < cell_count[1] +1; y++) {
+          for (int z = -1; z < cell_count[2] +1; z++) {
+            bool isHalo;
+            if(x == -1 || y== -1 || z == -1 || x == cell_count[0] || y == cell_count[1] || z == cell_count[2]) {
+              isHalo = true;
+              Cell c({x,y,z}, isHalo);
+              std::array<int,3> oponentID = findOponentCellID(c.getId());
+              Cell oponent(oponentID, isHalo), *o;
+              c.setOposition(o);
+              cells.push_back(c);
+            } else {
+              isHalo = false;
+            }
+            cells.push_back(Cell({x, y, z}, isHalo)); // Add generated cells to cells vector
           }
         }
       }
@@ -195,7 +208,7 @@ bool LCParticleContainer::addParticleToCell(Particle &p) {
   int y = int(floor(p.getX().at(1) / cell_size.at(1)));
   int z = int(floor(p.getX().at(2) / cell_size.at(2)));
   if (cellExists({x, y, z})) {
-    getCellById({x, y, z}).addParticle(&p);
+    getCellById({x, y, z})->addParticle(&p);
     return true;
   } else {
     return false;
@@ -236,18 +249,22 @@ void LCParticleContainer::countParticlesInCells() {
   }
   spdlog::info("there are {} particles in all the cells", counter);
 } //just for debugging
+
 std::vector<Particle *> LCParticleContainer::getBoundaryParticles() {
   std::vector<Particle*> result;
-  for(int x = 0; x < cell_count[0]; x++) {
-    for(int y = 0; y < cell_count[1]; y++) {
-      //for(int z = 0; z < cell_count[2]; z++) {
-        if(x==0 || x==(cell_count[0]-1) || y==0 || y==(cell_count[1]-1) ) { // || z==0 || z==(cell_count[2]-1)
-          for(auto p : getCellById({x,y,0}).getParticles()) {
-            result.push_back(p);
+#pragma omp parallel for
+  for(int x = -1; x < cell_count[0] +1; x++) {
+    for(int y = -1; y < cell_count[1]+1; y++) {
+      for(int z = -1; z < cell_count[2]+1; z++) {
+        if(x<=0 || x>=(cell_count[0]-1) || y<=0 || y>=(cell_count[1]-1) || z<=0 || z>=(cell_count[2]-1)) {
+          if (cellExists({x,y,z})) {
+            for(auto p : getCellById({x,y,z})->getParticles()) {
+              result.push_back(p);
+            }
           }
         }
       }
-    //}
+    }
   }
   return result;
 }
@@ -260,9 +277,10 @@ void LCParticleContainer::handleBoundaryAction() {
       std::array<double, 6> compare = {-1.0, -1.0, -1.0, -1.0, -1.0, -1.0};
       if(bounds != compare) {
         for(int i = 0; i < 6; i++) {
-          if(boundary_types[i] == 2){
+          if(boundary_types[i] == 1){} //outflow
+          else if(boundary_types[i] == 2){
             // generate halo Particle
-            if(bounds.at(i) != -1.0 && bounds.at(i) <= (pow(2, 1/6)/2)){
+            if(bounds.at(i) != -1.0 ){ //&& abs(bounds.at(i)) <= (pow(2, 1/6)/2)
               if( i == 0 ){ //Boundary to YZ Plane
                 std::array<double, 3> x_arg = {-bounds.at(i), p->getX().at(1), p->getX().at(2)};
                 std::array<double, 3> v_arg = {-1*(p->getV().at(0)), p->getV().at(1), p->getV().at(2)};
@@ -359,7 +377,14 @@ void LCParticleContainer::handleBoundaryAction() {
 
             } // if(bounds.at(i) != -1.0 && bounds.at(i) <= (pow(2, 1/6)/2)){
 
-          } // for(int i = 0; i < 6; i++){
+          } //reflectiv
+          else if(boundary_types[i] == 3) {
+
+            //creates new Particle in OponentCell with same Atributes exept for X_Arg
+            std::array<double,3> x = findOponentXYZ(p->getX());
+            Particle oponent(x, p->getV(), p->getM(), p->getType());
+            particles.push_back(oponent);
+          } //periodic
 
           }// if(boundary_types[i] == 2){
 
@@ -403,4 +428,65 @@ std::array<double, 6> LCParticleContainer::getInfluencingBoundarysWithDistance(P
   }
   return result;
 }
+
+std::array<int, 3> LCParticleContainer::findOponentCellID(std::array<int, 3> id) {
+  int x;
+  int y;
+  int z;
+  if(id.at(0) == -1) {
+    x = cell_count.at(0);
+  }else if(id.at(0) == cell_count.at(0)) {
+    x = -1;
+  } else {
+    x = cell_count.at(0)-id.at(0);
+  }
+  if(id.at(1) == -1) {
+    y = cell_count.at(1);
+  }else if(id.at(1) == cell_count.at(1)) {
+    x = -1;
+  } else {
+    y = cell_count.at(1)-id.at(1);
+  }
+  if(id.at(2) == -1) {
+    z = cell_count.at(2);
+  }else if(id.at(2) == cell_count.at(2)) {
+    z = -1;
+  } else {
+    z = cell_count.at(2)-id.at(2);
+  }
+  return {x, y, z};
+
+}
+
+std::array<double, 3> LCParticleContainer::findOponentXYZ(std::array<double, 3> XYZ) {
+  double x;
+  double y;
+  double z;
+  if(XYZ.at(0) == -1) {
+    x = cell_count.at(0) * cell_size.at(0) + XYZ.at(0);
+  }else if(XYZ.at(0) == cell_count.at(0)) {
+    x = -1 + XYZ.at(0);
+  } else {
+    x = cell_count.at(0) * cell_size.at(0) - XYZ.at(0);
+  }
+  if(XYZ.at(1) == -1) {
+    y = cell_count.at(1) * cell_size.at(1) + XYZ.at(1);
+  }else if(XYZ.at(1) == cell_count.at(1)) {
+    x = -1 + XYZ.at(1);
+  } else {
+    y = cell_count.at(1)*cell_size.at(1)-XYZ.at(1) ;
+  }
+  if(XYZ.at(2) == -1) {
+    z = cell_count.at(2) * cell_size.at(2) + XYZ.at(2);
+  }else if(XYZ.at(2) == cell_count.at(2)) {
+    z = -1 + XYZ.at(2);
+  } else {
+    z = cell_count.at(2)*cell_size.at(2)-XYZ.at(2);
+  }
+  return {x, y, z};
+}
+
+
+
+
 

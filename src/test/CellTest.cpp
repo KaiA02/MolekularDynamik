@@ -8,7 +8,7 @@
 // Test the constructor and getId method
 TEST(CellTest, ConstructorAndGetId) {
     std::array<int, 3> id = {1, 2, 3};
-    Cell cell(id);
+    Cell cell(id, false);
 
     EXPECT_EQ(cell.getId(), id);
 }
@@ -16,7 +16,7 @@ TEST(CellTest, ConstructorAndGetId) {
 // Test the addParticle and getParticles methods
 TEST(CellTest, AddAndGetParticles) {
     std::array<int, 3> id = {1, 2, 3};
-    Cell cell(id);
+    Cell cell(id, false);
 
     Particle p1({{0.1, 0.2, 0.3}}, {{0.0, 0.0, 0.0}}, 1.0);
     Particle p2({{1.1, 1.2, 1.3}}, {{0.0, 0.0, 0.0}}, 1.0);
@@ -33,7 +33,7 @@ TEST(CellTest, AddAndGetParticles) {
 // Test adding no particles
 TEST(CellTest, NoParticles) {
     std::array<int, 3> id = {1, 2, 3};
-    Cell cell(id);
+    Cell cell(id, false);
 
     std::vector<Particle*> particles = cell.getParticles();
     EXPECT_TRUE(particles.empty());
@@ -42,7 +42,7 @@ TEST(CellTest, NoParticles) {
 // Test adding a single particle
 TEST(CellTest, AddSingleParticle) {
     std::array<int, 3> id = {1, 2, 3};
-    Cell cell(id);
+    Cell cell(id, false);
 
     Particle p({{0.1, 0.2, 0.3}}, {{0.0, 0.0, 0.0}}, 1.0);
     cell.addParticle(&p);
@@ -55,7 +55,7 @@ TEST(CellTest, AddSingleParticle) {
 // Test particle order
 TEST(CellTest, ParticleOrder) {
     std::array<int, 3> id = {1, 2, 3};
-    Cell cell(id);
+    Cell cell(id, false);
 
     Particle p1({{0.1, 0.2, 0.3}}, {{0.0, 0.0, 0.0}}, 1.0);
     Particle p2({{1.1, 1.2, 1.3}}, {{0.0, 0.0, 0.0}}, 1.0);

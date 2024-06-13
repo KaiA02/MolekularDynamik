@@ -2,7 +2,7 @@
             xsi:noNamespaceSchemaLocation="../src/inputReader/simulation.xsd">
     <input>
         <tStart>0.0</tStart>
-        <tEnd>3.0</tEnd>
+        <tEnd>1.0</tEnd>
         <deltaT>0.0005</deltaT>
         <inputType>LJF</inputType>
         <particleContainerType>LC</particleContainerType>
@@ -26,7 +26,7 @@
             <mass>1</mass>
         </particles>
         <disk>
-            <radius>10</radius>
+            <radius>7</radius>
             <distance>1.1225</distance>
             <dimension>3</dimension>
         </disk>
