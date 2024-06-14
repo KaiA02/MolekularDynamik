@@ -150,7 +150,13 @@ if (distance <= r_cutoff) {
   std::array<double, 3> f_ij = {forcefactor * displacement_vector.at(0),
                                 forcefactor * displacement_vector.at(1),
                                 forcefactor * displacement_vector.at(2)};
+  std::array<double, 3> addedForce;
+  for(int k = 0; k < 3; k++) {
+    addedForce[k] = p1->getF()[k] + f_ij[k];
+  }
+  p1->setF(addedForce);
   return f_ij;
+
 } else {
   return {0.0,0.0,0.0};
 }
