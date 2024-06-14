@@ -64,7 +64,6 @@ void LCParticleContainer::realocateParticles() {
   for (auto &c : cells) {
     c.emptyCell();
   }
-  //std::vector<Particle> updatedParticles;
   for (auto &p : particles) {
     int x = floor(p.getX().at(0) / cell_size.at(0));
     int y = floor(p.getX().at(1) / cell_size.at(1));
@@ -72,15 +71,10 @@ void LCParticleContainer::realocateParticles() {
     p.setF({0.0, 0.0, 0.0});
     if (cellExists({x, y, z})) {
       getCellById({x,y,z})->addParticle(&p);
-      //updatedParticles.push_back(p);
     } else { //Parking of deleted Particles
-        p.setF({0.0,0.0,0.0});
-        p.setX({-50.0,-50.0,-50.0}); //todo: adjust this Parking Spot regarding to DomainSize
-        p.setV({0.0,0.0,0.0});
-        p.setType(p.getType()+10);
+        p.park();
       }
     }
-    //particles = updatedParticles;
   }
 
 void LCParticleContainer::fillCellsWithParticles() {
@@ -109,9 +103,9 @@ void LCParticleContainer::generateCells(int size_x, int size_y, int size_z, doub
       spdlog::info("Domainsize: {} {} {}", size_x, size_y, size_z);
       spdlog::info("r_cutoff: {}", r_cutoff);
       cells.clear(); // Clear existing cells before generating new ones
-      for (int x = -1; x < cell_count[0] +1; x++) {
-        for (int y = -1; y < cell_count[1] +1; y++) {
-          for (int z = -1; z < cell_count[2] +1; z++) {
+      for (int x = -1; x <= cell_count[0]; x++) {
+        for (int y = -1; y <= cell_count[1]; y++) {
+          for (int z = -1; z <= cell_count[2]; z++) {
             bool isHalo;
             if(x == -1 || y== -1 || z == -1 || x == cell_count[0] || y == cell_count[1] || z == cell_count[2]) {
               isHalo = true;
@@ -227,7 +221,11 @@ void LCParticleContainer::handleBoundaryAction() {
     for(auto p: boundaryparticles) {
       std::array<double, 6> bounds = getInfluencingBoundarysWithDistance(p);
         for(int i = 0; i < 6; i++) {
-          if(boundary_types[i] == 1){} //outflow
+          if(boundary_types[i] == 1) {
+            if(bounds.at(i) < 0) {
+              p->park();
+            }
+          } //outflow
           else if(boundary_types[i] == 2){
             // generate halo Particle
             if(bounds.at(i) != -1.0 && abs(bounds.at(i)) <= r_cutoff){ //&& abs(bounds.at(i)) <= r_cutoff
@@ -267,7 +265,7 @@ void LCParticleContainer::handleBoundaryAction() {
           else if(boundary_types[i] == 3) {
             //creates new Particle in OponentCell with same Atributes exept for X_Arg
             //sets x V and F of p to match opponent
-            std::array<double,3> x = findOponentXYZ(p->getX(), p->getV());
+            std::array<double,3> x;// = findOponentXYZ(p->getX(), p->getV());
             x = {5,5,5};
             p->setX(x);
           } //periodic
@@ -285,27 +283,32 @@ std::array<double, 6> LCParticleContainer::getInfluencingBoundarysWithDistance(P
   double x = p->getX().at(0);
   double y = p->getX().at(1);
   double z = p->getX().at(2);
-  if(x <= cell_size.at(0)){ //Particle close to boundary 1
+
+  int x_id = int(floor(p->getX().at(0) / cell_size.at(0)));
+  int y_id = int(floor(p->getX().at(1) / cell_size.at(1)));
+  int z_id = int(floor(p->getX().at(2) / cell_size.at(2)));
+
+  if(x_id == 0){ //Particle close to boundary 1
     double distance1 = x;
     result.at(0) = distance1;
   }
-  if(x >= (cell_size.at(0)*(cell_count.at(0)-1))) { //Particle close to boundary 2
+  if(x_id == cell_count.at(0) -1) { //Particle close to boundary 2
     double distance2 = cell_size.at(0) - (x - (cell_size.at(0)*(cell_count.at(0)-1)));
     result.at(1) = distance2;
   }
-  if(y <= cell_size.at(1)){ //Particle close to boundary 3
+  if(y_id == 0){ //Particle close to boundary 3
     double distance3 = y;
     result.at(2) = distance3;
   }
-  if(y >= (cell_size.at(1)*(cell_count.at(1)-1))) { //Particle close to boundary 4
+  if(y_id == cell_count.at(1) -1) { //Particle close to boundary 4
     double distance4 = cell_size.at(1) - (y - (cell_size.at(1)*(cell_count.at(1)-1)));
     result.at(3) = distance4;
   }
-  if(z <= cell_size.at(2)){ //Particle close to boundary 5
+  if(z_id == 0){ //Particle close to boundary 5
     double distance5 = z;
     result.at(4) = distance5;
   }
-  if(z >= (cell_size.at(2)*(cell_count.at(2)-1))) { //Particle close to boundary 6
+  if(z_id >= cell_count.at(2) -1) { //Particle close to boundary 6
     double distance6 = cell_size.at(2) - (z - (cell_size.at(2)*(cell_count.at(2)-1)));
     result.at(5) = distance6;
   }

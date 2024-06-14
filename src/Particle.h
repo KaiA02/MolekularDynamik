@@ -86,6 +86,7 @@ public:
  void setType(const int &newType);
 
  bool operator==(const Particle &other) const;
+ void park();
 
 };
 
