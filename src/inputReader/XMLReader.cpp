@@ -40,14 +40,14 @@ void XMLReader::readXML(ParticleContainer &particleContainer) {
       spdlog::debug("generating Cube");
       pg.generateCuboid(particle, in.cuboids()[i].n1(), in.cuboids()[i].n2(),
                         n3, in.cuboids()[i].distance(),
-                        in.cuboids()[i].meanVelocity(), dimension);
+                        in.cuboids()[i].meanVelocity(), dimension, in.temp_init());
 
       particleContainer.addMultipleParticles(pg.getAllParticles());
     } else if (i < in.disk().size()) {
       spdlog::debug("generating Disk");
       int dimension = in.disk()[i].dimension();
       pg.generateDisk(particle, in.disk()[i].radius(), in.disk()[i].distance(),
-                      dimension);
+                      in.disk()[i].meanVelocity(), dimension, in.temp_init());
       particleContainer.addMultipleParticles(pg.getAllParticles());
     } else {
       particleContainer.addParticle(particle);
@@ -78,7 +78,7 @@ void XMLReader::readXML_LC(LCParticleContainer &particleContainer) {
       spdlog::debug("generating Cube");
       pg.generateCuboid(particle, in.cuboids()[i].n1(), in.cuboids()[i].n2(),
                         n3, in.cuboids()[i].distance(),
-                        in.cuboids()[i].meanVelocity(), dimension);
+                        in.cuboids()[i].meanVelocity(), dimension, in.temp_init());
 
       particleContainer.addMultipleParticles(pg.getAllParticles());
       spdlog::info("added {} particles to the generator", pg.getAllParticles().size());
@@ -86,7 +86,7 @@ void XMLReader::readXML_LC(LCParticleContainer &particleContainer) {
     } else if (i < in.disk().size()) { //case its a disk
       int dimension = in.disk()[i].dimension();
       pg.generateDisk(particle, in.disk()[i].radius(), in.disk()[i].distance(),
-                      dimension);
+                      in.disk()[i].meanVelocity(), dimension, in.temp_init());
       particleContainer.addMultipleParticles(pg.getAllParticles());
     } else { //case its a single particle
       particleContainer.addParticle(particle);

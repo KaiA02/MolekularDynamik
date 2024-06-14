@@ -92,9 +92,10 @@ void CuboidFileReader::readFileCuboid(ParticleContainer &particleContainer,
   double m;
   int num_particles = 0;
   std::array<double, 3> s; // size im n1 n2 n3 format
-  // double mv; //meanVelocityInput
+  double mv;
   double distance;
   int dimension;
+  double temp_init;
 
   std::ifstream input_file(filename);
   std::string tmp_string;
@@ -131,6 +132,7 @@ void CuboidFileReader::readFileCuboid(ParticleContainer &particleContainer,
         datastream >> sj;
       }
       datastream >> distance;
+      datastream >> mv;
       datastream >> dimension;
       if (datastream.eof()) {
         spdlog::error(
@@ -139,14 +141,15 @@ void CuboidFileReader::readFileCuboid(ParticleContainer &particleContainer,
         exit(-1);
       }
       datastream >> m;
+      datastream >> temp_init;
       Particle particle(x, v, m);
       ParticleGenerator generator;
       if(dimension == 2) {
         generator.generateCuboid(particle, s.at(0), s.at(1), 1, distance,
-                               0.1, dimension);
+                               mv, dimension, temp_init);
       } else {
         generator.generateCuboid(particle, s.at(0), s.at(1), s.at(2), distance,
-                                  0.1, dimension);
+                                  mv, dimension, 0.0);
       }
       particleContainer.addMultipleParticles(generator.getAllParticles());
 
@@ -173,7 +176,9 @@ void DiskFileReader::readFileDisk(ParticleContainer &particleContainer,
   int num_particles = 0;
   int radius;
   double distance;
+  double mv;
   int dimension;
+  double temp_init;
 
   std::ifstream input_file(filename);
   std::string tmp_string;
@@ -208,6 +213,7 @@ void DiskFileReader::readFileDisk(ParticleContainer &particleContainer,
       }
       datastream >> radius;
       datastream >> distance;
+      datastream >> mv;
       datastream >> dimension;
       if (datastream.eof()) {
         spdlog::error(
@@ -216,9 +222,10 @@ void DiskFileReader::readFileDisk(ParticleContainer &particleContainer,
         exit(-1);
       }
       datastream >> m;
+      datastream >> temp_init;
       Particle particle(x, v, m);
       ParticleGenerator generator;
-      generator.generateDisk(particle, radius, distance, dimension);
+      generator.generateDisk(particle, radius, distance, mv, dimension, temp_init);
       particleContainer.addMultipleParticles(generator.getAllParticles());
 
       getline(input_file, tmp_string);

@@ -16,6 +16,11 @@
         <boundary4Type>1</boundary4Type>
         <boundary5Type>1</boundary5Type>
         <boundary6Type>1</boundary6Type>
+        <temp_init>40</temp_init>
+        <n_thermostat>1000</n_thermostat>
+        <temp_target>40</temp_target>
+        <delta_temp>0.0005</delta_temp>
+        <g_grav>-12.44</g_grav>
         <particles>
             <x>15.0</x>
             <y>15.0</y>
@@ -24,6 +29,8 @@
             <velocityY>-10.0</velocityY>
             <velocityZ>0.0</velocityZ>
             <mass>1</mass>
+            <epsilon>1</epsilon>
+            <sigma>1</sigma>
         </particles>
         <particles>
             <x>0.0</x>
@@ -33,11 +40,12 @@
             <velocityY>0.0</velocityY>
             <velocityZ>0.0</velocityZ>
             <mass>1</mass>
+            <epsilon>1</epsilon>
+            <sigma>1</sigma>
 
             <!-- Add more particle elements as needed -->
         </particles>
         <cuboids>
-
             <n1>8.0</n1>
             <n2>8.0</n2>
             <n3>1.0</n3>
@@ -46,15 +54,12 @@
             <dimension>3.0</dimension>
         </cuboids>
         <cuboids>
-
             <n1>40.0</n1>
             <n2>8.0</n2>
             <n3>1.0</n3>
             <distance>1.1225</distance>
             <meanVelocity>0.1</meanVelocity>
             <dimension>3.0</dimension>
-
-            <!-- Add more cuboid elements as needed -->
         </cuboids>
     </input>
     <output>

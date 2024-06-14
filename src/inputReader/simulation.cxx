@@ -803,6 +803,42 @@ mass (const mass_type& x)
   this->mass_.set (x);
 }
 
+const particles::epsilon_type& particles::
+epsilon () const
+{
+  return this->epsilon_.get ();
+}
+
+particles::epsilon_type& particles::
+epsilon ()
+{
+  return this->epsilon_.get ();
+}
+
+void particles::
+epsilon (const epsilon_type& x)
+{
+  this->epsilon_.set (x);
+}
+
+const particles::sigma_type& particles::
+sigma () const
+{
+  return this->sigma_.get ();
+}
+
+particles::sigma_type& particles::
+sigma ()
+{
+  return this->sigma_.get ();
+}
+
+void particles::
+sigma (const sigma_type& x)
+{
+  this->sigma_.set (x);
+}
+
 
 // cuboids
 // 
@@ -915,42 +951,6 @@ dimension (const dimension_type& x)
   this->dimension_.set (x);
 }
 
-const cuboids::epsilon_type& cuboids::
-epsilon () const
-{
-  return this->epsilon_.get ();
-}
-
-cuboids::epsilon_type& cuboids::
-epsilon ()
-{
-  return this->epsilon_.get ();
-}
-
-void cuboids::
-epsilon (const epsilon_type& x)
-{
-  this->epsilon_.set (x);
-}
-
-const cuboids::sigma_type& cuboids::
-sigma () const
-{
-  return this->sigma_.get ();
-}
-
-cuboids::sigma_type& cuboids::
-sigma ()
-{
-  return this->sigma_.get ();
-}
-
-void cuboids::
-sigma (const sigma_type& x)
-{
-  this->sigma_.set (x);
-}
-
 
 // disk
 // 
@@ -1025,42 +1025,6 @@ void disk::
 dimension (const dimension_type& x)
 {
   this->dimension_.set (x);
-}
-
-const disk::epsilon_type& disk::
-epsilon () const
-{
-  return this->epsilon_.get ();
-}
-
-disk::epsilon_type& disk::
-epsilon ()
-{
-  return this->epsilon_.get ();
-}
-
-void disk::
-epsilon (const epsilon_type& x)
-{
-  this->epsilon_.set (x);
-}
-
-const disk::sigma_type& disk::
-sigma () const
-{
-  return this->sigma_.get ();
-}
-
-disk::sigma_type& disk::
-sigma ()
-{
-  return this->sigma_.get ();
-}
-
-void disk::
-sigma (const sigma_type& x)
-{
-  this->sigma_.set (x);
 }
 
 
@@ -2049,7 +2013,9 @@ particles (const x_type& x,
            const velocityX_type& velocityX,
            const velocityY_type& velocityY,
            const velocityZ_type& velocityZ,
-           const mass_type& mass)
+           const mass_type& mass,
+           const epsilon_type& epsilon,
+           const sigma_type& sigma)
 : ::xml_schema::type (),
   x_ (x, this),
   y_ (y, this),
@@ -2057,7 +2023,9 @@ particles (const x_type& x,
   velocityX_ (velocityX, this),
   velocityY_ (velocityY, this),
   velocityZ_ (velocityZ, this),
-  mass_ (mass, this)
+  mass_ (mass, this),
+  epsilon_ (epsilon, this),
+  sigma_ (sigma, this)
 {
 }
 
@@ -2072,7 +2040,9 @@ particles (const particles& x,
   velocityX_ (x.velocityX_, f, this),
   velocityY_ (x.velocityY_, f, this),
   velocityZ_ (x.velocityZ_, f, this),
-  mass_ (x.mass_, f, this)
+  mass_ (x.mass_, f, this),
+  epsilon_ (x.epsilon_, f, this),
+  sigma_ (x.sigma_, f, this)
 {
 }
 
@@ -2087,7 +2057,9 @@ particles (const ::xercesc::DOMElement& e,
   velocityX_ (this),
   velocityY_ (this),
   velocityZ_ (this),
-  mass_ (this)
+  mass_ (this),
+  epsilon_ (this),
+  sigma_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -2183,6 +2155,28 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // epsilon
+    //
+    if (n.name () == "epsilon" && n.namespace_ ().empty ())
+    {
+      if (!epsilon_.present ())
+      {
+        this->epsilon_.set (epsilon_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // sigma
+    //
+    if (n.name () == "sigma" && n.namespace_ ().empty ())
+    {
+      if (!sigma_.present ())
+      {
+        this->sigma_.set (sigma_traits::create (i, f, this));
+        continue;
+      }
+    }
+
     break;
   }
 
@@ -2234,6 +2228,20 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "mass",
       "");
   }
+
+  if (!epsilon_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "epsilon",
+      "");
+  }
+
+  if (!sigma_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "sigma",
+      "");
+  }
 }
 
 particles* particles::
@@ -2256,6 +2264,8 @@ operator= (const particles& x)
     this->velocityY_ = x.velocityY_;
     this->velocityZ_ = x.velocityZ_;
     this->mass_ = x.mass_;
+    this->epsilon_ = x.epsilon_;
+    this->sigma_ = x.sigma_;
   }
 
   return *this;
@@ -2275,18 +2285,14 @@ cuboids (const n1_type& n1,
          const n3_type& n3,
          const distance_type& distance,
          const meanVelocity_type& meanVelocity,
-         const dimension_type& dimension,
-         const epsilon_type& epsilon,
-         const sigma_type& sigma)
+         const dimension_type& dimension)
 : ::xml_schema::type (),
   n1_ (n1, this),
   n2_ (n2, this),
   n3_ (n3, this),
   distance_ (distance, this),
   meanVelocity_ (meanVelocity, this),
-  dimension_ (dimension, this),
-  epsilon_ (epsilon, this),
-  sigma_ (sigma, this)
+  dimension_ (dimension, this)
 {
 }
 
@@ -2300,9 +2306,7 @@ cuboids (const cuboids& x,
   n3_ (x.n3_, f, this),
   distance_ (x.distance_, f, this),
   meanVelocity_ (x.meanVelocity_, f, this),
-  dimension_ (x.dimension_, f, this),
-  epsilon_ (x.epsilon_, f, this),
-  sigma_ (x.sigma_, f, this)
+  dimension_ (x.dimension_, f, this)
 {
 }
 
@@ -2316,9 +2320,7 @@ cuboids (const ::xercesc::DOMElement& e,
   n3_ (this),
   distance_ (this),
   meanVelocity_ (this),
-  dimension_ (this),
-  epsilon_ (this),
-  sigma_ (this)
+  dimension_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -2403,28 +2405,6 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
-    // epsilon
-    //
-    if (n.name () == "epsilon" && n.namespace_ ().empty ())
-    {
-      if (!epsilon_.present ())
-      {
-        this->epsilon_.set (epsilon_traits::create (i, f, this));
-        continue;
-      }
-    }
-
-    // sigma
-    //
-    if (n.name () == "sigma" && n.namespace_ ().empty ())
-    {
-      if (!sigma_.present ())
-      {
-        this->sigma_.set (sigma_traits::create (i, f, this));
-        continue;
-      }
-    }
-
     break;
   }
 
@@ -2469,20 +2449,6 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "dimension",
       "");
   }
-
-  if (!epsilon_.present ())
-  {
-    throw ::xsd::cxx::tree::expected_element< char > (
-      "epsilon",
-      "");
-  }
-
-  if (!sigma_.present ())
-  {
-    throw ::xsd::cxx::tree::expected_element< char > (
-      "sigma",
-      "");
-  }
 }
 
 cuboids* cuboids::
@@ -2504,8 +2470,6 @@ operator= (const cuboids& x)
     this->distance_ = x.distance_;
     this->meanVelocity_ = x.meanVelocity_;
     this->dimension_ = x.dimension_;
-    this->epsilon_ = x.epsilon_;
-    this->sigma_ = x.sigma_;
   }
 
   return *this;
@@ -2523,16 +2487,12 @@ disk::
 disk (const radius_type& radius,
       const distance_type& distance,
       const meanVelocity_type& meanVelocity,
-      const dimension_type& dimension,
-      const epsilon_type& epsilon,
-      const sigma_type& sigma)
+      const dimension_type& dimension)
 : ::xml_schema::type (),
   radius_ (radius, this),
   distance_ (distance, this),
   meanVelocity_ (meanVelocity, this),
-  dimension_ (dimension, this),
-  epsilon_ (epsilon, this),
-  sigma_ (sigma, this)
+  dimension_ (dimension, this)
 {
 }
 
@@ -2544,9 +2504,7 @@ disk (const disk& x,
   radius_ (x.radius_, f, this),
   distance_ (x.distance_, f, this),
   meanVelocity_ (x.meanVelocity_, f, this),
-  dimension_ (x.dimension_, f, this),
-  epsilon_ (x.epsilon_, f, this),
-  sigma_ (x.sigma_, f, this)
+  dimension_ (x.dimension_, f, this)
 {
 }
 
@@ -2558,9 +2516,7 @@ disk (const ::xercesc::DOMElement& e,
   radius_ (this),
   distance_ (this),
   meanVelocity_ (this),
-  dimension_ (this),
-  epsilon_ (this),
-  sigma_ (this)
+  dimension_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -2623,28 +2579,6 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
-    // epsilon
-    //
-    if (n.name () == "epsilon" && n.namespace_ ().empty ())
-    {
-      if (!epsilon_.present ())
-      {
-        this->epsilon_.set (epsilon_traits::create (i, f, this));
-        continue;
-      }
-    }
-
-    // sigma
-    //
-    if (n.name () == "sigma" && n.namespace_ ().empty ())
-    {
-      if (!sigma_.present ())
-      {
-        this->sigma_.set (sigma_traits::create (i, f, this));
-        continue;
-      }
-    }
-
     break;
   }
 
@@ -2675,20 +2609,6 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "dimension",
       "");
   }
-
-  if (!epsilon_.present ())
-  {
-    throw ::xsd::cxx::tree::expected_element< char > (
-      "epsilon",
-      "");
-  }
-
-  if (!sigma_.present ())
-  {
-    throw ::xsd::cxx::tree::expected_element< char > (
-      "sigma",
-      "");
-  }
 }
 
 disk* disk::
@@ -2708,8 +2628,6 @@ operator= (const disk& x)
     this->distance_ = x.distance_;
     this->meanVelocity_ = x.meanVelocity_;
     this->dimension_ = x.dimension_;
-    this->epsilon_ = x.epsilon_;
-    this->sigma_ = x.sigma_;
   }
 
   return *this;

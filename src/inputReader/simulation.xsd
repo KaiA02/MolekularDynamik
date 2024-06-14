@@ -35,6 +35,8 @@
                                         <xs:element name="velocityY" type="xs:double"/>
                                         <xs:element name="velocityZ" type="xs:double"/>
                                         <xs:element name="mass" type="xs:double"/>
+                                        <xs:element name="epsilon" type="xs:double"/>
+                                        <xs:element name="sigma" type="xs:double"/>
                                     </xs:sequence>
                                 </xs:complexType>
                             </xs:element>
@@ -47,8 +49,6 @@
                                         <xs:element name="distance" type="xs:double"/>
                                         <xs:element name="meanVelocity" type="xs:double"/>
                                         <xs:element name="dimension" type="xs:double"/>
-                                        <xs:element name="epsilon" type="xs:double"/>
-                                        <xs:element name="sigma" type="xs:double"/>
                                     </xs:sequence>
                                 </xs:complexType>
                             </xs:element>
@@ -59,8 +59,6 @@
                                         <xs:element name="distance" type="xs:double"/>
                                         <xs:element name="meanVelocity" type="xs:double"/>
                                         <xs:element name="dimension" type="xs:double"/>
-                                        <xs:element name="epsilon" type="xs:double"/>
-                                        <xs:element name="sigma" type="xs:double"/>
                                     </xs:sequence>
                                 </xs:complexType>
                             </xs:element>

@@ -20,7 +20,7 @@ void ParticleGenerator::generateCuboid(const Particle &start, int n1, int n2,
     double factor = std::sqrt(temp_init / start.getM());
     std::array<double, 3> addedVelocity = maxwellBoltzmannDistributedVelocity(meanVelocity, dimension);
     for (int i = 0; i < 3; i++) {
-        addedVelocity.at(i) * factor + start.getV()[i];
+         addedVelocity.at(i) = addedVelocity.at(i) * factor + start.getV()[i];
     }
 
     for (int x = 0; x < n1; x++) {
@@ -45,7 +45,7 @@ void ParticleGenerator::generateDisk(const Particle &center, int radius, double 
     double factor = std::sqrt(temp_init / center.getM());
     std::array<double, 3> addedVelocity = maxwellBoltzmannDistributedVelocity(meanVelocity, dimension);
     for (int i = 0; i < 3; i++) {
-        addedVelocity.at(i) * factor + center.getV()[i];
+        addedVelocity.at(i) = addedVelocity.at(i) * factor + center.getV()[i];
     }
 
     // Coordinates of the center
