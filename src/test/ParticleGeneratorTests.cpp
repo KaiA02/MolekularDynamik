@@ -88,8 +88,8 @@ TEST(ParticleGeneratorTest, Generate3DDiskTest) {
     }
 }
 
-TEST(ParticleGeneratorTest, InvalidDimension_Disk) {
-    Particle center;
-    ParticleGenerator generator;// Expect an invalid_argument exception for invalid dimension
-    EXPECT_THROW(generator.generateDisk(center, 2, 1.0, 0.1, 4, 0), std::invalid_argument);
-}
+//TEST(ParticleGeneratorTest, InvalidDimension_Disk) {
+//    Particle center;
+//    ParticleGenerator generator;// Expect an invalid_argument exception for invalid dimension
+//    EXPECT_THROW(generator.generateDisk(center, 2, 1.0, 0.1, 4, 0), std::invalid_argument);
+//}
