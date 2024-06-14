@@ -75,7 +75,7 @@ void LCParticleContainer::realocateParticles() {
       //updatedParticles.push_back(p);
     } else { //Parking of deleted Particles
         p.setF({0.0,0.0,0.0});
-        p.setX({-10.0,-10.0,-10.0}); //todo: adjust this Parking Spot regarding to DomainSize
+        p.setX({-50.0,-50.0,-50.0}); //todo: adjust this Parking Spot regarding to DomainSize
         p.setV({0.0,0.0,0.0});
         p.setType(p.getType()+10);
       }
@@ -265,11 +265,11 @@ void LCParticleContainer::handleBoundaryAction() {
 
           } //reflectiv
           else if(boundary_types[i] == 3) {
-
             //creates new Particle in OponentCell with same Atributes exept for X_Arg
-            std::array<double,3> x = findOponentXYZ(p->getX());
-            Particle oponent(x, p->getV(), p->getM(), p->getType());
-            particles.push_back(oponent);
+            //sets x V and F of p to match opponent
+            std::array<double,3> x = findOponentXYZ(p->getX(), p->getV());
+            x = {5,5,5};
+            p->setX(x);
           } //periodic
 
           }// if(boundary_types[i] == 2){
@@ -341,31 +341,37 @@ std::array<int, 3> LCParticleContainer::findOponentCellID(std::array<int, 3> id)
 
 }
 
-std::array<double, 3> LCParticleContainer::findOponentXYZ(std::array<double, 3> XYZ) {
-  double x;
-  double y;
-  double z;
-  if(XYZ.at(0) == -1) {
-    x = cell_count.at(0) * cell_size.at(0) + XYZ.at(0);
-  }else if(XYZ.at(0) == cell_count.at(0)) {
-    x = -1 + XYZ.at(0);
-  } else {
-    x = cell_count.at(0) * cell_size.at(0) - XYZ.at(0);
-  }
-  if(XYZ.at(1) == -1) {
-    y = cell_count.at(1) * cell_size.at(1) + XYZ.at(1);
-  }else if(XYZ.at(1) == cell_count.at(1)) {
-    x = -1 + XYZ.at(1);
-  } else {
-    y = cell_count.at(1)*cell_size.at(1)-XYZ.at(1) ;
-  }
-  if(XYZ.at(2) == -1) {
-    z = cell_count.at(2) * cell_size.at(2) + XYZ.at(2);
-  }else if(XYZ.at(2) == cell_count.at(2)) {
-    z = -1 + XYZ.at(2);
-  } else {
-    z = cell_count.at(2)*cell_size.at(2)-XYZ.at(2);
-  }
+std::array<double, 3> LCParticleContainer::findOponentXYZ(std::array<double, 3> XYZ, std::array<double, 3> velo) {
+  double x = 0;
+  double y = 0;
+  double z = 0;
+  //get Id of Cell the particle is in.
+  int x_id = floor(XYZ.at(0) / XYZ.at(0));
+  int y_id = floor(XYZ.at(1) / XYZ.at(1));
+  int z_id = floor(std::abs(XYZ.at(2)) / XYZ.at(2));
+
+
+  //if(XYZ.at(0) == -1) {
+  //  x = cell_count.at(0) * cell_size.at(0) + XYZ.at(0);
+  //}else if(XYZ.at(0) == cell_count.at(0)) {
+  //  x = -1 + XYZ.at(0);
+  //} else {
+  //  x = cell_count.at(0) * cell_size.at(0) - XYZ.at(0);
+  //}
+  //if(XYZ.at(1) == -1) {
+  //  y = cell_count.at(1) * cell_size.at(1) + XYZ.at(1);
+  //}else if(XYZ.at(1) == cell_count.at(1)) {
+  //  x = -1 + XYZ.at(1);
+  //} else {
+  //  y = cell_count.at(1)*cell_size.at(1)-XYZ.at(1) ;
+  //}
+  //if(XYZ.at(2) == -1) {
+  //  z = cell_count.at(2) * cell_size.at(2) + XYZ.at(2);
+  //}else if(XYZ.at(2) == cell_count.at(2)) {
+  //  z = -1 + XYZ.at(2);
+  //} else {
+  //  z = cell_count.at(2)*cell_size.at(2)-XYZ.at(2);
+  //}
   return {x, y, z};
 }
 

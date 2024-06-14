@@ -7,21 +7,21 @@
         <inputType>LJF</inputType>
         <particleContainerType>LC</particleContainerType>
         <r_cutoff>2.0</r_cutoff>
-        <domainSizeX>20</domainSizeX>
-        <domainSizeY>20</domainSizeY>
-        <domainSizeZ>20</domainSizeZ>
-        <boundary1Type>2</boundary1Type>
-        <boundary2Type>2</boundary2Type>
-        <boundary3Type>2</boundary3Type>
-        <boundary4Type>2</boundary4Type>
-        <boundary5Type>2</boundary5Type>
-        <boundary6Type>2</boundary6Type>
+        <domainSizeX>25</domainSizeX>
+        <domainSizeY>25</domainSizeY>
+        <domainSizeZ>25</domainSizeZ>
+        <boundary1Type></boundary1Type>
+        <boundary2Type></boundary2Type>
+        <boundary3Type></boundary3Type>
+        <boundary4Type></boundary4Type>
+        <boundary5Type></boundary5Type>
+        <boundary6Type></boundary6Type>
         <particles>
             <x>10.0</x>
             <y>10.0</y>
             <z>10.0</z>
-            <velocityX>0.0</velocityX>
-            <velocityY>-10.0</velocityY>
+            <velocityX>-10.0</velocityX>
+            <velocityY>0.0</velocityY>
             <velocityZ>0.0</velocityZ>
             <mass>1</mass>
         </particles>
