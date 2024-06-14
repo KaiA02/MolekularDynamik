@@ -10,12 +10,12 @@
         <domainSizeX>25</domainSizeX>
         <domainSizeY>25</domainSizeY>
         <domainSizeZ>25</domainSizeZ>
-        <boundary1Type>2</boundary1Type>
-        <boundary2Type>2</boundary2Type>
-        <boundary3Type>2</boundary3Type>
-        <boundary4Type>2</boundary4Type>
-        <boundary5Type>2</boundary5Type>
-        <boundary6Type>2</boundary6Type>
+        <boundary1Type>3</boundary1Type>
+        <boundary2Type>3</boundary2Type>
+        <boundary3Type>3</boundary3Type>
+        <boundary4Type>3</boundary4Type>
+        <boundary5Type>3</boundary5Type>
+        <boundary6Type>3</boundary6Type>
         <particles>
             <x>10.0</x>
             <y>10.0</y>
