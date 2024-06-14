@@ -3,13 +3,13 @@
     <input>
         <tStart>0.0</tStart>
         <tEnd>3.0</tEnd>
-        <deltaT>0.0005</deltaT>
+        <deltaT>0.0001</deltaT>
         <inputType>LJF</inputType>
         <particleContainerType>LC</particleContainerType>
         <r_cutoff>3.0</r_cutoff>
-        <domainSizeX>80</domainSizeX>
-        <domainSizeY>40</domainSizeY>
-        <domainSizeZ>80</domainSizeZ>
+        <domainSizeX>20</domainSizeX>
+        <domainSizeY>15</domainSizeY>
+        <domainSizeZ>20</domainSizeZ>
         <boundary1Type>2</boundary1Type>
         <boundary2Type>2</boundary2Type>
         <boundary3Type>2</boundary3Type>
@@ -17,10 +17,10 @@
         <boundary5Type>2</boundary5Type>
         <boundary6Type>2</boundary6Type>
         <particles>
-            <x>40.0</x>
-            <y>20.0</y>
-            <z>40.0</z>
-            <velocityX>5.0</velocityX>
+            <x>10.0</x>
+            <y>7.5</y>
+            <z>10.0</z>
+            <velocityX>0.0</velocityX>
             <velocityY>-10.0</velocityY>
             <velocityZ>0.0</velocityZ>
             <mass>1</mass>

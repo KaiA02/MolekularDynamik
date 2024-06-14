@@ -61,6 +61,11 @@ void ParticleContainer::setParticle(Particle p, int position) {
   particles.at(position) = p;
 }
 
+void LCParticleContainer::setR_cutoff(double radius) {
+  r_cutoff = radius;
+}
+
+
 std::vector<Particle>
 LCParticleContainer::getParticleInNeighbourhood(std::array<int, 3> id) {
   std::vector<Particle> neigbourhood;
@@ -109,8 +114,7 @@ void LCParticleContainer::realocateParticles() {
   for (auto &c : cells) {
     c.emptyCell();
   }
-  std::vector<Particle> updatedParticles;
-  #pragma omp parallel for
+  //std::vector<Particle> updatedParticles;
   for (auto &p : particles) {
     int x = floor(p.getX().at(0) / cell_size.at(0));
     int y = floor(p.getX().at(1) / cell_size.at(1));
@@ -118,14 +122,15 @@ void LCParticleContainer::realocateParticles() {
     p.setF({0.0, 0.0, 0.0});
     if (cellExists({x, y, z})) {
       getCellById({x,y,z})->addParticle(&p);
-      updatedParticles.push_back(p);
-    } else {
-        //when exiting at boundary 1, do what boundary 1 wants
-          //case outflow: do not add Particle to List
-          //case reflecting: do reflecting stuff
+      //updatedParticles.push_back(p);
+    } else { //Parking of deleted Particles
+        p.setF({0.0,0.0,0.0});
+        p.setX({-10.0,-10.0,-10.0}); //todo: adjust this Parking Spot regarding to DomainSize
+        p.setV({0.0,0.0,0.0});
+        p.setType(p.getType()+10);
       }
     }
-    particles = updatedParticles;
+    //particles = updatedParticles;
   }
 
 void LCParticleContainer::fillCellsWithParticles() {
@@ -185,7 +190,6 @@ void LCParticleContainer::generateCells(int size_x, int size_y, int size_z, doub
 }
 
 void LCParticleContainer::handleLJFCalculation() {
-  std::array<int, 6> boundarys = {1,1,1,1,1,1};
   realocateParticles();
   int empty_counter = 0;
   for (auto &c : cells) {
@@ -194,6 +198,7 @@ void LCParticleContainer::handleLJFCalculation() {
           getParticleInNeighbourhood(c.getId());
       LCParticleContainer container;
       Calculations calc(container);
+      calc.setR_cutoff(r_cutoff);
       calc.LCcalculateLJF(c.getParticles(), neighbourhood);
 
     } else {
@@ -252,7 +257,6 @@ void LCParticleContainer::countParticlesInCells() {
 
 std::vector<Particle *> LCParticleContainer::getBoundaryParticles() {
   std::vector<Particle*> result;
-#pragma omp parallel for
   for(int x = -1; x < cell_count[0] +1; x++) {
     for(int y = -1; y < cell_count[1]+1; y++) {
       for(int z = -1; z < cell_count[2]+1; z++) {
@@ -280,7 +284,7 @@ void LCParticleContainer::handleBoundaryAction() {
           if(boundary_types[i] == 1){} //outflow
           else if(boundary_types[i] == 2){
             // generate halo Particle
-            if(bounds.at(i) != -1.0 ){ //&& abs(bounds.at(i)) <= (pow(2, 1/6)/2)
+            if(bounds.at(i) != -1.0 && abs(bounds.at(i)) <= r_cutoff){ //&& abs(bounds.at(i)) <= r_cutoff
               if( i == 0 ){ //Boundary to YZ Plane
                 std::array<double, 3> x_arg = {-bounds.at(i), p->getX().at(1), p->getX().at(2)};
                 std::array<double, 3> v_arg = {-1*(p->getV().at(0)), p->getV().at(1), p->getV().at(2)};
