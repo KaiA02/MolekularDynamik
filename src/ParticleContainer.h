@@ -101,6 +101,7 @@ public:
  */
 class LCParticleContainer : public ParticleContainer {
 public:
+ void setR_cutoff(double r_cutoff);
  /**
   *@brief realocates the particles to their new cells and also
   *implements the outflow boundary (managing the deltion of particles out of the domain)
@@ -118,7 +119,7 @@ public:
  */
  std::vector<Particle> getParticleInNeighbourhood(std::array<int, 3> id);
 
- Cell& getCellById(std::array<int, 3> id);
+ Cell* getCellById(std::array<int, 3> id);
  /**
   *@brief generate all cells with according size
   *@param size_x size of x axis
@@ -164,12 +165,16 @@ public:
  std::vector<Particle*> getBoundaryParticles();
  void handleBoundaryAction();
  std::array<double, 6> getInfluencingBoundarysWithDistance(Particle*);
+ std::array<int,3> findOponentCellID(std::array<int,3>id);
+ std::array<double, 3> findOponentXYZ(std::array<double, 3> XYZ);
+ void calcWithHalo(Particle* p, std::array<double, 3> x_arg, std::array<double, 3> v_arg);
 
 private:
  std::vector<Cell> cells;
  std::array<double, 3> cell_size;
  std::array<int, 3> cell_count;
  std::array<int, 6> boundary_types;
+ double r_cutoff;
 
 
 };

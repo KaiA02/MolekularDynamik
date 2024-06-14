@@ -14,10 +14,13 @@ private:
   BaseParticleContainer &particles;
   static constexpr double epsilion = 5;
   static constexpr double sigma = 1;
+  double r_cutoff;
 
 public:
   Calculations();
   Calculations(BaseParticleContainer &particles);
+
+ void setR_cutoff(double r_cutoff);
 
  /**
  * @brief the following function calculates the gravitational force

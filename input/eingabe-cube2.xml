@@ -10,12 +10,12 @@
         <domainSizeX>180</domainSizeX>
         <domainSizeY>90</domainSizeY>
         <domainSizeZ>1</domainSizeZ>
-        <boundary1Type>no</boundary1Type>
-        <boundary2Type>no</boundary2Type>
-        <boundary3Type>Reflecting</boundary3Type>
-        <boundary4Type>no</boundary4Type>
-        <boundary5Type>no</boundary5Type>
-        <boundary6Type>no</boundary6Type>
+        <boundary1Type>1</boundary1Type>
+        <boundary2Type>1</boundary2Type>
+        <boundary3Type>1</boundary3Type>
+        <boundary4Type>1</boundary4Type>
+        <boundary5Type>1</boundary5Type>
+        <boundary6Type>1</boundary6Type>
         <particles>
             <x>20.0</x>
             <y>20.0</y>
@@ -44,6 +44,7 @@
             <distance>1.1225</distance>
             <meanVelocity>0.1</meanVelocity>
             <dimension>3.0</dimension>
+
         </cuboids>
         <cuboids>
 

@@ -10,7 +10,14 @@
 #include "ParticleContainer.h"
 #include "spdlog/spdlog.h"
 
-Calculations::Calculations(BaseParticleContainer &other) : particles(other) {}
+Calculations::Calculations(BaseParticleContainer &other) : particles(other) {
+  r_cutoff = 100000000000000000000000.0;
+}
+
+void Calculations::setR_cutoff(double r) {
+  r_cutoff = r;
+}
+
 
 
 void Calculations::calculateX(double delta_t) {
@@ -135,7 +142,7 @@ std::array<double, 3> Calculations::calculateLJF(Particle *p1, Particle *p2) {
   double distance = sqrt(pow(displacement_vector.at(0), 2) +
                          pow(displacement_vector.at(1), 2) +
                          pow(displacement_vector.at(2), 2));
-
+if (distance <= r_cutoff) {
   double forcefactor =
       ((-24 * epsilion) / pow(distance, 2)) *
       (pow((sigma) / distance, 6) - 2 * pow((sigma) / distance, 12));
@@ -143,5 +150,14 @@ std::array<double, 3> Calculations::calculateLJF(Particle *p1, Particle *p2) {
   std::array<double, 3> f_ij = {forcefactor * displacement_vector.at(0),
                                 forcefactor * displacement_vector.at(1),
                                 forcefactor * displacement_vector.at(2)};
+  std::array<double, 3> addedForce;
+  for(int k = 0; k < 3; k++) {
+    addedForce[k] = p1->getF()[k] + f_ij[k];
+  }
+  p1->setF(addedForce);
   return f_ij;
+
+} else {
+  return {0.0,0.0,0.0};
+}
 }

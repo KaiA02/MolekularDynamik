@@ -6,30 +6,33 @@
         <deltaT>0.0005</deltaT>
         <inputType>LJF</inputType>
         <particleContainerType>LC</particleContainerType>
-        <r_cutoff>2.0</r_cutoff>
-        <domainSizeX>20</domainSizeX>
-        <domainSizeY>15</domainSizeY>
-        <domainSizeZ>20</domainSizeZ>
-        <boundary1Type>2</boundary1Type>
-        <boundary2Type>2</boundary2Type>
-        <boundary3Type>2</boundary3Type>
-        <boundary4Type>2</boundary4Type>
-        <boundary5Type>2</boundary5Type>
-        <boundary6Type>2</boundary6Type>
+        <r_cutoff>3.0</r_cutoff>
+        <domainSizeX>90</domainSizeX>
+        <domainSizeY>90</domainSizeY>
+        <domainSizeZ>90</domainSizeZ>
+        <boundary1Type>1</boundary1Type>
+        <boundary2Type>1</boundary2Type>
+        <boundary3Type>1</boundary3Type>
+        <boundary4Type>1</boundary4Type>
+        <boundary5Type>1</boundary5Type>
+        <boundary6Type>1</boundary6Type>
         <particles>
-            <x>10.0</x>
-            <y>7.5</y>
-            <z>10.0</z>
+            <x>15.0</x>
+            <y>15.0</y>
+            <z>0.0</z>
             <velocityX>0.0</velocityX>
             <velocityY>-10.0</velocityY>
             <velocityZ>0.0</velocityZ>
             <mass>1</mass>
         </particles>
-        <disk>
-            <radius>5</radius>
+        <cuboids>
+            <n1>8.0</n1>
+            <n2>8.0</n2>
+            <n3>1.0</n3>
             <distance>1.1225</distance>
-            <dimension>3</dimension>
-        </disk>
+            <meanVelocity>0.1</meanVelocity>
+            <dimension>3.0</dimension>
+        </cuboids>
     </input>
     <output>
         <baseName>simulation_output</baseName>

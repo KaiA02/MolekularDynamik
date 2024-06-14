@@ -94,6 +94,7 @@ void XMLReader::readXML_LC(LCParticleContainer &particleContainer) {
   }
   spdlog::info("there are {} particles in the container now", particleContainer.getParticles().size());
   particleContainer.generateCells(in.domainSizeX(), in.domainSizeY(), in.domainSizeZ(), in.r_cutoff());
+  particleContainer.setR_cutoff(in.r_cutoff());
   particleContainer.fillCellsWithParticles();
   particleContainer.countParticlesInCells();
 }
