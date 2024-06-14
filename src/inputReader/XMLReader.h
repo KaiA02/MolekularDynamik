@@ -4,10 +4,9 @@
 
 #ifndef XMLREADER_H
 #define XMLREADER_H
-
-#include "../ParticleContainer.h"
+#include "../Container/ParticleContainer.h"
+#include "../Container/LCParticleContainer.h"
 #include "simulation.hxx"
-#include <iostream>
 
 /**
    *@brief class XMLReader is used to read the xml files

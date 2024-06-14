@@ -2,7 +2,7 @@
 // Created by joshu on 25.05.2024.
 //
 #include "XMLReader.h"
-#include "ParticleContainer.h"
+
 #include "ParticleGenerator.h"
 #include "simulation.hxx"
 #include "spdlog/spdlog.h"

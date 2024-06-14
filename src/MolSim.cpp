@@ -2,7 +2,7 @@
 #include "inputReader/FileReader.h"
 #include "outputWriter/VTKWriter.h"
 #include "outputWriter/XYZWriter.h"
-
+#include "Container/LCParticleContainer.h"
 #include "Calculations.h"
 #include "inputReader/XMLReader.h"
 
@@ -85,7 +85,7 @@ int main(int argc, char *argsv[]) {
     while(current_time < end_time) {
       //spdlog::warn("iteration: {}", current_time / delta_t);
       lcCaluclations.calculateX(delta_t);
-      if(inputType == "SF") {
+      if(inputType == "SF") { //Simple Force
         lcCaluclations.calculateLJF();
       } else {
         lcParticles.handleLJFCalculation();
@@ -104,7 +104,7 @@ int main(int argc, char *argsv[]) {
   } else {
     while(current_time < end_time) {
       normCalculations.calculateX(delta_t);
-      if(inputType == "SF") {
+      if(inputType == "SF") { //Simple Force
         normCalculations.calculateF();
       } else {
         normCalculations.calculateLJF();

@@ -4,7 +4,7 @@
 
 #ifndef CALCULATIONS_H
 #define CALCULATIONS_H
-#include "ParticleContainer.h"
+#include "Container/ParticleContainer.h"
 
 /**
  * @brief Calculations class
@@ -41,7 +41,7 @@ public:
    *@param other are the particles in the neighbour cell
    */
   void LCcalculateLJF(std::vector<Particle *> &center,
-                      std::vector<Particle> &other);
+                      std::vector<Particle > &other);
  /**
    *@brief calculate the Lennard-Jones-Force in the center particles
    *(escpecially used for LC)

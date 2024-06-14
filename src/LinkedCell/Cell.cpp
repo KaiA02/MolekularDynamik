@@ -31,9 +31,7 @@ std::array<int, 3> Cell::getId() {
 
 
 void Cell::addParticle(Particle* p) {
-
     particles.push_back(p);
-
 }
 
 void Cell::emptyCell() {

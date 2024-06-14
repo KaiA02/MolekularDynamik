@@ -7,11 +7,11 @@
 #include <cmath>
 
 #include "Particle.h"
-#include "ParticleContainer.h"
+#include "Container/ParticleContainer.h"
 #include "spdlog/spdlog.h"
 
 Calculations::Calculations(BaseParticleContainer &other) : particles(other) {
-  r_cutoff = 100000000000000000000000.0;
+  r_cutoff = std::numeric_limits<double>::infinity();
 }
 
 void Calculations::setR_cutoff(double r) {
@@ -44,10 +44,10 @@ void Calculations::calculateV(double delta_t) {
 }
 
 void Calculations::calculateF() {
-  for (size_t k = 0; k < particles.size(); k++) {
+  for (int k = 0; k < particles.size(); k++) {
     Particle &p1 = particles.getParticles().at(k);
     std::array<double, 3> newForce = {0.0, 0.0, 0.0};
-    for (size_t j = 0; j < particles.size(); j++) {
+    for (int j = 0; j < particles.size(); j++) {
       Particle &p2 = particles.getParticles().at(j);
       if (&p1 != &p2) {
         double distSquared = 0.0;
@@ -98,19 +98,14 @@ void Calculations::LCcalculateLJF(std::vector<Particle*> &center, std::vector<Pa
     calculateLJFcenter(center);
   }
   if (other.size() > 0) {
-    for (size_t i = 0; i < center.size(); ++i) {
-      Particle *pi = center.at(i);
-      for (size_t j = 0; j < other.size(); ++j) {
-        Particle &pj = other.at(j);
+    for(auto pi : center){
+      for(auto pj : other) {
         std::array<double, 3> f_ij = calculateLJF(pi, &pj);
         std::array<double, 3> newForcei = {0.0, 0.0, 0.0};
-        //std::array<double, 3> newForcej = {0.0, 0.0, 0.0};
         for (int k = 0; k < 3; ++k) {
           newForcei.at(k) = pi->getF().at(k) + f_ij.at(k);
-          // newForcej.at(k) = pj.getF().at(k) - (f_ij.at(k)/2);
         }
         pi->setF(newForcei);
-        // pj.setF(newForcej);
       }
     }
   }
@@ -118,9 +113,9 @@ void Calculations::LCcalculateLJF(std::vector<Particle*> &center, std::vector<Pa
 
 
 void Calculations::calculateLJFcenter(std::vector<Particle *> &center) {
-  for (int i = 0; i < center.size() - 1; ++i) {
+  for (size_t i = 0; i < center.size() - 1; ++i) {
     Particle *pi = center.at(i);
-    for (int j = i + 1; j < center.size(); ++j) {
+    for (size_t j = i + 1; j < center.size(); ++j) {
       Particle *pj = center.at(j);
       std::array<double, 3> f_ij = calculateLJF(pi, pj);
       std::array<double, 3> newForcei = {0.0, 0.0, 0.0};
@@ -150,14 +145,11 @@ if (distance <= r_cutoff) {
   std::array<double, 3> f_ij = {forcefactor * displacement_vector.at(0),
                                 forcefactor * displacement_vector.at(1),
                                 forcefactor * displacement_vector.at(2)};
-  std::array<double, 3> addedForce;
-  for(int k = 0; k < 3; k++) {
-    addedForce[k] = p1->getF()[k] + f_ij[k];
-  }
-  p1->setF(addedForce);
+
   return f_ij;
 
 } else {
   return {0.0,0.0,0.0};
+
 }
 }
