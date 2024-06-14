@@ -7,11 +7,11 @@
 
 #pragma once
 
-#include "Particle.h"
+#include "../Particle.h"
 
 #include <list>
 
-#include "ParticleContainer.h"
+#include "../Container/ParticleContainer.h"
 /**
  * @brief FileReader class
  */
@@ -37,4 +37,20 @@ public:
    * @param filename
    */
   void readFileCuboid(ParticleContainer &particleContainer, char *filename);
+};
+
+/**
+ * @brief DiskFileReader extends FileReader
+ */
+class DiskFileReader : public FileReader {
+public:
+ DiskFileReader();
+ // virtual ~DiskFileReader();
+ /**
+  * @brief reads a file and adds the resulting disk to the
+  * particleContainer
+  * @param particleContainer
+  * @param filename
+  */
+ void readFileDisk(ParticleContainer &particleContainer, char *filename);
 };

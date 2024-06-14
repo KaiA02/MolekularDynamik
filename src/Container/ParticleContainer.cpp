@@ -1,10 +1,11 @@
-// ParticleContainer.cpp
-
 #include "ParticleContainer.h"
-
+#include "../Calculations.h"
+#include "../LinkedCell/Cell.h"
+#include "spdlog/spdlog.h"
+#include <cmath>
 #include <iostream>
 
-// Constructor (if needed)
+// Constructor for ParticleContainer
 ParticleContainer::ParticleContainer() {
   // Initialize any other members if necessary
 }
@@ -14,27 +15,14 @@ ParticleContainer::ParticleContainer() {
  */
 void ParticleContainer::addParticle(const Particle &particle) {
   particles.push_back(particle);
-  pairings.emplace_back(); // Initialize an empty pairing list for this particle
 }
 
-/**
- * @brief add a Pairing to the 2d-vector pairings
- * @param particleIndex1: index of the first Particle in particles
- * @param particleIndex2: index of the second Particle in particles
- */
-void ParticleContainer::addPairing(int particleIndex1, int particleIndex2) {
-  if (particleIndex1 >= 0 && particleIndex1 < particles.size() &&
-      particleIndex2 >= 0 && particleIndex2 < particles.size()) {
-    pairings.push_back(std::make_pair(particleIndex1, particleIndex2));
-  }
-}
+std::vector<Particle> &ParticleContainer::getParticles() { return particles; }
 
- std::vector<Particle> &ParticleContainer::getParticles() {
-        return particles;
-}
 const std::vector<Particle> &ParticleContainer::getParticles() const {
-    return particles;
+  return particles;
 }
+std::vector<Cell> ParticleContainer::getCells() { return {}; }
 
 int ParticleContainer::size() const { return particles.size(); }
 
@@ -54,7 +42,11 @@ std::vector<Particle>::const_iterator ParticleContainer::end() const {
   return particles.end();
 }
 
-void ParticleContainer::addCube(std::vector<Particle> particleCube) {
+void ParticleContainer::handleLJFCalculation() {}
+
+void ParticleContainer::resetParticles() { particles.clear(); }
+
+void ParticleContainer::addMultipleParticles(std::vector<Particle> particleCube) {
   for (size_t x = 0; x < particleCube.size(); ++x) {
     addParticle(particleCube.at(x));
   }
@@ -63,3 +55,11 @@ void ParticleContainer::addCube(std::vector<Particle> particleCube) {
 void ParticleContainer::setParticle(Particle p, int position) {
   particles.at(position) = p;
 }
+
+
+
+
+
+
+
+

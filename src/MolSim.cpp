@@ -1,93 +1,127 @@
 
-#include "FileReader.h"
+#include "inputReader/FileReader.h"
 #include "outputWriter/VTKWriter.h"
 #include "outputWriter/XYZWriter.h"
-
+#include "Container/LCParticleContainer.h"
 #include "Calculations.h"
+#include "inputReader/XMLReader.h"
+
 #include <chrono>
+#include <filesystem>
 #include <iostream>
 #include <spdlog/spdlog.h>
 
 /**
  * plot the particles to a xyz-file
  */
-void plotParticles(int iteration, int fileType);
+void plotParticlesLC(int iteration, std::string outputType, std::string baseName,
+                   std::string outputPath, LCParticleContainer& particles);
+void plotParticles(int iteration, std::string outputType, std::string baseName,
+                   std::string outputPath, ParticleContainer& particles);
 
-ParticleContainer particles;
-Calculations calculations(particles);
 
 int main(int argc, char *argsv[]) {
-  auto start = std::chrono::high_resolution_clock::now();
-  std::cout << "Hello from MolSim for PSE!" << std::endl;
+  XMLReader xmlReader(argsv[1]);
+
+  std::string particleContainerType = xmlReader.getParticleContainerType();
+  std::string inputType = xmlReader.getInputType();
+  std::array<double, 3> times = xmlReader.getTime();
+  std::string outputType = xmlReader.getOutputType();
+  std::string baseName = xmlReader.getBaseName();
+  //int writeFrequency = xmlReader.getWriteFrequency();
+  xml_schema::boolean performanceMeasurement =
+      xmlReader.getPerformanceMeasurement();
+  std::string logLevel = xmlReader.getLogLevel();
+
+  //std::cout << "Hello from MolSim for PSE!" << std::endl;
   if (argc < 2) {
     std::cout << "Erroneous programme call! " << std::endl;
     std::cout << "./molsym filename" << std::endl;
   }
   spdlog::default_logger()->set_level(spdlog::level::info);
-  if (argc > 8) {
-    std::string log_level = argsv[8];
-    if (log_level == "trace") {
-      spdlog::default_logger()->set_level(spdlog::level::trace);
-    } else if (log_level == "debug") {
-      spdlog::default_logger()->set_level(spdlog::level::debug);
-    } else if (log_level == "warn") {
-      spdlog::default_logger()->set_level(spdlog::level::warn);
-    } else if (log_level == "error") {
-      spdlog::default_logger()->set_level(spdlog::level::err);
-    } else if (log_level == "info") {
-      spdlog::default_logger()->set_level(spdlog::level::info);
-    } else {
-      std::cout << "Invalid log level! " << std::endl;
-      return 1;
-    }
-  }
 
-  double start_time = std::stod(argsv[2]);
-  double end_time = std::stod(argsv[3]);
-  double delta_t = std::stod(argsv[4]);
-  int fileType = std::stoi(argsv[5]);
-  int fileInputType = std::stoi(argsv[6]);
-  int performanceMeasurement = std::stoi(argsv[7]);
-
-  if (fileInputType == 1) {
-    FileReader fileReader;
-    fileReader.readFile(particles, argsv[1]);
+  if (logLevel == "trace") {
+    spdlog::default_logger()->set_level(spdlog::level::trace);
+  } else if (logLevel == "debug") {
+    spdlog::default_logger()->set_level(spdlog::level::debug);
+  } else if (logLevel == "warn") {
+    spdlog::default_logger()->set_level(spdlog::level::warn);
+  } else if (logLevel == "error") {
+    spdlog::default_logger()->set_level(spdlog::level::err);
+  } else if (logLevel == "info") {
+    spdlog::default_logger()->set_level(spdlog::level::info);
   } else {
-    CuboidFileReader fileReader;
-    fileReader.readFileCuboid(particles, argsv[1]);
+    std::cout << "Invalid log level! " << std::endl;
+    return 1;
   }
+
+  double start_time = times[0];
+  double end_time = times[1];
+  double delta_t = times[2];
 
   double current_time = start_time;
 
   int iteration = 0;
+  LCParticleContainer lcParticles;
+  ParticleContainer normParticles;
+  if (particleContainerType == "LC") {
+    xmlReader.readXML_LC(lcParticles);
+  } else {
+    xmlReader.readXML(normParticles);
+  }
 
+  Calculations normCalculations(normParticles);
+  Calculations lcCaluclations(lcParticles);
+  spdlog::warn("Simulation started with parameters: start_time: {}, end_time: "
+               "{}, delta_t: {}, inputType: {}, outputType: {}, baseName: {}, "
+               "logLevel: {}, performanceMeasurement: {}, {} "
+               "particles, {} cuboids, {} disks ",
+               start_time, end_time, delta_t, inputType, outputType, baseName,
+               logLevel, performanceMeasurement, lcParticles.getParticles().size(),
+               xmlReader.getNumberOfCuboids(), xmlReader.getNumberOfDisks());
+  auto start = std::chrono::high_resolution_clock::now();
   // for this loop, we assume: current x, current f and current v are known
-  while (current_time < end_time) {
-    // calculate new x
-    calculations.calculateX(delta_t);
-    // calculate new f
-    if (fileInputType == 1) {
-      calculations.calculateF();
-    } else {
-      calculations.calculateLJF();
-    }
-    // calculate new v
-    calculations.calculateV(delta_t);
+  if(particleContainerType == "LC") {
+    while(current_time < end_time) {
+      //spdlog::warn("iteration: {}", current_time / delta_t);
+      lcCaluclations.calculateX(delta_t);
+      if(inputType == "SF") { //Simple Force
+        lcCaluclations.calculateLJF();
+      } else {
+        lcParticles.handleLJFCalculation();
 
-    iteration++;
-    if (performanceMeasurement != 1) {
-      if (iteration % 10 == 0) {
-        plotParticles(iteration, fileType);
       }
-      spdlog::trace("Iteration {} finished", iteration);
+      lcParticles.handleBoundaryAction();
+      lcCaluclations.calculateV(delta_t);
+      iteration++;
+      if (!performanceMeasurement) {
+        if (iteration % 10 == 0) {
+          plotParticlesLC(iteration, outputType, baseName, "../output", lcParticles);
+        }
+      }
+      current_time += delta_t;
     }
-
-    current_time += delta_t;
+  } else {
+    while(current_time < end_time) {
+      normCalculations.calculateX(delta_t);
+      if(inputType == "SF") { //Simple Force
+        normCalculations.calculateF();
+      } else {
+        normCalculations.calculateLJF();
+      }
+      normCalculations.calculateV(delta_t);
+      iteration++;
+      if (!performanceMeasurement) {
+        if (iteration % 10 == 0) {
+          plotParticles(iteration, outputType, baseName, "../output", normParticles);
+        }
+      }
+      current_time += delta_t;
+    }
   }
   auto end = std::chrono::high_resolution_clock::now();
   std::chrono::duration<double> elapsed = end - start;
-
-  spdlog::info("Simulation finished in {} seconds", elapsed.count());
+  spdlog::warn("Simulation finished in {} seconds", elapsed.count());
   return 0;
 }
 
@@ -99,10 +133,14 @@ int main(int argc, char *argsv[]) {
  *
  * @param iteration is the number of iterations of the particles
  */
-void plotParticles(int iteration, int fileType) {
-
-  if (fileType == 2) {
-    std::string out_name("output_xyz");
+void plotParticlesLC(int iteration, std::string outputType, std::string baseName,
+                   std::string outputPath, LCParticleContainer& particles) {
+  std::filesystem::path dir(outputPath);
+  if (!std::filesystem::exists(dir)) {
+    std::filesystem::create_directories(dir);
+  }
+  std::string out_name = outputPath + "/" + baseName;
+  if (outputType == "xyz") {
 
     outputWriter::XYZWriter writer;
     writer.plotParticles(particles, out_name, iteration);
@@ -110,14 +148,40 @@ void plotParticles(int iteration, int fileType) {
 
   else {
     outputWriter::VTKWriter vtkWriter;
-    int numParticles = particles.size();
+    int numParticles = particles.getParticles().size();
     vtkWriter.initializeOutput(numParticles);
 
-    for (auto &particle : particles) {
+    for (auto &particle : particles.getParticles()) {
       vtkWriter.plotParticle(particle);
     }
 
-    std::string filename = "MD_vtk";
+    std::string filename = out_name;
+    vtkWriter.writeFile(filename, iteration);
+  }
+}
+void plotParticles(int iteration, std::string outputType, std::string baseName,
+                   std::string outputPath, ParticleContainer& particles) {
+  std::filesystem::path dir(outputPath);
+  if (!std::filesystem::exists(dir)) {
+    std::filesystem::create_directories(dir);
+  }
+  std::string out_name = outputPath + "/" + baseName;
+  if (outputType == "xyz") {
+
+    outputWriter::XYZWriter writer;
+    writer.plotParticles(particles, out_name, iteration);
+  }
+
+  else {
+    outputWriter::VTKWriter vtkWriter;
+    int numParticles = particles.getParticles().size();
+    vtkWriter.initializeOutput(numParticles);
+
+    for (auto &particle : particles.getParticles()) {
+      vtkWriter.plotParticle(particle);
+    }
+
+    std::string filename = out_name;
     vtkWriter.writeFile(filename, iteration);
   }
 }

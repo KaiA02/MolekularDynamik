@@ -5,7 +5,7 @@
  *      Author: eckhardw
  */
 
-#include "outputWriter/XYZWriter.h"
+#include "XYZWriter.h"
 #include <iomanip>
 #include <sstream>
 
@@ -15,11 +15,12 @@ XYZWriter::XYZWriter() = default;
 
 XYZWriter::~XYZWriter() = default;
 
-void XYZWriter::plotParticles(ParticleContainer& particles,
+void XYZWriter::plotParticles(BaseParticleContainer &particles,
                               const std::string &filename, int iteration) {
   std::ofstream file;
   std::stringstream strstr;
-  strstr << filename << "_" << std::setfill('0') << std::setw(4) << iteration << ".xyz";
+  strstr << filename << "_" << std::setfill('0') << std::setw(4) << iteration
+         << ".xyz";
 
   file.open(strstr.str().c_str());
   file << particles.size() << std::endl;
@@ -27,7 +28,7 @@ void XYZWriter::plotParticles(ParticleContainer& particles,
           "file format doku."
        << std::endl;
 
-  for (auto &p : particles) {
+  for (auto &p : particles.getParticles()) {
     std::array<double, 3> x = p.getX();
     file << "Ar ";
     file.setf(std::ios_base::showpoint);
