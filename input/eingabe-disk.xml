@@ -21,8 +21,8 @@
             <y>10.0</y>
             <z>10.0</z>
             <velocityX>-10.0</velocityX>
-            <velocityY>-10.0</velocityY>
-            <velocityZ>-10.0</velocityZ>
+            <velocityY>-8.0</velocityY>
+            <velocityZ>-5.0</velocityZ>
             <mass>1</mass>
         </particles>
         <disk>

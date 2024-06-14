@@ -12,7 +12,6 @@ private:
     std::vector<Particle*> particles;
     std::array<int, 3> id;
     bool halo_cell;
-    Cell* oposition;
 public:
     Cell(std::array<int, 3> id, bool halo);
     void setOposition(Cell* op);

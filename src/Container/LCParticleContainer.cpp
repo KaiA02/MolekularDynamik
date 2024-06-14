@@ -110,9 +110,6 @@ void LCParticleContainer::generateCells(int size_x, int size_y, int size_z, doub
             if(x == -1 || y== -1 || z == -1 || x == cell_count[0] || y == cell_count[1] || z == cell_count[2]) {
               isHalo = true;
               Cell c({x,y,z}, isHalo);
-              std::array<int,3> oponentID = findOponentCellID(c.getId());
-              Cell oponent(oponentID, isHalo), *o;
-              c.setOposition(o);
               cells.push_back(c);
             } else {
               isHalo = false;
