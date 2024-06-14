@@ -26,6 +26,7 @@ public:
     const double getN_Thermostat() const;
     const double getTemp_Target() const;
     const double getDelta_Temp() const;
+    const double getCurrentTemp(const std::vector<Particle>& particles) const;
 
     // Apply thermostat periodically (uses graudal velocity scaling)
     //First option

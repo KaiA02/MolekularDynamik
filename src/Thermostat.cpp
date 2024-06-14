@@ -7,6 +7,26 @@
 Thermostat::Thermostat(double temp_init, int n_thermostat, double temp_target, double delta_temp, int dimension)
     : temp_init(temp_init), n_thermostat(n_thermostat), temp_target(temp_target), delta_temp(delta_temp), dimension(dimension) {}
 
+const double Thermostat::getTemp_Init() const {
+    return temp_init;
+}
+
+const double Thermostat::getN_Thermostat() const {
+    return n_thermostat;
+}
+
+const double Thermostat::getTemp_Target() const {
+    return temp_target;
+}
+
+const double Thermostat::getDelta_Temp() const {
+    return delta_temp;
+}
+
+const double Thermostat::getCurrentTemp(const std::vector<Particle>& particles) const {
+    return calculateCurrentTemperature(particles);
+}
+
 
 double Thermostat::calculateCurrentTemperature(const std::vector<Particle>& particles) const {
     double kineticEnergy = 0.0;
@@ -48,4 +68,6 @@ void Thermostat::applyThermostatPeriodically(std::vector<Particle>& particles, i
     if (currentStep % n_thermostat == 0) {
         gradualScaling(particles);
     }
+    //in Molsim die iteration als currentstep benutzen und diese methode wird dann überflussig, weil dann in molsim direkt graduale scaling benutzt wird
+    //in molsim checken if (n_thermostat == 0), dann direct scaling sonst gradual
 }
