@@ -14,7 +14,7 @@
 #include <iostream>
 #include <sstream>
 
-#include "ParticleGenerator.h"
+#include "../ParticleGenerator.h"
 
 FileReader::FileReader() = default;
 
