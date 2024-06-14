@@ -2,7 +2,7 @@
             xsi:noNamespaceSchemaLocation="../src/inputReader/simulation.xsd">
     <input>
         <tStart>0.0</tStart>
-        <tEnd>1.0</tEnd>
+        <tEnd>10.0</tEnd>
         <deltaT>0.0005</deltaT>
         <inputType>LJF</inputType>
         <particleContainerType>LC</particleContainerType>
@@ -46,6 +46,6 @@
     </output>
     <config>
         <performanceMeasurement>false</performanceMeasurement>
-        <logLevel>info</logLevel>
+        <logLevel>warn</logLevel>
     </config>
 </simulation>
