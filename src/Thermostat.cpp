@@ -4,8 +4,8 @@
 #include <algorithm>
 #include <limits>
 
-Thermostat::Thermostat(double temp_init, int n_thermostat, double temp_target, double delta_temp, int dimension)
-    : temp_init(temp_init), n_thermostat(n_thermostat), temp_target(temp_target), delta_temp(delta_temp), dimension(dimension) {}
+Thermostat::Thermostat(double temp_init, int n_thermostat, double temp_target, double delta_temp)
+    : temp_init(temp_init), n_thermostat(n_thermostat), temp_target(temp_target), delta_temp(delta_temp) {}
 
 const double Thermostat::getTemp_Init() const {
     return temp_init;
@@ -63,11 +63,11 @@ void Thermostat::gradualScaling(std::vector<Particle>& particles) const {
     double scalingFactor = std::sqrt(temp_new / currentTemperature);
     scaleVelocities(particles, scalingFactor);
 }
+//TODO:hier noch fehler weil cooling funktioniert nicht ganz, es wird direkt auf die target gesetzt aber heating funktioniert?
 
-void Thermostat::applyThermostatPeriodically(std::vector<Particle>& particles, int currentStep) const {
-    if (currentStep % n_thermostat == 0) {
-        gradualScaling(particles);
-    }
-    //in Molsim die iteration als currentstep benutzen und diese methode wird dann überflussig, weil dann in molsim direkt graduale scaling benutzt wird
-    //in molsim checken if (n_thermostat == 0), dann direct scaling sonst gradual
+void Thermostat::setInitialTemperature(std::vector<Particle> &particles) const {
+    double currentTemperature = calculateCurrentTemperature(particles);
+    double scalingFactor = std::sqrt(temp_init / currentTemperature);
+    scaleVelocities(particles, scalingFactor);
 }
+

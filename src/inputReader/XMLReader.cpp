@@ -109,6 +109,14 @@ std::array<double, 3> XMLReader::getTime() {
 
 std::string XMLReader::getInputType() { return sim->input().inputType(); }
 
+double XMLReader::getTemp_init() { return sim->input().temp_init(); }
+
+int XMLReader::getN_Thermostat() { return sim->input().n_thermostat(); }
+
+double XMLReader::getTemp_Target() { return sim->input().temp_target(); }
+
+double XMLReader::getDelta_Temp() { return sim->input().delta_temp(); }
+
 std::string XMLReader::getParticleContainerType() { return sim->input().particleContainerType(); }
 
 std::string XMLReader::getOutputType() { return sim->output().outputType(); }

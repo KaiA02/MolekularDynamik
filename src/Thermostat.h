@@ -11,7 +11,7 @@ private:
     double temp_target;
     double delta_temp;
 
-    int dimension;
+    const static int dimension = 3;
 
     // Helper function to calculate current temperature
     double calculateCurrentTemperature(const std::vector<Particle>& particles) const;
@@ -20,7 +20,7 @@ private:
     void scaleVelocities(std::vector<Particle>& particles, double scalingFactor) const;
 
 public:
-    Thermostat(double temp_init, int n_thermostat, double temp_target, double delta_temp, int dimension);
+    Thermostat(double temp_init, int n_thermostat, double temp_target, double delta_temp);
 
     const double getTemp_Init() const;
     const double getN_Thermostat() const;
@@ -28,16 +28,15 @@ public:
     const double getDelta_Temp() const;
     const double getCurrentTemp(const std::vector<Particle>& particles) const;
 
-    // Apply thermostat periodically (uses graudal velocity scaling)
-    //First option
-    void applyThermostatPeriodically(std::vector<Particle>& particles, int currentStep) const;
-
     // Set temperature directly via velocity scaling
-    //Second Option
+    //First Option
     void setTemperatureDirectly(std::vector<Particle>& particles) const;
 
     // Gradual velocity scaling
+    //Second option
     void gradualScaling(std::vector<Particle>& particles) const;
+
+    void setInitialTemperature(std::vector<Particle>& particles) const;
 };
 
 #endif //THERMOSTAT_H
