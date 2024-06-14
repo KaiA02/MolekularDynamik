@@ -27,10 +27,12 @@ public:
     const double getTemp_Target() const;
     const double getDelta_Temp() const;
 
-    // Apply thermostat periodically
+    // Apply thermostat periodically (uses graudal velocity scaling)
+    //First option
     void applyThermostatPeriodically(std::vector<Particle>& particles, int currentStep) const;
 
     // Set temperature directly via velocity scaling
+    //Second Option
     void setTemperatureDirectly(std::vector<Particle>& particles) const;
 
     // Gradual velocity scaling

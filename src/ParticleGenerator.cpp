@@ -22,6 +22,7 @@ void ParticleGenerator::generateCuboid(const Particle &start, int n1, int n2,
     for (int i = 0; i < 3; i++) {
         addedVelocity.at(i) * factor + start.getV()[i];
     }
+
     for (int x = 0; x < n1; x++) {
         for (int y = 0; y < n2; y++) {
             for (int z = 0; z < n3; z++) {
