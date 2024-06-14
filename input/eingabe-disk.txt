@@ -10,6 +10,6 @@
 # * velocities (2 or 3 double values)
 # * mass (1 double value)
 #
-# xyz-coord     velocity       radius   distance  dimension  mass
+# xyz-coord     velocity       radius   distance     mv    dimension  mass    temp_init
 1
-60.0 25.0 0.0   0.0 -10.0 0.0    15      1.1225       2        1
+60.0 25.0 0.0   0.0 -10.0 0.0    15      1.1225      0.1       2        1        0

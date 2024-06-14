@@ -11,6 +11,8 @@
 #include <iostream>
 #include <spdlog/spdlog.h>
 
+#include "Thermostat.h"
+
 /**
  * plot the particles to a xyz-file
  */
@@ -32,6 +34,13 @@ int main(int argc, char *argsv[]) {
   xml_schema::boolean performanceMeasurement =
       xmlReader.getPerformanceMeasurement();
   std::string logLevel = xmlReader.getLogLevel();
+
+  double temp_init = xmlReader.getTemp_init();
+  int n_thermostat = xmlReader.getN_Thermostat();
+  double temp_target = xmlReader.getTemp_Target();
+  double delta_temp = xmlReader.getDelta_Temp();
+  if(delta_temp == 0) { delta_temp = std::numeric_limits<double>::infinity(); }
+  Thermostat thermostat(temp_init, n_thermostat, temp_target, delta_temp);
 
   //std::cout << "Hello from MolSim for PSE!" << std::endl;
   if (argc < 2) {
@@ -73,17 +82,22 @@ int main(int argc, char *argsv[]) {
   Calculations normCalculations(normParticles);
   Calculations lcCaluclations(lcParticles);
   spdlog::warn("Simulation started with parameters: start_time: {}, end_time: "
-               "{}, delta_t: {}, inputType: {}, outputType: {}, baseName: {}, "
+               "{}, delta_t: {}, temp_init: {}, temp_target: {}, inputType: {}, outputType: {}, baseName: {}, "
                "logLevel: {}, performanceMeasurement: {}, {} "
                "particles, {} cuboids, {} disks ",
-               start_time, end_time, delta_t, inputType, outputType, baseName,
+               start_time, end_time, delta_t, temp_init, temp_target, inputType, outputType, baseName,
                logLevel, performanceMeasurement, lcParticles.getParticles().size(),
                xmlReader.getNumberOfCuboids(), xmlReader.getNumberOfDisks());
   auto start = std::chrono::high_resolution_clock::now();
   // for this loop, we assume: current x, current f and current v are known
   if(particleContainerType == "LC") {
+
+    //temperature setting
+    spdlog::info("current Temperature: {}", thermostat.getCurrentTemp(lcParticles.getParticles()));
+    thermostat.setInitialTemperature(lcParticles.getParticles());
+    spdlog::info("current Temperature: {}", thermostat.getCurrentTemp(lcParticles.getParticles()));
+
     while(current_time < end_time) {
-      //spdlog::warn("iteration: {}", current_time / delta_t);
       lcCaluclations.calculateX(delta_t);
       if(inputType == "SF") { //Simple Force
         lcCaluclations.calculateLJF();
@@ -94,14 +108,30 @@ int main(int argc, char *argsv[]) {
       lcParticles.handleBoundaryAction();
       lcCaluclations.calculateV(delta_t);
       iteration++;
+
+      if(n_thermostat == 0) {
+        thermostat.setTemperatureDirectly(lcParticles.getParticles());
+      } else {
+        if(iteration % n_thermostat == 0) {
+          thermostat.gradualScaling(lcParticles.getParticles());
+        }
+      }
+
       if (!performanceMeasurement) {
         if (iteration % 10 == 0) {
+          spdlog::info("current Temperature: {}", thermostat.getCurrentTemp(lcParticles.getParticles()));
           plotParticlesLC(iteration, outputType, baseName, "../output", lcParticles);
         }
       }
       current_time += delta_t;
     }
   } else {
+
+    //temperature setting
+    spdlog::info("current Temperature: {}", thermostat.getCurrentTemp(normParticles.getParticles()));
+    thermostat.setInitialTemperature(normParticles.getParticles());
+    spdlog::info("current Temperature: {}", thermostat.getCurrentTemp(normParticles.getParticles()));
+
     while(current_time < end_time) {
       normCalculations.calculateX(delta_t);
       if(inputType == "SF") { //Simple Force
@@ -111,8 +141,18 @@ int main(int argc, char *argsv[]) {
       }
       normCalculations.calculateV(delta_t);
       iteration++;
+
+      if(n_thermostat == 0) {
+        thermostat.setTemperatureDirectly(normParticles.getParticles());
+      } else {
+        if(iteration % n_thermostat == 0) {
+          thermostat.gradualScaling(normParticles.getParticles());
+        }
+      }
+
       if (!performanceMeasurement) {
         if (iteration % 10 == 0) {
+          spdlog::info("current Temperature: {}", thermostat.getCurrentTemp(normParticles.getParticles()));
           plotParticles(iteration, outputType, baseName, "../output", normParticles);
         }
       }

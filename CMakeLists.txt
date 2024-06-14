@@ -29,6 +29,8 @@ add_executable(MolSim ${MY_SRC}
         src/inputReader/XMLReader.h
         src/inputReader/simulation.cxx
         src/inputReader/simulation.hxx
+        src/Thermostat.cpp
+        src/Thermostat.h
 )
 
 # set cxx standard. You may raise this if you want.
@@ -100,6 +102,7 @@ add_executable(
         src/Container/LCParticleContainer.cpp
         src/Container/LCParticleContainer.h
         src/Container/BaseParticleContainer.h
+        src/test/ThermostatTests.cpp
 
 
 )
