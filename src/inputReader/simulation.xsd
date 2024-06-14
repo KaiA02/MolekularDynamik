@@ -20,6 +20,11 @@
                             <xs:element name="boundary4Type" type="xs:int"/>
                             <xs:element name="boundary5Type" type="xs:int"/>
                             <xs:element name="boundary6Type" type="xs:int"/>
+                            <xs:element name="temp_init" type="xs:double"/>
+                            <xs:element name="n_thermostat" type="xs:int"/>
+                            <xs:element name="temp_target" type="xs:double"/>
+                            <xs:element name="delta_temp" type="xs:double"/>
+                            <xs:element name="g_grav" type="xs:double"/>
                             <xs:element name="particles" maxOccurs="unbounded" minOccurs="1">
                                 <xs:complexType>
                                     <xs:sequence>
@@ -42,6 +47,8 @@
                                         <xs:element name="distance" type="xs:double"/>
                                         <xs:element name="meanVelocity" type="xs:double"/>
                                         <xs:element name="dimension" type="xs:double"/>
+                                        <xs:element name="epsilon" type="xs:double"/>
+                                        <xs:element name="sigma" type="xs:double"/>
                                     </xs:sequence>
                                 </xs:complexType>
                             </xs:element>
@@ -50,7 +57,10 @@
                                     <xs:sequence>
                                         <xs:element name="radius" type="xs:double"/>
                                         <xs:element name="distance" type="xs:double"/>
+                                        <xs:element name="meanVelocity" type="xs:double"/>
                                         <xs:element name="dimension" type="xs:double"/>
+                                        <xs:element name="epsilon" type="xs:double"/>
+                                        <xs:element name="sigma" type="xs:double"/>
                                     </xs:sequence>
                                 </xs:complexType>
                             </xs:element>

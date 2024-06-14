@@ -31,8 +31,8 @@
 // in the accompanying FLOSSE file.
 //
 
-#ifndef CXX_MNT_C_USERS_JH_CLION_PROJECTS_MOL_SIM_RETRY_SRC_INPUT_READER_SIMULATION_HXX
-#define CXX_MNT_C_USERS_JH_CLION_PROJECTS_MOL_SIM_RETRY_SRC_INPUT_READER_SIMULATION_HXX
+#ifndef CXX_HOME_KAIARENJA_CLION_PROJECTS_MOLEKULAR_DYNAMIK_SRC_INPUT_READER_SIMULATION_HXX
+#define CXX_HOME_KAIARENJA_CLION_PROJECTS_MOLEKULAR_DYNAMIK_SRC_INPUT_READER_SIMULATION_HXX
 
 #ifndef XSD_CXX11
 #define XSD_CXX11
@@ -562,6 +562,76 @@ class input: public ::xml_schema::type
   void
   boundary6Type (const boundary6Type_type& x);
 
+  // temp_init
+  //
+  typedef ::xml_schema::double_ temp_init_type;
+  typedef ::xsd::cxx::tree::traits< temp_init_type, char, ::xsd::cxx::tree::schema_type::double_ > temp_init_traits;
+
+  const temp_init_type&
+  temp_init () const;
+
+  temp_init_type&
+  temp_init ();
+
+  void
+  temp_init (const temp_init_type& x);
+
+  // n_thermostat
+  //
+  typedef ::xml_schema::int_ n_thermostat_type;
+  typedef ::xsd::cxx::tree::traits< n_thermostat_type, char > n_thermostat_traits;
+
+  const n_thermostat_type&
+  n_thermostat () const;
+
+  n_thermostat_type&
+  n_thermostat ();
+
+  void
+  n_thermostat (const n_thermostat_type& x);
+
+  // temp_target
+  //
+  typedef ::xml_schema::double_ temp_target_type;
+  typedef ::xsd::cxx::tree::traits< temp_target_type, char, ::xsd::cxx::tree::schema_type::double_ > temp_target_traits;
+
+  const temp_target_type&
+  temp_target () const;
+
+  temp_target_type&
+  temp_target ();
+
+  void
+  temp_target (const temp_target_type& x);
+
+  // delta_temp
+  //
+  typedef ::xml_schema::double_ delta_temp_type;
+  typedef ::xsd::cxx::tree::traits< delta_temp_type, char, ::xsd::cxx::tree::schema_type::double_ > delta_temp_traits;
+
+  const delta_temp_type&
+  delta_temp () const;
+
+  delta_temp_type&
+  delta_temp ();
+
+  void
+  delta_temp (const delta_temp_type& x);
+
+  // g_grav
+  //
+  typedef ::xml_schema::double_ g_grav_type;
+  typedef ::xsd::cxx::tree::traits< g_grav_type, char, ::xsd::cxx::tree::schema_type::double_ > g_grav_traits;
+
+  const g_grav_type&
+  g_grav () const;
+
+  g_grav_type&
+  g_grav ();
+
+  void
+  g_grav (const g_grav_type& x);
+
   // particles
   //
   typedef ::particles particles_type;
@@ -629,7 +699,12 @@ class input: public ::xml_schema::type
          const boundary3Type_type&,
          const boundary4Type_type&,
          const boundary5Type_type&,
-         const boundary6Type_type&);
+         const boundary6Type_type&,
+         const temp_init_type&,
+         const n_thermostat_type&,
+         const temp_target_type&,
+         const delta_temp_type&,
+         const g_grav_type&);
 
   input (const ::xercesc::DOMElement& e,
          ::xml_schema::flags f = 0,
@@ -672,6 +747,11 @@ class input: public ::xml_schema::type
   ::xsd::cxx::tree::one< boundary4Type_type > boundary4Type_;
   ::xsd::cxx::tree::one< boundary5Type_type > boundary5Type_;
   ::xsd::cxx::tree::one< boundary6Type_type > boundary6Type_;
+  ::xsd::cxx::tree::one< temp_init_type > temp_init_;
+  ::xsd::cxx::tree::one< n_thermostat_type > n_thermostat_;
+  ::xsd::cxx::tree::one< temp_target_type > temp_target_;
+  ::xsd::cxx::tree::one< delta_temp_type > delta_temp_;
+  ::xsd::cxx::tree::one< g_grav_type > g_grav_;
   particles_sequence particles_;
   cuboids_sequence cuboids_;
   disk_sequence disk_;
@@ -1074,6 +1154,34 @@ class cuboids: public ::xml_schema::type
   void
   dimension (const dimension_type& x);
 
+  // epsilon
+  //
+  typedef ::xml_schema::double_ epsilon_type;
+  typedef ::xsd::cxx::tree::traits< epsilon_type, char, ::xsd::cxx::tree::schema_type::double_ > epsilon_traits;
+
+  const epsilon_type&
+  epsilon () const;
+
+  epsilon_type&
+  epsilon ();
+
+  void
+  epsilon (const epsilon_type& x);
+
+  // sigma
+  //
+  typedef ::xml_schema::double_ sigma_type;
+  typedef ::xsd::cxx::tree::traits< sigma_type, char, ::xsd::cxx::tree::schema_type::double_ > sigma_traits;
+
+  const sigma_type&
+  sigma () const;
+
+  sigma_type&
+  sigma ();
+
+  void
+  sigma (const sigma_type& x);
+
   // Constructors.
   //
   cuboids (const n1_type&,
@@ -1081,7 +1189,9 @@ class cuboids: public ::xml_schema::type
            const n3_type&,
            const distance_type&,
            const meanVelocity_type&,
-           const dimension_type&);
+           const dimension_type&,
+           const epsilon_type&,
+           const sigma_type&);
 
   cuboids (const ::xercesc::DOMElement& e,
            ::xml_schema::flags f = 0,
@@ -1115,6 +1225,8 @@ class cuboids: public ::xml_schema::type
   ::xsd::cxx::tree::one< distance_type > distance_;
   ::xsd::cxx::tree::one< meanVelocity_type > meanVelocity_;
   ::xsd::cxx::tree::one< dimension_type > dimension_;
+  ::xsd::cxx::tree::one< epsilon_type > epsilon_;
+  ::xsd::cxx::tree::one< sigma_type > sigma_;
 };
 
 class disk: public ::xml_schema::type
@@ -1148,6 +1260,20 @@ class disk: public ::xml_schema::type
   void
   distance (const distance_type& x);
 
+  // meanVelocity
+  //
+  typedef ::xml_schema::double_ meanVelocity_type;
+  typedef ::xsd::cxx::tree::traits< meanVelocity_type, char, ::xsd::cxx::tree::schema_type::double_ > meanVelocity_traits;
+
+  const meanVelocity_type&
+  meanVelocity () const;
+
+  meanVelocity_type&
+  meanVelocity ();
+
+  void
+  meanVelocity (const meanVelocity_type& x);
+
   // dimension
   //
   typedef ::xml_schema::double_ dimension_type;
@@ -1162,11 +1288,42 @@ class disk: public ::xml_schema::type
   void
   dimension (const dimension_type& x);
 
+  // epsilon
+  //
+  typedef ::xml_schema::double_ epsilon_type;
+  typedef ::xsd::cxx::tree::traits< epsilon_type, char, ::xsd::cxx::tree::schema_type::double_ > epsilon_traits;
+
+  const epsilon_type&
+  epsilon () const;
+
+  epsilon_type&
+  epsilon ();
+
+  void
+  epsilon (const epsilon_type& x);
+
+  // sigma
+  //
+  typedef ::xml_schema::double_ sigma_type;
+  typedef ::xsd::cxx::tree::traits< sigma_type, char, ::xsd::cxx::tree::schema_type::double_ > sigma_traits;
+
+  const sigma_type&
+  sigma () const;
+
+  sigma_type&
+  sigma ();
+
+  void
+  sigma (const sigma_type& x);
+
   // Constructors.
   //
   disk (const radius_type&,
         const distance_type&,
-        const dimension_type&);
+        const meanVelocity_type&,
+        const dimension_type&,
+        const epsilon_type&,
+        const sigma_type&);
 
   disk (const ::xercesc::DOMElement& e,
         ::xml_schema::flags f = 0,
@@ -1196,7 +1353,10 @@ class disk: public ::xml_schema::type
   protected:
   ::xsd::cxx::tree::one< radius_type > radius_;
   ::xsd::cxx::tree::one< distance_type > distance_;
+  ::xsd::cxx::tree::one< meanVelocity_type > meanVelocity_;
   ::xsd::cxx::tree::one< dimension_type > dimension_;
+  ::xsd::cxx::tree::one< epsilon_type > epsilon_;
+  ::xsd::cxx::tree::one< sigma_type > sigma_;
 };
 
 #include <iosfwd>
@@ -1305,4 +1465,4 @@ simulation_ (::xml_schema::dom::unique_ptr< ::xercesc::DOMDocument > d,
 //
 // End epilogue.
 
-#endif // CXX_MNT_C_USERS_JH_CLION_PROJECTS_MOL_SIM_RETRY_SRC_INPUT_READER_SIMULATION_HXX
+#endif // CXX_HOME_KAIARENJA_CLION_PROJECTS_MOLEKULAR_DYNAMIK_SRC_INPUT_READER_SIMULATION_HXX
