@@ -58,12 +58,17 @@ void Thermostat::setTemperatureDirectly(std::vector<Particle>& particles) const 
 
 void Thermostat::gradualScaling(std::vector<Particle>& particles) const {
     double currentTemperature = calculateCurrentTemperature(particles);
-    double tempChange = std::min(delta_temp, temp_target - currentTemperature);
-    double temp_new = currentTemperature + tempChange;
+    double tempChange = std::min(delta_temp, std::abs(temp_target - currentTemperature));
+    double temp_new = 0;
+    if(temp_target < currentTemperature) {
+        temp_new = currentTemperature - tempChange;
+    } else {
+        temp_new = currentTemperature + tempChange;
+    }
     double scalingFactor = std::sqrt(temp_new / currentTemperature);
     scaleVelocities(particles, scalingFactor);
 }
-//TODO:hier noch fehler weil cooling funktioniert nicht ganz, es wird direkt auf die target gesetzt aber heating funktioniert?
+//TODO:noch test schreiben für heating, cooling und holding
 
 void Thermostat::setInitialTemperature(std::vector<Particle> &particles) const {
     double currentTemperature = calculateCurrentTemperature(particles);

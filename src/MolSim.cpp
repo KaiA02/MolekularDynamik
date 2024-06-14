@@ -113,7 +113,6 @@ int main(int argc, char *argsv[]) {
         thermostat.setTemperatureDirectly(lcParticles.getParticles());
       } else {
         if(iteration % n_thermostat == 0) {
-          spdlog::info("now");
           thermostat.gradualScaling(lcParticles.getParticles());
         }
       }
