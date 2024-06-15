@@ -26,6 +26,10 @@ public:
   void readXML_LC(LCParticleContainer &particleContainer);
   std::string getParticleContainerType();
   std::string getInputType();
+  double getTemp_init();
+  int getN_Thermostat();
+  double getTemp_Target();
+  double getDelta_Temp();
   std::array<double, 3> getTime();
   std::string getOutputType();
   std::string getBaseName();

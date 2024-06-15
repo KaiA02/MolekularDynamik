@@ -16,6 +16,11 @@
         <boundary4Type>3</boundary4Type>
         <boundary5Type>3</boundary5Type>
         <boundary6Type>3</boundary6Type>
+        <temp_init>40</temp_init>
+        <n_thermostat>1000</n_thermostat>
+        <temp_target>40</temp_target>
+        <delta_temp>0</delta_temp>
+        <g_grav>-12.44</g_grav>
         <particles>
             <x>15.0</x>
             <y>15.0</y>
@@ -24,6 +29,8 @@
             <velocityY>-10.0</velocityY>
             <velocityZ>0.0</velocityZ>
             <mass>1</mass>
+            <epsilon>1</epsilon>
+            <sigma>1</sigma>
         </particles>
         <particles>
             <x>40.0</x>

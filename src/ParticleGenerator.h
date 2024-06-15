@@ -25,9 +25,12 @@ public:
    * @param n3 z dimension of the cuboid
    * @param distance distance between the particles
    * @param meanVelocity brownian motion mean velocity
+   * @param dimension defines the dimension (2D or 3D)
+   * @param temp_init initial temperature
    */
   void generateCuboid(const Particle &start, int n1, int n2, int n3,
-                      double distance, double meanVelocity, int dimension);
+                      double distance, double meanVelocity, int dimension, double temp_init);
+
   std::vector<Particle>& getAllParticles();
 
     /**
@@ -36,10 +39,12 @@ public:
       * @param center center particle with inital velocity
       * @param radius is the radius from the center on
       * @param distance distance between the particles
-      * @param dimension defines the dimension
+      * @param meanVelocity brownian motion mean velocity
+      * @param dimension defines the dimension (2D or 3D)
+      * @param temp_init initial temperature
       */
     void generateDisk(const Particle &center, int radius,
-                        double distance, int dimension);
+    double distance, double meanVelocity, int dimension, double temp_init);
 };
 
 #endif // PARTICLEGENERATOR_H
