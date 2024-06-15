@@ -104,7 +104,7 @@ int main(int argc, char *argsv[]) {
       } else {
         lcParticles.handleLJFCalculation();
       }
-      lcParticles.handleBoundaryAction();
+      //lcParticles.handleBoundaryAction();
       lcCaluclations.calculateV(delta_t);
       iteration++;
 
