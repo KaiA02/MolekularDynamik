@@ -2,14 +2,14 @@
             xsi:noNamespaceSchemaLocation="../src/inputReader/simulation.xsd">
     <input>
         <tStart>0.0</tStart>
-        <tEnd>3.0</tEnd>
+        <tEnd>4.0</tEnd>
         <deltaT>0.0005</deltaT>
         <inputType>LJF</inputType>
         <particleContainerType>LC</particleContainerType>
-        <r_cutoff>2.0</r_cutoff>
-        <domainSizeX>25</domainSizeX>
-        <domainSizeY>25</domainSizeY>
-        <domainSizeZ>25</domainSizeZ>
+        <r_cutoff>3.0</r_cutoff>
+        <domainSizeX>50</domainSizeX>
+        <domainSizeY>50</domainSizeY>
+        <domainSizeZ>50</domainSizeZ>
         <boundary1Type>3</boundary1Type>
         <boundary2Type>3</boundary2Type>
         <boundary3Type>3</boundary3Type>
@@ -20,13 +20,27 @@
             <x>10.0</x>
             <y>10.0</y>
             <z>10.0</z>
-            <velocityX>-10.0</velocityX>
-            <velocityY>-8.0</velocityY>
-            <velocityZ>-5.0</velocityZ>
+            <velocityX>10.0</velocityX>
+            <velocityY>10.0</velocityY>
+            <velocityZ>10.0</velocityZ>
+            <mass>1</mass>
+        </particles>
+        <particles>
+            <x>25.0</x>
+            <y>25.0</y>
+            <z>25.0</z>
+            <velocityX>0.0</velocityX>
+            <velocityY>0.0</velocityY>
+            <velocityZ>0.0</velocityZ>
             <mass>1</mass>
         </particles>
         <disk>
-            <radius>5</radius>
+            <radius>4</radius>
+            <distance>1.1225</distance>
+            <dimension>3</dimension>
+        </disk>
+        <disk>
+            <radius>7</radius>
             <distance>1.1225</distance>
             <dimension>3</dimension>
         </disk>

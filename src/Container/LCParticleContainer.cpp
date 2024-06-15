@@ -134,8 +134,7 @@ void LCParticleContainer::handleLJFCalculation() {
   realocateParticles();
   for (auto &c : cells) {
     if (!c.isEmpty()) {
-      std::vector<Particle> neighbourhood =
-          getParticleInNeighbourhood(c.getId());
+      std::vector<Particle> neighbourhood = getParticleInNeighbourhood(c.getId());
       LCParticleContainer container;
       Calculations calc(container);
       calc.setR_cutoff(r_cutoff);
@@ -143,6 +142,7 @@ void LCParticleContainer::handleLJFCalculation() {
 
     }
   }
+  handleBoundaryAction();
 }
 
 bool LCParticleContainer::addParticleToCell(Particle &p) {
@@ -191,6 +191,7 @@ void LCParticleContainer::countParticlesInCells() { //just for debugging
   }
   spdlog::info("there are {} particles in all the cells", counter);
 }
+
 std::vector<Particle *> LCParticleContainer::getBoundaryParticles() {
   std::vector<Particle*> result;
   for(int x = -1; x < cell_count[0] +1; x++) {
@@ -247,17 +248,10 @@ void LCParticleContainer::handleBoundaryAction() {
                 std::array<double, 3> v_arg = {p->getV().at(0), -p->getV().at(1), -1*(p->getV().at(2))};
                 calcWithHalo(p, x_arg, v_arg);
               }
-              //Particle has same absolute velocity but
-              //eg. boundary is XY, then velocity in x and y are same but in z is -z;
-              //Particle has same x and y position but z is same distance from boundary but reversed
-              //Particle has no force
-
             } // if(bounds.at(i) != -1.0 && bounds.at(i) <= (pow(2, 1/6)/2)){
-
           } //reflectiv
           else if(boundary_types[i] == 3) {
             std::array<double,3> x = findOponentXYZ(p);
-            spdlog::warn("{} {} {}", x.at(0), x.at(1), x.at(2));
             p->setX(x);
           } //periodic
 
@@ -266,7 +260,6 @@ void LCParticleContainer::handleBoundaryAction() {
       }// for(auto p: boundaryparticles) {
 
   }
-
 
 std::array<double, 6> LCParticleContainer::getInfluencingBoundarysWithDistance(Particle * p) {
   std::array<double, 6> result = {-1.0, -1.0, -1.0, -1.0, -1.0, -1.0};
@@ -340,19 +333,19 @@ std::array<double, 3> LCParticleContainer::findOponentXYZ(Particle* p) {
 std::array<int, 3> LCParticleContainer::findOponentCellID(std::array<int, 3> ID) {
   std::array<int, 3> return_id = ID;
   if(ID.at(0) < 0) {
-    return_id.at(0) = cell_count.at(0);
+    return_id.at(0) = cell_count.at(0)-2;
   } else if(ID.at(0) >= cell_count.at(0)) {
-    return_id.at(0) = -1;
+    return_id.at(0) = 1;
   }
   if(ID.at(1) < 0) {
-    return_id.at(1) = cell_count.at(1);
+    return_id.at(1) = cell_count.at(1)-2;
   } else if(ID.at(1) >= cell_count.at(1)) {
-    return_id.at(1) = -1;
+    return_id.at(1) = 1;
   }
   if(ID.at(2) < 0) {
-    return_id.at(2) = cell_count.at(2);
+    return_id.at(2) = cell_count.at(2)-2;
   } else if(ID.at(2) >= cell_count.at(2)) {
-    return_id.at(2) = -1;
+    return_id.at(2) = 1;
   }
   return return_id;
 }

@@ -83,15 +83,13 @@ int main(int argc, char *argsv[]) {
   // for this loop, we assume: current x, current f and current v are known
   if(particleContainerType == "LC") {
     while(current_time < end_time) {
-      //spdlog::warn("iteration: {}", current_time / delta_t);
       lcCaluclations.calculateX(delta_t);
       if(inputType == "SF") { //Simple Force
         lcCaluclations.calculateLJF();
       } else {
         lcParticles.handleLJFCalculation();
-
       }
-      lcParticles.handleBoundaryAction();
+      //lcParticles.handleBoundaryAction();
       lcCaluclations.calculateV(delta_t);
       iteration++;
       if (!performanceMeasurement) {
@@ -100,6 +98,7 @@ int main(int argc, char *argsv[]) {
         }
       }
       current_time += delta_t;
+
     }
   } else {
     while(current_time < end_time) {

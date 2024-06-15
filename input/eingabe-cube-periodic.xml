@@ -10,25 +10,42 @@
         <domainSizeX>90</domainSizeX>
         <domainSizeY>90</domainSizeY>
         <domainSizeZ>90</domainSizeZ>
-        <boundary1Type>1</boundary1Type>
-        <boundary2Type>1</boundary2Type>
-        <boundary3Type>1</boundary3Type>
-        <boundary4Type>1</boundary4Type>
-        <boundary5Type>1</boundary5Type>
-        <boundary6Type>1</boundary6Type>
+        <boundary1Type>3</boundary1Type>
+        <boundary2Type>3</boundary2Type>
+        <boundary3Type>3</boundary3Type>
+        <boundary4Type>3</boundary4Type>
+        <boundary5Type>3</boundary5Type>
+        <boundary6Type>3</boundary6Type>
         <particles>
             <x>15.0</x>
             <y>15.0</y>
-            <z>0.0</z>
+            <z>3.0</z>
             <velocityX>0.0</velocityX>
             <velocityY>-10.0</velocityY>
+            <velocityZ>0.0</velocityZ>
+            <mass>1</mass>
+        </particles>
+        <particles>
+            <x>40.0</x>
+            <y>15.0</y>
+            <z>0.0</z>
+            <velocityX>0.0</velocityX>
+            <velocityY>0.0</velocityY>
             <velocityZ>0.0</velocityZ>
             <mass>1</mass>
         </particles>
         <cuboids>
             <n1>8.0</n1>
             <n2>8.0</n2>
-            <n3>1.0</n3>
+            <n3>4.0</n3>
+            <distance>1.1225</distance>
+            <meanVelocity>0.1</meanVelocity>
+            <dimension>3.0</dimension>
+        </cuboids>
+        <cuboids>
+            <n1>10.0</n1>
+            <n2>10.0</n2>
+            <n3>10.0</n3>
             <distance>1.1225</distance>
             <meanVelocity>0.1</meanVelocity>
             <dimension>3.0</dimension>
