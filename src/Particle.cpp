@@ -107,5 +107,13 @@ bool Particle::operator==(const Particle &other) const {
   return true;
 }
 
+void Particle::park() {
+  setF({0.0,0.0,0.0});
+  setX({-50.0,-50.0,-50.0});
+  setV({0.0,0.0,0.0});
+  setM(0);
+  setType(0);
+}
+
 
 

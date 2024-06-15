@@ -64,23 +64,17 @@ void LCParticleContainer::realocateParticles() {
   for (auto &c : cells) {
     c.emptyCell();
   }
-  //std::vector<Particle> updatedParticles;
   for (auto &p : particles) {
     int x = floor(p.getX().at(0) / cell_size.at(0));
     int y = floor(p.getX().at(1) / cell_size.at(1));
-    int z = floor(std::abs(p.getX().at(2)) / cell_size.at(2));
+    int z = floor(p.getX().at(2) / cell_size.at(2));
     p.setF({0.0, 0.0, 0.0});
     if (cellExists({x, y, z})) {
       getCellById({x,y,z})->addParticle(&p);
-      //updatedParticles.push_back(p);
     } else { //Parking of deleted Particles
-        p.setF({0.0,0.0,0.0});
-        p.setX({-10.0,-10.0,-10.0}); //todo: adjust this Parking Spot regarding to DomainSize
-        p.setV({0.0,0.0,0.0});
-        p.setType(p.getType()+10);
+        p.park();
       }
     }
-    //particles = updatedParticles;
   }
 
 void LCParticleContainer::fillCellsWithParticles() {
@@ -109,16 +103,13 @@ void LCParticleContainer::generateCells(int size_x, int size_y, int size_z, doub
       spdlog::info("Domainsize: {} {} {}", size_x, size_y, size_z);
       spdlog::info("r_cutoff: {}", r_cutoff);
       cells.clear(); // Clear existing cells before generating new ones
-      for (int x = -1; x < cell_count[0] +1; x++) {
-        for (int y = -1; y < cell_count[1] +1; y++) {
-          for (int z = -1; z < cell_count[2] +1; z++) {
+      for (int x = -1; x <= cell_count[0]; x++) {
+        for (int y = -1; y <= cell_count[1]; y++) {
+          for (int z = -1; z <= cell_count[2]; z++) {
             bool isHalo;
             if(x == -1 || y== -1 || z == -1 || x == cell_count[0] || y == cell_count[1] || z == cell_count[2]) {
               isHalo = true;
               Cell c({x,y,z}, isHalo);
-              std::array<int,3> oponentID = findOponentCellID(c.getId());
-              Cell oponent(oponentID, isHalo), *o;
-              c.setOposition(o);
               cells.push_back(c);
             } else {
               isHalo = false;
@@ -141,21 +132,17 @@ void LCParticleContainer::generateCells(int size_x, int size_y, int size_z, doub
 
 void LCParticleContainer::handleLJFCalculation() {
   realocateParticles();
-  int empty_counter = 0;
   for (auto &c : cells) {
     if (!c.isEmpty()) {
-      std::vector<Particle> neighbourhood =
-          getParticleInNeighbourhood(c.getId());
+      std::vector<Particle> neighbourhood = getParticleInNeighbourhood(c.getId());
       LCParticleContainer container;
       Calculations calc(container);
       calc.setR_cutoff(r_cutoff);
       calc.LCcalculateLJF(c.getParticles(), neighbourhood);
 
-    } else {
-      empty_counter++;
     }
   }
-  spdlog::debug("there where {} empty cells", empty_counter);
+  handleBoundaryAction();
 }
 
 bool LCParticleContainer::addParticleToCell(Particle &p) {
@@ -204,6 +191,7 @@ void LCParticleContainer::countParticlesInCells() { //just for debugging
   }
   spdlog::info("there are {} particles in all the cells", counter);
 }
+
 std::vector<Particle *> LCParticleContainer::getBoundaryParticles() {
   std::vector<Particle*> result;
   for(int x = -1; x < cell_count[0] +1; x++) {
@@ -227,7 +215,11 @@ void LCParticleContainer::handleBoundaryAction() {
     for(auto p: boundaryparticles) {
       std::array<double, 6> bounds = getInfluencingBoundarysWithDistance(p);
         for(int i = 0; i < 6; i++) {
-          if(boundary_types[i] == 1){} //outflow
+          if(boundary_types[i] == 1) {
+            if(bounds.at(i) < 0) {
+              p->park();
+            }
+          } //outflow
           else if(boundary_types[i] == 2){
             // generate halo Particle
             if(bounds.at(i) != -1.0 && abs(bounds.at(i)) <= r_cutoff){ //&& abs(bounds.at(i)) <= r_cutoff
@@ -256,20 +248,11 @@ void LCParticleContainer::handleBoundaryAction() {
                 std::array<double, 3> v_arg = {p->getV().at(0), -p->getV().at(1), -1*(p->getV().at(2))};
                 calcWithHalo(p, x_arg, v_arg);
               }
-              //Particle has same absolute velocity but
-              //eg. boundary is XY, then velocity in x and y are same but in z is -z;
-              //Particle has same x and y position but z is same distance from boundary but reversed
-              //Particle has no force
-
             } // if(bounds.at(i) != -1.0 && bounds.at(i) <= (pow(2, 1/6)/2)){
-
           } //reflectiv
           else if(boundary_types[i] == 3) {
-
-            //creates new Particle in OponentCell with same Atributes exept for X_Arg
-            std::array<double,3> x = findOponentXYZ(p->getX());
-            Particle oponent(x, p->getV(), p->getM(), p->getType());
-            particles.push_back(oponent);
+            std::array<double,3> x = findOponentXYZ(p);
+            p->setX(x);
           } //periodic
 
           }// if(boundary_types[i] == 2){
@@ -278,96 +261,95 @@ void LCParticleContainer::handleBoundaryAction() {
 
   }
 
-
 std::array<double, 6> LCParticleContainer::getInfluencingBoundarysWithDistance(Particle * p) {
   std::array<double, 6> result = {-1.0, -1.0, -1.0, -1.0, -1.0, -1.0};
   //get position and decide which boundary is affecting the Particle in the future
   double x = p->getX().at(0);
   double y = p->getX().at(1);
   double z = p->getX().at(2);
-  if(x <= cell_size.at(0)){ //Particle close to boundary 1
+
+  int x_id = int(floor(p->getX().at(0) / cell_size.at(0)));
+  int y_id = int(floor(p->getX().at(1) / cell_size.at(1)));
+  int z_id = int(floor(p->getX().at(2) / cell_size.at(2)));
+
+  if(x_id == 0){ //Particle close to boundary 1
     double distance1 = x;
     result.at(0) = distance1;
   }
-  if(x >= (cell_size.at(0)*(cell_count.at(0)-1))) { //Particle close to boundary 2
+  if(x_id == cell_count.at(0) -1) { //Particle close to boundary 2
     double distance2 = cell_size.at(0) - (x - (cell_size.at(0)*(cell_count.at(0)-1)));
     result.at(1) = distance2;
   }
-  if(y <= cell_size.at(1)){ //Particle close to boundary 3
+  if(y_id == 0){ //Particle close to boundary 3
     double distance3 = y;
     result.at(2) = distance3;
   }
-  if(y >= (cell_size.at(1)*(cell_count.at(1)-1))) { //Particle close to boundary 4
+  if(y_id == cell_count.at(1) -1) { //Particle close to boundary 4
     double distance4 = cell_size.at(1) - (y - (cell_size.at(1)*(cell_count.at(1)-1)));
     result.at(3) = distance4;
   }
-  if(z <= cell_size.at(2)){ //Particle close to boundary 5
+  if(z_id == 0){ //Particle close to boundary 5
     double distance5 = z;
     result.at(4) = distance5;
   }
-  if(z >= (cell_size.at(2)*(cell_count.at(2)-1))) { //Particle close to boundary 6
+  if(z_id >= cell_count.at(2) -1) { //Particle close to boundary 6
     double distance6 = cell_size.at(2) - (z - (cell_size.at(2)*(cell_count.at(2)-1)));
     result.at(5) = distance6;
   }
   return result;
 }
 
-std::array<int, 3> LCParticleContainer::findOponentCellID(std::array<int, 3> id) {
-  int x;
-  int y;
-  int z;
-  if(id.at(0) == -1) {
-    x = cell_count.at(0);
-  }else if(id.at(0) == cell_count.at(0)) {
-    x = -1;
-  } else {
-    x = cell_count.at(0)-id.at(0);
-  }
-  if(id.at(1) == -1) {
-    y = cell_count.at(1);
-  }else if(id.at(1) == cell_count.at(1)) {
-    x = -1;
-  } else {
-    y = cell_count.at(1)-id.at(1);
-  }
-  if(id.at(2) == -1) {
-    z = cell_count.at(2);
-  }else if(id.at(2) == cell_count.at(2)) {
-    z = -1;
-  } else {
-    z = cell_count.at(2)-id.at(2);
-  }
-  return {x, y, z};
+std::array<double, 3> LCParticleContainer::findOponentXYZ(Particle* p) {
 
+  //calculates Cell ID
+  int x_id = floor(p->getX().at(0) / cell_size.at(0));
+  int y_id = floor(p->getX().at(1) / cell_size.at(1));
+  int z_id = floor(p->getX().at(2) / cell_size.at(2));
+
+  // finds oponentCell ID
+  std::array<int, 3> oponentCellID = findOponentCellID({x_id, y_id, z_id});
+
+  double x_cell = x_id * cell_size.at(0);
+  double y_cell = y_id * cell_size.at(1);
+  double z_cell = z_id * cell_size.at(2);
+
+  double x_relative_to_cell = p->getX().at(0) - x_cell;
+  double y_relative_to_cell = p->getX().at(1) - y_cell;
+  double z_relative_to_cell = p->getX().at(2) - z_cell;
+
+  //calcs right XYZ for Particle in new Cell
+  double x_oponentCell = oponentCellID.at(0) * cell_size.at(0);
+  double y_oponentCell = oponentCellID.at(1) * cell_size.at(1);
+  double z_oponentCell = oponentCellID.at(2) * cell_size.at(2);
+
+  double x_relative_to_OponentCell = x_oponentCell + x_relative_to_cell;
+  double y_relative_to_OponentCell = y_oponentCell + y_relative_to_cell;
+  double z_relative_to_OponentCell = z_oponentCell + z_relative_to_cell;
+
+  //returns XYZ of Particle in new Cell
+  return {x_relative_to_OponentCell, y_relative_to_OponentCell, z_relative_to_OponentCell};
 }
 
-std::array<double, 3> LCParticleContainer::findOponentXYZ(std::array<double, 3> XYZ) {
-  double x;
-  double y;
-  double z;
-  if(XYZ.at(0) == -1) {
-    x = cell_count.at(0) * cell_size.at(0) + XYZ.at(0);
-  }else if(XYZ.at(0) == cell_count.at(0)) {
-    x = -1 + XYZ.at(0);
-  } else {
-    x = cell_count.at(0) * cell_size.at(0) - XYZ.at(0);
+std::array<int, 3> LCParticleContainer::findOponentCellID(std::array<int, 3> ID) {
+  std::array<int, 3> return_id = ID;
+  if(ID.at(0) < 0) {
+    return_id.at(0) = cell_count.at(0)-2;
+  } else if(ID.at(0) >= cell_count.at(0)) {
+    return_id.at(0) = 1;
   }
-  if(XYZ.at(1) == -1) {
-    y = cell_count.at(1) * cell_size.at(1) + XYZ.at(1);
-  }else if(XYZ.at(1) == cell_count.at(1)) {
-    x = -1 + XYZ.at(1);
-  } else {
-    y = cell_count.at(1)*cell_size.at(1)-XYZ.at(1) ;
+  if(ID.at(1) < 0) {
+    return_id.at(1) = cell_count.at(1)-2;
+  } else if(ID.at(1) >= cell_count.at(1)) {
+    return_id.at(1) = 1;
   }
-  if(XYZ.at(2) == -1) {
-    z = cell_count.at(2) * cell_size.at(2) + XYZ.at(2);
-  }else if(XYZ.at(2) == cell_count.at(2)) {
-    z = -1 + XYZ.at(2);
-  } else {
-    z = cell_count.at(2)*cell_size.at(2)-XYZ.at(2);
+  if(ID.at(2) < 0) {
+    return_id.at(2) = cell_count.at(2)-2;
+  } else if(ID.at(2) >= cell_count.at(2)) {
+    return_id.at(2) = 1;
   }
-  return {x, y, z};
+  return return_id;
 }
+
 
 void LCParticleContainer::calcWithHalo(Particle *p, std::array<double, 3> x_arg, std::array<double, 3> v_arg) {
   double m_arg = p->getM();

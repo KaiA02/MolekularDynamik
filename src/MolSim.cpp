@@ -103,9 +103,8 @@ int main(int argc, char *argsv[]) {
         lcCaluclations.calculateLJF();
       } else {
         lcParticles.handleLJFCalculation();
-
       }
-      lcParticles.handleBoundaryAction();
+      //lcParticles.handleBoundaryAction();
       lcCaluclations.calculateV(delta_t);
       iteration++;
 
@@ -124,6 +123,7 @@ int main(int argc, char *argsv[]) {
         }
       }
       current_time += delta_t;
+
     }
   } else {
 

@@ -78,8 +78,8 @@ public:
  std::vector<Particle*> getBoundaryParticles();
  void handleBoundaryAction();
  std::array<double, 6> getInfluencingBoundarysWithDistance(Particle*);
- std::array<int,3> findOponentCellID(std::array<int,3>id);
- std::array<double, 3> findOponentXYZ(std::array<double, 3> XYZ);
+ std::array<double, 3> findOponentXYZ(Particle* p);
+ std::array<int, 3> findOponentCellID(std::array<int, 3> ID);
  void calcWithHalo(Particle* p, std::array<double, 3> x_arg, std::array<double, 3> v_arg);
 
 private:

@@ -14,12 +14,6 @@ Cell::Cell(std::array<int, 3> init_id, bool halo) {
 bool Cell::isHalo() {
     return halo_cell;
 }
-void Cell::setOposition(Cell *op) {
-    oposition = op;
-}
-Cell *Cell::getOposition() {
-    return oposition;
-}
 
 
 std::vector<Particle*>& Cell::getParticles() {
