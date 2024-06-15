@@ -40,6 +40,8 @@
             <velocityY>0.0</velocityY>
             <velocityZ>0.0</velocityZ>
             <mass>1</mass>
+            <epsilon>1</epsilon>
+            <sigma>1</sigma>
         </particles>
         <cuboids>
             <n1>8.0</n1>

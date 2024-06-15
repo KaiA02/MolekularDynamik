@@ -29,6 +29,8 @@
             <velocityY>10.0</velocityY>
             <velocityZ>10.0</velocityZ>
             <mass>1</mass>
+            <epsilon>1</epsilon>
+            <sigma>1</sigma>
         </particles>
         <particles>
             <x>25.0</x>
@@ -44,6 +46,7 @@
         <disk>
             <radius>4</radius>
             <distance>1.1225</distance>
+            <meanVelocity>0.1</meanVelocity>
             <dimension>3</dimension>
         </disk>
         <disk>
@@ -60,6 +63,6 @@
     </output>
     <config>
         <performanceMeasurement>false</performanceMeasurement>
-        <logLevel>warn</logLevel>
+        <logLevel>info</logLevel>
     </config>
 </simulation>
