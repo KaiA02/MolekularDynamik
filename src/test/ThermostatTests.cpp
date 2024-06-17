@@ -6,9 +6,9 @@
 
 TEST(ThermostatTest, Heating) {
     LCParticleContainer pc;
-    pc.addParticle(Particle({0.0, 0.0, 0.0}, {1.0, 1.0, 1.0}, 1, 0));
-    pc.addParticle(Particle({1.0, 0.0, 0.0}, {2.0, 2.0, 2.0}, 2, 0));
-    pc.addParticle(Particle({0.0, 1.0, 0.0}, {3.0, 3.0, 3.0}, 3, 0));
+    pc.addParticle(Particle({0.0, 0.0, 0.0}, {1.0, 1.0, 1.0}, 1));
+    pc.addParticle(Particle({1.0, 0.0, 0.0}, {2.0, 2.0, 2.0}, 2));
+    pc.addParticle(Particle({0.0, 1.0, 0.0}, {3.0, 3.0, 3.0}, 3));
 
     Thermostat thermostat(300.0, 10, 400.0, 10.0);  // Initial temp: 300, target: 400, delta temp: 10
 
@@ -28,10 +28,9 @@ TEST(ThermostatTest, Heating) {
 
 TEST(ThermostatTest, Cooling) {
     LCParticleContainer pc;
-    pc.addParticle(Particle({0.0, 0.0, 0.0}, {1.0, 1.0, 1.0}, 1, 0));
-    pc.addParticle(Particle({1.0, 0.0, 0.0}, {2.0, 2.0, 2.0}, 2, 0));
-    pc.addParticle(Particle({0.0, 1.0, 0.0}, {3.0, 3.0, 3.0}, 3, 0));
-
+    pc.addParticle(Particle({0.0, 0.0, 0.0}, {1.0, 1.0, 1.0}, 1));
+    pc.addParticle(Particle({1.0, 0.0, 0.0}, {2.0, 2.0, 2.0}, 2));
+    pc.addParticle(Particle({0.0, 1.0, 0.0}, {3.0, 3.0, 3.0}, 3));
 
     Thermostat thermostat(500.0, 10, 400.0, 10.0);  // Initial temp: 500, target: 400, delta temp: 10
 
@@ -51,10 +50,9 @@ TEST(ThermostatTest, Cooling) {
 
 TEST(ThermostatTest, Holding) {
     LCParticleContainer pc;
-    pc.addParticle(Particle({0.0, 0.0, 0.0}, {1.0, 1.0, 1.0}, 1, 0));
-    pc.addParticle(Particle({1.0, 0.0, 0.0}, {2.0, 2.0, 2.0}, 2, 0));
-    pc.addParticle(Particle({0.0, 1.0, 0.0}, {3.0, 3.0, 3.0}, 3, 0));
-
+    pc.addParticle(Particle({0.0, 0.0, 0.0}, {1.0, 1.0, 1.0}, 1));
+    pc.addParticle(Particle({1.0, 0.0, 0.0}, {2.0, 2.0, 2.0}, 2));
+    pc.addParticle(Particle({0.0, 1.0, 0.0}, {3.0, 3.0, 3.0}, 3));
 
     Thermostat thermostat(400.0, 10, 400.0, 10.0);  // Initial temp: 400, target: 400, delta temp: 10
 

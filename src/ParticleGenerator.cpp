@@ -29,7 +29,8 @@ void ParticleGenerator::generateCuboid(const Particle &start, int n1, int n2,
                 Particle p({start.getX()[0] + x * distance,
                     start.getX()[1] + y * distance,
                     start.getX()[2] + z * distance},
-                   addedVelocity, start.getM(), start.getType());
+                   addedVelocity, start.getM(), start.getType(),
+                   start.getEpsilon(), start.getSigma());
                 allParticles.push_back(p);
       }
     }
@@ -76,7 +77,8 @@ void ParticleGenerator::generateDisk(const Particle &center, int radius, double 
                 if (dist <= maxRadius) {
                     // Create the particle
                     std::array<double, 3> position = {x, y, centerZ};
-                    Particle p(position, addedVelocity, center.getM(), center.getType());
+                    Particle p(position, addedVelocity, center.getM(),
+                        center.getType(), center.getEpsilon(), center.getSigma());
 
                     // Add the particle to the list
                     allParticles.push_back(p);
@@ -105,7 +107,8 @@ void ParticleGenerator::generateDisk(const Particle &center, int radius, double 
                     if (dist <= maxRadius) {
                         // Create the particle
                         std::array<double, 3> position = {x, y, z};
-                        Particle p(position, addedVelocity, center.getM(), center.getType());
+                        Particle p(position, addedVelocity, center.getM(),
+                            center.getType(), center.getEpsilon(), center.getSigma());
 
                         // Add the particle to the list
                         allParticles.push_back(p);

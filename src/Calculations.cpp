@@ -137,6 +137,9 @@ void Calculations::calculateLJFcenter(std::vector<Particle *> &center) {
 }
 
 std::array<double, 3> Calculations::calculateLJF(Particle *p1, Particle *p2) {
+  double sigma = (p1->getSigma() + p2->getSigma()) / 2;
+  double epsilon = std::sqrt(p1->getEpsilon() * p2->getEpsilon());
+
   std::array<double, 3> displacement_vector = {
       p1->getX().at(0) - p2->getX().at(0), p1->getX().at(1) - p2->getX().at(1),
       p1->getX().at(2) - p2->getX().at(2)};
@@ -145,7 +148,7 @@ std::array<double, 3> Calculations::calculateLJF(Particle *p1, Particle *p2) {
                          pow(displacement_vector.at(2), 2));
 if (distance <= r_cutoff) {
   double forcefactor =
-      ((-24 * epsilion) / pow(distance, 2)) *
+      ((-24 * epsilon) / pow(distance, 2)) *
       (pow((sigma) / distance, 6) - 2 * pow((sigma) / distance, 12));
 
   std::array<double, 3> f_ij = {forcefactor * displacement_vector.at(0),

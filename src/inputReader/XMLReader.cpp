@@ -31,6 +31,8 @@ void XMLReader::readXML(ParticleContainer &particleContainer) {
          in.particles()[i].velocityZ()},
         in.particles()[i].mass());
     particle.setType(i);
+    particle.setEpsilon(in.particles()[i].epsilon());
+    particle.setSigma(in.particles()[i].sigma());
     if (i < in.cuboids().size()) {
       int dimension = in.cuboids()[i].dimension();
       int n3 = in.cuboids()[i].n3();
@@ -69,6 +71,8 @@ void XMLReader::readXML_LC(LCParticleContainer &particleContainer) {
          in.particles()[i].velocityZ()},
         in.particles()[i].mass());
     particle.setType(i);
+    particle.setEpsilon(in.particles()[i].epsilon());
+    particle.setSigma(in.particles()[i].sigma());
     if (i < in.cuboids().size()) { //case its a cube
       int dimension = in.cuboids()[i].dimension();
       int n3 = in.cuboids()[i].n3();

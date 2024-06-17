@@ -16,6 +16,7 @@
 
 #include "../ParticleGenerator.h"
 
+//TODO: sigma und epsilon hinzufügen
 FileReader::FileReader() = default;
 
 FileReader::~FileReader() = default;

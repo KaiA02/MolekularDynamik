@@ -44,6 +44,17 @@ private:
    */
   int type;
 
+ /**
+   * Lennard-Jones parameter sigma
+   */
+ double sigma;
+
+ /**
+   * Lennard-Jones parameter epsilon
+   */
+ double epsilon;
+
+
 public:
   explicit Particle(int type = 0);
 
@@ -53,7 +64,7 @@ public:
       // for visualization, we need always 3 coordinates
       // -> in case of 2d, we use only the first and the second
       std::array<double, 3> x_arg, std::array<double, 3> v_arg, double m_arg,
-      int type = 0);
+      int type = 0, double epsilon = 5, double sigma = 1);
 
   ~Particle();
 
@@ -71,6 +82,9 @@ public:
 
   int getType() const;
 
+  double getSigma() const;
+  double getEpsilon() const;
+
   bool operator==(Particle &other);
 
   std::string toString() const;
@@ -84,6 +98,9 @@ public:
  void setM(const double &newMass);
 
  void setType(const int &newType);
+
+ void setSigma(const double &sigma);
+ void setEpsilon(const double &epsilon);
 
  bool operator==(const Particle &other) const;
  void park();
