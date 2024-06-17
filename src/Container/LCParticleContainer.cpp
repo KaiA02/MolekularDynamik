@@ -11,6 +11,11 @@ void LCParticleContainer::setBoundarys(std::array<int, 6> in) {
   boundary_types = in;
 }
 
+double LCParticleContainer::getR_cutoff() {
+  return r_cutoff;
+}
+
+
 void LCParticleContainer::setR_cutoff(double radius) {
   r_cutoff = radius;
 }
@@ -138,15 +143,11 @@ void LCParticleContainer::generateCells(int size_x, int size_y, int size_z, doub
   }
 }
 
-void LCParticleContainer::handleLJFCalculation() {
+void LCParticleContainer::handleLJFCalculation(Calculations& calc) {
   realocateParticles();
   for (auto &c : cells) {
     if (!c.isEmpty()) {
       std::vector<Particle> neighbourhood = getParticleInNeighbourhood(c.getId());
-      LCParticleContainer container;
-      Calculations calc(container);
-      calc.setR_cutoff(r_cutoff);
-      calc.setG_grav(g_grav);
       calc.LCcalculateLJF(c.getParticles(), neighbourhood);
 
     }

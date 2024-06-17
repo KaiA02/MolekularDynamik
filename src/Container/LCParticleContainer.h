@@ -5,6 +5,7 @@
 #ifndef LCPARTICLECONTAINER_H
 #define LCPARTICLECONTAINER_H
 #include "ParticleContainer.h"
+#include "../Calculations.h"
 
 
 
@@ -17,6 +18,8 @@ public:
  void setR_cutoff(double r_cutoff);
 
  void setG_grav(double g);
+
+ double getR_cutoff();
 
  double getG_grav();
  /**
@@ -50,7 +53,7 @@ public:
  /**
   *@brief calls realocateParticle() and calculates LJF for all cells
  */
- void handleLJFCalculation() override;
+ void handleLJFCalculation(Calculations& calc);
  /**
   *@brief adds the particle to all particles
   *and calls addParticleToCell(p)

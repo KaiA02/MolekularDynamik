@@ -80,6 +80,8 @@ int main(int argc, char *argsv[]) {
 
   Calculations normCalculations(normParticles);
   Calculations lcCaluclations(lcParticles);
+  lcCaluclations.setR_cutoff(lcParticles.getR_cutoff());
+  lcCaluclations.setG_grav(lcParticles.getG_grav());
   spdlog::warn("Simulation started with parameters: start_time: {}, end_time: "
                "{}, delta_t: {}, temp_init: {}, temp_target: {}, inputType: {}, outputType: {}, baseName: {}, "
                "logLevel: {}, performanceMeasurement: {}, {} "
@@ -101,9 +103,9 @@ int main(int argc, char *argsv[]) {
       if(inputType == "SF") { //Simple Force
         lcCaluclations.calculateLJF();
       } else {
-        lcParticles.handleLJFCalculation();
+        lcParticles.handleLJFCalculation(lcCaluclations);
       }
-      //lcParticles.handleBoundaryAction();
+
       lcCaluclations.calculateV(delta_t);
       iteration++;
 
@@ -156,7 +158,6 @@ int main(int argc, char *argsv[]) {
           }
         }
       }
-
 
       if (!performanceMeasurement) {
         if (iteration % 10 == 0) {

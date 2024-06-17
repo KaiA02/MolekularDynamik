@@ -79,7 +79,7 @@ void XMLReader::readXML_LC(LCParticleContainer &particleContainer) {
       pg.generateCuboid(particle, in.cuboids()[i].n1(), in.cuboids()[i].n2(),
                         n3, in.cuboids()[i].distance(),
                         in.cuboids()[i].meanVelocity(), dimension, in.temp_init());
-
+      particle.setType(i);
       particleContainer.addMultipleParticles(pg.getAllParticles());
       spdlog::info("added {} particles to the generator", pg.getAllParticles().size());
 
@@ -87,6 +87,7 @@ void XMLReader::readXML_LC(LCParticleContainer &particleContainer) {
       int dimension = in.disk()[i].dimension();
       pg.generateDisk(particle, in.disk()[i].radius(), in.disk()[i].distance(),
                       in.disk()[i].meanVelocity(), dimension, in.temp_init());
+      particle.setType(i);
       particleContainer.addMultipleParticles(pg.getAllParticles());
     } else { //case its a single particle
       particleContainer.addParticle(particle);
