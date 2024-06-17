@@ -17,6 +17,9 @@ Calculations::Calculations(BaseParticleContainer &other) : particles(other) {
 void Calculations::setR_cutoff(double r) {
   r_cutoff = r;
 }
+ void Calculations::setG_grav(double g) {
+   g_grav = g;
+ }
 
 
 
@@ -104,6 +107,9 @@ void Calculations::LCcalculateLJF(std::vector<Particle*> &center, std::vector<Pa
         std::array<double, 3> newForcei = {0.0, 0.0, 0.0};
         for (int k = 0; k < 3; ++k) {
           newForcei.at(k) = pi->getF().at(k) + f_ij.at(k);
+          if(k == 1) {
+            newForcei.at(k) += g_grav;
+          }
         }
         pi->setF(newForcei);
       }

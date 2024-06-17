@@ -15,6 +15,14 @@ void LCParticleContainer::setR_cutoff(double radius) {
   r_cutoff = radius;
 }
 
+double LCParticleContainer::getG_grav() {
+  return g_grav;
+}
+
+void LCParticleContainer::setG_grav(double g) {
+  g_grav = g;
+}
+
 
 std::vector<Particle>
 LCParticleContainer::getParticleInNeighbourhood(std::array<int, 3> id) {
@@ -138,6 +146,7 @@ void LCParticleContainer::handleLJFCalculation() {
       LCParticleContainer container;
       Calculations calc(container);
       calc.setR_cutoff(r_cutoff);
+      calc.setG_grav(g_grav);
       calc.LCcalculateLJF(c.getParticles(), neighbourhood);
 
     }

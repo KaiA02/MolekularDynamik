@@ -15,6 +15,10 @@
 class LCParticleContainer : public ParticleContainer {
 public:
  void setR_cutoff(double r_cutoff);
+
+ void setG_grav(double g);
+
+ double getG_grav();
  /**
   *@brief realocates the particles to their new cells and also
   *implements the outflow boundary (managing the deltion of particles out of the domain)
@@ -88,6 +92,7 @@ private:
  std::array<int, 3> cell_count;
  std::array<int, 6> boundary_types;
  double r_cutoff;
+ double g_grav;
 
 
 };
