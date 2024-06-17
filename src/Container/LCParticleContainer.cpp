@@ -376,17 +376,17 @@ std::array<double, 3> LCParticleContainer::findOponentXYZ(Particle* p) {
 std::array<int, 3> LCParticleContainer::findOponentCellID(std::array<int, 3> ID) {
   std::array<int, 3> return_id = ID;
   if(ID.at(0) < 0) {
-    return_id.at(0) = cell_count.at(0);
+    return_id.at(0) = cell_count.at(0) -1;
   } else if(ID.at(0) >= cell_count.at(0)) {
     return_id.at(0) = 1;
   }
   if(ID.at(1) < 0) {
-    return_id.at(1) = cell_count.at(1);
+    return_id.at(1) = cell_count.at(1) -1;
   } else if(ID.at(1) >= cell_count.at(1)) {
     return_id.at(1) = 1;
   }
   if(ID.at(2) < 0) {
-    return_id.at(2) = cell_count.at(2);
+    return_id.at(2) = cell_count.at(2) -1;
   } else if(ID.at(2) >= cell_count.at(2)) {
     return_id.at(2) = 1;
   }
