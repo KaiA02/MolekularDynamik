@@ -35,7 +35,7 @@
 - n_thermostat means after how many steps the thermostat is applied.
 - Reaching and holding the target temperature is the aim, therefore we have the delta_temp to say what the absolute change of temperature allowed is (for the steps, declared at n_thermostat)
 - If no delta_temp is given, then we see declare the delta_temp as 0 in xml file, but see it as infinity
-- If n_thermostat = 0, then the thermostat is applied directly also with attention to delta_temp.
+- If n_thermostat = 0, then the thermostat is applied directly.
 
 
 ## create new c++ classes from xsd file:
