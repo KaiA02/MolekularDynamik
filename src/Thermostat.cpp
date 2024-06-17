@@ -68,7 +68,6 @@ void Thermostat::gradualScaling(std::vector<Particle>& particles) const {
     double scalingFactor = std::sqrt(temp_new / currentTemperature);
     scaleVelocities(particles, scalingFactor);
 }
-//TODO:noch test schreiben für heating, cooling und holding
 
 void Thermostat::setInitialTemperature(std::vector<Particle> &particles) const {
     double currentTemperature = calculateCurrentTemperature(particles);

@@ -103,6 +103,8 @@ add_executable(
         src/Container/LCParticleContainer.h
         src/Container/BaseParticleContainer.h
         src/test/ThermostatTests.cpp
+        src/Thermostat.cpp
+        src/Thermostat.h
 
 
 )
