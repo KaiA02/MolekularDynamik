@@ -39,7 +39,6 @@ int main(int argc, char *argsv[]) {
   int n_thermostat = xmlReader.getN_Thermostat();
   double temp_target = xmlReader.getTemp_Target();
   double delta_temp = xmlReader.getDelta_Temp();
-  if(delta_temp == 0) { delta_temp = std::numeric_limits<double>::infinity(); }
   Thermostat thermostat(temp_init, n_thermostat, temp_target, delta_temp);
 
   //std::cout << "Hello from MolSim for PSE!" << std::endl;
@@ -109,10 +108,14 @@ int main(int argc, char *argsv[]) {
       iteration++;
 
       if(n_thermostat == 0) {
-        thermostat.setTemperatureDirectly(lcParticles.getParticles());
+        thermostat.gradualScaling(lcParticles.getParticles());
       } else {
         if(iteration % n_thermostat == 0) {
-          thermostat.gradualScaling(lcParticles.getParticles());
+          if(delta_temp == 0) {
+            thermostat.setTemperatureDirectly(lcParticles.getParticles());
+          } else {
+            thermostat.gradualScaling(lcParticles.getParticles());
+          }
         }
       }
 
@@ -143,12 +146,17 @@ int main(int argc, char *argsv[]) {
       iteration++;
 
       if(n_thermostat == 0) {
-        thermostat.setTemperatureDirectly(normParticles.getParticles());
+        thermostat.gradualScaling(normParticles.getParticles());
       } else {
         if(iteration % n_thermostat == 0) {
-          thermostat.gradualScaling(normParticles.getParticles());
+          if(delta_temp == 0) {
+            thermostat.setTemperatureDirectly(normParticles.getParticles());
+          } else {
+            thermostat.gradualScaling(normParticles.getParticles());
+          }
         }
       }
+
 
       if (!performanceMeasurement) {
         if (iteration % 10 == 0) {
