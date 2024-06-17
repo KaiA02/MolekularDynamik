@@ -84,10 +84,11 @@ public:
 
  std::vector<Particle*> getBoundaryParticles();
  void handleBoundaryAction();
- std::array<double, 6> getInfluencingBoundarysWithDistance(Particle*);
+ std::array<double, 12> getInfluencingBoundarysWithDistance(Particle*);
  std::array<double, 3> findOponentXYZ(Particle* p);
  std::array<int, 3> findOponentCellID(std::array<int, 3> ID);
  void calcWithHalo(Particle* p, std::array<double, 3> x_arg, std::array<double, 3> v_arg);
+ void applyGravitation();
 
 private:
  std::vector<Cell> cells;

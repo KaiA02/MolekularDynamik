@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <limits>
 
+#include "spdlog/spdlog.h"
+
 Thermostat::Thermostat(double temp_init, int n_thermostat, double temp_target, double delta_temp)
     : temp_init(temp_init), n_thermostat(n_thermostat), temp_target(temp_target), delta_temp(delta_temp) {}
 
@@ -30,14 +32,19 @@ const double Thermostat::getCurrentTemp(const std::vector<Particle>& particles) 
 
 double Thermostat::calculateCurrentTemperature(const std::vector<Particle>& particles) const {
     double kineticEnergy = 0.0;
+    int counter = 0;
     for (const auto& p : particles) {
         double skalarproduct = 0;
         for(int i = 0; i < 3; i++) {
             skalarproduct += p.getV().at(i) * p.getV().at(i);
         }
+
         kineticEnergy += (p.getM() * skalarproduct) / 2.0;
+        counter++;
     }
+    spdlog::warn("kinetic Energy: {} ", kineticEnergy);
     return (2.0 * kineticEnergy) / (dimension * particles.size());
+
 }
 
 void Thermostat::scaleVelocities(std::vector<Particle>& particles, double scalingFactor) const {

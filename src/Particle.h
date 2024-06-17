@@ -55,6 +55,8 @@ private:
  double epsilon;
 
 
+ bool isHalo;
+
 public:
   explicit Particle(int type = 0);
 
@@ -101,6 +103,10 @@ public:
 
  void setSigma(const double &sigma);
  void setEpsilon(const double &epsilon);
+
+ void setIsHalo(bool halo);
+
+ bool getIsHalo();
 
  bool operator==(const Particle &other) const;
  void park();

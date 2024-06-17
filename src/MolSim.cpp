@@ -20,6 +20,7 @@ void plotParticlesLC(int iteration, std::string outputType, std::string baseName
                    std::string outputPath, LCParticleContainer& particles);
 void plotParticles(int iteration, std::string outputType, std::string baseName,
                    std::string outputPath, ParticleContainer& particles);
+void displayProgressBar(int progress, int total, std::chrono::high_resolution_clock::time_point start);
 
 
 int main(int argc, char *argsv[]) {
@@ -69,6 +70,9 @@ int main(int argc, char *argsv[]) {
 
   double current_time = start_time;
 
+  double totalIterations = (end_time - start_time) / delta_t;
+  int progress = 0;
+
   int iteration = 0;
   LCParticleContainer lcParticles;
   ParticleContainer normParticles;
@@ -94,9 +98,9 @@ int main(int argc, char *argsv[]) {
   if(particleContainerType == "LC") {
 
     //temperature setting
-    spdlog::info("current Temperature: {}", thermostat.getCurrentTemp(lcParticles.getParticles()));
-    thermostat.setInitialTemperature(lcParticles.getParticles());
-    spdlog::info("current Temperature: {}", thermostat.getCurrentTemp(lcParticles.getParticles()));
+    //spdlog::info("current Temperature: {}", thermostat.getCurrentTemp(lcParticles.getParticles()));
+    //thermostat.setInitialTemperature(lcParticles.getParticles());
+    //spdlog::info("current Temperature: {}", thermostat.getCurrentTemp(lcParticles.getParticles()));
 
     while(current_time < end_time) {
       lcCaluclations.calculateX(delta_t);
@@ -104,7 +108,9 @@ int main(int argc, char *argsv[]) {
         lcCaluclations.calculateLJF();
       } else {
         lcParticles.handleLJFCalculation(lcCaluclations);
+        lcParticles.applyGravitation();
       }
+
 
       lcCaluclations.calculateV(delta_t);
       iteration++;
@@ -125,8 +131,10 @@ int main(int argc, char *argsv[]) {
         if (iteration % 10 == 0) {
           spdlog::info("current Temperature: {}", thermostat.getCurrentTemp(lcParticles.getParticles()));
           plotParticlesLC(iteration, outputType, baseName, "../output", lcParticles);
+          displayProgressBar(progress, totalIterations, start);
         }
       }
+      progress++;
       current_time += delta_t;
 
     }
@@ -233,4 +241,24 @@ void plotParticles(int iteration, std::string outputType, std::string baseName,
     std::string filename = out_name;
     vtkWriter.writeFile(filename, iteration);
   }
+}
+
+void displayProgressBar(int progress, int total, std::chrono::high_resolution_clock::time_point start) {
+  const int barWidth = 70;
+
+  std::cout << "[";
+  int pos = barWidth * progress / total;
+  for (int i = 0; i < barWidth; ++i) {
+    if (i < pos) std::cout << "=";
+    else if (i == pos) std::cout << ">";
+    else std::cout << " ";
+  }
+
+  auto now = std::chrono::high_resolution_clock::now();
+  auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(now - start).count();
+  auto totalEstimatedTime = total > 0 ? (elapsed * total) / progress : 0;
+  auto remainingTime = totalEstimatedTime - elapsed;
+
+  std::cout << "] " << int(progress * 100.0 / total) << " %, estimated time remaining: " << remainingTime << "s\r";
+  std::cout.flush();
 }

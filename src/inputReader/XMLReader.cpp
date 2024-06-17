@@ -33,6 +33,7 @@ void XMLReader::readXML(ParticleContainer &particleContainer) {
     particle.setType(i);
     particle.setEpsilon(in.particles()[i].epsilon());
     particle.setSigma(in.particles()[i].sigma());
+    particle.setIsHalo(false);
     if (i < in.cuboids().size()) {
       int dimension = in.cuboids()[i].dimension();
       int n3 = in.cuboids()[i].n3();
@@ -71,6 +72,7 @@ void XMLReader::readXML_LC(LCParticleContainer &particleContainer) {
          in.particles()[i].velocityZ()},
         in.particles()[i].mass());
     particle.setType(i);
+    particle.setIsHalo(false);
     particle.setEpsilon(in.particles()[i].epsilon());
     particle.setSigma(in.particles()[i].sigma());
     if (i < in.cuboids().size()) { //case its a cube
@@ -84,6 +86,7 @@ void XMLReader::readXML_LC(LCParticleContainer &particleContainer) {
                         n3, in.cuboids()[i].distance(),
                         in.cuboids()[i].meanVelocity(), dimension, in.temp_init());
       particle.setType(i);
+      particle.setIsHalo(false);
       particleContainer.addMultipleParticles(pg.getAllParticles());
       spdlog::info("added {} particles to the generator", pg.getAllParticles().size());
 
@@ -92,6 +95,7 @@ void XMLReader::readXML_LC(LCParticleContainer &particleContainer) {
       pg.generateDisk(particle, in.disk()[i].radius(), in.disk()[i].distance(),
                       in.disk()[i].meanVelocity(), dimension, in.temp_init());
       particle.setType(i);
+      particle.setIsHalo(false);
       particleContainer.addMultipleParticles(pg.getAllParticles());
     } else { //case its a single particle
       particleContainer.addParticle(particle);

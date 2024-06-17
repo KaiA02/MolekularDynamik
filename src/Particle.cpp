@@ -131,5 +131,15 @@ void Particle::park() {
   setType(0);
 }
 
+bool Particle::getIsHalo() {
+  return isHalo;
+}
+
+ void Particle::setIsHalo(bool halo) {
+   isHalo = halo;
+ }
+
+
+
 
 
