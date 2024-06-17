@@ -30,6 +30,13 @@
 4. open generated outputFiles in Paraview and add a Glyph to the Data
 5. run Simulation
 
+## Thermostat:
+- In the beginning the system is set to the initial temperature.
+- n_thermostat means after how many steps the thermostat is applied.
+- Reaching and holding the target temperature is the aim, therefore we have the delta_temp to say what the absolute change of temperature allowed is (for the steps, declared at n_thermostat)
+- If no delta_temp is given, then we see declare the delta_temp as 0 in xml file, but see it as infinity
+- If n_thermostat = 0, then the thermostat is applied directly also with attention to delta_temp.
+
 
 ## create new c++ classes from xsd file:
 xsdcxx cxx-tree --std c++11 /mnt/c/Users/joshu/CLionProjects/MolekularDynamik/src/input/simulation.xsd d
