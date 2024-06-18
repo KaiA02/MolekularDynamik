@@ -84,8 +84,8 @@ void LCParticleContainer::realocateParticles() {
     p.setF({0.0, 0.0, 0.0});
     if (cellExists({x, y, z})) {
       getCellById({x,y,z})->addParticle(&p);
-    } else { //Parking of deleted Particles
-        p.park();
+    //} else { //Parking of deleted Particles
+    //    p.park();
       }
     }
   }

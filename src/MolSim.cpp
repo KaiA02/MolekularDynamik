@@ -257,7 +257,7 @@ void plotParticles(int iteration, std::string outputType, std::string baseName,
 }
 
 void displayProgressBar(int progress, int total, std::chrono::high_resolution_clock::time_point start) {
-  const int barWidth = 70;
+  const int barWidth = 100;
 
   std::cout << "[";
   int pos = barWidth * progress / total;

@@ -127,8 +127,6 @@ void Particle::park() {
   setF({0.0,0.0,0.0});
   setX({-50.0,-50.0,-50.0});
   setV({0.0,0.0,0.0});
-  setM(0);
-  setType(0);
 }
 
 bool Particle::getIsHalo() {

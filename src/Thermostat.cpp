@@ -34,16 +34,19 @@ double Thermostat::calculateCurrentTemperature(const std::vector<Particle>& part
     double kineticEnergy = 0.0;
     int counter = 0;
     for (const auto& p : particles) {
-        double skalarproduct = 0;
-        for(int i = 0; i < 3; i++) {
-            skalarproduct += p.getV().at(i) * p.getV().at(i);
-        }
+        std::array<double, 3> comp = {-50.0,-50.0,-50.0};
+        if(p.getX() != comp) {
+            double skalarproduct = 0;
+            for(int i = 0; i < 3; i++) {
+                skalarproduct += p.getV().at(i) * p.getV().at(i);
+            }
 
-        kineticEnergy += (p.getM() * skalarproduct) / 2.0;
-        counter++;
+            kineticEnergy += (p.getM() * skalarproduct) / 2.0;
+            counter ++;
+        }
     }
-    spdlog::warn("kinetic Energy: {} ", kineticEnergy);
-    return (2.0 * kineticEnergy) / (dimension * particles.size());
+    //spdlog::info("kinetic Energy: {} ", kineticEnergy);
+    return (2.0 * kineticEnergy) / (dimension * counter);
 
 }
 
