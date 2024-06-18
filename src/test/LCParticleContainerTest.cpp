@@ -66,6 +66,36 @@ TEST(LCParticleContainerTest, GenerateCells) {
   // EXPECT_EQ(container.getCellById({3,3,3}), nullptr); // Out of range
 }
 
+TEST(LCParticleContainerTest, ApplyGravitation) {
+  double g_grav = -12.44;
+  LCParticleContainer container;
+  container.setG_grav(g_grav);
+
+  std::array<double, 3> position = {1.0, 1.0, 1.0};
+  std::array<double, 3> velocity = {0.0, 0.0, 0.0};
+  double mass = 1.0;
+
+  // Create and add particles
+  Particle p1(position, velocity, mass);
+  Particle p2(position, velocity, mass);
+
+  container.addParticle(p1);
+  container.addParticle(p2);
+
+  // Apply gravitation
+  container.applyGravitation();
+
+  // Check forces
+  const auto& particles = container.getParticles();
+  ASSERT_EQ(particles.size(), 2);
+
+  for (const auto& p : particles) {
+    EXPECT_DOUBLE_EQ(p.getF().at(1), g_grav * mass);
+    EXPECT_DOUBLE_EQ(p.getF().at(0), 0.0);
+    EXPECT_DOUBLE_EQ(p.getF().at(2), 0.0);
+  }
+}
+
 // TODO: fix the test so that the ci does not throw a stack-use-after-scope
 // error
 /**TEST(LCParticleContainerTest, AddParticle) {
@@ -97,3 +127,4 @@ TEST(LCParticleContainerTest, GenerateCells) {
     }
   }
 }*/
+
