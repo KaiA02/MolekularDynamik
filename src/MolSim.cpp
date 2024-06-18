@@ -74,6 +74,8 @@ int main(int argc, char *argsv[]) {
   double totalIterations = (end_time - start_time) / delta_t;
   int progress = 0;
 
+  int molecule_updates = 0;
+
   int iteration = 0;
   LCParticleContainer lcParticles;
   ParticleContainer normParticles;
@@ -103,18 +105,23 @@ int main(int argc, char *argsv[]) {
      spdlog::info("current Temperature: {}", thermostat.getCurrentTemp(lcParticles.getParticles()));
      thermostat.setInitialTemperature(lcParticles.getParticles());
      spdlog::info("current Temperature: {}", thermostat.getCurrentTemp(lcParticles.getParticles()));
+     molecule_updates += lcParticles.getParticles().size();
     }
 
     while(current_time < end_time) {
       lcCaluclations.calculateX(delta_t);
+      molecule_updates += lcParticles.getParticles().size();
       if(inputType == "SF") { //Simple Force
         lcCaluclations.calculateLJF();
+        molecule_updates += lcParticles.getParticles().size();
       } else {
         lcParticles.handleLJFCalculation(lcCaluclations);
+        molecule_updates += 5 * lcParticles.getParticles().size(); //only provisionally
       }
 
 
       lcCaluclations.calculateV(delta_t);
+      molecule_updates += lcParticles.getParticles().size();
       iteration++;
 
       if(thermostatOn == "YES") {
@@ -129,6 +136,7 @@ int main(int argc, char *argsv[]) {
            }
           }
         }
+        molecule_updates += lcParticles.getParticles().size();
       }
 
       if (!performanceMeasurement) {
@@ -137,21 +145,15 @@ int main(int argc, char *argsv[]) {
             spdlog::info("current Temperature: {}", thermostat.getCurrentTemp(lcParticles.getParticles()));
           }
           plotParticlesLC(iteration, outputType, baseName, "../output", lcParticles);
-          displayProgressBar(progress, totalIterations, start);
         }
       }
+
+      displayProgressBar(progress, totalIterations, start);
       progress++;
       current_time += delta_t;
 
     }
   } else {
-
-    if(thermostatOn == "YES") {
-      //temperature setting
-      spdlog::info("current Temperature: {}", thermostat.getCurrentTemp(normParticles.getParticles()));
-      thermostat.setInitialTemperature(normParticles.getParticles());
-      spdlog::info("current Temperature: {}", thermostat.getCurrentTemp(normParticles.getParticles()));
-    }
 
     while(current_time < end_time) {
       normCalculations.calculateX(delta_t);
@@ -163,25 +165,9 @@ int main(int argc, char *argsv[]) {
       normCalculations.calculateV(delta_t);
       iteration++;
 
-      if(thermostatOn == "YES") {
-        if(n_thermostat == 0) {
-         thermostat.gradualScaling(normParticles.getParticles());
-        } else {
-          if(iteration % n_thermostat == 0) {
-           if(delta_temp == 0) {
-             thermostat.setTemperatureDirectly(normParticles.getParticles());
-           } else {
-             thermostat.gradualScaling(normParticles.getParticles());
-           }
-         }
-        }
-      }
 
       if (!performanceMeasurement) {
         if (iteration % 10 == 0) {
-          if(thermostatOn == "YES") {
-            spdlog::info("current Temperature: {}", thermostat.getCurrentTemp(normParticles.getParticles()));
-          }
           plotParticles(iteration, outputType, baseName, "../output", normParticles);
         }
       }
@@ -190,7 +176,9 @@ int main(int argc, char *argsv[]) {
   }
   auto end = std::chrono::high_resolution_clock::now();
   std::chrono::duration<double> elapsed = end - start;
-  spdlog::warn("Simulation finished in {} seconds", elapsed.count());
+  molecule_updates = molecule_updates / elapsed.count();
+  spdlog::warn("Simulation finished in {} seconds and {} molecule-updates per second", elapsed.count());
+  spdlog::warn("There were {} molecule-updates per second", molecule_updates);
   return 0;
 }
 
