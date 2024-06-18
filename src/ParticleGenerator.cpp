@@ -49,6 +49,11 @@ void ParticleGenerator::generateDisk(const Particle &center, int radius, double 
         addedVelocity.at(i) = addedVelocity.at(i) * factor + center.getV()[i];
     }
 
+    //maxWellBoltzmann returns huge value for x for no reason. We switch this value to y to support Gravitat
+    double x_velocity = addedVelocity.at(0);
+    addedVelocity.at(0) = addedVelocity.at(1);
+    addedVelocity.at(1) = x_velocity;
+
     // Coordinates of the center
     double centerX = center.getX()[0];
     double centerY = center.getX()[1];

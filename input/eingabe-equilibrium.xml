@@ -2,30 +2,31 @@
             xsi:noNamespaceSchemaLocation="../src/inputReader/simulation.xsd">
     <input>
         <tStart>0.0</tStart>
-        <tEnd>1.0</tEnd>
+        <tEnd>15.0</tEnd>
         <deltaT>0.0005</deltaT>
         <inputType>LJF</inputType>
         <particleContainerType>LC</particleContainerType>
-        <r_cutoff>2.5</r_cutoff>
-        <domainSizeX>300</domainSizeX>
-        <domainSizeY>54</domainSizeY>
-        <domainSizeZ>4</domainSizeZ>
+        <r_cutoff>3</r_cutoff>
+        <domainSizeX>303</domainSizeX>
+        <domainSizeY>180</domainSizeY>
+        <domainSizeZ>5</domainSizeZ>
         <boundary1Type>2</boundary1Type>
         <boundary2Type>2</boundary2Type>
         <boundary3Type>2</boundary3Type>
         <boundary4Type>2</boundary4Type>
         <boundary5Type>2</boundary5Type>
         <boundary6Type>2</boundary6Type>
-        <thermostatON>NO</thermostatON>
-        <temp_init>40</temp_init>
+        <thermostatON>YES</thermostatON>
+        <temp_init>0.5</temp_init>
         <n_thermostat>1000</n_thermostat>
-        <temp_target>40</temp_target>
+        <temp_target>0.5</temp_target>
         <delta_temp>0</delta_temp>
         <g_grav>-12.44</g_grav>
+
         <particles>
-            <x>0.6</x>
-            <y>2.0</y>
-            <z>2.0</z>
+            <x>1.5</x>
+            <y>2</y>
+            <z>1.5</z>
             <velocityX>0.0</velocityX>
             <velocityY>0.0</velocityY>
             <velocityZ>0.0</velocityZ>
@@ -33,28 +34,9 @@
             <epsilon>1</epsilon>
             <sigma>1.2</sigma>
         </particles>
-        <particles>
-            <x>0.6</x>
-            <y>27.0</y>
-            <z>2.0</z>
-            <velocityX>0.0</velocityX>
-            <velocityY>0.0</velocityY>
-            <velocityZ>0.0</velocityZ>
-            <mass>2</mass>
-            <epsilon>1</epsilon>
-            <sigma>1.1</sigma>
-        </particles>
         <cuboids>
             <n1>250</n1>
-            <n2>20</n2>
-            <n3>1</n3>
-            <distance>1.2</distance>
-            <meanVelocity>0.1</meanVelocity>
-            <dimension>3</dimension>
-        </cuboids>
-        <cuboids>
-            <n1>250</n1>
-            <n2>20</n2>
+            <n2>50</n2>
             <n3>1</n3>
             <distance>1.2</distance>
             <meanVelocity>0.1</meanVelocity>

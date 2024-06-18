@@ -7,7 +7,7 @@
         <inputType>LJF</inputType>
         <particleContainerType>LC</particleContainerType>
         <r_cutoff>2.0</r_cutoff>
-        <domainSizeX>60</domainSizeX>
+        <domainSizeX>20</domainSizeX>
         <domainSizeY>20</domainSizeY>
         <domainSizeZ>20</domainSizeZ>
         <boundary1Type>3</boundary1Type>
@@ -18,19 +18,19 @@
         <boundary6Type>3</boundary6Type>
         <thermostatON>YES</thermostatON>
         <temp_init>40</temp_init>
-        <n_thermostat>10</n_thermostat>
-        <temp_target>25</temp_target>
-        <delta_temp>10</delta_temp>
-
+        <n_thermostat>1</n_thermostat>
+        <temp_target>40</temp_target>
+        <delta_temp>0</delta_temp>
         <g_grav>-12.44</g_grav>
+
         <particles>
             <x>10.0</x>
             <y>10.0</y>
             <z>10.0</z>
-            <velocityX>-10.0</velocityX>
+            <velocityX>0.0</velocityX>
             <velocityY>0.0</velocityY>
             <velocityZ>0.0</velocityZ>
-            <mass>2</mass>
+            <mass>1</mass>
             <epsilon>1</epsilon>
             <sigma>1</sigma>
         </particles>
