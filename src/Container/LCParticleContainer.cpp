@@ -152,6 +152,7 @@ void LCParticleContainer::handleLJFCalculation(Calculations& calc) {
     }
   }
   handleBoundaryAction();
+  applyGravitation();
 }
 
 bool LCParticleContainer::addParticleToCell(Particle &p) {
@@ -407,9 +408,9 @@ void LCParticleContainer::calcWithHalo(Particle *p, std::array<double, 3> x_arg,
 }
 
 void LCParticleContainer::applyGravitation() {
-  for(auto p : particles) {
-    double y_force = p.getX().at(1);
+  for(auto &p : particles) {
+    double y_force = p.getF().at(1);
     y_force += g_grav * p.getM();
-    p.setX({p.getX().at(0), y_force, p.getX().at(2)});
+    p.setF({p.getF().at(0), y_force, p.getF().at(2)});
   }
 }

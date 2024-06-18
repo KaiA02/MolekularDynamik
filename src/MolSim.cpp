@@ -111,7 +111,6 @@ int main(int argc, char *argsv[]) {
         lcCaluclations.calculateLJF();
       } else {
         lcParticles.handleLJFCalculation(lcCaluclations);
-        lcParticles.applyGravitation();
       }
 
 
