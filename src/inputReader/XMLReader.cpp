@@ -119,6 +119,10 @@ std::array<double, 3> XMLReader::getTime() {
 
 std::string XMLReader::getInputType() { return sim->input().inputType(); }
 
+std::string XMLReader::ThermostatON() {
+  return sim->input().thermostatON();
+}
+
 double XMLReader::getTemp_init() { return sim->input().temp_init(); }
 
 int XMLReader::getN_Thermostat() { return sim->input().n_thermostat(); }

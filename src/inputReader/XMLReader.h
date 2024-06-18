@@ -26,6 +26,7 @@ public:
   void readXML_LC(LCParticleContainer &particleContainer);
   std::string getParticleContainerType();
   std::string getInputType();
+  std::string ThermostatON();
   double getTemp_init();
   int getN_Thermostat();
   double getTemp_Target();

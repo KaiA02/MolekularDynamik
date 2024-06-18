@@ -31,6 +31,7 @@
 5. run Simulation
 
 ## Thermostat:
+- First set the "thermostatON" option in xml on "YES"
 - In the beginning the system is set to the initial temperature.
 - n_thermostat means after how many steps the thermostat is applied.
 - Reaching and holding the target temperature is the aim, therefore we have the delta_temp to say what the absolute change of temperature allowed is (for the steps, declared at n_thermostat)

@@ -16,6 +16,7 @@
         <boundary4Type>2</boundary4Type>
         <boundary5Type>2</boundary5Type>
         <boundary6Type>2</boundary6Type>
+        <thermostatON>NO</thermostatON>
         <temp_init>40</temp_init>
         <n_thermostat>1000</n_thermostat>
         <temp_target>25</temp_target>

@@ -36,6 +36,7 @@ int main(int argc, char *argsv[]) {
       xmlReader.getPerformanceMeasurement();
   std::string logLevel = xmlReader.getLogLevel();
 
+  std::string thermostatOn = xmlReader.ThermostatON();
   double temp_init = xmlReader.getTemp_init();
   int n_thermostat = xmlReader.getN_Thermostat();
   double temp_target = xmlReader.getTemp_Target();
@@ -97,10 +98,12 @@ int main(int argc, char *argsv[]) {
   // for this loop, we assume: current x, current f and current v are known
   if(particleContainerType == "LC") {
 
+    if(thermostatOn == "YES") {
     //temperature setting
-    //spdlog::info("current Temperature: {}", thermostat.getCurrentTemp(lcParticles.getParticles()));
-    //thermostat.setInitialTemperature(lcParticles.getParticles());
-    //spdlog::info("current Temperature: {}", thermostat.getCurrentTemp(lcParticles.getParticles()));
+     spdlog::info("current Temperature: {}", thermostat.getCurrentTemp(lcParticles.getParticles()));
+     thermostat.setInitialTemperature(lcParticles.getParticles());
+     spdlog::info("current Temperature: {}", thermostat.getCurrentTemp(lcParticles.getParticles()));
+    }
 
     while(current_time < end_time) {
       lcCaluclations.calculateX(delta_t);
@@ -115,21 +118,25 @@ int main(int argc, char *argsv[]) {
       lcCaluclations.calculateV(delta_t);
       iteration++;
 
-      if(n_thermostat == 0) {
-        thermostat.gradualScaling(lcParticles.getParticles());
-      } else {
-        if(iteration % n_thermostat == 0) {
-          if(delta_temp == 0) {
-            thermostat.setTemperatureDirectly(lcParticles.getParticles());
-          } else {
-            thermostat.gradualScaling(lcParticles.getParticles());
+      if(thermostatOn == "YES") {
+        if(n_thermostat == 0) {
+          thermostat.gradualScaling(lcParticles.getParticles());
+        } else {
+          if(iteration % n_thermostat == 0) {
+            if(delta_temp == 0) {
+              thermostat.setTemperatureDirectly(lcParticles.getParticles());
+           } else {
+              thermostat.gradualScaling(lcParticles.getParticles());
+           }
           }
         }
       }
 
       if (!performanceMeasurement) {
         if (iteration % 10 == 0) {
-          spdlog::info("current Temperature: {}", thermostat.getCurrentTemp(lcParticles.getParticles()));
+          if(thermostatOn == "YES") {
+            spdlog::info("current Temperature: {}", thermostat.getCurrentTemp(lcParticles.getParticles()));
+          }
           plotParticlesLC(iteration, outputType, baseName, "../output", lcParticles);
           displayProgressBar(progress, totalIterations, start);
         }
@@ -140,10 +147,12 @@ int main(int argc, char *argsv[]) {
     }
   } else {
 
-    //temperature setting
-    spdlog::info("current Temperature: {}", thermostat.getCurrentTemp(normParticles.getParticles()));
-    thermostat.setInitialTemperature(normParticles.getParticles());
-    spdlog::info("current Temperature: {}", thermostat.getCurrentTemp(normParticles.getParticles()));
+    if(thermostatOn == "YES") {
+      //temperature setting
+      spdlog::info("current Temperature: {}", thermostat.getCurrentTemp(normParticles.getParticles()));
+      thermostat.setInitialTemperature(normParticles.getParticles());
+      spdlog::info("current Temperature: {}", thermostat.getCurrentTemp(normParticles.getParticles()));
+    }
 
     while(current_time < end_time) {
       normCalculations.calculateX(delta_t);
@@ -155,21 +164,25 @@ int main(int argc, char *argsv[]) {
       normCalculations.calculateV(delta_t);
       iteration++;
 
-      if(n_thermostat == 0) {
-        thermostat.gradualScaling(normParticles.getParticles());
-      } else {
-        if(iteration % n_thermostat == 0) {
-          if(delta_temp == 0) {
-            thermostat.setTemperatureDirectly(normParticles.getParticles());
-          } else {
-            thermostat.gradualScaling(normParticles.getParticles());
-          }
+      if(thermostatOn == "YES") {
+        if(n_thermostat == 0) {
+         thermostat.gradualScaling(normParticles.getParticles());
+        } else {
+          if(iteration % n_thermostat == 0) {
+           if(delta_temp == 0) {
+             thermostat.setTemperatureDirectly(normParticles.getParticles());
+           } else {
+             thermostat.gradualScaling(normParticles.getParticles());
+           }
+         }
         }
       }
 
       if (!performanceMeasurement) {
         if (iteration % 10 == 0) {
-          spdlog::info("current Temperature: {}", thermostat.getCurrentTemp(normParticles.getParticles()));
+          if(thermostatOn == "YES") {
+            spdlog::info("current Temperature: {}", thermostat.getCurrentTemp(normParticles.getParticles()));
+          }
           plotParticles(iteration, outputType, baseName, "../output", normParticles);
         }
       }

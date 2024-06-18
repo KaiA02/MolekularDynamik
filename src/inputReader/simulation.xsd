@@ -20,6 +20,7 @@
                             <xs:element name="boundary4Type" type="xs:int"/>
                             <xs:element name="boundary5Type" type="xs:int"/>
                             <xs:element name="boundary6Type" type="xs:int"/>
+                            <xs:element name="thermostatON" type="xs:string"/>
                             <xs:element name="temp_init" type="xs:double"/>
                             <xs:element name="n_thermostat" type="xs:int"/>
                             <xs:element name="temp_target" type="xs:double"/>

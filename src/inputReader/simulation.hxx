@@ -562,6 +562,23 @@ class input: public ::xml_schema::type
   void
   boundary6Type (const boundary6Type_type& x);
 
+  // thermostatON
+  //
+  typedef ::xml_schema::string thermostatON_type;
+  typedef ::xsd::cxx::tree::traits< thermostatON_type, char > thermostatON_traits;
+
+  const thermostatON_type&
+  thermostatON () const;
+
+  thermostatON_type&
+  thermostatON ();
+
+  void
+  thermostatON (const thermostatON_type& x);
+
+  void
+  thermostatON (::std::unique_ptr< thermostatON_type > p);
+
   // temp_init
   //
   typedef ::xml_schema::double_ temp_init_type;
@@ -700,6 +717,7 @@ class input: public ::xml_schema::type
          const boundary4Type_type&,
          const boundary5Type_type&,
          const boundary6Type_type&,
+         const thermostatON_type&,
          const temp_init_type&,
          const n_thermostat_type&,
          const temp_target_type&,
@@ -747,6 +765,7 @@ class input: public ::xml_schema::type
   ::xsd::cxx::tree::one< boundary4Type_type > boundary4Type_;
   ::xsd::cxx::tree::one< boundary5Type_type > boundary5Type_;
   ::xsd::cxx::tree::one< boundary6Type_type > boundary6Type_;
+  ::xsd::cxx::tree::one< thermostatON_type > thermostatON_;
   ::xsd::cxx::tree::one< temp_init_type > temp_init_;
   ::xsd::cxx::tree::one< n_thermostat_type > n_thermostat_;
   ::xsd::cxx::tree::one< temp_target_type > temp_target_;

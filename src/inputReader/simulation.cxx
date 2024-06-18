@@ -401,6 +401,30 @@ boundary6Type (const boundary6Type_type& x)
   this->boundary6Type_.set (x);
 }
 
+const input::thermostatON_type& input::
+thermostatON () const
+{
+  return this->thermostatON_.get ();
+}
+
+input::thermostatON_type& input::
+thermostatON ()
+{
+  return this->thermostatON_.get ();
+}
+
+void input::
+thermostatON (const thermostatON_type& x)
+{
+  this->thermostatON_.set (x);
+}
+
+void input::
+thermostatON (::std::unique_ptr< thermostatON_type > x)
+{
+  this->thermostatON_.set (std::move (x));
+}
+
 const input::temp_init_type& input::
 temp_init () const
 {
@@ -1204,6 +1228,7 @@ input (const tStart_type& tStart,
        const boundary4Type_type& boundary4Type,
        const boundary5Type_type& boundary5Type,
        const boundary6Type_type& boundary6Type,
+       const thermostatON_type& thermostatON,
        const temp_init_type& temp_init,
        const n_thermostat_type& n_thermostat,
        const temp_target_type& temp_target,
@@ -1225,6 +1250,7 @@ input (const tStart_type& tStart,
   boundary4Type_ (boundary4Type, this),
   boundary5Type_ (boundary5Type, this),
   boundary6Type_ (boundary6Type, this),
+  thermostatON_ (thermostatON, this),
   temp_init_ (temp_init, this),
   n_thermostat_ (n_thermostat, this),
   temp_target_ (temp_target, this),
@@ -1256,6 +1282,7 @@ input (const input& x,
   boundary4Type_ (x.boundary4Type_, f, this),
   boundary5Type_ (x.boundary5Type_, f, this),
   boundary6Type_ (x.boundary6Type_, f, this),
+  thermostatON_ (x.thermostatON_, f, this),
   temp_init_ (x.temp_init_, f, this),
   n_thermostat_ (x.n_thermostat_, f, this),
   temp_target_ (x.temp_target_, f, this),
@@ -1287,6 +1314,7 @@ input (const ::xercesc::DOMElement& e,
   boundary4Type_ (this),
   boundary5Type_ (this),
   boundary6Type_ (this),
+  thermostatON_ (this),
   temp_init_ (this),
   n_thermostat_ (this),
   temp_target_ (this),
@@ -1480,6 +1508,20 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       if (!boundary6Type_.present ())
       {
         this->boundary6Type_.set (boundary6Type_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // thermostatON
+    //
+    if (n.name () == "thermostatON" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< thermostatON_type > r (
+        thermostatON_traits::create (i, f, this));
+
+      if (!thermostatON_.present ())
+      {
+        this->thermostatON_.set (::std::move (r));
         continue;
       }
     }
@@ -1680,6 +1722,13 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "");
   }
 
+  if (!thermostatON_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "thermostatON",
+      "");
+  }
+
   if (!temp_init_.present ())
   {
     throw ::xsd::cxx::tree::expected_element< char > (
@@ -1744,6 +1793,7 @@ operator= (const input& x)
     this->boundary4Type_ = x.boundary4Type_;
     this->boundary5Type_ = x.boundary5Type_;
     this->boundary6Type_ = x.boundary6Type_;
+    this->thermostatON_ = x.thermostatON_;
     this->temp_init_ = x.temp_init_;
     this->n_thermostat_ = x.n_thermostat_;
     this->temp_target_ = x.temp_target_;
