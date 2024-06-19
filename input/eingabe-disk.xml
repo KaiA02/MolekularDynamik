@@ -2,40 +2,40 @@
             xsi:noNamespaceSchemaLocation="../src/inputReader/simulation.xsd">
     <input>
         <tStart>0.0</tStart>
-        <tEnd>1.0</tEnd>
+        <tEnd>2.0</tEnd>
         <deltaT>0.0005</deltaT>
         <inputType>LJF</inputType>
         <particleContainerType>LC</particleContainerType>
         <r_cutoff>2.0</r_cutoff>
-        <domainSizeX>70</domainSizeX>
-        <domainSizeY>50</domainSizeY>
-        <domainSizeZ>10</domainSizeZ>
+        <domainSizeX>20</domainSizeX>
+        <domainSizeY>20</domainSizeY>
+        <domainSizeZ>20</domainSizeZ>
         <boundary1Type>2</boundary1Type>
         <boundary2Type>2</boundary2Type>
         <boundary3Type>2</boundary3Type>
         <boundary4Type>2</boundary4Type>
         <boundary5Type>2</boundary5Type>
         <boundary6Type>2</boundary6Type>
-        <thermostatON>NO</thermostatON>
+        <thermostatON>YES</thermostatON>
         <temp_init>40</temp_init>
         <n_thermostat>1</n_thermostat>
         <temp_target>40</temp_target>
         <delta_temp>0</delta_temp>
-        <g_grav>-12.44</g_grav>
+        <g_grav>0</g_grav>
 
         <particles>
-            <x>35.0</x>
-            <y>25.0</y>
-            <z>5.0</z>
-            <velocityX>0.0</velocityX>
-            <velocityY>-1.0</velocityY>
+            <x>10.0</x>
+            <y>10.0</y>
+            <z>10.0</z>
+            <velocityX>-10.0</velocityX>
+            <velocityY>0.0</velocityY>
             <velocityZ>0.0</velocityZ>
             <mass>1</mass>
             <epsilon>1</epsilon>
             <sigma>1</sigma>
         </particles>
         <disk>
-            <radius>3</radius>
+            <radius>5</radius>
             <distance>1.1225</distance>
             <meanVelocity>0.1</meanVelocity>
             <dimension>3</dimension>

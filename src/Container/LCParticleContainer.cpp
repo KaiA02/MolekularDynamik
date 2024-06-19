@@ -33,13 +33,16 @@ std::vector<Particle>
 LCParticleContainer::getParticleInNeighbourhood(std::array<int, 3> id) {
   std::vector<Particle> neigbourhood;
   int particleCount = 0;
+  int x;
+  int y;
+  int z;
   for (auto &cell : cells) {
     if (cell.getParticles().size() > 0) {
-      int x = cell.getId().at(0) - id.at(0);
+      x = cell.getId().at(0) - id.at(0);
       if (x <= 1 && x >= -1) {
-        int y = cell.getId().at(1) - id.at(1);
+        y = cell.getId().at(1) - id.at(1);
         if (y <= 1 && y >= -1) {
-          int z = cell.getId().at(2) - id.at(2);
+          z = cell.getId().at(2) - id.at(2);
           if (z <= 1 && z >= -1) {
             if (x != 0 || y != 0 || z != 0) {
               for (auto p : cell.getParticles()) {
@@ -61,7 +64,7 @@ LCParticleContainer::getParticleInNeighbourhood(std::array<int, 3> id) {
   }
 }
 
-Cell* LCParticleContainer::getCellById(std::array<int, 3> id) {
+Cell* LCParticleContainer::getCellById(const std::array<int, 3> id) {
   if (cells.size() != 0) {
     for (auto& c : cells) {
       if (c.getId() == id) {
@@ -73,27 +76,24 @@ Cell* LCParticleContainer::getCellById(std::array<int, 3> id) {
 }
 
 void LCParticleContainer::realocateParticles() {
-  spdlog::debug("we have {} cells and {} particles", cells.size(),getParticles().size());
   for (auto &c : cells) {
     c.emptyCell();
   }
+  int x;
+  int y;
+  int z;
 
-  int counter = 0;
   for (auto &p : particles) {
-    int x = floor(p.getX().at(0) / cell_size.at(0));
-    int y = floor(p.getX().at(1) / cell_size.at(1));
-    int z = floor(p.getX().at(2) / cell_size.at(2));
+    x = floor(p.getX().at(0) / cell_size.at(0));
+    y = floor(p.getX().at(1) / cell_size.at(1));
+    z = floor(p.getX().at(2) / cell_size.at(2));
     p.setF({0.0, 0.0, 0.0});
-    //spdlog::info("{} {} {} {} {} {} {} {} {}", p.getX().at(0), p.getX().at(1), p.getX().at(2), cell_size.at(0), cell_size.at(1), cell_size.at(2), x,y,z);
     if (cellExists({x, y, z})) {
       getCellById({x,y,z})->addParticle(&p);
     } else { //Parking of deleted Particles
         p.park();
-        counter ++;
       }
     }
-  spdlog::info("parked {} particles", counter);
-  countParticlesInCells();
   }
 
 void LCParticleContainer::fillCellsWithParticles() {
@@ -266,7 +266,7 @@ void LCParticleContainer::handleBoundaryAction() {
                 std::array<double, 3> v_arg = {-1*(p->getV().at(0)), p->getV().at(1), p->getV().at(2)};
                 calcWithHalo(p, x_arg, v_arg);
               } else if ( i == 2 ) { //Boundary to XZ Plane
-                std::array<double, 3> x_arg = {p->getX().at(0), -bounds.at(1), p->getX().at(2)};
+                std::array<double, 3> x_arg = {p->getX().at(0), -bounds.at(i), p->getX().at(2)};
                 std::array<double, 3> v_arg = {p->getV().at(0), -1*(p->getV().at(1)), p->getV().at(2)};
                 calcWithHalo(p, x_arg, v_arg);
               } else if ( i == 3 ) { //Boundary to other XZ Plane
@@ -274,7 +274,7 @@ void LCParticleContainer::handleBoundaryAction() {
                 std::array<double, 3> v_arg = {p->getV().at(0), -1*(p->getV().at(1)), p->getV().at(2)};
                 calcWithHalo(p, x_arg, v_arg);
               } else if ( i == 4 ) { //Boundary to XY Plane
-                std::array<double, 3> x_arg = {p->getX().at(0), p->getX().at(1), -bounds.at(2)};
+                std::array<double, 3> x_arg = {p->getX().at(0), p->getX().at(1), -bounds.at(i)};
                 std::array<double, 3> v_arg = {p->getV().at(0), p->getV().at(1), -1*(p->getV().at(2))};
                 calcWithHalo(p, x_arg, v_arg);
               } else { // i == 5      //Boundary to other XY Plane
