@@ -3,6 +3,7 @@
 #SBATCH --output=my_molsim_job_out.txt    # Datei für Standardausgabe
 #SBATCH --error=my_molsim_job_err.txt     # Datei für Fehlerausgabe
 #SBATCH --time=04:00:00                  # Maximale Laufzeit (Stunden:Minuten:Sekunden)
+#SBATCH --clusters=serial                # Cluster wählen (hier: serial)
 #SBATCH --partition=serial_std           # Partition wählen (hier: serial_std)
 #SBATCH --mem=4gb                        # Speicher pro Job
 #SBATCH --cpus-per-task=1                # Anzahl der CPUs pro Job
@@ -14,7 +15,7 @@ module load gcc
 module load cmake
 
 # Navigieren zum Verzeichnis, in dem das Programm kompiliert wird
-cd /home/MolekularDynamik
+cd MolekularDynamik/
 mkdir build
 cd build
 
@@ -27,4 +28,4 @@ gcc -pg -o MolSim ../input/eingabe-equilibrium.xml
 ./MolSim ../input/eingabe-equilibrium.xml
 
 # Optional: Speichern der gmon.out-Datei für das Profiling
-cp gmon.out /home/MolekularDynamik/build/gmon.out
+cp gmon.out /MolekularDynamik/build/gmon.out
