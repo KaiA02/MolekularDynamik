@@ -19,9 +19,7 @@ void ParticleGenerator::generateCuboid(const Particle &start, int n1, int n2,
     //maxwellVelocity and factor of temperature
     double factor = std::sqrt(temp_init / start.getM());
     std::array<double, 3> addedVelocity = maxwellBoltzmannDistributedVelocity(meanVelocity, dimension);
-    for (int i = 0; i < 3; i++) {
-         addedVelocity.at(i) = addedVelocity.at(i) * factor + start.getV()[i];
-    }
+    addedVelocity = {addedVelocity.at(2) * factor + start.getV()[0], addedVelocity.at(0) * factor + start.getV()[1], addedVelocity.at(1) * factor + start.getV()[2]};
 
     for (int x = 0; x < n1; x++) {
         for (int y = 0; y < n2; y++) {
@@ -45,9 +43,7 @@ void ParticleGenerator::generateDisk(const Particle &center, int radius, double 
     //maxwellVelocity and factor of temperature
     double factor = std::sqrt(temp_init / center.getM());
     std::array<double, 3> addedVelocity = maxwellBoltzmannDistributedVelocity(meanVelocity, dimension);
-    for (int i = 0; i < 3; i++) {
-        addedVelocity.at(i) = addedVelocity.at(i) * factor + center.getV()[i];
-    }
+    addedVelocity = {addedVelocity.at(1) * factor + center.getV()[0], addedVelocity.at(0) * factor + center.getV()[1], addedVelocity.at(2) * factor + center.getV()[2]};
 
     //maxWellBoltzmann returns huge value for x for no reason. We switch this value to y to support Gravitat
     double x_velocity = addedVelocity.at(0);
