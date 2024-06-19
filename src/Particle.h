@@ -45,14 +45,16 @@ private:
   int type;
 
  /**
+   * Lennard-Jones parameter epsilon
+   */
+ double epsilon;
+
+ /**
    * Lennard-Jones parameter sigma
    */
  double sigma;
 
- /**
-   * Lennard-Jones parameter epsilon
-   */
- double epsilon;
+
 
 
  bool isHalo;

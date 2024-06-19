@@ -2,21 +2,21 @@
             xsi:noNamespaceSchemaLocation="../src/inputReader/simulation.xsd">
     <input>
         <tStart>0.0</tStart>
-        <tEnd>3.0</tEnd>
+        <tEnd>1.0</tEnd>
         <deltaT>0.0005</deltaT>
         <inputType>LJF</inputType>
         <particleContainerType>LC</particleContainerType>
         <r_cutoff>2.0</r_cutoff>
-        <domainSizeX>20</domainSizeX>
-        <domainSizeY>20</domainSizeY>
-        <domainSizeZ>20</domainSizeZ>
-        <boundary1Type>3</boundary1Type>
-        <boundary2Type>3</boundary2Type>
+        <domainSizeX>70</domainSizeX>
+        <domainSizeY>50</domainSizeY>
+        <domainSizeZ>10</domainSizeZ>
+        <boundary1Type>2</boundary1Type>
+        <boundary2Type>2</boundary2Type>
         <boundary3Type>2</boundary3Type>
         <boundary4Type>2</boundary4Type>
-        <boundary5Type>3</boundary5Type>
-        <boundary6Type>3</boundary6Type>
-        <thermostatON>YES</thermostatON>
+        <boundary5Type>2</boundary5Type>
+        <boundary6Type>2</boundary6Type>
+        <thermostatON>NO</thermostatON>
         <temp_init>40</temp_init>
         <n_thermostat>1</n_thermostat>
         <temp_target>40</temp_target>
@@ -24,18 +24,18 @@
         <g_grav>-12.44</g_grav>
 
         <particles>
-            <x>10.0</x>
-            <y>10.0</y>
-            <z>10.0</z>
+            <x>35.0</x>
+            <y>25.0</y>
+            <z>5.0</z>
             <velocityX>0.0</velocityX>
-            <velocityY>0.0</velocityY>
+            <velocityY>-1.0</velocityY>
             <velocityZ>0.0</velocityZ>
             <mass>1</mass>
             <epsilon>1</epsilon>
             <sigma>1</sigma>
         </particles>
         <disk>
-            <radius>5</radius>
+            <radius>3</radius>
             <distance>1.1225</distance>
             <meanVelocity>0.1</meanVelocity>
             <dimension>3</dimension>
@@ -48,6 +48,6 @@
     </output>
     <config>
         <performanceMeasurement>false</performanceMeasurement>
-        <logLevel>info</logLevel>
+        <logLevel>warn</logLevel>
     </config>
 </simulation>

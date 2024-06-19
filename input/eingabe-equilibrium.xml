@@ -2,14 +2,14 @@
             xsi:noNamespaceSchemaLocation="../src/inputReader/simulation.xsd">
     <input>
         <tStart>0.0</tStart>
-        <tEnd>15.0</tEnd>
+        <tEnd>1.0</tEnd>
         <deltaT>0.0005</deltaT>
         <inputType>LJF</inputType>
         <particleContainerType>LC</particleContainerType>
         <r_cutoff>3</r_cutoff>
         <domainSizeX>303</domainSizeX>
         <domainSizeY>180</domainSizeY>
-        <domainSizeZ>5</domainSizeZ>
+        <domainSizeZ>1</domainSizeZ>
         <boundary1Type>2</boundary1Type>
         <boundary2Type>2</boundary2Type>
         <boundary3Type>2</boundary3Type>

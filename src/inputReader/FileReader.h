@@ -22,6 +22,8 @@ public:
   virtual ~FileReader();
 
   void readFile(ParticleContainer &particleContainer, char *filename);
+
+
 };
 /**
  * @brief CuboidFileReader extends FileReader
