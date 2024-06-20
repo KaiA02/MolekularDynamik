@@ -19,8 +19,9 @@
 3. Time_Step as Double
 4. Output type: "xyz" or "vtk"
 5. Input type: "cube" or "sonne"
-6. (optional) performance measurement: true or false
-7. (optional) log level: "off", "error", "warn", "info", "debug", "trace"
+6. ... see xsd file
+7. (optional) performance measurement: true or false
+8. (optional) log level: "off", "error", "warn", "info", "debug", "trace"
 
 
 ## Quick start guide:
@@ -51,7 +52,7 @@ the end of your console input.
 
 
 # create new c++ classes from xsd file:
-xsdcxx cxx-tree --std c++11 /mnt/c/Users/joshu/CLionProjects/MolekularDynamik/src/input/simulation.xsd d
+xsdcxx cxx-tree --std c++11 /mnt/c/Users/joshu/CLionProjects/MolekularDynamik/src/input/simulation.xsd  
 xsdcxx cxx-tree --std c++11 /home/kaiarenja/CLionProjects/MolekularDynamik/src/inputReader/simulation.xsd
 
 ## explaination for realocateParticles in LCParticleContainer
