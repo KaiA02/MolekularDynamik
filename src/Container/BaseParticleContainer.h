@@ -2,7 +2,7 @@
 // Created by jh on 14.06.2024.
 //
 
-#ifndef BASEPARTICLECONTAINER_H
+#ifndef
 #define BASEPARTICLECONTAINER_H
 #include "../LinkedCell/Cell.h"
 /**
@@ -48,6 +48,10 @@ public:
     virtual std::vector<Particle>::iterator end() = 0;
     virtual std::vector<Particle>::const_iterator begin() const = 0;
     virtual std::vector<Particle>::const_iterator end() const = 0;
+
+          /**
+         * @brief handles the calculation of the Lennard-Jones force
+         */
     virtual void handleLJFCalculation() = 0;
 
 protected:

@@ -15,14 +15,13 @@ module load gcc
 module load cmake
 
 # Navigieren zum Verzeichnis, in dem das Programm kompiliert wird
-cd MolekularDynamik/
 mkdir build
 cd build
 
 # Kompilieren des Programms mit gprof
 cmake ..
 make
-gcc -pg -o MolSim ../input/eingabe-equilibrium.xml
+#gcc -pg -o MolSim ../input/eingabe-equilibrium.xml
 
 # Ausführen des Programms mit einem XML-Eingabedateiargument
 ./MolSim ../input/eingabe-equilibrium.xml

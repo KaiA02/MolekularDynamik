@@ -46,10 +46,14 @@ target_include_directories(MolSim
         ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
+find_package(XercesC 3.2 REQUIRED)
+
+include_directories(${XercesC_INCLUDE_DIR})
+
 target_link_libraries(MolSim
         # stuff that is used in headers and source files
         PUBLIC
-        xerces-c
+        XercesC::XercesC
         spdlog::spdlog
 )
 

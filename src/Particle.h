@@ -44,20 +44,17 @@ private:
    */
   int type;
 
- /**
+  /**
    * Lennard-Jones parameter epsilon
    */
- double epsilon;
+  double epsilon;
 
- /**
+  /**
    * Lennard-Jones parameter sigma
    */
- double sigma;
+  double sigma;
 
-
-
-
- bool isHalo;
+  bool isHalo;
 
 public:
   explicit Particle(int type = 0);
@@ -72,7 +69,7 @@ public:
 
   ~Particle();
 
-  //virtual ~Particle();
+  // virtual ~Particle();
 
   const std::array<double, 3> &getX() const;
 
@@ -86,7 +83,16 @@ public:
 
   int getType() const;
 
+  /**
+   *
+   * @return the Lennard-Jones parameter epsilon
+   */
   double getSigma() const;
+
+  /**
+   *
+   * @return the Lennard-Jones parameter sigma
+   */
   double getEpsilon() const;
 
   bool operator==(Particle &other);
@@ -99,20 +105,39 @@ public:
 
   void setF(const std::array<double, 3> &newForce);
 
- void setM(const double &newMass);
+  void setM(const double &newMass);
 
- void setType(const int &newType);
+  void setType(const int &newType);
 
- void setSigma(const double &sigma);
- void setEpsilon(const double &epsilon);
+  /**
+   * @brief sets the Lennard-Jones parameter sigma
+   * @param sigma the Lennard-Jones parameter sigma
+   */
+  void setSigma(const double &sigma);
 
- void setIsHalo(bool halo);
+  /**
+   * sets the Lennard-Jones parameter epsilon
+   * @param epsilon the Lennard-Jones parameter epsilon
+   */
+  void setEpsilon(const double &epsilon);
 
- bool getIsHalo();
+  /**
+   * @brief sets the particle to a halo particle
+   * @param halo true if the particle is a halo particle, false otherwise
+   */
+  void setIsHalo(bool halo);
 
- bool operator==(const Particle &other) const;
- void park();
+  /**
+   * @return true if the particle is a halo particle, false otherwise
+   */
+  bool getIsHalo();
 
+  bool operator==(const Particle &other) const;
+
+  /**
+   * @brief parks the particle at position -50 -50 -50 with velocity and force 0
+   */
+  void park();
 };
 
 std::ostream &operator<<(std::ostream &stream, Particle &p);
