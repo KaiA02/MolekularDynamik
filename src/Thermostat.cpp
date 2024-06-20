@@ -45,7 +45,7 @@ double Thermostat::calculateCurrentTemperature(const std::vector<Particle>& part
             counter ++;
         }
     }
-    //spdlog::info("kinetic Energy: {} ", kineticEnergy);
+    spdlog::debug("kinetic Energy: {} ", kineticEnergy);
     return (2.0 * kineticEnergy) / (dimension * counter);
 
 }
