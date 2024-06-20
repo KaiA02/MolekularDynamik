@@ -163,17 +163,9 @@ int main(int argc, char *argsv[]) {
     }
     saveState(lcParticles.getParticles());
   } else {
-
-    if(thermostatOn == "YES") {
-      //temperature setting
-      spdlog::info("current Temperature: {}", thermostat.getCurrentTemp(normParticles.getParticles()));
-      thermostat.setInitialTemperature(normParticles.getParticles());
-      spdlog::info("current Temperature: {}", thermostat.getCurrentTemp(normParticles.getParticles()));
-    }
-
-    while(current_time < end_time) {
+    while (current_time < end_time) {
       normCalculations.calculateX(delta_t);
-      if(inputType == "SF") { //Simple Force
+      if (inputType == "SF") { // Simple Force
         normCalculations.calculateF();
       } else {
         normCalculations.calculateLJF();
@@ -181,26 +173,10 @@ int main(int argc, char *argsv[]) {
       normCalculations.calculateV(delta_t);
       iteration++;
 
-      if(thermostatOn == "YES") {
-        if(n_thermostat == 0) {
-         thermostat.gradualScaling(normParticles.getParticles());
-        } else {
-          if(iteration % n_thermostat == 0) {
-           if(delta_temp == 0) {
-             thermostat.setTemperatureDirectly(normParticles.getParticles());
-           } else {
-             thermostat.gradualScaling(normParticles.getParticles());
-           }
-         }
-        }
-      }
-
       if (!performanceMeasurement) {
         if (iteration % 10 == 0) {
-          if(thermostatOn == "YES") {
-            spdlog::info("current Temperature: {}", thermostat.getCurrentTemp(normParticles.getParticles()));
-          }
-          plotParticles(iteration, outputType, baseName, "../output", normParticles);
+          plotParticles(iteration, outputType, baseName, "../output",
+                        normParticles);
         }
       }
       current_time += delta_t;
@@ -210,7 +186,7 @@ int main(int argc, char *argsv[]) {
   std::chrono::duration<double> elapsed = end - start;
   molecule_updates = molecule_updates / elapsed.count();
   spdlog::warn("Simulation finished in {} seconds", elapsed.count());
-  if(performanceMeasurement) {
+  if (performanceMeasurement) {
     spdlog::warn("There were {} molecule-updates per second", molecule_updates);
   }
   int parkedCounter = 0;
@@ -231,8 +207,9 @@ int main(int argc, char *argsv[]) {
  *
  * @param iteration is the number of iterations of the particles
  */
-void plotParticlesLC(int iteration, std::string outputType, std::string baseName,
-                   std::string outputPath, LCParticleContainer& particles) {
+void plotParticlesLC(int iteration, std::string outputType,
+                     std::string baseName, std::string outputPath,
+                     LCParticleContainer &particles) {
   std::filesystem::path dir(outputPath);
   if (!std::filesystem::exists(dir)) {
     std::filesystem::create_directories(dir);
@@ -306,7 +283,6 @@ void displayProgressBar(int progress, int total, std::chrono::high_resolution_cl
 
 void saveState(std::vector<Particle> particles) {
   std::ofstream outFile("../input/output.txt");
-
 
   // Write the number of particles to the file
   outFile << particles.size() << "\n";
