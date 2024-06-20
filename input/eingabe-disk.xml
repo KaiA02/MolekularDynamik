@@ -27,8 +27,8 @@
             <x>10.0</x>
             <y>10.0</y>
             <z>10.0</z>
-            <velocityX>-10.0</velocityX>
-            <velocityY>0.0</velocityY>
+            <velocityX>0.0</velocityX>
+            <velocityY>10.0</velocityY>
             <velocityZ>0.0</velocityZ>
             <mass>1</mass>
             <epsilon>1</epsilon>

@@ -213,7 +213,13 @@ int main(int argc, char *argsv[]) {
   if(performanceMeasurement) {
     spdlog::warn("There were {} molecule-updates per second", molecule_updates);
   }
-
+  int parkedCounter = 0;
+  for(auto p: lcParticles.getParticles()) {
+    if(p.getX().at(0) < -5.0) {
+      parkedCounter ++;
+    }
+  }
+  spdlog::warn("there are {} parked Particles", parkedCounter);
   return 0;
 }
 
@@ -301,6 +307,7 @@ void displayProgressBar(int progress, int total, std::chrono::high_resolution_cl
 void saveState(std::vector<Particle> particles) {
   std::ofstream outFile("../input/output.txt");
 
+
   // Write the number of particles to the file
   outFile << particles.size() << "\n";
 
@@ -316,7 +323,7 @@ void saveState(std::vector<Particle> particles) {
       outFile << velocity << " ";
     }
 
-    // Write the velocities
+    // Write the force
     for (const auto& force : particle.getF()) {
       outFile << force << " ";
     }
@@ -325,10 +332,10 @@ void saveState(std::vector<Particle> particles) {
     outFile << particle.getM() << " ";
 
     // Write the type
-    outFile << particle.getType() << "\n";
+    outFile << particle.getType() << " ";
 
     // Write the epsilon
-    outFile << particle.getEpsilon() << "\n";
+    outFile << particle.getEpsilon() << " ";
 
     // Write the sigma
     outFile << particle.getSigma() << "\n";

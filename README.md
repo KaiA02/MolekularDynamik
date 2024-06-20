@@ -47,7 +47,7 @@ the end of your console input.
 - Step by step: 
   - first call first simulation: **./MolSim ../eingabe-equilibrium.xml** 
             (here you generate the input/output.txt file)
-  - then call second simulation on top of first: **./MolSim ../eingabe-sphere.xml ../input/output.txt**
+  - then call second simulation on top of first: **./MolSim ../input/eingabe-sphere.xml ../input/output.txt**
 
 
 # create new c++ classes from xsd file:
