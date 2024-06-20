@@ -2,7 +2,7 @@
 // Created by jh on 14.06.2024.
 //
 
-#ifndef
+#ifndef BASEPARTICLECONTAINER_H
 #define BASEPARTICLECONTAINER_H
 #include "../LinkedCell/Cell.h"
 /**
