@@ -15,14 +15,14 @@ module load gcc
 module load cmake
 
 # Navigieren zum Verzeichnis, in dem das Programm kompiliert wird
+
 mkdir build
 cd build
 
 # Kompilieren des Programms mit gprof
-cmake ..
+cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="-fsanitize=address" ..
 make
-#gcc -pg -o MolSim ../input/eingabe-equilibrium.xml
-
+g++ -pg -o MolSim ../src/*.cpp
 # Ausführen des Programms mit einem XML-Eingabedateiargument
 ./MolSim ../input/eingabe-equilibrium.xml
 
