@@ -444,13 +444,13 @@ void LCParticleContainer::setUpEpsilonAndSigmas() {
   double i_epsilon;
   double i_sigma;
 
-  for(int i= 0; i < oldOne.size(); i++){
+  for(std::vector<EpsilonSigma>::size_type i= 0; i < oldOne.size(); i++){
 
     i_epsilon = oldOne.at(i).getEpsilon();
     i_sigma = oldOne.at(i).getSigma();
     i_type = oldOne.at(i).getT1();
 
-    for(int j= 0; j < oldOne.size(); j++){
+    for(std::vector<EpsilonSigma>::size_type j= 0; j < oldOne.size(); j++){
       double sigma = (i_sigma +  oldOne.at(j).getSigma()) * 0.5;
       double epsilon = std::sqrt(i_epsilon * oldOne.at(j).getEpsilon());
       EpsilonSigma IWithJ (i_type, oldOne.at(j).getT1(), sigma, epsilon);
@@ -458,13 +458,5 @@ void LCParticleContainer::setUpEpsilonAndSigmas() {
     }
     epsAndSigs = newOne;
   }
-
-
-
-
-
-    //double sigma = (p1->getSigma() + p2->getSigma()) * 0.5;
-    //double epsilon = std::sqrt(p1->getEpsilon() * p2->getEpsilon());
-
 }
 

@@ -131,8 +131,8 @@ void Calculations::LCcalculateLJF(std::vector<Particle*> &center, std::vector<Pa
 void Calculations::calculateLJFcenter(std::vector<Particle *> &center, const std::vector<EpsilonSigma> EAndS) {
 
   std::array<double, 3> f_ij{};
-  double e;
-  double s;
+  double e = 1;
+  double s = 1;
 
   for (size_t i = 0; i < center.size() - 1; ++i) {
     Particle *pi = center.at(i);
