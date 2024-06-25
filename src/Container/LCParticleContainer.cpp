@@ -159,7 +159,7 @@ void LCParticleContainer::handleLJFCalculation(Calculations& calc) {
   for (auto c : cells) {
     if (!c.isEmpty()) {
       neighbourhood = getParticleInNeighbourhood(c.getId());
-      calc.LCcalculateLJF(c.getParticles(), neighbourhood);
+      calc.LCcalculateLJF(c.getParticles(), neighbourhood, epsAndSigs);
     }
   }
   handleBoundaryAction();
@@ -217,7 +217,6 @@ void LCParticleContainer::countParticlesInCells() { //just for debugging
   spdlog::info("there are {} particles in {} the cells", counter, cellCounter);
 }
 
-
 std::vector<Particle *> LCParticleContainer::getBoundaryParticles() {
   std::vector<Particle*> result;
   const std::vector<int> possible_x = {-1, 0, cell_count[0] -1 , cell_count[0]};
@@ -266,7 +265,6 @@ std::vector<Particle *> LCParticleContainer::getBoundaryParticles() {
   }
   return result;
 }
-
 
 void LCParticleContainer::handleBoundaryAction() {
   std::vector<Particle*> boundaryparticles = getBoundaryParticles();
@@ -409,7 +407,7 @@ void LCParticleContainer::calcWithHalo(Particle *p, std::array<double, 3> x_arg)
   Particle haloParticle = Particle(x_arg, {}, p->getM(), p->getType());
   Calculations calc(*this);
   std::array<double, 3> addedForce;
-  std::array<double, 3> f_ij = calc.calculateLJF(p, &haloParticle);
+  std::array<double, 3> f_ij = calc.calculateLJF(p, &haloParticle, p->getEpsilon(), p->getSigma());
   addedForce = {p->getF().at(0) + f_ij.at(0), p->getF().at(1) + f_ij.at(1), p->getF().at(2) + f_ij.at(2)};
   p->setF(addedForce);
 }
@@ -421,3 +419,52 @@ void LCParticleContainer::applyGravitation() {
     p.setF({F[0], F[1] + (g_grav * p.getM()), F[2]});
   }
 }
+
+void LCParticleContainer::setUpEpsilonAndSigmas() {
+  int type = 0;
+  std::vector<EpsilonSigma> oldOne {};
+  bool found;
+  for(auto p : particles) {
+    type = p.getType();
+    found = false;
+    for(auto es : oldOne) {
+      if(!found) {
+        if(es.getT1() == type) {
+          found = true;
+        }
+      }
+    }
+    if(!found) {
+      EpsilonSigma PWithP (type, type, p.getSigma(), p.getEpsilon());
+    oldOne.push_back(PWithP);
+    }
+  }
+  std::vector<EpsilonSigma> newOne {};
+  int i_type;
+  double i_epsilon;
+  double i_sigma;
+
+  for(int i= 0; i < oldOne.size(); i++){
+
+    i_epsilon = oldOne.at(i).getEpsilon();
+    i_sigma = oldOne.at(i).getSigma();
+    i_type = oldOne.at(i).getT1();
+
+    for(int j= 0; j < oldOne.size(); j++){
+      double sigma = (i_sigma +  oldOne.at(j).getSigma()) * 0.5;
+      double epsilon = std::sqrt(i_epsilon * oldOne.at(j).getEpsilon());
+      EpsilonSigma IWithJ (i_type, oldOne.at(j).getT1(), sigma, epsilon);
+      newOne.push_back(IWithJ);
+    }
+    epsAndSigs = newOne;
+  }
+
+
+
+
+
+    //double sigma = (p1->getSigma() + p2->getSigma()) * 0.5;
+    //double epsilon = std::sqrt(p1->getEpsilon() * p2->getEpsilon());
+
+}
+

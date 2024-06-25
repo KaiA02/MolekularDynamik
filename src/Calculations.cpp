@@ -89,41 +89,36 @@ void Calculations::calculateF() {
   }
 }
 
-void Calculations::calculateLJF() {
-
-  std::array<double, 3> f_ij;
-
-  for (int i = 0; i < particles.size(); ++i) {
-    Particle &pi = particles.getParticles().at(i);
-    pi.setF({0, 0, 0});
-  }
-
-  for (int i = 0; i < particles.size() - 1; ++i) {
-    Particle &pi = particles.getParticles().at(i);
-    for (int j = i + 1; j < particles.size(); ++j) {
-      Particle &pj = particles.getParticles().at(j);
-      f_ij = calculateLJF(&pi, &pj);
-      pi.setF(pi.getF() + f_ij);
-      pj.setF(pj.getF() - f_ij);
-
-    }
-  }
-}
 
 
-void Calculations::LCcalculateLJF(std::vector<Particle*> &center, std::vector<Particle> &other) {
+void Calculations::LCcalculateLJF(std::vector<Particle*> &center, std::vector<Particle> &other, std::vector<EpsilonSigma> EAndS) {
 
   std::array<double, 3> f_ij;
   std::array<double, 3> newForcei;
+  double e;
+  double s;
 
   if (center.size() > 1) {
-    calculateLJFcenter(center);
+    calculateLJFcenter(center, EAndS);
   }
   if (other.size() > 0) {
     for(auto pi : center){
       newForcei = pi->getF();
       for(auto pj : other) {
-        f_ij = calculateLJF(pi, &pj);
+        if(pi->getType() != pj.getType()) {
+          for(auto entry : EAndS) {
+          if(entry.isRight(pi->getType(), pj.getType())) {
+            e = entry.getEpsilon();
+            s = entry.getSigma();
+            break;
+          }
+        }
+        } else {
+          e = pi->getEpsilon();
+          s = pi->getSigma();
+        }
+
+        f_ij = calculateLJF(pi, &pj, e, s);
 
         newForcei = {newForcei.at(0) + f_ij.at(0), newForcei.at(1) + f_ij.at(1), newForcei.at(2) + f_ij.at(2)};
       }
@@ -133,24 +128,36 @@ void Calculations::LCcalculateLJF(std::vector<Particle*> &center, std::vector<Pa
 }
 
 
-void Calculations::calculateLJFcenter(std::vector<Particle *> &center) {
+void Calculations::calculateLJFcenter(std::vector<Particle *> &center, const std::vector<EpsilonSigma> EAndS) {
 
-  std::array<double, 3> f_ij;
+  std::array<double, 3> f_ij{};
+  double e;
+  double s;
 
   for (size_t i = 0; i < center.size() - 1; ++i) {
     Particle *pi = center.at(i);
     for (size_t j = i + 1; j < center.size(); ++j) {
       Particle *pj = center.at(j);
-      f_ij = calculateLJF(pi, pj);
+      if(pi->getType() != pj->getType()) {
+        for(auto entry : EAndS) {
+          if(entry.isRight(pi->getType(), pj->getType())) {
+            e = entry.getEpsilon();
+            s = entry.getSigma();
+            break;
+          }
+        }
+      } else {
+        e = pi->getEpsilon();
+        s = pi->getSigma();
+      }
+      f_ij = calculateLJF(pi, pj, e, s);
       pi->setF(pi->getF() + f_ij);
       pj->setF(pj->getF() - f_ij);
     }
   }
 }
 
-std::array<double, 3> Calculations::calculateLJF(Particle *p1, Particle *p2) {
-  double sigma = (p1->getSigma() + p2->getSigma()) * 0.5;
-  double epsilon = std::sqrt(p1->getEpsilon() * p2->getEpsilon());
+std::array<double, 3> Calculations::calculateLJF(Particle *p1, Particle *p2, double e, double s) {
   std::array<double,3> x1 = p1->getX();
   std::array<double,3> x2 = p2->getX();
   std::array<double, 3> f_ij{};
@@ -160,8 +167,8 @@ std::array<double, 3> Calculations::calculateLJF(Particle *p1, Particle *p2) {
                          displacement_vector[2] * displacement_vector[2]);
 if (distance <= r_cutoff) {
   double forcefactor =
-      ((-24 * epsilon) / pow(distance, 2)) *
-      (pow((sigma) / distance, 6) - 2 * pow((sigma) / distance, 12));
+      ((-24 * e) / pow(distance, 2)) *
+      (pow((s) / distance, 6) - 2 * pow((s) / distance, 12));
   f_ij = {forcefactor * displacement_vector[0],
                                 forcefactor * displacement_vector[1],
                                 forcefactor * displacement_vector[2]};

@@ -109,6 +109,8 @@ add_executable(
         src/test/ThermostatTests.cpp
         src/Thermostat.cpp
         src/Thermostat.h
+        src/utils/EpsilonSigma.h
+        src/utils/EpsilonSigma.h
 
 
 )

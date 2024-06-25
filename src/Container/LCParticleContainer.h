@@ -6,6 +6,7 @@
 #define LCPARTICLECONTAINER_H
 #include "../Calculations.h"
 #include "ParticleContainer.h"
+#include "../utils/EpsilonSigma.h"
 
 /**
  * @brief The LCParticleContainer class
@@ -156,6 +157,8 @@ public:
    */
   void applyGravitation();
 
+  void setUpEpsilonAndSigmas();
+
 private:
   std::vector<Cell> cells;
   std::array<double, 3> cell_size;
@@ -163,8 +166,7 @@ private:
   std::array<int, 6> boundary_types;
   double r_cutoff;
   double g_grav;
-  std::vector<std::vector<double>> epsilons;
-  std::vector<std::vector<double>> sigmas;
+  std::vector<EpsilonSigma> epsAndSigs;
 
 };
 

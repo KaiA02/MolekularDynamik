@@ -98,6 +98,7 @@ int main(int argc, char *argsv[]) {
   Calculations lcCaluclations(lcParticles);
   lcCaluclations.setR_cutoff(lcParticles.getR_cutoff());
   lcCaluclations.setG_grav(lcParticles.getG_grav());
+  lcParticles.setUpEpsilonAndSigmas();
   spdlog::warn("Simulation started with parameters: start_time: {}, end_time: "
                "{}, delta_t: {}, temp_init: {}, temp_target: {}, inputType: {}, outputType: {}, baseName: {}, "
                "logLevel: {}, performanceMeasurement: {}, {} "
@@ -120,13 +121,9 @@ int main(int argc, char *argsv[]) {
     while(current_time < end_time) {
       lcCaluclations.calculateX(delta_t);
       molecule_updates += lcParticles.getParticles().size();
-      if(inputType == "SF") { //Simple Force
-        lcCaluclations.calculateLJF();
-        molecule_updates += lcParticles.getParticles().size();
-      } else {
-        lcParticles.handleLJFCalculation(lcCaluclations);
-        molecule_updates += 5 * lcParticles.getParticles().size(); //only provisionally
-      }
+      lcParticles.handleLJFCalculation(lcCaluclations);
+      molecule_updates += 5 * lcParticles.getParticles().size(); //only provisionally
+
 
 
       lcCaluclations.calculateV(delta_t);
@@ -165,11 +162,7 @@ int main(int argc, char *argsv[]) {
   } else {
     while (current_time < end_time) {
       normCalculations.calculateX(delta_t);
-      if (inputType == "SF") { // Simple Force
-        normCalculations.calculateF();
-      } else {
-        normCalculations.calculateLJF();
-      }
+      normCalculations.calculateF();
       normCalculations.calculateV(delta_t);
       iteration++;
 
