@@ -148,10 +148,8 @@ public:
    * calculates the force on the particle p using a halo particle
    * @param p the particle
    * @param x_arg the position of the halo particle
-   * @param v_arg the velocity of the halo particle
    */
-  void calcWithHalo(Particle *p, std::array<double, 3> x_arg,
-                    std::array<double, 3> v_arg);
+  void calcWithHalo(Particle *p, std::array<double, 3> x_arg);
 
   /**
    * @brief applies the gravitational force to all particles
@@ -165,6 +163,9 @@ private:
   std::array<int, 6> boundary_types;
   double r_cutoff;
   double g_grav;
+  std::vector<std::vector<double>> epsilons;
+  std::vector<std::vector<double>> sigmas;
+
 };
 
 #endif // LCPARTICLECONTAINER_H

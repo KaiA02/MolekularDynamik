@@ -49,17 +49,17 @@ Particle::~Particle() {
 }
 
 
-const std::array<double, 3> &Particle::getX() const { return x; }
+ const std::array<double, 3> &Particle::getX() const { return x; }
 
-const std::array<double, 3> &Particle::getV() const { return v; }
+ const std::array<double, 3> &Particle::getV() const { return v; }
 
-const std::array<double, 3> &Particle::getF() const { return f; }
+ const std::array<double, 3> &Particle::getF() const { return f; }
 
-const std::array<double, 3> &Particle::getOldF() const { return old_f; }
+ const std::array<double, 3> &Particle::getOldF() const { return old_f; }
 
-double Particle::getM() const { return m; }
+ double Particle::getM() const { return m; }
 
-int Particle::getType() const { return type; }
+ int Particle::getType() const { return type; }
 
 double Particle::getSigma() const { return sigma; }
 double Particle::getEpsilon() const { return epsilon; }

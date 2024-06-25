@@ -81,7 +81,7 @@ public:
 
   double getM() const;
 
-  int getType() const;
+ int getType() const;
 
   /**
    *
