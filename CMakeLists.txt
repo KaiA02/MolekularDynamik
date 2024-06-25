@@ -12,6 +12,9 @@ if (NOT CMAKE_BUILD_TYPE)
             "Choose the type of build, options are: Debug Release RelWithDebInfo MinSizeRel." FORCE)
 endif (NOT CMAKE_BUILD_TYPE)
 
+# Add the -pg flag for gprof profiling
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pg")
+
 # collect all cpp files
 file(GLOB_RECURSE MY_SRC
         "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
@@ -29,6 +32,8 @@ add_executable(MolSim ${MY_SRC}
         src/inputReader/XMLReader.h
         src/inputReader/simulation.cxx
         src/inputReader/simulation.hxx
+        src/Thermostat.cpp
+        src/Thermostat.h
 )
 
 # set cxx standard. You may raise this if you want.
@@ -44,10 +49,14 @@ target_include_directories(MolSim
         ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
+find_package(XercesC 3.2 REQUIRED)
+
+include_directories(${XercesC_INCLUDE_DIR})
+
 target_link_libraries(MolSim
         # stuff that is used in headers and source files
         PUBLIC
-        xerces-c
+        XercesC::XercesC
         spdlog::spdlog
 )
 
@@ -100,6 +109,11 @@ add_executable(
         src/Container/LCParticleContainer.cpp
         src/Container/LCParticleContainer.h
         src/Container/BaseParticleContainer.h
+        src/test/ThermostatTests.cpp
+        src/Thermostat.cpp
+        src/Thermostat.h
+        src/utils/EpsilonSigma.h
+        src/utils/EpsilonSigma.h
 
 
 )

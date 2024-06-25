@@ -11,6 +11,8 @@
 #include <iostream>
 #include <spdlog/spdlog.h>
 
+#include "Thermostat.h"
+
 /**
  * plot the particles to a xyz-file
  */
@@ -18,10 +20,17 @@ void plotParticlesLC(int iteration, std::string outputType, std::string baseName
                    std::string outputPath, LCParticleContainer& particles);
 void plotParticles(int iteration, std::string outputType, std::string baseName,
                    std::string outputPath, ParticleContainer& particles);
+void displayProgressBar(int progress, int total, std::chrono::high_resolution_clock::time_point start);
 
+void saveState(std::vector<Particle> particles);
 
 int main(int argc, char *argsv[]) {
+
+  LCParticleContainer lcParticles;
+  ParticleContainer normParticles;
+
   XMLReader xmlReader(argsv[1]);
+
 
   std::string particleContainerType = xmlReader.getParticleContainerType();
   std::string inputType = xmlReader.getInputType();
@@ -33,10 +42,19 @@ int main(int argc, char *argsv[]) {
       xmlReader.getPerformanceMeasurement();
   std::string logLevel = xmlReader.getLogLevel();
 
+
+
+  std::string thermostatOn = xmlReader.ThermostatON();
+  double temp_init = xmlReader.getTemp_init();
+  int n_thermostat = xmlReader.getN_Thermostat();
+  double temp_target = xmlReader.getTemp_Target();
+  double delta_temp = xmlReader.getDelta_Temp();
+  Thermostat thermostat(temp_init, n_thermostat, temp_target, delta_temp);
+
   //std::cout << "Hello from MolSim for PSE!" << std::endl;
-  if (argc < 2) {
-    std::cout << "Erroneous programme call! " << std::endl;
-    std::cout << "./molsym filename" << std::endl;
+  if (argc > 2) {
+    FileReader stateReader;
+    stateReader.readFile(lcParticles, argsv[2]);
   }
   spdlog::default_logger()->set_level(spdlog::level::info);
 
@@ -61,9 +79,15 @@ int main(int argc, char *argsv[]) {
 
   double current_time = start_time;
 
+  double totalIterations = (end_time - start_time) / delta_t;
+  int progress = 0;
+
+  int molecule_updates = 0;
+
   int iteration = 0;
-  LCParticleContainer lcParticles;
-  ParticleContainer normParticles;
+
+
+
   if (particleContainerType == "LC") {
     xmlReader.readXML_LC(lcParticles);
   } else {
@@ -72,48 +96,80 @@ int main(int argc, char *argsv[]) {
 
   Calculations normCalculations(normParticles);
   Calculations lcCaluclations(lcParticles);
+  lcCaluclations.setR_cutoff(lcParticles.getR_cutoff());
+  lcCaluclations.setG_grav(lcParticles.getG_grav());
+  lcParticles.setUpEpsilonAndSigmas();
   spdlog::warn("Simulation started with parameters: start_time: {}, end_time: "
-               "{}, delta_t: {}, inputType: {}, outputType: {}, baseName: {}, "
+               "{}, delta_t: {}, temp_init: {}, temp_target: {}, inputType: {}, outputType: {}, baseName: {}, "
                "logLevel: {}, performanceMeasurement: {}, {} "
                "particles, {} cuboids, {} disks ",
-               start_time, end_time, delta_t, inputType, outputType, baseName,
+               start_time, end_time, delta_t, temp_init, temp_target, inputType, outputType, baseName,
                logLevel, performanceMeasurement, lcParticles.getParticles().size(),
                xmlReader.getNumberOfCuboids(), xmlReader.getNumberOfDisks());
   auto start = std::chrono::high_resolution_clock::now();
   // for this loop, we assume: current x, current f and current v are known
   if(particleContainerType == "LC") {
-    while(current_time < end_time) {
-      //spdlog::warn("iteration: {}", current_time / delta_t);
-      lcCaluclations.calculateX(delta_t);
-      if(inputType == "SF") { //Simple Force
-        lcCaluclations.calculateLJF();
-      } else {
-        lcParticles.handleLJFCalculation();
 
-      }
-      lcParticles.handleBoundaryAction();
+    if(thermostatOn == "YES") {
+    //temperature setting
+     spdlog::info("current Temperature: {}", thermostat.getCurrentTemp(lcParticles.getParticles()));
+     thermostat.setInitialTemperature(lcParticles.getParticles());
+     spdlog::info("current Temperature: {}", thermostat.getCurrentTemp(lcParticles.getParticles()));
+     molecule_updates += lcParticles.getParticles().size();
+    }
+
+    while(current_time < end_time) {
+      lcCaluclations.calculateX(delta_t);
+      molecule_updates += lcParticles.getParticles().size();
+      lcParticles.handleLJFCalculation(lcCaluclations);
+      molecule_updates += 5 * lcParticles.getParticles().size(); //only provisionally
+
+
+
       lcCaluclations.calculateV(delta_t);
+      molecule_updates += lcParticles.getParticles().size();
       iteration++;
+
+      if(thermostatOn == "YES") {
+        if(n_thermostat == 0) {
+          thermostat.gradualScaling(lcParticles.getParticles());
+        } else {
+          if(iteration % n_thermostat == 0) {
+            if(delta_temp == 0) {
+              thermostat.setTemperatureDirectly(lcParticles.getParticles());
+           } else {
+              thermostat.gradualScaling(lcParticles.getParticles());
+           }
+          }
+        }
+        molecule_updates += lcParticles.getParticles().size();
+      }
+
       if (!performanceMeasurement) {
         if (iteration % 10 == 0) {
+          if(thermostatOn == "YES") {
+            spdlog::info("current Temperature: {}", thermostat.getCurrentTemp(lcParticles.getParticles()));
+          }
           plotParticlesLC(iteration, outputType, baseName, "../output", lcParticles);
+          displayProgressBar(progress, totalIterations, start);
         }
       }
+      progress++;
       current_time += delta_t;
+
     }
+    saveState(lcParticles.getParticles());
   } else {
-    while(current_time < end_time) {
+    while (current_time < end_time) {
       normCalculations.calculateX(delta_t);
-      if(inputType == "SF") { //Simple Force
-        normCalculations.calculateF();
-      } else {
-        normCalculations.calculateLJF();
-      }
+      normCalculations.calculateF();
       normCalculations.calculateV(delta_t);
       iteration++;
+
       if (!performanceMeasurement) {
         if (iteration % 10 == 0) {
-          plotParticles(iteration, outputType, baseName, "../output", normParticles);
+          plotParticles(iteration, outputType, baseName, "../output",
+                        normParticles);
         }
       }
       current_time += delta_t;
@@ -121,7 +177,18 @@ int main(int argc, char *argsv[]) {
   }
   auto end = std::chrono::high_resolution_clock::now();
   std::chrono::duration<double> elapsed = end - start;
+  molecule_updates = molecule_updates / elapsed.count();
   spdlog::warn("Simulation finished in {} seconds", elapsed.count());
+  if (performanceMeasurement) {
+    spdlog::warn("There were {} molecule-updates per second", molecule_updates);
+  }
+  int parkedCounter = 0;
+  for(auto p: lcParticles.getParticles()) {
+    if(p.getX().at(0) < -5.0) {
+      parkedCounter ++;
+    }
+  }
+  spdlog::warn("there are {} parked Particles", parkedCounter);
   return 0;
 }
 
@@ -133,8 +200,9 @@ int main(int argc, char *argsv[]) {
  *
  * @param iteration is the number of iterations of the particles
  */
-void plotParticlesLC(int iteration, std::string outputType, std::string baseName,
-                   std::string outputPath, LCParticleContainer& particles) {
+void plotParticlesLC(int iteration, std::string outputType,
+                     std::string baseName, std::string outputPath,
+                     LCParticleContainer &particles) {
   std::filesystem::path dir(outputPath);
   if (!std::filesystem::exists(dir)) {
     std::filesystem::create_directories(dir);
@@ -184,4 +252,64 @@ void plotParticles(int iteration, std::string outputType, std::string baseName,
     std::string filename = out_name;
     vtkWriter.writeFile(filename, iteration);
   }
+}
+
+void displayProgressBar(int progress, int total, std::chrono::high_resolution_clock::time_point start) {
+  const int barWidth = 100;
+
+  std::cout << "[";
+  int pos = barWidth * progress / total;
+  for (int i = 0; i < barWidth; ++i) {
+    if (i < pos) std::cout << "=";
+    else if (i == pos) std::cout << ">";
+    else std::cout << " ";
+  }
+
+  auto now = std::chrono::high_resolution_clock::now();
+  auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(now - start).count();
+  auto totalEstimatedTime = total > 0 ? (elapsed * total) / progress : 0;
+  auto remainingTime = totalEstimatedTime - elapsed;
+
+  std::cout << "] " << int(progress * 100.0 / total) << " %, estimated time remaining: " << remainingTime << "s\r";
+  std::cout.flush();
+}
+
+void saveState(std::vector<Particle> particles) {
+  std::ofstream outFile("../input/output.txt");
+
+  // Write the number of particles to the file
+  outFile << particles.size() << "\n";
+
+  // Iterate over the particles and write their attributes to the file
+  for (const auto& particle : particles) {
+    // Write the xyz-coordinates
+    for (const auto& coord : particle.getX()) {
+      outFile << coord << " ";
+    }
+
+    // Write the velocities
+    for (const auto& velocity : particle.getV()) {
+      outFile << velocity << " ";
+    }
+
+    // Write the force
+    for (const auto& force : particle.getF()) {
+      outFile << force << " ";
+    }
+
+    // Write the mass
+    outFile << particle.getM() << " ";
+
+    // Write the type
+    outFile << particle.getType() << " ";
+
+    // Write the epsilon
+    outFile << particle.getEpsilon() << " ";
+
+    // Write the sigma
+    outFile << particle.getSigma() << "\n";
+  }
+
+  outFile.close();
+  spdlog::warn("State is saved");
 }

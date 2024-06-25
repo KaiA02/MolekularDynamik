@@ -401,6 +401,120 @@ boundary6Type (const boundary6Type_type& x)
   this->boundary6Type_.set (x);
 }
 
+const input::thermostatON_type& input::
+thermostatON () const
+{
+  return this->thermostatON_.get ();
+}
+
+input::thermostatON_type& input::
+thermostatON ()
+{
+  return this->thermostatON_.get ();
+}
+
+void input::
+thermostatON (const thermostatON_type& x)
+{
+  this->thermostatON_.set (x);
+}
+
+void input::
+thermostatON (::std::unique_ptr< thermostatON_type > x)
+{
+  this->thermostatON_.set (std::move (x));
+}
+
+const input::temp_init_type& input::
+temp_init () const
+{
+  return this->temp_init_.get ();
+}
+
+input::temp_init_type& input::
+temp_init ()
+{
+  return this->temp_init_.get ();
+}
+
+void input::
+temp_init (const temp_init_type& x)
+{
+  this->temp_init_.set (x);
+}
+
+const input::n_thermostat_type& input::
+n_thermostat () const
+{
+  return this->n_thermostat_.get ();
+}
+
+input::n_thermostat_type& input::
+n_thermostat ()
+{
+  return this->n_thermostat_.get ();
+}
+
+void input::
+n_thermostat (const n_thermostat_type& x)
+{
+  this->n_thermostat_.set (x);
+}
+
+const input::temp_target_type& input::
+temp_target () const
+{
+  return this->temp_target_.get ();
+}
+
+input::temp_target_type& input::
+temp_target ()
+{
+  return this->temp_target_.get ();
+}
+
+void input::
+temp_target (const temp_target_type& x)
+{
+  this->temp_target_.set (x);
+}
+
+const input::delta_temp_type& input::
+delta_temp () const
+{
+  return this->delta_temp_.get ();
+}
+
+input::delta_temp_type& input::
+delta_temp ()
+{
+  return this->delta_temp_.get ();
+}
+
+void input::
+delta_temp (const delta_temp_type& x)
+{
+  this->delta_temp_.set (x);
+}
+
+const input::g_grav_type& input::
+g_grav () const
+{
+  return this->g_grav_.get ();
+}
+
+input::g_grav_type& input::
+g_grav ()
+{
+  return this->g_grav_.get ();
+}
+
+void input::
+g_grav (const g_grav_type& x)
+{
+  this->g_grav_.set (x);
+}
+
 const input::particles_sequence& input::
 particles () const
 {
@@ -713,6 +827,42 @@ mass (const mass_type& x)
   this->mass_.set (x);
 }
 
+const particles::epsilon_type& particles::
+epsilon () const
+{
+  return this->epsilon_.get ();
+}
+
+particles::epsilon_type& particles::
+epsilon ()
+{
+  return this->epsilon_.get ();
+}
+
+void particles::
+epsilon (const epsilon_type& x)
+{
+  this->epsilon_.set (x);
+}
+
+const particles::sigma_type& particles::
+sigma () const
+{
+  return this->sigma_.get ();
+}
+
+particles::sigma_type& particles::
+sigma ()
+{
+  return this->sigma_.get ();
+}
+
+void particles::
+sigma (const sigma_type& x)
+{
+  this->sigma_.set (x);
+}
+
 
 // cuboids
 // 
@@ -863,6 +1013,24 @@ void disk::
 distance (const distance_type& x)
 {
   this->distance_.set (x);
+}
+
+const disk::meanVelocity_type& disk::
+meanVelocity () const
+{
+  return this->meanVelocity_.get ();
+}
+
+disk::meanVelocity_type& disk::
+meanVelocity ()
+{
+  return this->meanVelocity_.get ();
+}
+
+void disk::
+meanVelocity (const meanVelocity_type& x)
+{
+  this->meanVelocity_.set (x);
 }
 
 const disk::dimension_type& disk::
@@ -1059,7 +1227,13 @@ input (const tStart_type& tStart,
        const boundary3Type_type& boundary3Type,
        const boundary4Type_type& boundary4Type,
        const boundary5Type_type& boundary5Type,
-       const boundary6Type_type& boundary6Type)
+       const boundary6Type_type& boundary6Type,
+       const thermostatON_type& thermostatON,
+       const temp_init_type& temp_init,
+       const n_thermostat_type& n_thermostat,
+       const temp_target_type& temp_target,
+       const delta_temp_type& delta_temp,
+       const g_grav_type& g_grav)
 : ::xml_schema::type (),
   tStart_ (tStart, this),
   tEnd_ (tEnd, this),
@@ -1076,6 +1250,12 @@ input (const tStart_type& tStart,
   boundary4Type_ (boundary4Type, this),
   boundary5Type_ (boundary5Type, this),
   boundary6Type_ (boundary6Type, this),
+  thermostatON_ (thermostatON, this),
+  temp_init_ (temp_init, this),
+  n_thermostat_ (n_thermostat, this),
+  temp_target_ (temp_target, this),
+  delta_temp_ (delta_temp, this),
+  g_grav_ (g_grav, this),
   particles_ (this),
   cuboids_ (this),
   disk_ (this)
@@ -1102,6 +1282,12 @@ input (const input& x,
   boundary4Type_ (x.boundary4Type_, f, this),
   boundary5Type_ (x.boundary5Type_, f, this),
   boundary6Type_ (x.boundary6Type_, f, this),
+  thermostatON_ (x.thermostatON_, f, this),
+  temp_init_ (x.temp_init_, f, this),
+  n_thermostat_ (x.n_thermostat_, f, this),
+  temp_target_ (x.temp_target_, f, this),
+  delta_temp_ (x.delta_temp_, f, this),
+  g_grav_ (x.g_grav_, f, this),
   particles_ (x.particles_, f, this),
   cuboids_ (x.cuboids_, f, this),
   disk_ (x.disk_, f, this)
@@ -1128,6 +1314,12 @@ input (const ::xercesc::DOMElement& e,
   boundary4Type_ (this),
   boundary5Type_ (this),
   boundary6Type_ (this),
+  thermostatON_ (this),
+  temp_init_ (this),
+  n_thermostat_ (this),
+  temp_target_ (this),
+  delta_temp_ (this),
+  g_grav_ (this),
   particles_ (this),
   cuboids_ (this),
   disk_ (this)
@@ -1320,6 +1512,75 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // thermostatON
+    //
+    if (n.name () == "thermostatON" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< thermostatON_type > r (
+        thermostatON_traits::create (i, f, this));
+
+      if (!thermostatON_.present ())
+      {
+        this->thermostatON_.set (::std::move (r));
+        continue;
+      }
+    }
+
+    // temp_init
+    //
+    if (n.name () == "temp_init" && n.namespace_ ().empty ())
+    {
+      if (!temp_init_.present ())
+      {
+        this->temp_init_.set (temp_init_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // n_thermostat
+    //
+    if (n.name () == "n_thermostat" && n.namespace_ ().empty ())
+    {
+      if (!n_thermostat_.present ())
+      {
+        this->n_thermostat_.set (n_thermostat_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // temp_target
+    //
+    if (n.name () == "temp_target" && n.namespace_ ().empty ())
+    {
+      if (!temp_target_.present ())
+      {
+        this->temp_target_.set (temp_target_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // delta_temp
+    //
+    if (n.name () == "delta_temp" && n.namespace_ ().empty ())
+    {
+      if (!delta_temp_.present ())
+      {
+        this->delta_temp_.set (delta_temp_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // g_grav
+    //
+    if (n.name () == "g_grav" && n.namespace_ ().empty ())
+    {
+      if (!g_grav_.present ())
+      {
+        this->g_grav_.set (g_grav_traits::create (i, f, this));
+        continue;
+      }
+    }
+
     // particles
     //
     if (n.name () == "particles" && n.namespace_ ().empty ())
@@ -1460,6 +1721,48 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "boundary6Type",
       "");
   }
+
+  if (!thermostatON_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "thermostatON",
+      "");
+  }
+
+  if (!temp_init_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "temp_init",
+      "");
+  }
+
+  if (!n_thermostat_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "n_thermostat",
+      "");
+  }
+
+  if (!temp_target_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "temp_target",
+      "");
+  }
+
+  if (!delta_temp_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "delta_temp",
+      "");
+  }
+
+  if (!g_grav_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "g_grav",
+      "");
+  }
 }
 
 input* input::
@@ -1490,6 +1793,12 @@ operator= (const input& x)
     this->boundary4Type_ = x.boundary4Type_;
     this->boundary5Type_ = x.boundary5Type_;
     this->boundary6Type_ = x.boundary6Type_;
+    this->thermostatON_ = x.thermostatON_;
+    this->temp_init_ = x.temp_init_;
+    this->n_thermostat_ = x.n_thermostat_;
+    this->temp_target_ = x.temp_target_;
+    this->delta_temp_ = x.delta_temp_;
+    this->g_grav_ = x.g_grav_;
     this->particles_ = x.particles_;
     this->cuboids_ = x.cuboids_;
     this->disk_ = x.disk_;
@@ -1754,7 +2063,9 @@ particles (const x_type& x,
            const velocityX_type& velocityX,
            const velocityY_type& velocityY,
            const velocityZ_type& velocityZ,
-           const mass_type& mass)
+           const mass_type& mass,
+           const epsilon_type& epsilon,
+           const sigma_type& sigma)
 : ::xml_schema::type (),
   x_ (x, this),
   y_ (y, this),
@@ -1762,7 +2073,9 @@ particles (const x_type& x,
   velocityX_ (velocityX, this),
   velocityY_ (velocityY, this),
   velocityZ_ (velocityZ, this),
-  mass_ (mass, this)
+  mass_ (mass, this),
+  epsilon_ (epsilon, this),
+  sigma_ (sigma, this)
 {
 }
 
@@ -1777,7 +2090,9 @@ particles (const particles& x,
   velocityX_ (x.velocityX_, f, this),
   velocityY_ (x.velocityY_, f, this),
   velocityZ_ (x.velocityZ_, f, this),
-  mass_ (x.mass_, f, this)
+  mass_ (x.mass_, f, this),
+  epsilon_ (x.epsilon_, f, this),
+  sigma_ (x.sigma_, f, this)
 {
 }
 
@@ -1792,7 +2107,9 @@ particles (const ::xercesc::DOMElement& e,
   velocityX_ (this),
   velocityY_ (this),
   velocityZ_ (this),
-  mass_ (this)
+  mass_ (this),
+  epsilon_ (this),
+  sigma_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -1888,6 +2205,28 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // epsilon
+    //
+    if (n.name () == "epsilon" && n.namespace_ ().empty ())
+    {
+      if (!epsilon_.present ())
+      {
+        this->epsilon_.set (epsilon_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // sigma
+    //
+    if (n.name () == "sigma" && n.namespace_ ().empty ())
+    {
+      if (!sigma_.present ())
+      {
+        this->sigma_.set (sigma_traits::create (i, f, this));
+        continue;
+      }
+    }
+
     break;
   }
 
@@ -1939,6 +2278,20 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "mass",
       "");
   }
+
+  if (!epsilon_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "epsilon",
+      "");
+  }
+
+  if (!sigma_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "sigma",
+      "");
+  }
 }
 
 particles* particles::
@@ -1961,6 +2314,8 @@ operator= (const particles& x)
     this->velocityY_ = x.velocityY_;
     this->velocityZ_ = x.velocityZ_;
     this->mass_ = x.mass_;
+    this->epsilon_ = x.epsilon_;
+    this->sigma_ = x.sigma_;
   }
 
   return *this;
@@ -2181,10 +2536,12 @@ cuboids::
 disk::
 disk (const radius_type& radius,
       const distance_type& distance,
+      const meanVelocity_type& meanVelocity,
       const dimension_type& dimension)
 : ::xml_schema::type (),
   radius_ (radius, this),
   distance_ (distance, this),
+  meanVelocity_ (meanVelocity, this),
   dimension_ (dimension, this)
 {
 }
@@ -2196,6 +2553,7 @@ disk (const disk& x,
 : ::xml_schema::type (x, f, c),
   radius_ (x.radius_, f, this),
   distance_ (x.distance_, f, this),
+  meanVelocity_ (x.meanVelocity_, f, this),
   dimension_ (x.dimension_, f, this)
 {
 }
@@ -2207,6 +2565,7 @@ disk (const ::xercesc::DOMElement& e,
 : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
   radius_ (this),
   distance_ (this),
+  meanVelocity_ (this),
   dimension_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
@@ -2248,6 +2607,17 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // meanVelocity
+    //
+    if (n.name () == "meanVelocity" && n.namespace_ ().empty ())
+    {
+      if (!meanVelocity_.present ())
+      {
+        this->meanVelocity_.set (meanVelocity_traits::create (i, f, this));
+        continue;
+      }
+    }
+
     // dimension
     //
     if (n.name () == "dimension" && n.namespace_ ().empty ())
@@ -2276,6 +2646,13 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "");
   }
 
+  if (!meanVelocity_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "meanVelocity",
+      "");
+  }
+
   if (!dimension_.present ())
   {
     throw ::xsd::cxx::tree::expected_element< char > (
@@ -2299,6 +2676,7 @@ operator= (const disk& x)
     static_cast< ::xml_schema::type& > (*this) = x;
     this->radius_ = x.radius_;
     this->distance_ = x.distance_;
+    this->meanVelocity_ = x.meanVelocity_;
     this->dimension_ = x.dimension_;
   }
 

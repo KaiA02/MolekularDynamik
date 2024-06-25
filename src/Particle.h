@@ -44,6 +44,18 @@ private:
    */
   int type;
 
+  /**
+   * Lennard-Jones parameter epsilon
+   */
+  double epsilon;
+
+  /**
+   * Lennard-Jones parameter sigma
+   */
+  double sigma;
+
+  bool isHalo;
+
 public:
   explicit Particle(int type = 0);
 
@@ -53,11 +65,11 @@ public:
       // for visualization, we need always 3 coordinates
       // -> in case of 2d, we use only the first and the second
       std::array<double, 3> x_arg, std::array<double, 3> v_arg, double m_arg,
-      int type = 0);
+      int type = 0, double epsilon = 5, double sigma = 1);
 
   ~Particle();
 
-  //virtual ~Particle();
+  // virtual ~Particle();
 
   const std::array<double, 3> &getX() const;
 
@@ -69,7 +81,19 @@ public:
 
   double getM() const;
 
-  int getType() const;
+ int getType() const;
+
+  /**
+   *
+   * @return the Lennard-Jones parameter epsilon
+   */
+  double getSigma() const;
+
+  /**
+   *
+   * @return the Lennard-Jones parameter sigma
+   */
+  double getEpsilon() const;
 
   bool operator==(Particle &other);
 
@@ -81,12 +105,39 @@ public:
 
   void setF(const std::array<double, 3> &newForce);
 
- void setM(const double &newMass);
+  void setM(const double &newMass);
 
- void setType(const int &newType);
+  void setType(const int &newType);
 
- bool operator==(const Particle &other) const;
+  /**
+   * @brief sets the Lennard-Jones parameter sigma
+   * @param sigma the Lennard-Jones parameter sigma
+   */
+  void setSigma(const double &sigma);
 
+  /**
+   * sets the Lennard-Jones parameter epsilon
+   * @param epsilon the Lennard-Jones parameter epsilon
+   */
+  void setEpsilon(const double &epsilon);
+
+  /**
+   * @brief sets the particle to a halo particle
+   * @param halo true if the particle is a halo particle, false otherwise
+   */
+  void setIsHalo(bool halo);
+
+  /**
+   * @return true if the particle is a halo particle, false otherwise
+   */
+  bool getIsHalo();
+
+  bool operator==(const Particle &other) const;
+
+  /**
+   * @brief parks the particle at position -50 -50 -50 with velocity and force 0
+   */
+  void park();
 };
 
 std::ostream &operator<<(std::ostream &stream, Particle &p);

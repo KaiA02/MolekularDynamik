@@ -21,7 +21,14 @@ public:
   FileReader();
   virtual ~FileReader();
 
+  /**
+   * reads a file and adds the resulting particles to the particleContainer
+   * @param particleContainer the container to which the particles will be added
+   * @param filename the name of the input file
+   */
   void readFile(ParticleContainer &particleContainer, char *filename);
+
+
 };
 /**
  * @brief CuboidFileReader extends FileReader

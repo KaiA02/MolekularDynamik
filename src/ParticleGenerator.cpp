@@ -14,22 +14,22 @@ ParticleGenerator::ParticleGenerator() {}
 
 void ParticleGenerator::generateCuboid(const Particle &start, int n1, int n2,
                                        int n3, double distance,
-                                       double meanVelocity, int dimension) {
+                                       double meanVelocity, int dimension, double temp_init) {
 
-  std::array<double, 3> maxwellVelocity = maxwellBoltzmannDistributedVelocity(meanVelocity, dimension);
-  for (int x = 0; x < n1; x++) {
-    for (int y = 0; y < n2; y++) {
-      for (int z = 0; z < n3; z++) {
-        std::array<double, 3> addedVelocity;
-        for (int i = 0; i < 3; i++) {
-          addedVelocity[i] = start.getV()[i] + maxwellVelocity[i];
-        }
+    //maxwellVelocity and factor of temperature
+    double factor = std::sqrt(temp_init / start.getM());
+    std::array<double, 3> addedVelocity = maxwellBoltzmannDistributedVelocity(meanVelocity, dimension);
+    addedVelocity = {addedVelocity.at(2) * factor + start.getV()[0], addedVelocity.at(0) * factor + start.getV()[1], addedVelocity.at(1) * factor + start.getV()[2]};
 
-        Particle p({start.getX()[0] + x * distance,
+    for (int x = 0; x < n1; x++) {
+        for (int y = 0; y < n2; y++) {
+            for (int z = 0; z < n3; z++) {
+                Particle p({start.getX()[0] + x * distance,
                     start.getX()[1] + y * distance,
                     start.getX()[2] + z * distance},
-                   addedVelocity, start.getM(), start.getType());
-          allParticles.push_back(p);
+                   addedVelocity, start.getM(), start.getType(),
+                   start.getEpsilon(), start.getSigma());
+                allParticles.push_back(p);
       }
     }
   }
@@ -37,15 +37,25 @@ void ParticleGenerator::generateCuboid(const Particle &start, int n1, int n2,
 
 std::vector<Particle>& ParticleGenerator::getAllParticles() { return allParticles; }
 
-void ParticleGenerator::generateDisk(const Particle &center, int radius, double distance, int dimension) {
+void ParticleGenerator::generateDisk(const Particle &center, int radius, double distance,
+                                       double meanVelocity, int dimension, double temp_init) {
+
+    //maxwellVelocity and factor of temperature
+    double factor = std::sqrt(temp_init / center.getM());
+    std::array<double, 3> addedVelocity = maxwellBoltzmannDistributedVelocity(meanVelocity, dimension);
+    addedVelocity = {addedVelocity.at(1) * factor + center.getV()[0], addedVelocity.at(0) * factor + center.getV()[1], addedVelocity.at(2) * factor + center.getV()[2]};
+
+    //maxWellBoltzmann returns huge value for x for no reason. We switch this value to y to support Gravitat
+    double x_velocity = addedVelocity.at(0);
+    addedVelocity.at(0) = addedVelocity.at(1);
+    addedVelocity.at(1) = x_velocity;
 
     // Coordinates of the center
     double centerX = center.getX()[0];
     double centerY = center.getX()[1];
     double centerZ = center.getX()[2];
 
-    // Initial velocity of the center
-    std::array<double, 3> initialVelocity = center.getV();
+    //full circle
     double maxRadius = radius * distance;
 
     if (dimension == 2) {
@@ -68,7 +78,8 @@ void ParticleGenerator::generateDisk(const Particle &center, int radius, double 
                 if (dist <= maxRadius) {
                     // Create the particle
                     std::array<double, 3> position = {x, y, centerZ};
-                    Particle p(position, initialVelocity, center.getM(), center.getType());
+                    Particle p(position, addedVelocity, center.getM(),
+                        center.getType(), center.getEpsilon(), center.getSigma());
 
                     // Add the particle to the list
                     allParticles.push_back(p);
@@ -97,7 +108,8 @@ void ParticleGenerator::generateDisk(const Particle &center, int radius, double 
                     if (dist <= maxRadius) {
                         // Create the particle
                         std::array<double, 3> position = {x, y, z};
-                        Particle p(position, initialVelocity, center.getM(), center.getType());
+                        Particle p(position, addedVelocity, center.getM(),
+                            center.getType(), center.getEpsilon(), center.getSigma());
 
                         // Add the particle to the list
                         allParticles.push_back(p);
