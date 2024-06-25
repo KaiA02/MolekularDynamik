@@ -3,7 +3,7 @@
 //
 #include "XMLReader.h"
 
-#include "ParticleGenerator.h"
+#include "../ParticleGenerator.h"
 #include "simulation.hxx"
 #include "spdlog/spdlog.h"
 

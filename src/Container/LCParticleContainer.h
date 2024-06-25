@@ -13,13 +13,26 @@
  */
 class LCParticleContainer : public ParticleContainer {
 public:
+ /**
+ * @brief sets the cutoff
+ */
   void setR_cutoff(double r_cutoff);
 
+ /**
+  * @brief sets the g_grav
+  */
   void setG_grav(double g);
 
+ /**
+  * @brief getter for r_cutoff
+  */
   double getR_cutoff();
 
+ /**
+  * @brief getter for g_grav
+  */
   double getG_grav();
+
   /**
    *@brief realocates the particles to their new cells and also
    *implements the outflow boundary (managing the deltion of particles out of

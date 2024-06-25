@@ -43,6 +43,9 @@ public:
    *@brief adds particles to cell
    */
   void addParticle(Particle *p);
+ /**
+   *@brief getter for id
+   */
   std::array<int, 3> getId();
   /**
    *@brief clears all cells

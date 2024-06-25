@@ -46,7 +46,7 @@ change of temperature allowed is (for the steps, declared at **n_thermostat**)
 - in case you want to build your new Simulation on top of another simulation, you can also input this output.txt file at
 the end of your console input.
 - Step by step: 
-  - first call first simulation: **./MolSim ../eingabe-equilibrium.xml** 
+  - first call first simulation: **./MolSim ../input/eingabe-equilibrium.xml** 
             (here you generate the input/output.txt file)
   - then call second simulation on top of first: **./MolSim ../input/eingabe-sphere.xml ../input/output.txt**
 
