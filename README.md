@@ -11,6 +11,7 @@
 4. **ctest**
 5. **./MolSim XML-input-file** (e.g **./MolSim ../input/eingabe-sonne.xml**)
 6. **make doc**
+7. **gprof MolSim gmon.out > analysis.txt** (for profiling. Uncomment this in cmakeList.txt: set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pg") )
 
 ## XML input-file consists of:
 

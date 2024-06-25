@@ -36,13 +36,15 @@ LCParticleContainer::getParticleInNeighbourhood(std::array<int, 3> id) {
   int x;
   int y;
   int z;
+  std::array<int,3> cID;
   for (auto &cell : cells) {
+    cID = cell.getId();
     if (cell.getParticles().size() > 0) {
-      x = cell.getId().at(0) - id.at(0);
+      x = cID.at(0) - id.at(0);
       if (x <= 1 && x >= -1) {
-        y = cell.getId().at(1) - id.at(1);
+        y = cID.at(1) - id.at(1);
         if (y <= 1 && y >= -1) {
-          z = cell.getId().at(2) - id.at(2);
+          z = cID.at(2) - id.at(2);
           if (z <= 1 && z >= -1) {
             if (x != 0 || y != 0 || z != 0) {
               for (auto p : cell.getParticles()) {
@@ -196,9 +198,10 @@ void LCParticleContainer::addParticle(Particle p) {
 std::vector<Cell> LCParticleContainer::getCells() { return cells; }
 
 bool LCParticleContainer::cellExists(std::array<int, 3> id) {
+  std::array<int,3> cID;
   for (auto c : cells) {
-    if (c.getId().at(0) == id.at(0) && c.getId().at(1) == id.at(1) &&
-        c.getId().at(2) == id.at(2)) {
+    cID = c.getId();
+    if (cID.at(0) == id.at(0) && cID.at(1) == id.at(1) && cID.at(2) == id.at(2)) {
       return true;
     }
   }
