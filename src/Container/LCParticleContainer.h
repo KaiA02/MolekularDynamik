@@ -103,7 +103,7 @@ public:
   /**
    * @return all cells
    */
-  std::vector<Cell> getCells();
+  //std::vector<std::vector<std::vector<Cell>>> getCells();
 
   /**
    *@brief checks if the cell exists
@@ -160,7 +160,7 @@ public:
   void setUpEpsilonAndSigmas();
 
 private:
-  std::vector<Cell> cells;
+  std::vector<std::vector<std::vector<Cell>>> cells;
   std::array<double, 3> cell_size;
   std::array<int, 3> cell_count;
   std::array<int, 6> boundary_types;

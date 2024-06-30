@@ -87,13 +87,12 @@ int main(int argc, char *argsv[]) {
   int iteration = 0;
 
 
-
   if (particleContainerType == "LC") {
     xmlReader.readXML_LC(lcParticles);
   } else {
     xmlReader.readXML(normParticles);
   }
-
+  spdlog::info("read");
   Calculations normCalculations(normParticles);
   Calculations lcCaluclations(lcParticles);
   lcCaluclations.setR_cutoff(lcParticles.getR_cutoff());
@@ -119,16 +118,16 @@ int main(int argc, char *argsv[]) {
     }
 
     while(current_time < end_time) {
-      lcCaluclations.calculateX(delta_t);
-      molecule_updates += lcParticles.getParticles().size();
-      lcParticles.handleLJFCalculation(lcCaluclations);
-      molecule_updates += 5 * lcParticles.getParticles().size(); //only provisionally
-
-
-
-      lcCaluclations.calculateV(delta_t);
-      molecule_updates += lcParticles.getParticles().size();
-      iteration++;
+      	lcCaluclations.calculateX(delta_t);
+			spdlog::debug("MolSim: calculated X");
+      	molecule_updates += lcParticles.getParticles().size();
+      	lcParticles.handleLJFCalculation(lcCaluclations);
+			spdlog::debug("MolSim: calculated F");
+      	molecule_updates += 5 * lcParticles.getParticles().size(); //only provisionally
+		lcCaluclations.calculateV(delta_t);
+			spdlog::debug("MolSim: calculated V");
+      	molecule_updates += lcParticles.getParticles().size();
+      	iteration++;
 
       if(thermostatOn == "YES") {
         if(n_thermostat == 0) {
@@ -144,7 +143,7 @@ int main(int argc, char *argsv[]) {
         }
         molecule_updates += lcParticles.getParticles().size();
       }
-
+		spdlog::debug("MolSim: applied Thermostat");
       if (!performanceMeasurement) {
         if (iteration % 10 == 0) {
           if(thermostatOn == "YES") {
