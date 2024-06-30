@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -J "name"
 #SBATCH -o ./%x.%j.%N.out
-#SBATCH -D ./MolekularDynmaik/build
+#SBATCH -D ./MolekularDynamik/build
 #SBATCH --get-user-env
 #SBATCH --clusters=cm2_tiny
 #SBATCH --partition=cm2_tiny
