@@ -71,7 +71,7 @@ void XMLReader::readXML_LC(LCParticleContainer &particleContainer) {
         {in.particles()[i].velocityX(), in.particles()[i].velocityY(),
          in.particles()[i].velocityZ()},
         in.particles()[i].mass());
-    particle.setType(i);
+    particle.setType(i+1);
     particle.setIsHalo(false);
     particle.setEpsilon(in.particles()[i].epsilon());
     particle.setSigma(in.particles()[i].sigma());
@@ -82,11 +82,13 @@ void XMLReader::readXML_LC(LCParticleContainer &particleContainer) {
         n3 = 1;
       }
       spdlog::debug("generating Cube");
+		if(in.cuboids()[i].isMembrane() == "YES"){
+			particle.setType(0);
+			spdlog::info("generated a Membrane");
+		}
       pg.generateCuboid(particle, in.cuboids()[i].n1(), in.cuboids()[i].n2(),
                         n3, in.cuboids()[i].distance(),
                         in.cuboids()[i].meanVelocity(), dimension, in.temp_init());
-      particle.setType(i);
-      particle.setIsHalo(false);
       particleContainer.addMultipleParticles(pg.getAllParticles());
       spdlog::info("added {} particles to the generator", pg.getAllParticles().size());
 
@@ -94,18 +96,16 @@ void XMLReader::readXML_LC(LCParticleContainer &particleContainer) {
       int dimension = in.disk()[i].dimension();
       pg.generateDisk(particle, in.disk()[i].radius(), in.disk()[i].distance(),
                       in.disk()[i].meanVelocity(), dimension, in.temp_init());
-      particle.setType(i);
-      particle.setIsHalo(false);
       particleContainer.addMultipleParticles(pg.getAllParticles());
-    } else { //case its a single particle
+	} else { //case its a single particle
       particleContainer.addParticle(particle);
+		spdlog::info("instead added a single Particle");
     }
   }
   particleContainer.generateCells(in.domainSizeX(), in.domainSizeY(), in.domainSizeZ(), in.r_cutoff());
   particleContainer.setR_cutoff(in.r_cutoff());
   particleContainer.setG_grav(in.g_grav());
   particleContainer.fillCellsWithParticles();
-  spdlog::debug("finished Reading");
 }
 
 std::array<double, 3> XMLReader::getTime() {

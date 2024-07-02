@@ -177,3 +177,35 @@ if (distance <= r_cutoff) {
 }
   return f_ij;
 }
+
+std::array<double, 3> Calculations::calculateHarmonicForce(Particle *p1, Particle *p2){
+  std::array<double,3> x1 = p1->getX();
+  std::array<double,3> x2 = p2->getX();
+  std::array<double, 3> f_ij{};
+  std::array<double, 3> displacement_vector = { x1[0] - x2[0], x1[1] - x2[1], x1[2] - x2[2]};
+  double distance = sqrt(displacement_vector[0] * displacement_vector[0]+
+                         displacement_vector[1] * displacement_vector[1] +
+                         displacement_vector[2] * displacement_vector[2]);
+  double forcefactor = stiffness * (distance - avgBondLength);
+  f_ij = {forcefactor * (displacement_vector[0] / distance),
+          forcefactor * (displacement_vector[1] / distance),
+          forcefactor * (displacement_vector[2] / distance)};
+
+  return f_ij;
+
+}
+
+std::array<double, 3> Calculations::calculateHarmonicForceDiagonal(Particle *p1, Particle *p2){
+  std::array<double,3> x1 = p1->getX();
+  std::array<double,3> x2 = p2->getX();
+  std::array<double, 3> f_ij{};
+  std::array<double, 3> displacement_vector = { x1[0] - x2[0], x1[1] - x2[1], x1[2] - x2[2]};
+  double distance = sqrt(displacement_vector[0] * displacement_vector[0]+
+                         displacement_vector[1] * displacement_vector[1] +
+                         displacement_vector[2] * displacement_vector[2]);
+  double forcefactor = stiffness * (distance - (sqrt(2) * avgBondLength));
+  f_ij = {forcefactor * (displacement_vector[0] / distance),
+          forcefactor * (displacement_vector[1] / distance),
+          forcefactor * (displacement_vector[2] / distance)};
+  return f_ij;
+}

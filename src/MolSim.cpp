@@ -147,7 +147,7 @@ int main(int argc, char *argsv[]) {
       if (!performanceMeasurement) {
         if (iteration % 10 == 0) {
           if(thermostatOn == "YES") {
-            spdlog::info("current Temperature: {}", thermostat.getCurrentTemp(lcParticles.getParticles()));
+            spdlog::debug("current Temperature: {}", thermostat.getCurrentTemp(lcParticles.getParticles()));
           }
           plotParticlesLC(iteration, outputType, baseName, "../output", lcParticles);
           displayProgressBar(progress, totalIterations, start);
