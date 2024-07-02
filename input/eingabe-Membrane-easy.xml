@@ -23,9 +23,9 @@
         <delta_temp>0</delta_temp>
         <g_grav>0</g_grav>
         <particles>
-            <x>15.0</x>
+            <x>20.0</x>
             <y>1.0</y>
-            <z>15.0</z>
+            <z>20.0</z>
             <velocityX>0.0</velocityX>
             <velocityY>10.0</velocityY>
             <velocityZ>0.0</velocityZ>
@@ -34,9 +34,9 @@
             <sigma>1</sigma>
         </particles>
         <particles>
-            <x>20.0</x>
-            <y>2.0</y>
-            <z>2.0</z>
+            <x>5.0</x>
+            <y>20.0</y>
+            <z>5.0</z>
             <velocityX>0.0</velocityX>
             <velocityY>0.0</velocityY>
             <velocityZ>0.0</velocityZ>
@@ -54,9 +54,9 @@
             <isMembrane>NO</isMembrane>
         </cuboids>
         <cuboids>
-            <n1>1</n1>
-            <n2>20</n2>
-            <n3>20</n3>
+            <n1>30</n1>
+            <n2>1</n2>
+            <n3>30</n3>
             <distance>1.1225</distance>
             <meanVelocity>0.1</meanVelocity>
             <dimension>3</dimension>
