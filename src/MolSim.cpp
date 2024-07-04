@@ -34,6 +34,7 @@ int main(int argc, char *argsv[]) {
 
   std::string particleContainerType = xmlReader.getParticleContainerType();
   bool LJORSmoothLJ = xmlReader.getLJORSmoothLJ();
+  double r_l = xmlReader.getR_L();
   std::array<double, 3> times = xmlReader.getTime();
   std::string outputType = xmlReader.getOutputType();
   std::string baseName = xmlReader.getBaseName();
@@ -98,6 +99,7 @@ int main(int argc, char *argsv[]) {
   lcCaluclations.setG_grav(lcParticles.getG_grav());
   lcParticles.setLJORSmoothLJ(LJORSmoothLJ);
   lcCaluclations.setLJORSmoothLJ(LJORSmoothLJ);
+  lcCaluclations.setR_L(r_l);
   lcParticles.setUpEpsilonAndSigmas();
   spdlog::warn("Simulation started with parameters: start_time: {}, end_time: "
                "{}, delta_t: {}, temp_init: {}, temp_target: {}, LJORSmoothLJ: {}, outputType: {}, baseName: {}, "

@@ -16,6 +16,7 @@ private:
   double r_cutoff;
   double g_grav;
   bool LJORSmoothLJ;
+  double r_l;
   double stiffness;
   double avgBondLength;
 
@@ -40,6 +41,8 @@ public:
   * @brief setter for Deciding wether to have LJ or Smooth LJ
   */
  void setLJORSmoothLJ(bool LJORSmoothLJ);
+
+ void setR_L(double r_l);
 
 
   /**
@@ -101,6 +104,8 @@ public:
   std::array<double, 3> calculateLJF(Particle *p1, Particle *p2, double e, double s);
 
  std::array<double, 3> calculateSmoothLJF(Particle *p1, Particle *p2, double e, double s);
+
+ //void decideForceMethod()
 
   std::array<double, 3> calculateHarmonicForce(Particle *p1, Particle *p2);
   std::array<double, 3> calculateHarmonicForceDiagonal(Particle *p1, Particle *p2);

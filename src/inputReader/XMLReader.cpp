@@ -118,6 +118,8 @@ std::array<double, 3> XMLReader::getTime() {
 
 bool XMLReader::getLJORSmoothLJ() { return sim->input().LJORSmoothLJ(); }
 
+bool XMLReader::getR_L() { return sim->input().r_l(); }
+
 std::string XMLReader::ThermostatON() {
   return sim->input().thermostatON();
 }

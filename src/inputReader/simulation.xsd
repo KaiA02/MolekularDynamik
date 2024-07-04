@@ -11,6 +11,7 @@
                             <xs:element name="LJORSmoothLJ" type="xs:boolean"/>
                             <xs:element name="particleContainerType" type="xs:string"/>
                             <xs:element name="r_cutoff" type="xs:double"/>
+                            <xs:element name="r_l" type="xs:double"/>
                             <xs:element name="domainSizeX" type="xs:int"/>
                             <xs:element name="domainSizeY" type="xs:int"/>
                             <xs:element name="domainSizeZ" type="xs:int"/>

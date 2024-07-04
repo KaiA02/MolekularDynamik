@@ -26,6 +26,9 @@ void Calculations::setLJORSmoothLJ(bool LJORSLJ) {
   LJORSmoothLJ = LJORSLJ;
 }
 
+void Calculations::setR_L(double R_L) {
+    r_l = R_L;
+}
 
 
 void Calculations::calculateX(double delta_t) {
@@ -185,6 +188,7 @@ if (distance <= r_cutoff) {
 
 //TODO adapt for LJORSmoothLJ
 std::array<double, 3> calculateSmoothLJF(Particle *p1, Particle *p2, double e, double s) {
+
 }
 
 //TODO adapt for LJORSmoothLJ
