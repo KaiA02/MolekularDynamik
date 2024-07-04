@@ -31,8 +31,8 @@
 // in the accompanying FLOSSE file.
 //
 
-#ifndef CXX_MNT_C_USERS_JH_CLION_PROJECTS_MOLEKULARDYNAMIK_ASSIGNMENT5_SRC_INPUT_READER_SIMULATION_HXX
-#define CXX_MNT_C_USERS_JH_CLION_PROJECTS_MOLEKULARDYNAMIK_ASSIGNMENT5_SRC_INPUT_READER_SIMULATION_HXX
+#ifndef CXX_HOME_KAIARENJA_CLION_PROJECTS_MOLEKULAR_DYNAMIK_SRC_INPUT_READER_SIMULATION_HXX
+#define CXX_HOME_KAIARENJA_CLION_PROJECTS_MOLEKULAR_DYNAMIK_SRC_INPUT_READER_SIMULATION_HXX
 
 #ifndef XSD_CXX11
 #define XSD_CXX11
@@ -388,22 +388,19 @@ class input: public ::xml_schema::type
   void
   deltaT (const deltaT_type& x);
 
-  // inputType
+  // LJORSmoothLJ
   //
-  typedef ::xml_schema::string inputType_type;
-  typedef ::xsd::cxx::tree::traits< inputType_type, char > inputType_traits;
+  typedef ::xml_schema::boolean LJORSmoothLJ_type;
+  typedef ::xsd::cxx::tree::traits< LJORSmoothLJ_type, char > LJORSmoothLJ_traits;
 
-  const inputType_type&
-  inputType () const;
+  const LJORSmoothLJ_type&
+  LJORSmoothLJ () const;
 
-  inputType_type&
-  inputType ();
-
-  void
-  inputType (const inputType_type& x);
+  LJORSmoothLJ_type&
+  LJORSmoothLJ ();
 
   void
-  inputType (::std::unique_ptr< inputType_type > p);
+  LJORSmoothLJ (const LJORSmoothLJ_type& x);
 
   // particleContainerType
   //
@@ -705,7 +702,7 @@ class input: public ::xml_schema::type
   input (const tStart_type&,
          const tEnd_type&,
          const deltaT_type&,
-         const inputType_type&,
+         const LJORSmoothLJ_type&,
          const particleContainerType_type&,
          const r_cutoff_type&,
          const domainSizeX_type&,
@@ -753,7 +750,7 @@ class input: public ::xml_schema::type
   ::xsd::cxx::tree::one< tStart_type > tStart_;
   ::xsd::cxx::tree::one< tEnd_type > tEnd_;
   ::xsd::cxx::tree::one< deltaT_type > deltaT_;
-  ::xsd::cxx::tree::one< inputType_type > inputType_;
+  ::xsd::cxx::tree::one< LJORSmoothLJ_type > LJORSmoothLJ_;
   ::xsd::cxx::tree::one< particleContainerType_type > particleContainerType_;
   ::xsd::cxx::tree::one< r_cutoff_type > r_cutoff_;
   ::xsd::cxx::tree::one< domainSizeX_type > domainSizeX_;
@@ -1471,4 +1468,4 @@ simulation_ (::xml_schema::dom::unique_ptr< ::xercesc::DOMDocument > d,
 //
 // End epilogue.
 
-#endif // CXX_MNT_C_USERS_JH_CLION_PROJECTS_MOLEKULARDYNAMIK_ASSIGNMENT5_SRC_INPUT_READER_SIMULATION_HXX
+#endif // CXX_HOME_KAIARENJA_CLION_PROJECTS_MOLEKULAR_DYNAMIK_SRC_INPUT_READER_SIMULATION_HXX

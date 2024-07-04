@@ -32,9 +32,9 @@ public:
 
   /**
    *
-   * @return the type of the input
+   * @return 0 if we want to have LJF or 1 if we want to have Smooth LJF
    */
-  std::string getInputType();
+  bool getLJORSmoothLJ();
 
   /**
    * @return check if the thermostat is on or off

@@ -83,9 +83,7 @@ the end of your console input.
 - output ordner auf pc laden (im normalen terminal machen)  
   #zielquelle individuell einstellen     
   #-r für ganzen ordner  
-  scp -r di57yey@lxlogin1.lrz.de:MolekularDynamik/output "zielquelle" (z.B. /Users/kaiarenja/Desktop/)  
-
-
+  scp -r di57yey@lxlogin1.lrz.de:MolekularDynamik/output "zielquelle" (z.B. /Users/kaiarenja/Desktop/)
 
 # create new c++ classes from xsd file:
 xsdcxx cxx-tree --std c++11 /mnt/c/Users/joshu/CLionProjects/MolekularDynamik/src/input/simulation.xsd  

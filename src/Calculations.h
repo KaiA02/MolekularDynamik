@@ -15,6 +15,7 @@ private:
   BaseParticleContainer &particles;
   double r_cutoff;
   double g_grav;
+  bool LJORSmoothLJ;
   double stiffness;
   double avgBondLength;
 
@@ -34,6 +35,11 @@ public:
    * @param g_grav is the gravitational force
    */
   void setG_grav(double g_grav);
+
+ /**
+  * @brief setter for Deciding wether to have LJ or Smooth LJ
+  */
+ void setLJORSmoothLJ(bool LJORSmoothLJ);
 
 
   /**
@@ -56,10 +62,7 @@ public:
    * to calculate the physics behind the forces
    */
   void calculateF();
-  /**
-   * @brief calculate the Lennard-Jones-Force for all particles
-   */
-  void calculateLJF();
+
   /**
    *@brief calculate the Lennard-Jones-Force between the center particles
    *and the neighboourhood particles
@@ -96,6 +99,8 @@ public:
    *(escpecially used for LC)
    */
   std::array<double, 3> calculateLJF(Particle *p1, Particle *p2, double e, double s);
+
+ std::array<double, 3> calculateSmoothLJF(Particle *p1, Particle *p2, double e, double s);
 
   std::array<double, 3> calculateHarmonicForce(Particle *p1, Particle *p2);
   std::array<double, 3> calculateHarmonicForceDiagonal(Particle *p1, Particle *p2);

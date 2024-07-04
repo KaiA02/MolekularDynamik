@@ -33,7 +33,7 @@ int main(int argc, char *argsv[]) {
 
 
   std::string particleContainerType = xmlReader.getParticleContainerType();
-  std::string inputType = xmlReader.getInputType();
+  bool LJORSmoothLJ = xmlReader.getLJORSmoothLJ();
   std::array<double, 3> times = xmlReader.getTime();
   std::string outputType = xmlReader.getOutputType();
   std::string baseName = xmlReader.getBaseName();
@@ -41,7 +41,6 @@ int main(int argc, char *argsv[]) {
   xml_schema::boolean performanceMeasurement =
       xmlReader.getPerformanceMeasurement();
   std::string logLevel = xmlReader.getLogLevel();
-
 
 
   std::string thermostatOn = xmlReader.ThermostatON();
@@ -97,12 +96,14 @@ int main(int argc, char *argsv[]) {
   Calculations lcCaluclations(lcParticles);
   lcCaluclations.setR_cutoff(lcParticles.getR_cutoff());
   lcCaluclations.setG_grav(lcParticles.getG_grav());
+  lcParticles.setLJORSmoothLJ(LJORSmoothLJ);
+  lcCaluclations.setLJORSmoothLJ(LJORSmoothLJ);
   lcParticles.setUpEpsilonAndSigmas();
   spdlog::warn("Simulation started with parameters: start_time: {}, end_time: "
-               "{}, delta_t: {}, temp_init: {}, temp_target: {}, inputType: {}, outputType: {}, baseName: {}, "
+               "{}, delta_t: {}, temp_init: {}, temp_target: {}, LJORSmoothLJ: {}, outputType: {}, baseName: {}, "
                "logLevel: {}, performanceMeasurement: {}, {} "
                "particles, {} cuboids, {} disks ",
-               start_time, end_time, delta_t, temp_init, temp_target, inputType, outputType, baseName,
+               start_time, end_time, delta_t, temp_init, temp_target, LJORSmoothLJ, outputType, baseName,
                logLevel, performanceMeasurement, lcParticles.getParticles().size(),
                xmlReader.getNumberOfCuboids(), xmlReader.getNumberOfDisks());
   auto start = std::chrono::high_resolution_clock::now();

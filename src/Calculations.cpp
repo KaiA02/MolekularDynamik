@@ -22,6 +22,10 @@ void Calculations::setR_cutoff(double r) {
    g_grav = g;
  }
 
+void Calculations::setLJORSmoothLJ(bool LJORSLJ) {
+  LJORSmoothLJ = LJORSLJ;
+}
+
 
 
 void Calculations::calculateX(double delta_t) {
@@ -117,7 +121,7 @@ void Calculations::LCcalculateLJF(std::vector<Particle*> &center, std::vector<Pa
           e = pi->getEpsilon();
           s = pi->getSigma();
         }
-
+        //TODO adapt for LJORSmoothLJ
         f_ij = calculateLJF(pi, &pj, e, s);
 
         newForcei = {newForcei.at(0) + f_ij.at(0), newForcei.at(1) + f_ij.at(1), newForcei.at(2) + f_ij.at(2)};
@@ -150,6 +154,7 @@ void Calculations::calculateLJFcenter(std::vector<Particle *> &center, const std
         e = pi->getEpsilon();
         s = pi->getSigma();
       }
+      //TODO adapt for LJORSmoothLJ
       f_ij = calculateLJF(pi, pj, e, s);
       pi->setF(pi->getF() + f_ij);
       pj->setF(pj->getF() - f_ij);
@@ -177,6 +182,12 @@ if (distance <= r_cutoff) {
 }
   return f_ij;
 }
+
+//TODO adapt for LJORSmoothLJ
+std::array<double, 3> calculateSmoothLJF(Particle *p1, Particle *p2, double e, double s) {
+}
+
+//TODO adapt for LJORSmoothLJ
 
 std::array<double, 3> Calculations::calculateHarmonicForce(Particle *p1, Particle *p2){
   std::array<double,3> x1 = p1->getX();

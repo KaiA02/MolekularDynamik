@@ -4,7 +4,7 @@
         <tStart>0.0</tStart>
         <tEnd>25.0</tEnd>
         <deltaT>0.0005</deltaT>
-        <inputType>LJF</inputType>
+        <LJORSmoothLJ>0</LJORSmoothLJ>
         <particleContainerType>LC</particleContainerType>
         <r_cutoff>2.5</r_cutoff>
         <domainSizeX>63</domainSizeX>
