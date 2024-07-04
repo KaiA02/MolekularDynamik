@@ -199,7 +199,6 @@ void LCParticleContainer::handleLJFCalculation(Calculations& calc) {
          c = getCellById({int(x), int(y), int(z)});
           if (!c->isEmpty()) {
             neighbourhood = getParticleInNeighbourhood({int(x), int(y), int(z)});
-            //TODO adapt for LJORSmoothLJ
             calc.LCcalculateLJF(c->getParticles(), neighbourhood, epsAndSigs);
           }
         }
