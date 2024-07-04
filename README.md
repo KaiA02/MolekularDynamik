@@ -50,6 +50,36 @@ the end of your console input.
   - first call first simulation: **./MolSim ../input/eingabe-equilibrium.xml** 
             (here you generate the input/output.txt file)
   - then call second simulation on top of first: **./MolSim ../input/eingabe-sphere.xml ../input/output.txt**
+ 
+## Linux cluster
+1. Login on "ssh -CX di57yey@lxlogin1.lrz.de"  
+2. Steps 
+- projekt clonen:  
+  rm -rf MolekularDynamik  
+  #main branch (falls spezifische branch gewünscht ist "-b branchName" anhängen)  
+  git clone https://github.com/KaiA02/MolekularDynamik   
+
+- in projekt module laden und cmake/make ausführen  
+  cd MolekularDynamik  
+  module load xerces-c  
+  module load cmake/3.21.4  
+  module load gcc/11  
+  mkdir build && cd build  
+  cmake ..  
+  make -j 5  
+
+- script ausführen  
+  cd  
+  sbatch job.sh  
+
+- status prüfen  
+  squeue --clusters=cm2_tiny --start  
+
+- output ordner auf pc laden (im normalen terminal machen)  
+  #zielquelle individuell einstellen     
+  #-r für ganzen ordner  
+  scp -r di57yey@lxlogin1.lrz.de:MolekularDynamik/output "zielquelle" (z.B. /Users/kaiarenja/Desktop/)  
+
 
 
 # create new c++ classes from xsd file:
