@@ -187,7 +187,7 @@ if (distance <= r_cutoff) {
 }
 
 //TODO adapt for LJORSmoothLJ
-std::array<double, 3> calculateSmoothLJF(Particle *p1, Particle *p2, double e, double s) {
+std::array<double, 3> Calculations::calculateSmoothLJF(Particle *p1, Particle *p2, double e, double s) {
     std::array<double,3> x1 = p1->getX();
     std::array<double,3> x2 = p2->getX();
     std::array<double, 3> f_ij{};
@@ -196,13 +196,13 @@ std::array<double, 3> calculateSmoothLJF(Particle *p1, Particle *p2, double e, d
                            displacement_vector[1] * displacement_vector[1] +
                            displacement_vector[2] * displacement_vector[2]);
 
-    double forcefactor1 = -((24 * pow(s, 6) * e) / (pow(distance, 14) * pow((r_cutoff - r_l), 3)) * (r_cutoff - distance);
+    double forcefactor1 = -(24 * pow(s, 6) * e / (pow(distance, 14) * pow(r_cutoff - r_l, 3)) * (r_cutoff - distance));
 
     double forcefactor2_1 = r_cutoff * r_cutoff * (2 * pow(s, 6) - pow(distance, 6)) +
                             r_cutoff * (3 * r_l - distance) * (pow(distance, 6) - 2 * pow(s, 6));
 
     double forcefactor2_2_1 = 5 * r_l * pow(s, 6) - 2 * r_l * pow(distance, 6) -
-                              3 * pow(s, 6) * distance + pow(distance, 6);
+                              3 * pow(s, 6) * distance + pow(distance, 7);
 
     double forcefactor2_2 = distance * forcefactor2_2_1;
 
