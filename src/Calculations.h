@@ -15,6 +15,8 @@ private:
   BaseParticleContainer &particles;
   double r_cutoff;
   double g_grav;
+  double stiffness;
+  double avgBondLength;
 
 public:
   Calculations();
@@ -32,6 +34,20 @@ public:
    * @param g_grav is the gravitational force
    */
   void setG_grav(double g_grav);
+
+
+  /**
+   * @brief sets the stiffness
+   * @param stif is the stiffness
+   */
+  void setStiffness(double stif);
+
+
+   /**
+   * @brief sets the avgBondLength
+   * @param length is the avgBondLength
+   */
+  void setAvgBondLength(double length);
 
   /**
    * @brief the following function calculates the gravitational force
@@ -80,6 +96,9 @@ public:
    *(escpecially used for LC)
    */
   std::array<double, 3> calculateLJF(Particle *p1, Particle *p2, double e, double s);
+
+  std::array<double, 3> calculateHarmonicForce(Particle *p1, Particle *p2);
+  std::array<double, 3> calculateHarmonicForceDiagonal(Particle *p1, Particle *p2);
 };
 
 #endif // CALCULATIONS_H

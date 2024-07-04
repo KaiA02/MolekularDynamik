@@ -2,30 +2,30 @@
             xsi:noNamespaceSchemaLocation="../src/inputReader/simulation.xsd">
     <input>
         <tStart>0.0</tStart>
-        <tEnd>1</tEnd>
+        <tEnd>1.0</tEnd>
         <deltaT>0.0002</deltaT>
         <inputType>LJF</inputType>
         <particleContainerType>LC</particleContainerType>
-        <r_cutoff>3.0</r_cutoff>
-        <domainSizeX>180</domainSizeX>
-        <domainSizeY>90</domainSizeY>
-        <domainSizeZ>2</domainSizeZ>
+        <r_cutoff>2.0</r_cutoff>
+        <domainSizeX>40</domainSizeX>
+        <domainSizeY>40</domainSizeY>
+        <domainSizeZ>40</domainSizeZ>
         <boundary1Type>2</boundary1Type>
         <boundary2Type>2</boundary2Type>
         <boundary3Type>2</boundary3Type>
         <boundary4Type>2</boundary4Type>
         <boundary5Type>2</boundary5Type>
         <boundary6Type>2</boundary6Type>
-        <thermostatON>NO</thermostatON>
+        <thermostatON>YES</thermostatON>
         <temp_init>40</temp_init>
-        <n_thermostat>1000</n_thermostat>
+        <n_thermostat>1</n_thermostat>
         <temp_target>40</temp_target>
         <delta_temp>0</delta_temp>
-        <g_grav>-12.44</g_grav>
+        <g_grav>0</g_grav>
         <particles>
             <x>20.0</x>
-            <y>20.0</y>
-            <z>1.0</z>
+            <y>1.0</y>
+            <z>20.0</z>
             <velocityX>0.0</velocityX>
             <velocityY>10.0</velocityY>
             <velocityZ>0.0</velocityZ>
@@ -33,14 +33,36 @@
             <epsilon>1</epsilon>
             <sigma>1</sigma>
         </particles>
+        <particles>
+            <x>5.0</x>
+            <y>20.0</y>
+            <z>5.0</z>
+            <velocityX>0.0</velocityX>
+            <velocityY>0.0</velocityY>
+            <velocityZ>0.0</velocityZ>
+            <mass>2</mass>
+            <epsilon>1</epsilon>
+            <sigma>1</sigma>
+        </particles>
         <cuboids>
-            <n1>80.0</n1>
-            <n2>100.0</n2>
-            <n3>1.0</n3>
+            <n1>5</n1>
+            <n2>5</n2>
+            <n3>5</n3>
             <distance>1.1225</distance>
             <meanVelocity>0.1</meanVelocity>
-            <dimension>3.0</dimension>
+            <dimension>3</dimension>
+            <isMembrane>NO</isMembrane>
         </cuboids>
+        <cuboids>
+            <n1>30</n1>
+            <n2>1</n2>
+            <n3>30</n3>
+            <distance>1.1225</distance>
+            <meanVelocity>0.1</meanVelocity>
+            <dimension>3</dimension>
+            <isMembrane>YES</isMembrane>
+        </cuboids>
+
     </input>
     <output>
         <baseName>simulation_output</baseName>
@@ -48,7 +70,7 @@
         <outputType>vtk</outputType>
     </output>
     <config>
-        <performanceMeasurement>true</performanceMeasurement>
-        <logLevel>warn</logLevel>
+        <performanceMeasurement>false</performanceMeasurement>
+        <logLevel>info</logLevel>
     </config>
 </simulation>

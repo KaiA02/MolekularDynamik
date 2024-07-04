@@ -41,6 +41,11 @@ change of temperature allowed is (for the steps, declared at **n_thermostat**)
 - If no **delta_temp** is given, then we see declare the **delta_temp** as 0 in xml file, but see it as infinity
 - If **n_thermostat** = 0, then the thermostat is applied directly.
 
+## Membrane:
+- **n1**, **n2**, **n3** are count of Particles in Membrane in x, y and z direction
+- **distance** is distance between Particles in Membrane
+- Particles in Membrane are always of **type 0** so they can be identified more easy. 
+
 
 ## using Checkpoints (saving the state after simulation)
 - after every simulation a new file Output.txt is created in the Input directory
@@ -85,6 +90,7 @@ the end of your console input.
 # create new c++ classes from xsd file:
 xsdcxx cxx-tree --std c++11 /mnt/c/Users/joshu/CLionProjects/MolekularDynamik/src/input/simulation.xsd  
 xsdcxx cxx-tree --std c++11 /home/kaiarenja/CLionProjects/MolekularDynamik/src/inputReader/simulation.xsd
+xsdcxx cxx-tree --std c++11 /mnt/c/Users/jh/CLionProjects/Molekulardynamik/Assignment5/src/inputReader/simulation.xsd
 
 ## explaination for realocateParticles in LCParticleContainer
 input: is an array of for integers that represent all 6 boundarys. each Integer can be 1(_outflow_ boundary) or 2(_refelcting_ boundary) or 3(_periodic_ boundary)
