@@ -20,7 +20,6 @@ XMLReader::XMLReader(const std::string &filePath) {
   }
 }
 
-
 void XMLReader::readXML(ParticleContainer &particleContainer) {
   input in = sim->input();
   for (size_t i = 0; i < in.particles().size(); i++) {
@@ -43,7 +42,8 @@ void XMLReader::readXML(ParticleContainer &particleContainer) {
       spdlog::debug("generating Cube");
       pg.generateCuboid(particle, in.cuboids()[i].n1(), in.cuboids()[i].n2(),
                         n3, in.cuboids()[i].distance(),
-                        in.cuboids()[i].meanVelocity(), dimension, in.temp_init());
+                        in.cuboids()[i].meanVelocity(), dimension,
+                        in.temp_init());
 
       particleContainer.addMultipleParticles(pg.getAllParticles());
     } else if (i < in.disk().size()) {
@@ -54,16 +54,15 @@ void XMLReader::readXML(ParticleContainer &particleContainer) {
       particleContainer.addMultipleParticles(pg.getAllParticles());
     } else {
       particleContainer.addParticle(particle);
-
     }
   }
-
 }
-
 
 void XMLReader::readXML_LC(LCParticleContainer &particleContainer) {
   input in = sim->input();
-  particleContainer.setBoundarys({in.boundary1Type(), in.boundary2Type(), in.boundary3Type(), in.boundary4Type(), in.boundary5Type(), in.boundary6Type()});
+  particleContainer.setBoundarys({in.boundary1Type(), in.boundary2Type(),
+                                  in.boundary3Type(), in.boundary4Type(),
+                                  in.boundary5Type(), in.boundary6Type()});
   for (size_t i = 0; i < in.particles().size(); i++) {
     ParticleGenerator pg;
     Particle particle(
@@ -71,38 +70,41 @@ void XMLReader::readXML_LC(LCParticleContainer &particleContainer) {
         {in.particles()[i].velocityX(), in.particles()[i].velocityY(),
          in.particles()[i].velocityZ()},
         in.particles()[i].mass());
-    particle.setType(i+1);
+    particle.setType(i + 1);
     particle.setIsHalo(false);
     particle.setEpsilon(in.particles()[i].epsilon());
     particle.setSigma(in.particles()[i].sigma());
-    if (i < in.cuboids().size()) { //case its a cube
+    if (i < in.cuboids().size()) { // case its a cube
       int dimension = in.cuboids()[i].dimension();
       int n3 = in.cuboids()[i].n3();
       if (dimension == 2) {
         n3 = 1;
       }
       spdlog::debug("generating Cube");
-		if(in.cuboids()[i].isMembrane() == "YES"){
-			particle.setType(0);
-			spdlog::info("generated a Membrane");
-		}
+      if (in.cuboids()[i].isMembrane() == "YES") {
+        particle.setType(0);
+        spdlog::info("generated a Membrane");
+      }
       pg.generateCuboid(particle, in.cuboids()[i].n1(), in.cuboids()[i].n2(),
                         n3, in.cuboids()[i].distance(),
-                        in.cuboids()[i].meanVelocity(), dimension, in.temp_init());
+                        in.cuboids()[i].meanVelocity(), dimension,
+                        in.temp_init());
       particleContainer.addMultipleParticles(pg.getAllParticles());
-      spdlog::info("added {} particles to the generator", pg.getAllParticles().size());
+      spdlog::info("added {} particles to the generator",
+                   pg.getAllParticles().size());
 
-    } else if (i < in.disk().size()) { //case its a disk
+    } else if (i < in.disk().size()) { // case its a disk
       int dimension = in.disk()[i].dimension();
       pg.generateDisk(particle, in.disk()[i].radius(), in.disk()[i].distance(),
                       in.disk()[i].meanVelocity(), dimension, in.temp_init());
       particleContainer.addMultipleParticles(pg.getAllParticles());
-	} else { //case its a single particle
+    } else { // case its a single particle
       particleContainer.addParticle(particle);
-		spdlog::info("instead added a single Particle");
+      spdlog::info("instead added a single Particle");
     }
   }
-  particleContainer.generateCells(in.domainSizeX(), in.domainSizeY(), in.domainSizeZ(), in.r_cutoff());
+  particleContainer.generateCells(in.domainSizeX(), in.domainSizeY(),
+                                  in.domainSizeZ(), in.r_cutoff());
   particleContainer.setR_cutoff(in.r_cutoff());
   particleContainer.setG_grav(in.g_grav());
   particleContainer.fillCellsWithParticles();
@@ -118,11 +120,9 @@ std::array<double, 3> XMLReader::getTime() {
 
 bool XMLReader::getLJORSmoothLJ() { return sim->input().LJORSmoothLJ(); }
 
-bool XMLReader::getR_L() { return sim->input().r_l(); }
+double XMLReader::getR_L() { return sim->input().r_l(); }
 
-std::string XMLReader::ThermostatON() {
-  return sim->input().thermostatON();
-}
+std::string XMLReader::ThermostatON() { return sim->input().thermostatON(); }
 
 double XMLReader::getTemp_init() { return sim->input().temp_init(); }
 
@@ -132,7 +132,9 @@ double XMLReader::getTemp_Target() { return sim->input().temp_target(); }
 
 double XMLReader::getDelta_Temp() { return sim->input().delta_temp(); }
 
-std::string XMLReader::getParticleContainerType() { return sim->input().particleContainerType(); }
+std::string XMLReader::getParticleContainerType() {
+  return sim->input().particleContainerType();
+}
 
 std::string XMLReader::getOutputType() { return sim->output().outputType(); }
 

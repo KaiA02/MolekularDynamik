@@ -233,6 +233,24 @@ r_cutoff (const r_cutoff_type& x)
   this->r_cutoff_.set (x);
 }
 
+const input::r_l_type& input::
+r_l () const
+{
+  return this->r_l_.get ();
+}
+
+input::r_l_type& input::
+r_l ()
+{
+  return this->r_l_.get ();
+}
+
+void input::
+r_l (const r_l_type& x)
+{
+  this->r_l_.set (x);
+}
+
 const input::domainSizeX_type& input::
 domainSizeX () const
 {
@@ -1237,6 +1255,7 @@ input (const tStart_type& tStart,
        const LJORSmoothLJ_type& LJORSmoothLJ,
        const particleContainerType_type& particleContainerType,
        const r_cutoff_type& r_cutoff,
+       const r_l_type& r_l,
        const domainSizeX_type& domainSizeX,
        const domainSizeY_type& domainSizeY,
        const domainSizeZ_type& domainSizeZ,
@@ -1259,6 +1278,7 @@ input (const tStart_type& tStart,
   LJORSmoothLJ_ (LJORSmoothLJ, this),
   particleContainerType_ (particleContainerType, this),
   r_cutoff_ (r_cutoff, this),
+  r_l_ (r_l, this),
   domainSizeX_ (domainSizeX, this),
   domainSizeY_ (domainSizeY, this),
   domainSizeZ_ (domainSizeZ, this),
@@ -1291,6 +1311,7 @@ input (const input& x,
   LJORSmoothLJ_ (x.LJORSmoothLJ_, f, this),
   particleContainerType_ (x.particleContainerType_, f, this),
   r_cutoff_ (x.r_cutoff_, f, this),
+  r_l_ (x.r_l_, f, this),
   domainSizeX_ (x.domainSizeX_, f, this),
   domainSizeY_ (x.domainSizeY_, f, this),
   domainSizeZ_ (x.domainSizeZ_, f, this),
@@ -1323,6 +1344,7 @@ input (const ::xercesc::DOMElement& e,
   LJORSmoothLJ_ (this),
   particleContainerType_ (this),
   r_cutoff_ (this),
+  r_l_ (this),
   domainSizeX_ (this),
   domainSizeY_ (this),
   domainSizeZ_ (this),
@@ -1424,6 +1446,17 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       if (!r_cutoff_.present ())
       {
         this->r_cutoff_.set (r_cutoff_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // r_l
+    //
+    if (n.name () == "r_l" && n.namespace_ ().empty ())
+    {
+      if (!r_l_.present ())
+      {
+        this->r_l_.set (r_l_traits::create (i, f, this));
         continue;
       }
     }
@@ -1674,6 +1707,13 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "");
   }
 
+  if (!r_l_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "r_l",
+      "");
+  }
+
   if (!domainSizeX_.present ())
   {
     throw ::xsd::cxx::tree::expected_element< char > (
@@ -1799,6 +1839,7 @@ operator= (const input& x)
     this->LJORSmoothLJ_ = x.LJORSmoothLJ_;
     this->particleContainerType_ = x.particleContainerType_;
     this->r_cutoff_ = x.r_cutoff_;
+    this->r_l_ = x.r_l_;
     this->domainSizeX_ = x.domainSizeX_;
     this->domainSizeY_ = x.domainSizeY_;
     this->domainSizeZ_ = x.domainSizeZ_;

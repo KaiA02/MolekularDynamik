@@ -31,8 +31,8 @@
 // in the accompanying FLOSSE file.
 //
 
-#ifndef CXX_HOME_KAIARENJA_CLION_PROJECTS_MOLEKULAR_DYNAMIK_SRC_INPUT_READER_SIMULATION_HXX
-#define CXX_HOME_KAIARENJA_CLION_PROJECTS_MOLEKULAR_DYNAMIK_SRC_INPUT_READER_SIMULATION_HXX
+#ifndef SRC_INPUT_READER_SIMULATION_HXX
+#define SRC_INPUT_READER_SIMULATION_HXX
 
 #ifndef XSD_CXX11
 #define XSD_CXX11
@@ -433,6 +433,20 @@ class input: public ::xml_schema::type
   void
   r_cutoff (const r_cutoff_type& x);
 
+  // r_l
+  //
+  typedef ::xml_schema::double_ r_l_type;
+  typedef ::xsd::cxx::tree::traits< r_l_type, char, ::xsd::cxx::tree::schema_type::double_ > r_l_traits;
+
+  const r_l_type&
+  r_l () const;
+
+  r_l_type&
+  r_l ();
+
+  void
+  r_l (const r_l_type& x);
+
   // domainSizeX
   //
   typedef ::xml_schema::int_ domainSizeX_type;
@@ -705,6 +719,7 @@ class input: public ::xml_schema::type
          const LJORSmoothLJ_type&,
          const particleContainerType_type&,
          const r_cutoff_type&,
+         const r_l_type&,
          const domainSizeX_type&,
          const domainSizeY_type&,
          const domainSizeZ_type&,
@@ -753,6 +768,7 @@ class input: public ::xml_schema::type
   ::xsd::cxx::tree::one< LJORSmoothLJ_type > LJORSmoothLJ_;
   ::xsd::cxx::tree::one< particleContainerType_type > particleContainerType_;
   ::xsd::cxx::tree::one< r_cutoff_type > r_cutoff_;
+  ::xsd::cxx::tree::one< r_l_type > r_l_;
   ::xsd::cxx::tree::one< domainSizeX_type > domainSizeX_;
   ::xsd::cxx::tree::one< domainSizeY_type > domainSizeY_;
   ::xsd::cxx::tree::one< domainSizeZ_type > domainSizeZ_;
@@ -1468,4 +1484,4 @@ simulation_ (::xml_schema::dom::unique_ptr< ::xercesc::DOMDocument > d,
 //
 // End epilogue.
 
-#endif // CXX_HOME_KAIARENJA_CLION_PROJECTS_MOLEKULAR_DYNAMIK_SRC_INPUT_READER_SIMULATION_HXX
+#endif // SRC_INPUT_READER_SIMULATION_HXX
