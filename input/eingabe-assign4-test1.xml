@@ -52,6 +52,7 @@
             <distance>1.2</distance>
             <meanVelocity>0.1</meanVelocity>
             <dimension>3</dimension>
+            <isMembrane>NO</isMembrane>
         </cuboids>
         <cuboids>
             <n1>50</n1>
@@ -60,6 +61,8 @@
             <distance>1.2</distance>
             <meanVelocity>0.1</meanVelocity>
             <dimension>3</dimension>
+            <isMembrane>NO</isMembrane>
+
         </cuboids>
 
     </input>

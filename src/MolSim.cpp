@@ -121,7 +121,7 @@ int main(int argc, char *argsv[]) {
       	lcCaluclations.calculateX(delta_t);
 			spdlog::debug("MolSim: calculated X");
       	molecule_updates += lcParticles.getParticles().size();
-      	lcParticles.handleLJFCalculation(lcCaluclations);
+      	lcParticles.handleLJFCalculation(lcCaluclations, int(current_time/delta_t));
 			spdlog::debug("MolSim: calculated F");
       	molecule_updates += 5 * lcParticles.getParticles().size(); //only provisionally
 		lcCaluclations.calculateV(delta_t);

@@ -2,7 +2,7 @@
             xsi:noNamespaceSchemaLocation="../src/inputReader/simulation.xsd">
     <input>
         <tStart>0.0</tStart>
-        <tEnd>5.0</tEnd>
+        <tEnd>1.0</tEnd>
         <deltaT>0.0002</deltaT>
         <inputType>LJF</inputType>
         <particleContainerType>LC</particleContainerType>
@@ -16,7 +16,7 @@
         <boundary4Type>2</boundary4Type>
         <boundary5Type>2</boundary5Type>
         <boundary6Type>2</boundary6Type>
-        <thermostatON>YES</thermostatON>
+        <thermostatON>NO</thermostatON>
         <temp_init>40</temp_init>
         <n_thermostat>1</n_thermostat>
         <temp_target>40</temp_target>
@@ -28,8 +28,8 @@
             <y>10.0</y>
             <z>10.0</z>
             <velocityX>0.0</velocityX>
-            <velocityY>10.0</velocityY>
-            <velocityZ>0.0</velocityZ>
+            <velocityY>0.0</velocityY>
+            <velocityZ>-10.0</velocityZ>
             <mass>1</mass>
             <epsilon>1</epsilon>
             <sigma>1</sigma>
@@ -48,6 +48,6 @@
     </output>
     <config>
         <performanceMeasurement>false</performanceMeasurement>
-        <logLevel>warn</logLevel>
+        <logLevel>info</logLevel>
     </config>
 </simulation>

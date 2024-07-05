@@ -1222,6 +1222,20 @@ class cuboids: public ::xml_schema::type
   void
   isMembrane (::std::unique_ptr< isMembrane_type > p);
 
+  // forceUpwards
+  //
+  typedef ::xml_schema::double_ forceUpwards_type;
+  typedef ::xsd::cxx::tree::traits< forceUpwards_type, char, ::xsd::cxx::tree::schema_type::double_ > forceUpwards_traits;
+
+  const forceUpwards_type&
+  forceUpwards () const;
+
+  forceUpwards_type&
+  forceUpwards ();
+
+  void
+  forceUpwards (const forceUpwards_type& x);
+
   // Constructors.
   //
   cuboids (const n1_type&,
@@ -1230,7 +1244,8 @@ class cuboids: public ::xml_schema::type
            const distance_type&,
            const meanVelocity_type&,
            const dimension_type&,
-           const isMembrane_type&);
+           const isMembrane_type&,
+           const forceUpwards_type&);
 
   cuboids (const ::xercesc::DOMElement& e,
            ::xml_schema::flags f = 0,
@@ -1265,6 +1280,7 @@ class cuboids: public ::xml_schema::type
   ::xsd::cxx::tree::one< meanVelocity_type > meanVelocity_;
   ::xsd::cxx::tree::one< dimension_type > dimension_;
   ::xsd::cxx::tree::one< isMembrane_type > isMembrane_;
+  ::xsd::cxx::tree::one< forceUpwards_type > forceUpwards_;
 };
 
 class disk: public ::xml_schema::type

@@ -90,6 +90,10 @@ void XMLReader::readXML_LC(LCParticleContainer &particleContainer) {
                         n3, in.cuboids()[i].distance(),
                         in.cuboids()[i].meanVelocity(), dimension, in.temp_init());
       particleContainer.addMultipleParticles(pg.getAllParticles());
+      if(in.cuboids()[i].isMembrane() == "YES"){
+        Membrane m(pg.getAllParticlesPointers(), in.cuboids()[i].distance(), in.cuboids()[i].forceUpwards());
+        particleContainer.setMembrane(m);
+      }
       spdlog::info("added {} particles to the generator", pg.getAllParticles().size());
 
     } else if (i < in.disk().size()) { //case its a disk

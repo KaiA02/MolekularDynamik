@@ -32,6 +32,7 @@ public:
                       double distance, double meanVelocity, int dimension, double temp_init);
 
   std::vector<Particle>& getAllParticles();
+  std::vector<Particle*> getAllParticlesPointers();
 
     /**
       * @brief Generate a disk of particles with the radius and a cutoff value, from a

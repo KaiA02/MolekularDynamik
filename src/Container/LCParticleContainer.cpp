@@ -61,8 +61,8 @@ std::vector<Particle> LCParticleContainer::getParticleInNeighbourhood(std::array
 }
 
 Cell* LCParticleContainer::getCellById(const std::array<int, 3> id) {
-  spdlog::debug("getCellByID: id is {} {} {}", id[0], id[1], id[2]);
-  return &cells.at(id[0]).at(id[1]).at(id[2]);
+  spdlog::debug("getCellByID: id is {} {} {}", id[0]+1, id[1]+1, id[2]+1);
+  return &cells.at(id[0]+1).at(id[1]+1).at(id[2]+1);
 }
 
 void LCParticleContainer::realocateParticles() {
@@ -96,8 +96,12 @@ void LCParticleContainer::realocateParticles() {
       getCellById({x,y,z})->addParticle(&p);
       spdlog::debug("RelaocateParticle: added Particle to Cell");
     } else { //Parking of deleted Particles
-      spdlog::debug("RelaocateParticle: cell doesnt exists");
-        p.park();
+      //if(x > -20 && y > -20 && z > -20){
+      //  spdlog::debug("RelaocateParticle: Cell id {} {} {} dosent exists", x, y, z);
+      //}
+
+      p.park();
+
       }
     }
     spdlog::debug("all particles are added--------------------------------------->");
@@ -179,7 +183,7 @@ void LCParticleContainer::generateCells(const int size_x, const int size_y, cons
   }
 }
 
-void LCParticleContainer::handleLJFCalculation(Calculations& calc) {
+void LCParticleContainer::handleLJFCalculation(Calculations& calc, int timestep) {
   realocateParticles();
   spdlog::debug("LCPartCon: realoctaed Particles");
   std::vector<Particle> neighbourhood;
@@ -198,6 +202,11 @@ void LCParticleContainer::handleLJFCalculation(Calculations& calc) {
     }
   handleBoundaryAction();
   applyGravitation();
+  if(timestep <= 150){
+    membrane.applyMovement();
+  }
+  membrane.stabilizeMembrane(calc);
+
 }
 
 bool LCParticleContainer::addParticleToCell(Particle &p) {
@@ -231,7 +240,7 @@ void LCParticleContainer::addParticle(Particle p) {
 
 bool LCParticleContainer::cellExists(std::array<int, 3> id) {
   spdlog::debug("cell exists: id is {} {} {}", id[0], id[1], id[2]);
-  return(id[0] >= 0 && id[0] <= cell_count[0] +1 && id[1] >= 0 && id[1] <= cell_count[1] +1 && id[2] >= 0 && id[2] <= cell_count[2] +1);
+  return(id[0] >= -1 && id[0] <= cell_count[0]  && id[1] >= -1 && id[1] <= cell_count[1]  && id[2] >= -1 && id[2] <= cell_count[2]);
 };
 
 
@@ -478,4 +487,11 @@ void LCParticleContainer::setUpEpsilonAndSigmas() {
     epsAndSigs = newOne;
   }
 }
+
+void LCParticleContainer::setMembrane(Membrane m){
+  membrane = m;
+}
+Membrane LCParticleContainer::getMembrane(){
+  return membrane;
+};
 
