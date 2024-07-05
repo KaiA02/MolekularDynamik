@@ -74,8 +74,13 @@ the end of your console input.
   make -j 5  
 
 - script ausführen  
-  cd  
-  sbatch job.sh  
+salloc --partition=cm2_inter -t 10   (10min is time (max 2h))   
+./MolSim ../input/"name".xml 
+
+- oder so script ausführen  
+cd ..  
+sbatch job.sh  
+ 
 
 - status prüfen  
   squeue --clusters=cm2_tiny --start  
