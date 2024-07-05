@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -J "name"
+#SBATCH -J disk
 #SBATCH -o ./%x.%j.%N.out
 #SBATCH -D ./MolekularDynamik/build
 #SBATCH --get-user-env
@@ -12,4 +12,4 @@
 #SBATCH --mail-user=ge47jow@mytum.de
 #SBATCH --time=00:30:00
 
-./MolSim ../input/"name".xml 
+./MolSim ../input/eingabe-disk.xml 
