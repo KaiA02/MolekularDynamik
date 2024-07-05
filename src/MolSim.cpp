@@ -103,17 +103,16 @@ int main(int argc, char *argsv[]) {
   Calculations lcCaluclations(lcParticles);
   lcCaluclations.setR_cutoff(lcParticles.getR_cutoff());
   lcCaluclations.setG_grav(lcParticles.getG_grav());
-  //lcParticles.setLJORSmoothLJ(LJORSmoothLJ);
   lcCaluclations.setSmoothLJ(smoothLJ);
   lcCaluclations.setR_L(r_l);
   lcParticles.setUpEpsilonAndSigmas();
   spdlog::warn("Simulation started with parameters: start_time: {}, end_time: "
-               "{}, delta_t: {}, temp_init: {}, temp_target: {}, LJORSmoothLJ: "
+               "{}, delta_t: {}, temp_init: {}, temp_target: {}, smoothLJ: "
                "{}, outputType: {}, baseName: {}, "
                "logLevel: {}, performanceMeasurement: {}, {} "
                "particles, {} cuboids, {} disks ",
                start_time, end_time, delta_t, temp_init, temp_target,
-               LJORSmoothLJ, outputType, baseName, logLevel,
+               smoothLJ, outputType, baseName, logLevel,
                performanceMeasurement, lcParticles.getParticles().size(),
                xmlReader.getNumberOfCuboids(), xmlReader.getNumberOfDisks());
   auto start = std::chrono::high_resolution_clock::now();

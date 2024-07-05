@@ -173,22 +173,22 @@ deltaT (const deltaT_type& x)
   this->deltaT_.set (x);
 }
 
-const input::LJORSmoothLJ_type& input::
-LJORSmoothLJ () const
+const input::smoothLJ_type& input::
+smoothLJ () const
 {
-  return this->LJORSmoothLJ_.get ();
+  return this->smoothLJ_.get ();
 }
 
-input::LJORSmoothLJ_type& input::
-LJORSmoothLJ ()
+input::smoothLJ_type& input::
+smoothLJ ()
 {
-  return this->LJORSmoothLJ_.get ();
+  return this->smoothLJ_.get ();
 }
 
 void input::
-LJORSmoothLJ (const LJORSmoothLJ_type& x)
+smoothLJ (const smoothLJ_type& x)
 {
-  this->LJORSmoothLJ_.set (x);
+  this->smoothLJ_.set (x);
 }
 
 const input::particleContainerType_type& input::
@@ -1252,7 +1252,7 @@ input::
 input (const tStart_type& tStart,
        const tEnd_type& tEnd,
        const deltaT_type& deltaT,
-       const LJORSmoothLJ_type& LJORSmoothLJ,
+       const smoothLJ_type& smoothLJ,
        const particleContainerType_type& particleContainerType,
        const r_cutoff_type& r_cutoff,
        const r_l_type& r_l,
@@ -1275,7 +1275,7 @@ input (const tStart_type& tStart,
   tStart_ (tStart, this),
   tEnd_ (tEnd, this),
   deltaT_ (deltaT, this),
-  LJORSmoothLJ_ (LJORSmoothLJ, this),
+  smoothLJ_ (smoothLJ, this),
   particleContainerType_ (particleContainerType, this),
   r_cutoff_ (r_cutoff, this),
   r_l_ (r_l, this),
@@ -1308,7 +1308,7 @@ input (const input& x,
   tStart_ (x.tStart_, f, this),
   tEnd_ (x.tEnd_, f, this),
   deltaT_ (x.deltaT_, f, this),
-  LJORSmoothLJ_ (x.LJORSmoothLJ_, f, this),
+  smoothLJ_ (x.smoothLJ_, f, this),
   particleContainerType_ (x.particleContainerType_, f, this),
   r_cutoff_ (x.r_cutoff_, f, this),
   r_l_ (x.r_l_, f, this),
@@ -1341,7 +1341,7 @@ input (const ::xercesc::DOMElement& e,
   tStart_ (this),
   tEnd_ (this),
   deltaT_ (this),
-  LJORSmoothLJ_ (this),
+  smoothLJ_ (this),
   particleContainerType_ (this),
   r_cutoff_ (this),
   r_l_ (this),
@@ -1414,13 +1414,13 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
-    // LJORSmoothLJ
+    // smoothLJ
     //
-    if (n.name () == "LJORSmoothLJ" && n.namespace_ ().empty ())
+    if (n.name () == "smoothLJ" && n.namespace_ ().empty ())
     {
-      if (!LJORSmoothLJ_.present ())
+      if (!smoothLJ_.present ())
       {
-        this->LJORSmoothLJ_.set (LJORSmoothLJ_traits::create (i, f, this));
+        this->smoothLJ_.set (smoothLJ_traits::create (i, f, this));
         continue;
       }
     }
@@ -1686,10 +1686,10 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "");
   }
 
-  if (!LJORSmoothLJ_.present ())
+  if (!smoothLJ_.present ())
   {
     throw ::xsd::cxx::tree::expected_element< char > (
-      "LJORSmoothLJ",
+      "smoothLJ",
       "");
   }
 
@@ -1836,7 +1836,7 @@ operator= (const input& x)
     this->tStart_ = x.tStart_;
     this->tEnd_ = x.tEnd_;
     this->deltaT_ = x.deltaT_;
-    this->LJORSmoothLJ_ = x.LJORSmoothLJ_;
+    this->smoothLJ_ = x.smoothLJ_;
     this->particleContainerType_ = x.particleContainerType_;
     this->r_cutoff_ = x.r_cutoff_;
     this->r_l_ = x.r_l_;

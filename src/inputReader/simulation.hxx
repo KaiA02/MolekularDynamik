@@ -31,8 +31,8 @@
 // in the accompanying FLOSSE file.
 //
 
-#ifndef SRC_INPUT_READER_SIMULATION_HXX
-#define SRC_INPUT_READER_SIMULATION_HXX
+#ifndef CXX_HOME_KAIARENJA_CLION_PROJECTS_MOLEKULAR_DYNAMIK_SRC_INPUT_READER_SIMULATION_HXX
+#define CXX_HOME_KAIARENJA_CLION_PROJECTS_MOLEKULAR_DYNAMIK_SRC_INPUT_READER_SIMULATION_HXX
 
 #ifndef XSD_CXX11
 #define XSD_CXX11
@@ -388,19 +388,19 @@ class input: public ::xml_schema::type
   void
   deltaT (const deltaT_type& x);
 
-  // LJORSmoothLJ
+  // smoothLJ
   //
-  typedef ::xml_schema::boolean LJORSmoothLJ_type;
-  typedef ::xsd::cxx::tree::traits< LJORSmoothLJ_type, char > LJORSmoothLJ_traits;
+  typedef ::xml_schema::boolean smoothLJ_type;
+  typedef ::xsd::cxx::tree::traits< smoothLJ_type, char > smoothLJ_traits;
 
-  const LJORSmoothLJ_type&
-  LJORSmoothLJ () const;
+  const smoothLJ_type&
+  smoothLJ () const;
 
-  LJORSmoothLJ_type&
-  LJORSmoothLJ ();
+  smoothLJ_type&
+  smoothLJ ();
 
   void
-  LJORSmoothLJ (const LJORSmoothLJ_type& x);
+  smoothLJ (const smoothLJ_type& x);
 
   // particleContainerType
   //
@@ -716,7 +716,7 @@ class input: public ::xml_schema::type
   input (const tStart_type&,
          const tEnd_type&,
          const deltaT_type&,
-         const LJORSmoothLJ_type&,
+         const smoothLJ_type&,
          const particleContainerType_type&,
          const r_cutoff_type&,
          const r_l_type&,
@@ -765,7 +765,7 @@ class input: public ::xml_schema::type
   ::xsd::cxx::tree::one< tStart_type > tStart_;
   ::xsd::cxx::tree::one< tEnd_type > tEnd_;
   ::xsd::cxx::tree::one< deltaT_type > deltaT_;
-  ::xsd::cxx::tree::one< LJORSmoothLJ_type > LJORSmoothLJ_;
+  ::xsd::cxx::tree::one< smoothLJ_type > smoothLJ_;
   ::xsd::cxx::tree::one< particleContainerType_type > particleContainerType_;
   ::xsd::cxx::tree::one< r_cutoff_type > r_cutoff_;
   ::xsd::cxx::tree::one< r_l_type > r_l_;
@@ -1484,4 +1484,4 @@ simulation_ (::xml_schema::dom::unique_ptr< ::xercesc::DOMDocument > d,
 //
 // End epilogue.
 
-#endif // SRC_INPUT_READER_SIMULATION_HXX
+#endif // CXX_HOME_KAIARENJA_CLION_PROJECTS_MOLEKULAR_DYNAMIK_SRC_INPUT_READER_SIMULATION_HXX
