@@ -9,7 +9,8 @@
 #SBATCH --get-user-env
 #SBATCH --cpus-per-task=1
 #SBATCH --export=NONE
-#SBATCH --mail-user=ge47jow@mytum.de
+#SBATCH --mail-user=kai_arenja@hotmail.de
+#SBATCH --mail-type=end
 #SBATCH --time=00:30:00
 
 ./MolSim ../input/"name".xml 
