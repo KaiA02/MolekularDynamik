@@ -12,9 +12,9 @@
                             <xs:element name="particleContainerType" type="xs:string"/>
                             <xs:element name="r_cutoff" type="xs:double"/>
                             <xs:element name="r_l" type="xs:double"/>
-                            <xs:element name="domainSizeX" type="xs:int"/>
-                            <xs:element name="domainSizeY" type="xs:int"/>
-                            <xs:element name="domainSizeZ" type="xs:int"/>
+                            <xs:element name="domainSizeX" type="xs:double"/>
+                            <xs:element name="domainSizeY" type="xs:double"/>
+                            <xs:element name="domainSizeZ" type="xs:double"/>
                             <xs:element name="boundary1Type" type="xs:int"/>
                             <xs:element name="boundary2Type" type="xs:int"/>
                             <xs:element name="boundary3Type" type="xs:int"/>
