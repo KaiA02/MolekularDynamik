@@ -3,8 +3,7 @@
 #SBATCH -o ./%x.%j.%N.out
 #SBATCH -D ./build
 #SBATCH --get-user-env
-#SBATCH --clusters=cm2_tiny
-#SBATCH --partition=cm2_tiny
+#SBATCH --clusters=cm2
 #SBATCH --mem=150MB
 #SBATCH --cpus-per-task=1
 #SBATCH --export=NONE
