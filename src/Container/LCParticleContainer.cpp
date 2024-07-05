@@ -28,14 +28,6 @@ void LCParticleContainer::setG_grav(double g) {
   g_grav = g;
 }
 
-bool LCParticleContainer::getLJORSmoothLJ() {
-  return LJORSmoothLJ;
-}
-
-void LCParticleContainer::setLJORSmoothLJ(bool LJORSLJ) {
-  LJORSmoothLJ = LJORSLJ;
-}
-
 
 std::vector<Particle> LCParticleContainer::getParticleInNeighbourhood(std::array<int, 3> id) {
   std::vector<Particle> neigbourhood;
@@ -434,8 +426,7 @@ void LCParticleContainer::calcWithHalo(Particle *p, std::array<double, 3> x_arg)
   Particle haloParticle = Particle(x_arg, {}, p->getM(), p->getType());
   Calculations calc(*this);
   std::array<double, 3> addedForce;
-  //TODO adapt for LJORSmoothLJ
-  std::array<double, 3> f_ij = calc.calculateLJF(p, &haloParticle, p->getEpsilon(), p->getSigma());
+  std::array<double, 3> f_ij = calc.decideForceMethod(p, &haloParticle, p->getEpsilon(), p->getSigma());
   addedForce = {p->getF().at(0) + f_ij.at(0), p->getF().at(1) + f_ij.at(1), p->getF().at(2) + f_ij.at(2)};
   p->setF(addedForce);
 }

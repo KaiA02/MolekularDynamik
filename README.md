@@ -18,6 +18,7 @@
 1. Start_time as Double
 2. End_Time as Double
 3. Time_Step as Double
+4. SmoothLJ as boolean (true for smoothLJ and false for normal LJ)
 4. Output type: "xyz" or "vtk"
 5. Input type: "cube" or "sonne"
 6. ... see xsd file

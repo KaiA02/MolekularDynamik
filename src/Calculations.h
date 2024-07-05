@@ -15,7 +15,7 @@ private:
   BaseParticleContainer &particles;
   double r_cutoff;
   double g_grav;
-  bool LJORSmoothLJ;
+  bool smoothLJ;
   double r_l;
   double stiffness;
   double avgBondLength;
@@ -38,9 +38,9 @@ public:
   void setG_grav(double g_grav);
 
  /**
-  * @brief setter for Deciding wether to have LJ or Smooth LJ
+  * @brief setter for Deciding wether to have SmoothLJ or normal LJ
   */
- void setLJORSmoothLJ(bool LJORSmoothLJ);
+ void setSmoothLJ(bool SLJ);
 
  void setR_L(double r_l);
 
@@ -103,9 +103,9 @@ public:
    */
   std::array<double, 3> calculateLJF(Particle *p1, Particle *p2, double e, double s);
 
- std::array<double, 3> calculateSmoothLJF(Particle *p1, Particle *p2, double e, double s);
+  std::array<double, 3> calculateSmoothLJF(Particle *p1, Particle *p2, double e, double s);
 
- //void decideForceMethod()
+  std::array<double, 3> decideForceMethod(Particle *p1, Particle *p2, double e, double s);
 
   std::array<double, 3> calculateHarmonicForce(Particle *p1, Particle *p2);
   std::array<double, 3> calculateHarmonicForceDiagonal(Particle *p1, Particle *p2);

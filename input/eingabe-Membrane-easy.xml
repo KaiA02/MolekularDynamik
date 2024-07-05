@@ -4,9 +4,10 @@
         <tStart>0.0</tStart>
         <tEnd>1.0</tEnd>
         <deltaT>0.0002</deltaT>
-        <LJORSmoothLJ>0</LJORSmoothLJ>
+        <smoothLJ>false</smoothLJ>
         <particleContainerType>LC</particleContainerType>
         <r_cutoff>2.0</r_cutoff>
+        <r_l>0</r_l>
         <domainSizeX>40</domainSizeX>
         <domainSizeY>40</domainSizeY>
         <domainSizeZ>40</domainSizeZ>

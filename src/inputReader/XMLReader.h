@@ -33,7 +33,7 @@ public:
   /**
    * @return 0 if we want to have LJF or 1 if we want to have Smooth LJF
    */
-  bool getLJORSmoothLJ();
+  bool getSmoothLJ();
 
     /**
      * @return the r_L

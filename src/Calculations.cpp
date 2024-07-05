@@ -22,8 +22,8 @@ void Calculations::setR_cutoff(double r) {
    g_grav = g;
  }
 
-void Calculations::setLJORSmoothLJ(bool LJORSLJ) {
-  LJORSmoothLJ = LJORSLJ;
+void Calculations::setSmoothLJ(bool SLJ) {
+  smoothLJ = SLJ;
 }
 
 void Calculations::setR_L(double R_L) {
@@ -124,8 +124,7 @@ void Calculations::LCcalculateLJF(std::vector<Particle*> &center, std::vector<Pa
           e = pi->getEpsilon();
           s = pi->getSigma();
         }
-        //TODO adapt for LJORSmoothLJ
-        f_ij = calculateLJF(pi, &pj, e, s);
+        f_ij = decideForceMethod(pi, &pj, e, s);
 
         newForcei = {newForcei.at(0) + f_ij.at(0), newForcei.at(1) + f_ij.at(1), newForcei.at(2) + f_ij.at(2)};
       }
@@ -157,8 +156,7 @@ void Calculations::calculateLJFcenter(std::vector<Particle *> &center, const std
         e = pi->getEpsilon();
         s = pi->getSigma();
       }
-      //TODO adapt for LJORSmoothLJ
-      f_ij = calculateLJF(pi, pj, e, s);
+      f_ij = decideForceMethod(pi, pj, e, s);
       pi->setF(pi->getF() + f_ij);
       pj->setF(pj->getF() - f_ij);
     }
@@ -186,7 +184,7 @@ if (distance <= r_cutoff) {
   return f_ij;
 }
 
-//TODO adapt for LJORSmoothLJ
+
 std::array<double, 3> Calculations::calculateSmoothLJF(Particle *p1, Particle *p2, double e, double s) {
     std::array<double,3> x1 = p1->getX();
     std::array<double,3> x2 = p2->getX();
@@ -196,13 +194,18 @@ std::array<double, 3> Calculations::calculateSmoothLJF(Particle *p1, Particle *p
                            displacement_vector[1] * displacement_vector[1] +
                            displacement_vector[2] * displacement_vector[2]);
 
-    double forcefactor1 = -(24 * pow(s, 6) * e / (pow(distance, 14) * pow(r_cutoff - r_l, 3)) * (r_cutoff - distance));
+    double distance_exp2 = distance * distance;
+    double distance_exp6 = distance_exp2 * distance_exp2 * distance_exp2;
+    double distance_exp14 = distance_exp6 * distance_exp6 * distance_exp2;
+    double sigma_exp6 = pow(s, 6);
 
-    double forcefactor2_1 = r_cutoff * r_cutoff * (2 * pow(s, 6) - pow(distance, 6)) +
-                            r_cutoff * (3 * r_l - distance) * (pow(distance, 6) - 2 * pow(s, 6));
+    double forcefactor1 = -(24 * sigma_exp6 * e / (distance_exp14 * pow(r_cutoff - r_l, 3)) * (r_cutoff - distance));
 
-    double forcefactor2_2_1 = 5 * r_l * pow(s, 6) - 2 * r_l * pow(distance, 6) -
-                              3 * pow(s, 6) * distance + pow(distance, 7);
+    double forcefactor2_1 = r_cutoff * r_cutoff * (2 * sigma_exp6 - distance_exp6) +
+                            r_cutoff * (3 * r_l - distance) * (distance_exp6 - 2 * sigma_exp6);
+
+    double forcefactor2_2_1 = 5 * r_l * sigma_exp6 - 2 * r_l * distance_exp6 -
+                              3 * sigma_exp6 * distance + distance_exp6 * distance;
 
     double forcefactor2_2 = distance * forcefactor2_2_1;
 
@@ -215,8 +218,26 @@ std::array<double, 3> Calculations::calculateSmoothLJF(Particle *p1, Particle *p
     return f_ij;
 }
 
-//TODO adapt for LJORSmoothLJ
-//void decideForceMethod()
+std::array<double, 3> Calculations::decideForceMethod(Particle *p1, Particle *p2, double e, double s) {
+    if(smoothLJ) {
+        std::array<double,3> x1 = p1->getX();
+        std::array<double,3> x2 = p2->getX();
+        std::array<double, 3> f_ij{};
+        std::array<double, 3> displacement_vector = { x1[0] - x2[0], x1[1] - x2[1], x1[2] - x2[2]};
+        double distance = sqrt(displacement_vector[0] * displacement_vector[0]+
+                               displacement_vector[1] * displacement_vector[1] +
+                               displacement_vector[2] * displacement_vector[2]);
+        if(distance <= r_l) {
+            return calculateLJF(p1, p2, e, s);
+        } else if(r_l <= distance && distance <= r_cutoff) {
+            return calculateSmoothLJF(p1, p2, e, s);
+        } else {
+            return 0;
+        }
+    }else {
+        return calculateLJF(p1, p2, e, s);
+    }
+}
 
 std::array<double, 3> Calculations::calculateHarmonicForce(Particle *p1, Particle *p2){
   std::array<double,3> x1 = p1->getX();

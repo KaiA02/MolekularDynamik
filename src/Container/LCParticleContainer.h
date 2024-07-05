@@ -25,11 +25,6 @@ public:
   void setG_grav(double g);
 
  /**
-  * @brief setter for Deciding wether to have LJ or Smooth LJ
-  */
- void setLJORSmoothLJ(bool LJORSmoothLJ);
-
- /**
   * @brief getter for r_cutoff
   */
   double getR_cutoff();
@@ -38,11 +33,6 @@ public:
   * @brief getter for g_grav
   */
   double getG_grav();
-
- /**
-  * @brief getter for Deciding wether to have LJ or Smooth LJ
-  */
- bool getLJORSmoothLJ();
 
   /**
    *@brief realocates the particles to their new cells and also
