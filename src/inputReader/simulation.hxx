@@ -449,8 +449,8 @@ class input: public ::xml_schema::type
 
   // domainSizeX
   //
-  typedef ::xml_schema::int_ domainSizeX_type;
-  typedef ::xsd::cxx::tree::traits< domainSizeX_type, char > domainSizeX_traits;
+  typedef ::xml_schema::double_ domainSizeX_type;
+  typedef ::xsd::cxx::tree::traits< domainSizeX_type, char, ::xsd::cxx::tree::schema_type::double_ > domainSizeX_traits;
 
   const domainSizeX_type&
   domainSizeX () const;
@@ -463,8 +463,8 @@ class input: public ::xml_schema::type
 
   // domainSizeY
   //
-  typedef ::xml_schema::int_ domainSizeY_type;
-  typedef ::xsd::cxx::tree::traits< domainSizeY_type, char > domainSizeY_traits;
+  typedef ::xml_schema::double_ domainSizeY_type;
+  typedef ::xsd::cxx::tree::traits< domainSizeY_type, char, ::xsd::cxx::tree::schema_type::double_ > domainSizeY_traits;
 
   const domainSizeY_type&
   domainSizeY () const;
@@ -477,8 +477,8 @@ class input: public ::xml_schema::type
 
   // domainSizeZ
   //
-  typedef ::xml_schema::int_ domainSizeZ_type;
-  typedef ::xsd::cxx::tree::traits< domainSizeZ_type, char > domainSizeZ_traits;
+  typedef ::xml_schema::double_ domainSizeZ_type;
+  typedef ::xsd::cxx::tree::traits< domainSizeZ_type, char, ::xsd::cxx::tree::schema_type::double_ > domainSizeZ_traits;
 
   const domainSizeZ_type&
   domainSizeZ () const;
