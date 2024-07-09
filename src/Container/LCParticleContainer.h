@@ -164,6 +164,8 @@ public:
 
   Membrane getMembrane();
 
+  std::vector<Particle*> getMovingParticles(std::array<std::array<int, 2>, 4> ids, int size);
+
 private:
   std::vector<std::vector<std::vector<Cell>>> cells;
   std::array<double, 3> cell_size;

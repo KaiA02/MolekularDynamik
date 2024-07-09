@@ -80,6 +80,9 @@ int main(int argc, char *argsv[]) {
   double current_time = start_time;
 
   double totalIterations = (end_time - start_time) / delta_t;
+  spdlog::debug("MolSim: end_time: {}", end_time);
+  spdlog::debug("MolSim: start_time: {}", start_time);
+  spdlog::debug("MolSim: delta_t: {}", delta_t);
   int progress = 0;
 
   int molecule_updates = 0;
@@ -118,18 +121,22 @@ int main(int argc, char *argsv[]) {
     }
 
     while(current_time < end_time) {
+        spdlog::debug("itteration {}", floor(current_time/delta_t));
       	lcCaluclations.calculateX(delta_t);
 			spdlog::debug("MolSim: calculated X");
       	molecule_updates += lcParticles.getParticles().size();
       	lcParticles.handleLJFCalculation(lcCaluclations, int(current_time/delta_t));
 			spdlog::debug("MolSim: calculated F");
       	molecule_updates += 5 * lcParticles.getParticles().size(); //only provisionally
-		lcCaluclations.calculateV(delta_t);
+      spdlog::debug("MolSim: moleculeUpdate");
+		    lcCaluclations.calculateV(delta_t);
 			spdlog::debug("MolSim: calculated V");
       	molecule_updates += lcParticles.getParticles().size();
-      	iteration++;
+      spdlog::debug("MolSim: moleculeUpdate");
+      iteration++;
 
       if(thermostatOn == "YES") {
+        spdlog::debug("MolSim: in Thermostat");
         if(n_thermostat == 0) {
           thermostat.gradualScaling(lcParticles.getParticles());
         } else {
@@ -142,19 +149,29 @@ int main(int argc, char *argsv[]) {
           }
         }
         molecule_updates += lcParticles.getParticles().size();
+        spdlog::debug("MolSim: applied Thermostat");
       }
-		spdlog::debug("MolSim: applied Thermostat");
+
+
       if (!performanceMeasurement) {
+        spdlog::debug("MolSim: in performanceMeasurment");
         if (iteration % 10 == 0) {
+          spdlog::debug("MolSim: itteration is % 10");
           if(thermostatOn == "YES") {
             spdlog::debug("current Temperature: {}", thermostat.getCurrentTemp(lcParticles.getParticles()));
           }
+          spdlog::debug("MolSim: will plot Particles");
           plotParticlesLC(iteration, outputType, baseName, "../output", lcParticles);
+          spdlog::debug("MolSim: ploted Particles");
+          spdlog::debug("MolSim: totalIterations: {}", totalIterations);
           displayProgressBar(progress, totalIterations, start);
+          spdlog::debug("MolSim: displayed progress");
         }
       }
+      spdlog::debug("MolSim: itteration++");
       progress++;
       current_time += delta_t;
+      spdlog::debug("MolSim: itteration finished");
 
     }
     saveState(lcParticles.getParticles());

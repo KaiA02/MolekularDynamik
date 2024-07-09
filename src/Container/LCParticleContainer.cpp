@@ -51,61 +51,63 @@ std::vector<Particle> LCParticleContainer::getParticleInNeighbourhood(std::array
       }
     }
   }
-  spdlog::debug("neighbourhood has {} particles", particleCount);
+  //spdlog::debug("neighbourhood has {} particles", particleCount);
   if (particleCount <= 0) {
     return {};
   } else {
-    spdlog::debug("there was a neigbourhood of {} particles", particleCount);
+    //spdlog::debug("there was a neigbourhood of {} particles", particleCount);
     return neigbourhood;
   }
 }
 
 Cell* LCParticleContainer::getCellById(const std::array<int, 3> id) {
-  spdlog::debug("getCellByID: id is {} {} {}", id[0]+1, id[1]+1, id[2]+1);
+  //spdlog::debug("getCellByID: id is {} {} {}", id[0]+1, id[1]+1, id[2]+1);
   return &cells.at(id[0]+1).at(id[1]+1).at(id[2]+1);
 }
 
 void LCParticleContainer::realocateParticles() {
-  std::vector<std::vector<std::vector<Cell>>> newCells = std::vector<std::vector<std::vector<Cell>>>{};
+  spdlog::debug("realocateP: realocateParticles()");
+  //std::vector<std::vector<std::vector<Cell>>> newCells = std::vector<std::vector<std::vector<Cell>>>{};
   int x;
   int y;
   int z;
+  //spdlog::debug("realocateP: starting to resize");
   // cells size in x is set to cell_count in x plus 2(halo_cells)
-  newCells.resize(cell_count[0]+2);
+  //newCells.resize(cell_count[0]+2);
 
   // cells size in y is set to cell_count in y plus 2(halo_cells)
-  for (int i = 0; i < cell_count[0]+2; ++i) {
-    newCells[i].resize(cell_count[1]+2);
-  }
-
-  // cells size in z is set to cell_count in z plus 2(halo_cells)
-  for (int i = 0; i < cell_count[0]+2; ++i) {
-    for (int j = 0; j < cell_count[1]+2; ++j) {
-      newCells[i][j].resize(cell_count[2]+2);
+  //for (int i = 0; i < cell_count[0]+2; ++i) {
+  //  newCells[i].resize(cell_count[1]+2);
+  //}
+//
+  //// cells size in z is set to cell_count in z plus 2(halo_cells)
+  //for (int i = 0; i < cell_count[0]+2; ++i) {
+  //  for (int j = 0; j < cell_count[1]+2; ++j) {
+  //    newCells[i][j].resize(cell_count[2]+2);
+  //  }
+  //}
+  //spdlog::debug("realocateP: resized cells");
+  //cells = newCells;
+  for(int i = 0; i < cell_count[0]+2; i++){
+    for(int j = 0; j < cell_count[1]+2; j++){
+      for(int k = 0; k < cell_count[2]+2; k++){
+        cells[i][j][k].emptyCell();
+      }
     }
   }
-  cells = newCells;
   for (auto &p : particles) {
-    spdlog::debug("RelaocateParticle: will realocate Particle");
+    //spdlog::debug("RelaocateParticle: will realocate Particle");
     x = floor(p.getX().at(0) / cell_size.at(0));
     y = floor(p.getX().at(1) / cell_size.at(1));
     z = floor(p.getX().at(2) / cell_size.at(2));
     p.setF({0.0, 0.0, 0.0});
     if (cellExists({x, y, z})) {
-      spdlog::debug("RelaocateParticle: cell exists");
       getCellById({x,y,z})->addParticle(&p);
-      spdlog::debug("RelaocateParticle: added Particle to Cell");
     } else { //Parking of deleted Particles
-      //if(x > -20 && y > -20 && z > -20){
-      //  spdlog::debug("RelaocateParticle: Cell id {} {} {} dosent exists", x, y, z);
-      //}
-
       p.park();
-
-      }
     }
-    spdlog::debug("all particles are added--------------------------------------->");
   }
+}
 
 void LCParticleContainer::fillCellsWithParticles() {
   int counter =0;
@@ -137,20 +139,35 @@ void LCParticleContainer::generateCells(const int size_x, const int size_y, cons
         cell_size_z = r_cutoff;
       }
 
-      // cells size in x is set to cell_count in x plus 2(halo_cells)
-      newCells.resize(cell_count[0]+2);
+      //// cells size in x is set to cell_count in x plus 2(halo_cells)
+      //newCells.resize(cell_count[0]+2);
+//
+      //// cells size in y is set to cell_count in y plus 2(halo_cells)
+      //for (int i = 0; i < cell_count[0]+2; ++i) {
+      //  newCells[i].resize(cell_count[1]+2);
+      //}
+//
+      //// cells size in z is set to cell_count in z plus 2(halo_cells)
+      //for (int i = 0; i < cell_count[0]+2; ++i) {
+      //  for (int j = 0; j < cell_count[1]+2; ++j) {
+      //    newCells[i][j].resize(cell_count[2]+2);
+      //  }
+      //}
 
-      // cells size in y is set to cell_count in y plus 2(halo_cells)
-      for (int i = 0; i < cell_count[0]+2; ++i) {
-        newCells[i].resize(cell_count[1]+2);
-      }
-
-      // cells size in z is set to cell_count in z plus 2(halo_cells)
-      for (int i = 0; i < cell_count[0]+2; ++i) {
-        for (int j = 0; j < cell_count[1]+2; ++j) {
-          newCells[i][j].resize(cell_count[2]+2);
+      std::vector<std::vector<std::vector<Cell>>> vec1 {};
+      for(int i = 0; i < cell_count[0]+2; i++){
+        std::vector<std::vector<Cell>> vec2 {};
+        for(int j = 0; j < cell_count[1]+2; j++){
+          std::vector<Cell> vec3 {};
+          for(int k = 0; k < cell_count[2]+2; k++){
+            Cell c;
+            vec3.push_back(c);
+          }
+          vec2.push_back(vec3);
         }
+        vec1.push_back(vec2);
       }
+      newCells = vec1;
 
       spdlog::info("Cellcounts: {} {} {}", cell_count[0], cell_count[1], cell_count[2]);
       spdlog::info("Cellsize: {} {} {}", cell_size_x, cell_size_y, cell_size_z);
@@ -171,7 +188,6 @@ void LCParticleContainer::generateCells(const int size_x, const int size_y, cons
       }
       cell_size = {cell_size_x, cell_size_y, cell_size_z};
       cells = newCells;
-      spdlog::debug("generated Cells");
     } else {
       spdlog::warn(
           "negative value detected in: generate Cells(count_x etc.) {}, {}, {}",
@@ -184,11 +200,11 @@ void LCParticleContainer::generateCells(const int size_x, const int size_y, cons
 }
 
 void LCParticleContainer::handleLJFCalculation(Calculations& calc, int timestep) {
+  spdlog::debug("LCPartCon: will handleLJF");
   realocateParticles();
-  spdlog::debug("LCPartCon: realoctaed Particles");
+  spdlog::debug("LCPartCon: realocated Particles");
   std::vector<Particle> neighbourhood;
   Cell* c = nullptr;
-  spdlog::debug("LCPartCon: itterating over all neighbourhoods");
   for(std::vector<Cell>::size_type x = 0; x < cells.size() -1; x++){
     for(std::vector<Cell>::size_type y = 0; y < cells[x].size() -1; y++){
       for(std::vector<Cell>::size_type z = 0; z < cells[x][z].size() -1; z++){
@@ -200,12 +216,18 @@ void LCParticleContainer::handleLJFCalculation(Calculations& calc, int timestep)
         }
       }
     }
+  spdlog::debug("LCPartCon: calculated all neighbourhoods");
   handleBoundaryAction();
+  spdlog::debug("LCPartCon: handled Boundaries");
   applyGravitation();
+  spdlog::debug("LCPartCon: applied Gravity");
   if(timestep <= 150){
+  spdlog::debug("LCPartCon: applied Movement");
     membrane.applyMovement();
+    spdlog::debug("LCPartCon: applied Movement");
   }
   membrane.stabilizeMembrane(calc);
+  spdlog::debug("LCPartCon: stabilized Membrane");
 
 }
 
@@ -228,7 +250,6 @@ void LCParticleContainer::addMultipleParticles(std::vector<Particle> &newParticl
     particles.push_back(p);
     counter++;
   }
-  spdlog::info("added {} particles from generator to Container", counter);
 }
 
 void LCParticleContainer::addParticle(Particle p) {
@@ -239,7 +260,7 @@ void LCParticleContainer::addParticle(Particle p) {
 //std::vector<std::vector<std::vector<Cell>>> LCParticleContainer::getCells() { return cells; }
 
 bool LCParticleContainer::cellExists(std::array<int, 3> id) {
-  spdlog::debug("cell exists: id is {} {} {}", id[0], id[1], id[2]);
+  //spdlog::debug("cell exists: id is {} {} {}", id[0], id[1], id[2]);
   return(id[0] >= -1 && id[0] <= cell_count[0]  && id[1] >= -1 && id[1] <= cell_count[1]  && id[2] >= -1 && id[2] <= cell_count[2]);
 };
 
@@ -493,5 +514,14 @@ void LCParticleContainer::setMembrane(Membrane m){
 }
 Membrane LCParticleContainer::getMembrane(){
   return membrane;
+};
+
+std::vector<Particle*> LCParticleContainer::getMovingParticles(std::array<std::array<int, 2>, 4> ids, int size){
+    Particle* p1 = &particles.at(size*ids[0][0] + ids[0][1]);
+    Particle* p2 = &particles.at(size*ids[1][0] + ids[1][1]);
+    Particle* p3 = &particles.at(size*ids[2][0] + ids[2][1]);
+    Particle* p4 = &particles.at(size*ids[3][0] + ids[3][1]);
+	std::vector<Particle*> result = {p1, p2, p3, p4};
+	return result;
 };
 

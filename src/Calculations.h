@@ -15,8 +15,8 @@ private:
   BaseParticleContainer &particles;
   double r_cutoff;
   double g_grav;
-  double stiffness;
-  double avgBondLength;
+  double stiffness = 300;
+  double avgBondLength = 2.2;
 
 public:
   Calculations();

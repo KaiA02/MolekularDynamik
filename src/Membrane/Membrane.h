@@ -14,6 +14,10 @@ class Membrane{
         Membrane(std::vector<Particle*> particles, double distance, double fUp);
         void applyMovement();
         void stabilizeMembrane(Calculations& calc);
+        void setMovingParticles(std::vector<Particle*> movPart);
+        int getMovingParticleCount();
+        void getAveragePairSize();
+
     private:
         std::vector<MembranePair> pairs;
         double distance;

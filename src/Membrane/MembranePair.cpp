@@ -2,7 +2,7 @@
 // Created by jh on 04.07.2024.
 //
 #include "MembranePair.h"
-
+#include "spdlog/spdlog.h"
 
 
 MembranePair::MembranePair(Particle* p){
@@ -15,6 +15,10 @@ MembranePair::MembranePair(Particle* p){
 
 Particle* MembranePair::getCenter(){
     return center;
+}
+
+void MembranePair::setCenter(Particle* c){
+    center = c;
 }
 
 std::vector<Particle*> MembranePair::getDirect(){

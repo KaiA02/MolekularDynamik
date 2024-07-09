@@ -12,6 +12,7 @@ class MembranePair{
     public:
         MembranePair(Particle* center);
         Particle* getCenter();
+        void setCenter(Particle* center);
         std::vector<Particle*> getDirect();
         void appendDirect(Particle* p);
         std::vector<Particle*> getDiagonal();

@@ -104,6 +104,7 @@ void Calculations::LCcalculateLJF(std::vector<Particle*> &center, std::vector<Pa
   if (other.size() > 0) {
     for(auto pi : center){
       newForcei = pi->getF();
+      if(pi->getType() != 0){
       for(auto pj : other) {
         if(pi->getType() != pj.getType()) {
           for(auto entry : EAndS) {
@@ -123,6 +124,7 @@ void Calculations::LCcalculateLJF(std::vector<Particle*> &center, std::vector<Pa
         newForcei = {newForcei.at(0) + f_ij.at(0), newForcei.at(1) + f_ij.at(1), newForcei.at(2) + f_ij.at(2)};
       }
       pi->setF(newForcei);
+      }
     }
   }
 }
@@ -136,6 +138,7 @@ void Calculations::calculateLJFcenter(std::vector<Particle *> &center, const std
 
   for (size_t i = 0; i < center.size() - 1; ++i) {
     Particle *pi = center.at(i);
+    if(pi->getType() != 0){
     for (size_t j = i + 1; j < center.size(); ++j) {
       Particle *pj = center.at(j);
       if(pi->getType() != pj->getType()) {
@@ -153,6 +156,7 @@ void Calculations::calculateLJFcenter(std::vector<Particle *> &center, const std
       f_ij = calculateLJF(pi, pj, e, s);
       pi->setF(pi->getF() + f_ij);
       pj->setF(pj->getF() - f_ij);
+    }
     }
   }
 }

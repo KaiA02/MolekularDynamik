@@ -82,18 +82,10 @@ void XMLReader::readXML_LC(LCParticleContainer &particleContainer) {
         n3 = 1;
       }
       spdlog::debug("generating Cube");
-		if(in.cuboids()[i].isMembrane() == "YES"){
-			particle.setType(0);
-			spdlog::info("generated a Membrane");
-		}
       pg.generateCuboid(particle, in.cuboids()[i].n1(), in.cuboids()[i].n2(),
                         n3, in.cuboids()[i].distance(),
                         in.cuboids()[i].meanVelocity(), dimension, in.temp_init());
       particleContainer.addMultipleParticles(pg.getAllParticles());
-      if(in.cuboids()[i].isMembrane() == "YES"){
-        Membrane m(pg.getAllParticlesPointers(), in.cuboids()[i].distance(), in.cuboids()[i].forceUpwards());
-        particleContainer.setMembrane(m);
-      }
       spdlog::info("added {} particles to the generator", pg.getAllParticles().size());
 
     } else if (i < in.disk().size()) { //case its a disk
@@ -101,6 +93,22 @@ void XMLReader::readXML_LC(LCParticleContainer &particleContainer) {
       pg.generateDisk(particle, in.disk()[i].radius(), in.disk()[i].distance(),
                       in.disk()[i].meanVelocity(), dimension, in.temp_init());
       particleContainer.addMultipleParticles(pg.getAllParticles());
+    } else if(i < in.membrane().size()){ //case its a membrane
+      spdlog::debug("Reader: will generate a Membrane");
+      particle.setType(0);
+      pg.generateCuboid(particle, in.membrane()[i].n1(), in.membrane()[i].n2(),
+                        in.membrane()[i].n3(), in.membrane()[i].distance(),
+                        in.membrane()[i].meanVelocity(), 3, in.temp_init());
+      particleContainer.addMultipleParticles(pg.getAllParticles());
+      spdlog::debug("Reader: added the membrane to the container");
+      Membrane m(pg.getAllParticlesPointers(), in.membrane()[i].distance(), in.membrane()[i].forceUpwards());
+      int gridsize = (in.membrane()[i].n1()+in.membrane()[i].n2()+in.membrane()[i].n3()-1)/2;
+      std::array<int, 2> id1 = {in.membrane()[i].id1a(), in.membrane()[i].id1b()};
+      std::array<int, 2> id2 = {in.membrane()[i].id2a(), in.membrane()[i].id2b()};
+      std::array<int, 2> id3 = {in.membrane()[i].id3a(), in.membrane()[i].id3b()};
+      std::array<int, 2> id4 = {in.membrane()[i].id4a(), in.membrane()[i].id4b()};
+      m.setMovingParticles(particleContainer.getMovingParticles({id1, id2, id3, id4}, gridsize));
+      particleContainer.setMembrane(m);
 	} else { //case its a single particle
       particleContainer.addParticle(particle);
 		spdlog::info("instead added a single Particle");

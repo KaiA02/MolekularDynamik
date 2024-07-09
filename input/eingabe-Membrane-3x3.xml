@@ -2,14 +2,14 @@
             xsi:noNamespaceSchemaLocation="../src/inputReader/simulation.xsd">
     <input>
         <tStart>0.0</tStart>
-        <tEnd>50</tEnd>
+        <tEnd>500</tEnd>
         <deltaT>0.01</deltaT>
         <inputType>LJF</inputType>
         <particleContainerType>LC</particleContainerType>
-        <r_cutoff>4.0</r_cutoff>
-        <domainSizeX>148</domainSizeX>
-        <domainSizeY>148</domainSizeY>
-        <domainSizeZ>148</domainSizeZ>
+        <r_cutoff>2.0</r_cutoff>
+        <domainSizeX>20</domainSizeX>
+        <domainSizeY>20</domainSizeY>
+        <domainSizeZ>20</domainSizeZ>
         <boundary1Type>2</boundary1Type>
         <boundary2Type>2</boundary2Type>
         <boundary3Type>2</boundary3Type>
@@ -23,9 +23,9 @@
         <delta_temp>0</delta_temp>
         <g_grav>-0.001</g_grav>
         <particles>
-            <x>15.0</x>
-            <y>15.0</y>
-            <z>1.5</z>
+            <x>6.5</x>
+            <y>6.5</y>
+            <z>6.5</z>
             <velocityX>0.0</velocityX>
             <velocityY>0.0</velocityY>
             <velocityZ>0.0</velocityZ>
@@ -34,20 +34,20 @@
             <sigma>1</sigma>
         </particles>
         <membrane>
-            <n1>50</n1>
-            <n2>50</n2>
+            <n1>4</n1>
+            <n2>4</n2>
             <n3>1</n3>
             <distance>2.2</distance>
             <meanVelocity>0.0</meanVelocity>
             <forceUpwards>0.8</forceUpwards>
-            <id1a>17</id1a>
-            <id1b>24</id1b>
-            <id2a>17</id2a>
-            <id2b>25</id2b>
-            <id3a>18</id3a>
-            <id3b>24</id3b>
-            <id4a>18</id4a>
-            <id4b>25</id4b>
+            <id1a>1</id1a>
+            <id1b>1</id1b>
+            <id2a>1</id2a>
+            <id2b>2</id2b>
+            <id3a>2</id3a>
+            <id3b>1</id3b>
+            <id4a>2</id4a>
+            <id4b>2</id4b>
         </membrane>
 
     </input>
