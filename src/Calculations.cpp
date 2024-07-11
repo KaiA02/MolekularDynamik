@@ -226,16 +226,13 @@ std::array<double, 3> Calculations::decideForceMethod(Particle *p1, Particle *p2
     if(smoothLJ) {
         std::array<double,3> x1 = p1->getX();
         std::array<double,3> x2 = p2->getX();
-        std::array<double, 3> displacement_vector = { x1[0] - x2[0], x1[1] - x2[1], x1[2] - x2[2]};
-        double distance = sqrt(displacement_vector[0] * displacement_vector[0]+
-                               displacement_vector[1] * displacement_vector[1] +
-                               displacement_vector[2] * displacement_vector[2]);
+        double distance = calcDistance(x1, x2);
         if(distance <= r_l) {
             return calculateLJF(p1, p2, e, s);
         } else if(r_l <= distance && distance <= r_cutoff) {
             return calculateSmoothLJF(p1, p2, e, s);
         } else {
-            return {};
+            return {0.0,0.0,0.0};
         }
     }else {
         return calculateLJF(p1, p2, e, s);

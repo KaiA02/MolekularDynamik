@@ -31,8 +31,8 @@
 // in the accompanying FLOSSE file.
 //
 
-#ifndef CXX_HOME_KAIARENJA_CLION_PROJECTS_MOLEKULAR_DYNAMIK_SRC_INPUT_READER_SIMULATION_HXX
-#define CXX_HOME_KAIARENJA_CLION_PROJECTS_MOLEKULAR_DYNAMIK_SRC_INPUT_READER_SIMULATION_HXX
+#ifndef CXX_MNT_C_USERS_JH_CLION_PROJECTS_MOLEKULARDYNAMIK_ASSIGNMENT5_SRC_INPUT_READER_SIMULATION_HXX
+#define CXX_MNT_C_USERS_JH_CLION_PROJECTS_MOLEKULARDYNAMIK_ASSIGNMENT5_SRC_INPUT_READER_SIMULATION_HXX
 
 #ifndef XSD_CXX11
 #define XSD_CXX11
@@ -1237,37 +1237,6 @@ class cuboids: public ::xml_schema::type
   void
   dimension (const dimension_type& x);
 
-  // isMembrane
-  //
-  typedef ::xml_schema::string isMembrane_type;
-  typedef ::xsd::cxx::tree::traits< isMembrane_type, char > isMembrane_traits;
-
-  const isMembrane_type&
-  isMembrane () const;
-
-  isMembrane_type&
-  isMembrane ();
-
-  void
-  isMembrane (const isMembrane_type& x);
-
-  void
-  isMembrane (::std::unique_ptr< isMembrane_type > p);
-
-  // forceUpwards
-  //
-  typedef ::xml_schema::double_ forceUpwards_type;
-  typedef ::xsd::cxx::tree::traits< forceUpwards_type, char, ::xsd::cxx::tree::schema_type::double_ > forceUpwards_traits;
-
-  const forceUpwards_type&
-  forceUpwards () const;
-
-  forceUpwards_type&
-  forceUpwards ();
-
-  void
-  forceUpwards (const forceUpwards_type& x);
-
   // Constructors.
   //
   cuboids (const n1_type&,
@@ -1275,9 +1244,7 @@ class cuboids: public ::xml_schema::type
            const n3_type&,
            const distance_type&,
            const meanVelocity_type&,
-           const dimension_type&,
-           const isMembrane_type&,
-           const forceUpwards_type&);
+           const dimension_type&);
 
   cuboids (const ::xercesc::DOMElement& e,
            ::xml_schema::flags f = 0,
@@ -1311,8 +1278,6 @@ class cuboids: public ::xml_schema::type
   ::xsd::cxx::tree::one< distance_type > distance_;
   ::xsd::cxx::tree::one< meanVelocity_type > meanVelocity_;
   ::xsd::cxx::tree::one< dimension_type > dimension_;
-  ::xsd::cxx::tree::one< isMembrane_type > isMembrane_;
-  ::xsd::cxx::tree::one< forceUpwards_type > forceUpwards_;
 };
 
 class disk: public ::xml_schema::type
@@ -1777,4 +1742,4 @@ simulation_ (::xml_schema::dom::unique_ptr< ::xercesc::DOMDocument > d,
 //
 // End epilogue.
 
-#endif // CXX_HOME_KAIARENJA_CLION_PROJECTS_MOLEKULAR_DYNAMIK_SRC_INPUT_READER_SIMULATION_HXX
+#endif // CXX_MNT_C_USERS_JH_CLION_PROJECTS_MOLEKULARDYNAMIK_ASSIGNMENT5_SRC_INPUT_READER_SIMULATION_HXX
