@@ -52,6 +52,7 @@
                                         <xs:element name="meanVelocity" type="xs:double"/>
                                         <xs:element name="dimension" type="xs:double"/>
                                         <xs:element name="isMembrane" type="xs:string"/>
+                                        <xs:element name="forceUpwards" type="xs:double"/>
                                     </xs:sequence>
                                 </xs:complexType>
                             </xs:element>
@@ -62,6 +63,26 @@
                                         <xs:element name="distance" type="xs:double"/>
                                         <xs:element name="meanVelocity" type="xs:double"/>
                                         <xs:element name="dimension" type="xs:double"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="membrane" maxOccurs="unbounded" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="n1" type="xs:double"/>
+                                        <xs:element name="n2" type="xs:double"/>
+                                        <xs:element name="n3" type="xs:double"/>
+                                        <xs:element name="distance" type="xs:double"/>
+                                        <xs:element name="meanVelocity" type="xs:double"/>
+                                        <xs:element name="forceUpwards" type="xs:double"/>
+                                        <xs:element name="id1a" type="xs:int"/>
+                                        <xs:element name="id1b" type="xs:int"/>
+                                        <xs:element name="id2a" type="xs:int"/>
+                                        <xs:element name="id2b" type="xs:int"/>
+                                        <xs:element name="id3a" type="xs:int"/>
+                                        <xs:element name="id3b" type="xs:int"/>
+                                        <xs:element name="id4a" type="xs:int"/>
+                                        <xs:element name="id4b" type="xs:int"/>
                                     </xs:sequence>
                                 </xs:complexType>
                             </xs:element>

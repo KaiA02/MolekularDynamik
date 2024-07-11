@@ -87,6 +87,9 @@ int main(int argc, char *argsv[]) {
   double current_time = start_time;
 
   double totalIterations = (end_time - start_time) / delta_t;
+  spdlog::debug("MolSim: end_time: {}", end_time);
+  spdlog::debug("MolSim: start_time: {}", start_time);
+  spdlog::debug("MolSim: delta_t: {}", delta_t);
   int progress = 0;
 
   int molecule_updates = 0;
@@ -130,21 +133,21 @@ int main(int argc, char *argsv[]) {
     }
     prevParticles = lcParticles.getParticles();
 
-    while (current_time < end_time) {
-      lcCaluclations.calculateX(delta_t);
-      spdlog::debug("MolSim: calculated X");
-      molecule_updates += lcParticles.getParticles().size();
-      lcParticles.handleLJFCalculation(lcCaluclations);
-      spdlog::debug("MolSim: calculated F");
-      molecule_updates +=
-          5 * lcParticles.getParticles().size(); // only provisionally
-      lcCaluclations.calculateV(delta_t);
-      spdlog::debug("MolSim: calculated V");
-      molecule_updates += lcParticles.getParticles().size();
+    while(current_time < end_time) {
+
+      	lcCaluclations.calculateX(delta_t);
+
+      	molecule_updates += lcParticles.getParticles().size();
+      	lcParticles.handleLJFCalculation(lcCaluclations, int(current_time));
+
+      	molecule_updates += 5 * lcParticles.getParticles().size(); //only provisionally
+		    lcCaluclations.calculateV(delta_t);
+
+      	molecule_updates += lcParticles.getParticles().size();
       iteration++;
 
-      if (thermostatOn == "YES") {
-        if (n_thermostat == 0) {
+      if(thermostatOn == "YES") {
+        if(n_thermostat == 0) {
           thermostat.gradualScaling(lcParticles.getParticles());
         } else {
           if (iteration % n_thermostat == 0) {
@@ -157,7 +160,6 @@ int main(int argc, char *argsv[]) {
         }
         molecule_updates += lcParticles.getParticles().size();
       }
-      spdlog::debug("MolSim: applied Thermostat");
       if (!performanceMeasurement) {
         if (iteration % 10 == 0) {
           if (iteration % 1000 == 0) {
