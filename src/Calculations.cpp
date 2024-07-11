@@ -104,6 +104,7 @@ void Calculations::LCcalculateLJF(std::vector<Particle*> &center, std::vector<Pa
   if (other.size() > 0) {
     for(auto pi : center){
       newForcei = pi->getF();
+      if(pi->getType() != 0){
       for(auto pj : other) {
         if(pi->getType() != pj.getType()) {
           for(auto entry : EAndS) {
@@ -123,6 +124,7 @@ void Calculations::LCcalculateLJF(std::vector<Particle*> &center, std::vector<Pa
         newForcei = {newForcei.at(0) + f_ij.at(0), newForcei.at(1) + f_ij.at(1), newForcei.at(2) + f_ij.at(2)};
       }
       pi->setF(newForcei);
+      }
     }
   }
 }
@@ -136,6 +138,7 @@ void Calculations::calculateLJFcenter(std::vector<Particle *> &center, const std
 
   for (size_t i = 0; i < center.size() - 1; ++i) {
     Particle *pi = center.at(i);
+    if(pi->getType() != 0){
     for (size_t j = i + 1; j < center.size(); ++j) {
       Particle *pj = center.at(j);
       if(pi->getType() != pj->getType()) {
@@ -153,6 +156,7 @@ void Calculations::calculateLJFcenter(std::vector<Particle *> &center, const std
       f_ij = calculateLJF(pi, pj, e, s);
       pi->setF(pi->getF() + f_ij);
       pj->setF(pj->getF() - f_ij);
+    }
     }
   }
 }
@@ -178,34 +182,40 @@ if (distance <= r_cutoff) {
   return f_ij;
 }
 
-std::array<double, 3> Calculations::calculateHarmonicForce(Particle *p1, Particle *p2){
-  std::array<double,3> x1 = p1->getX();
-  std::array<double,3> x2 = p2->getX();
-  std::array<double, 3> f_ij{};
-  std::array<double, 3> displacement_vector = { x1[0] - x2[0], x1[1] - x2[1], x1[2] - x2[2]};
-  double distance = sqrt(displacement_vector[0] * displacement_vector[0]+
-                         displacement_vector[1] * displacement_vector[1] +
-                         displacement_vector[2] * displacement_vector[2]);
-  double forcefactor = stiffness * (distance - avgBondLength);
-  f_ij = {forcefactor * (displacement_vector[0] / distance),
-          forcefactor * (displacement_vector[1] / distance),
-          forcefactor * (displacement_vector[2] / distance)};
-
-  return f_ij;
+std::vector<double> Calculations::calculateHarmonicForce(Particle *p1, Particle *p2, double r0){
+  std::array<double,3> xi = p1->getX();
+  std::array<double,3> xj = p2->getX();
+  std::vector<double> i_j = {xi[0] - xj[0], xi[1] - xj[1], xi[2] - xj[2]};
+  double distance = calcDistance(xi, xj);
+  double scalar = stiffness * (distance - r0);
+  for (int i = 0; i < 3; ++i) {
+    i_j[i] = scalar * (xj[i]-xi[i]) / distance;
+  }
+  return i_j;
 
 }
 
-std::array<double, 3> Calculations::calculateHarmonicForceDiagonal(Particle *p1, Particle *p2){
-  std::array<double,3> x1 = p1->getX();
-  std::array<double,3> x2 = p2->getX();
-  std::array<double, 3> f_ij{};
-  std::array<double, 3> displacement_vector = { x1[0] - x2[0], x1[1] - x2[1], x1[2] - x2[2]};
-  double distance = sqrt(displacement_vector[0] * displacement_vector[0]+
-                         displacement_vector[1] * displacement_vector[1] +
-                         displacement_vector[2] * displacement_vector[2]);
-  double forcefactor = stiffness * (distance - (sqrt(2) * avgBondLength));
-  f_ij = {forcefactor * (displacement_vector[0] / distance),
-          forcefactor * (displacement_vector[1] / distance),
-          forcefactor * (displacement_vector[2] / distance)};
-  return f_ij;
+//std::array<double, 3> Calculations::calculateHarmonicForceDiagonal(Particle *p1, Particle *p2){
+//  std::array<double,3> x1 = p1->getX();
+//  std::array<double,3> x2 = p2->getX();
+//  std::array<double, 3> f_ij{};
+//  std::array<double, 3> displacement_vector = { x1[0] - x2[0], x1[1] - x2[1], x1[2] - x2[2]};
+//  double distance = sqrt(displacement_vector[0] * displacement_vector[0]+
+//                         displacement_vector[1] * displacement_vector[1] +
+//                         displacement_vector[2] * displacement_vector[2]);
+//  double forcefactor = stiffness * (distance - (sqrt(2) * avgBondLength));
+//  f_ij = {forcefactor * (-displacement_vector[0] / distance),
+//          forcefactor * (-displacement_vector[1] / distance),
+//          forcefactor * (-displacement_vector[2] / distance)};
+//  spdlog::warn("diagonal force is {} {} {}, distance: {}, forcefactor: {}, x1: {} {} {}, x2: {} {} {}", f_ij[0], f_ij[1], f_ij[2], distance, forcefactor, x1[0], x1[1], x1[2], x2[0], x2[1], x2[2]);
+//  return f_ij;
+//}
+
+double Calculations::calcDistance(std::array<double, 3> x1, std::array<double, 3> x2){
+  double distance = 0.0;
+  for (size_t i = 0; i < 3; ++i) {
+    distance += std::pow(x1[i]-x2[i], 2);
+  }
+  distance = std::sqrt(distance);
+  return distance;
 }

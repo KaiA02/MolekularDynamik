@@ -15,8 +15,8 @@ private:
   BaseParticleContainer &particles;
   double r_cutoff;
   double g_grav;
-  double stiffness;
-  double avgBondLength;
+  double stiffness = 300;
+  double avgBondLength = 2.2;
 
 public:
   Calculations();
@@ -97,8 +97,9 @@ public:
    */
   std::array<double, 3> calculateLJF(Particle *p1, Particle *p2, double e, double s);
 
-  std::array<double, 3> calculateHarmonicForce(Particle *p1, Particle *p2);
-  std::array<double, 3> calculateHarmonicForceDiagonal(Particle *p1, Particle *p2);
+  std::vector<double> calculateHarmonicForce(Particle *p1, Particle *p2, double r0);
+
+  double calcDistance(std::array<double, 3> x1, std::array<double, 3> x2);
 };
 
 #endif // CALCULATIONS_H

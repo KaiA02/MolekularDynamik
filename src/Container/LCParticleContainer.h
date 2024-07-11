@@ -7,6 +7,7 @@
 #include "../Calculations.h"
 #include "ParticleContainer.h"
 #include "../utils/EpsilonSigma.h"
+#include "../Membrane/Membrane.h"
 
 /**
  * @brief The LCParticleContainer class
@@ -77,7 +78,7 @@ public:
   /**
    *@brief calls realocateParticle() and calculates LJF for all cells
    */
-  void handleLJFCalculation(Calculations &calc);
+  void handleLJFCalculation(Calculations &calc, int timestep);
   /**
    *@brief adds the particle to all particles
    *and calls addParticleToCell(p)
@@ -159,6 +160,14 @@ public:
 
   void setUpEpsilonAndSigmas();
 
+  void setMembrane(Membrane m);
+
+  Membrane getMembrane();
+
+  std::vector<Particle*> getMovingParticles(std::array<std::array<int, 2>, 4> ids, int size);
+
+ std::vector<Particle*> getAllParticlePointers();
+
 private:
   std::vector<std::vector<std::vector<Cell>>> cells;
   std::array<double, 3> cell_size;
@@ -167,6 +176,7 @@ private:
   double r_cutoff;
   double g_grav;
   std::vector<EpsilonSigma> epsAndSigs;
+  Membrane membrane;
 
 };
 

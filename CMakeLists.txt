@@ -114,6 +114,10 @@ add_executable(
         src/Thermostat.h
         src/utils/EpsilonSigma.h
         src/utils/EpsilonSigma.h
+        src/Membrane/Membrane.h
+        src/Membrane/MembranePair.h
+        src/Membrane/MembranePair.cpp
+        src/Membrane/Membrane.cpp
 
 
 )
