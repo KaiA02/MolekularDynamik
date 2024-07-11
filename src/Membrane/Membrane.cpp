@@ -78,7 +78,6 @@ void Membrane::applyMovement(){
 };
 
 void Membrane::stabilizeMembrane(Calculations& calc){
-    applyMovement();
     std::vector<double> f_ij;
     std::array<double, 3> f_ij_result;
     Particle* center;

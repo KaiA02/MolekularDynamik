@@ -4,11 +4,10 @@
         <tStart>0.0</tStart>
         <tEnd>50</tEnd>
         <deltaT>0.01</deltaT>
-        <inputType>LJF</inputType>
         <smoothLJ>false</smoothLJ>
         <particleContainerType>LC</particleContainerType>
-        <r_l>0</r_l>
         <r_cutoff>4.0</r_cutoff>
+        <r_l>0</r_l>
         <domainSizeX>148</domainSizeX>
         <domainSizeY>148</domainSizeY>
         <domainSizeZ>148</domainSizeZ>
@@ -41,7 +40,7 @@
             <n3>1</n3>
             <distance>2.2</distance>
             <meanVelocity>0.0</meanVelocity>
-            <forceUpwards>4.0</forceUpwards>
+            <forceUpwards>16.0</forceUpwards>
             <id1a>17</id1a>
             <id1b>24</id1b>
             <id2a>17</id2a>

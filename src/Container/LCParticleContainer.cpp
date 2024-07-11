@@ -200,12 +200,11 @@ void LCParticleContainer::handleLJFCalculation(Calculations& calc, int timestep)
   //spdlog::debug("LCPartCon: handled Boundaries");
   applyGravitation();
   //spdlog::debug("LCPartCon: applied Gravity");
-
+	if(timestep <= 150){
+		membrane.applyMovement();
+	}
   //spdlog::debug("LCPartCon: applied Movement");
-
-
-
-  membrane.stabilizeMembrane(calc);
+	membrane.stabilizeMembrane(calc);
   //spdlog::debug("LCPartCon: stabilized Membrane");
 
 }
