@@ -5,7 +5,9 @@
         <tEnd>50</tEnd>
         <deltaT>0.01</deltaT>
         <inputType>LJF</inputType>
+        <smoothLJ>false</smoothLJ>
         <particleContainerType>LC</particleContainerType>
+        <r_l>0</r_l>
         <r_cutoff>4.0</r_cutoff>
         <domainSizeX>148</domainSizeX>
         <domainSizeY>148</domainSizeY>

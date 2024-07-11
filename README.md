@@ -18,6 +18,7 @@
 1. Start_time as Double
 2. End_Time as Double
 3. Time_Step as Double
+4. SmoothLJ as boolean (true for smoothLJ and false for normal LJ)
 4. Output type: "xyz" or "vtk"
 5. Input type: "cube" or "sonne"
 6. ... see xsd file
@@ -83,13 +84,11 @@ the end of your console input.
 - output ordner auf pc laden (im normalen terminal machen)  
   #zielquelle individuell einstellen     
   #-r für ganzen ordner  
-  scp -r di57yey@lxlogin1.lrz.de:MolekularDynamik/output "zielquelle" (z.B. /Users/kaiarenja/Desktop/)  
-
-
+  scp -r di57yey@lxlogin1.lrz.de:MolekularDynamik/output "zielquelle" (z.B. /Users/kaiarenja/Desktop/)
 
 # create new c++ classes from xsd file:
 xsdcxx cxx-tree --std c++11 /mnt/c/Users/joshu/CLionProjects/MolekularDynamik/src/input/simulation.xsd  
-xsdcxx cxx-tree --std c++11 /home/kaiarenja/CLionProjects/MolekularDynamik/src/inputReader/simulation.xsd
+xsdcxx cxx-tree --std c++11 /home/kaiarenja/CLionProjects/MolekularDynamik/src/inputReader/simulation.xsd  
 xsdcxx cxx-tree --std c++11 /mnt/c/Users/jh/CLionProjects/Molekulardynamik/Assignment5/src/inputReader/simulation.xsd
 
 ## explaination for realocateParticles in LCParticleContainer

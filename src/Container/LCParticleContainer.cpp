@@ -455,7 +455,7 @@ void LCParticleContainer::calcWithHalo(Particle *p, std::array<double, 3> x_arg)
   Particle haloParticle = Particle(x_arg, {}, p->getM(), p->getType());
   Calculations calc(*this);
   std::array<double, 3> addedForce;
-  std::array<double, 3> f_ij = calc.calculateLJF(p, &haloParticle, p->getEpsilon(), p->getSigma());
+  std::array<double, 3> f_ij = calc.decideForceMethod(p, &haloParticle, p->getEpsilon(), p->getSigma());
   addedForce = {p->getF().at(0) + f_ij.at(0), p->getF().at(1) + f_ij.at(1), p->getF().at(2) + f_ij.at(2)};
   p->setF(addedForce);
 }

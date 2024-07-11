@@ -31,8 +31,8 @@
 // in the accompanying FLOSSE file.
 //
 
-#ifndef CXX_MNT_C_USERS_JH_CLION_PROJECTS_MOLEKULARDYNAMIK_ASSIGNMENT5_SRC_INPUT_READER_SIMULATION_HXX
-#define CXX_MNT_C_USERS_JH_CLION_PROJECTS_MOLEKULARDYNAMIK_ASSIGNMENT5_SRC_INPUT_READER_SIMULATION_HXX
+#ifndef CXX_HOME_KAIARENJA_CLION_PROJECTS_MOLEKULAR_DYNAMIK_SRC_INPUT_READER_SIMULATION_HXX
+#define CXX_HOME_KAIARENJA_CLION_PROJECTS_MOLEKULAR_DYNAMIK_SRC_INPUT_READER_SIMULATION_HXX
 
 #ifndef XSD_CXX11
 #define XSD_CXX11
@@ -389,22 +389,19 @@ class input: public ::xml_schema::type
   void
   deltaT (const deltaT_type& x);
 
-  // inputType
+  // smoothLJ
   //
-  typedef ::xml_schema::string inputType_type;
-  typedef ::xsd::cxx::tree::traits< inputType_type, char > inputType_traits;
+  typedef ::xml_schema::boolean smoothLJ_type;
+  typedef ::xsd::cxx::tree::traits< smoothLJ_type, char > smoothLJ_traits;
 
-  const inputType_type&
-  inputType () const;
+  const smoothLJ_type&
+  smoothLJ () const;
 
-  inputType_type&
-  inputType ();
-
-  void
-  inputType (const inputType_type& x);
+  smoothLJ_type&
+  smoothLJ ();
 
   void
-  inputType (::std::unique_ptr< inputType_type > p);
+  smoothLJ (const smoothLJ_type& x);
 
   // particleContainerType
   //
@@ -437,10 +434,24 @@ class input: public ::xml_schema::type
   void
   r_cutoff (const r_cutoff_type& x);
 
+  // r_l
+  //
+  typedef ::xml_schema::double_ r_l_type;
+  typedef ::xsd::cxx::tree::traits< r_l_type, char, ::xsd::cxx::tree::schema_type::double_ > r_l_traits;
+
+  const r_l_type&
+  r_l () const;
+
+  r_l_type&
+  r_l ();
+
+  void
+  r_l (const r_l_type& x);
+
   // domainSizeX
   //
-  typedef ::xml_schema::int_ domainSizeX_type;
-  typedef ::xsd::cxx::tree::traits< domainSizeX_type, char > domainSizeX_traits;
+  typedef ::xml_schema::double_ domainSizeX_type;
+  typedef ::xsd::cxx::tree::traits< domainSizeX_type, char, ::xsd::cxx::tree::schema_type::double_ > domainSizeX_traits;
 
   const domainSizeX_type&
   domainSizeX () const;
@@ -453,8 +464,8 @@ class input: public ::xml_schema::type
 
   // domainSizeY
   //
-  typedef ::xml_schema::int_ domainSizeY_type;
-  typedef ::xsd::cxx::tree::traits< domainSizeY_type, char > domainSizeY_traits;
+  typedef ::xml_schema::double_ domainSizeY_type;
+  typedef ::xsd::cxx::tree::traits< domainSizeY_type, char, ::xsd::cxx::tree::schema_type::double_ > domainSizeY_traits;
 
   const domainSizeY_type&
   domainSizeY () const;
@@ -467,8 +478,8 @@ class input: public ::xml_schema::type
 
   // domainSizeZ
   //
-  typedef ::xml_schema::int_ domainSizeZ_type;
-  typedef ::xsd::cxx::tree::traits< domainSizeZ_type, char > domainSizeZ_traits;
+  typedef ::xml_schema::double_ domainSizeZ_type;
+  typedef ::xsd::cxx::tree::traits< domainSizeZ_type, char, ::xsd::cxx::tree::schema_type::double_ > domainSizeZ_traits;
 
   const domainSizeZ_type&
   domainSizeZ () const;
@@ -723,9 +734,10 @@ class input: public ::xml_schema::type
   input (const tStart_type&,
          const tEnd_type&,
          const deltaT_type&,
-         const inputType_type&,
+         const smoothLJ_type&,
          const particleContainerType_type&,
          const r_cutoff_type&,
+         const r_l_type&,
          const domainSizeX_type&,
          const domainSizeY_type&,
          const domainSizeZ_type&,
@@ -771,9 +783,10 @@ class input: public ::xml_schema::type
   ::xsd::cxx::tree::one< tStart_type > tStart_;
   ::xsd::cxx::tree::one< tEnd_type > tEnd_;
   ::xsd::cxx::tree::one< deltaT_type > deltaT_;
-  ::xsd::cxx::tree::one< inputType_type > inputType_;
+  ::xsd::cxx::tree::one< smoothLJ_type > smoothLJ_;
   ::xsd::cxx::tree::one< particleContainerType_type > particleContainerType_;
   ::xsd::cxx::tree::one< r_cutoff_type > r_cutoff_;
+  ::xsd::cxx::tree::one< r_l_type > r_l_;
   ::xsd::cxx::tree::one< domainSizeX_type > domainSizeX_;
   ::xsd::cxx::tree::one< domainSizeY_type > domainSizeY_;
   ::xsd::cxx::tree::one< domainSizeZ_type > domainSizeZ_;
@@ -1764,4 +1777,4 @@ simulation_ (::xml_schema::dom::unique_ptr< ::xercesc::DOMDocument > d,
 //
 // End epilogue.
 
-#endif // CXX_MNT_C_USERS_JH_CLION_PROJECTS_MOLEKULARDYNAMIK_ASSIGNMENT5_SRC_INPUT_READER_SIMULATION_HXX
+#endif // CXX_HOME_KAIARENJA_CLION_PROJECTS_MOLEKULAR_DYNAMIK_SRC_INPUT_READER_SIMULATION_HXX
