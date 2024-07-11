@@ -12,24 +12,32 @@ Membrane::Membrane(){
  pairs = pair;
  std::vector<Particle*> movingParticle;
  movingParticles = movingParticle;
-forceUpwards= 0;
+   forceUpwards= 0;
 };
 
 void Membrane::getAveragePairSize(){
-int counter = 1;
     for(auto pair: pairs){
-        spdlog::warn("pair id is {}:", counter);
-        spdlog::warn("    has {} direct and {} diagonal", pair.getDirect().size(), pair.getDiagonal().size());
-        spdlog::warn("-----------------------------");
-        counter ++;
+        Particle* center = pair.getCenter();
+        for(auto dir: pair.getDirect()){
+            double distance = calcDistance(center->getX(), dir->getX());
+            spdlog::warn("distance {}", distance);
+        }
+        for(auto dia: pair.getDiagonal()){
+            double distance = calcDistance(center->getX(), dia->getX());
+            spdlog::warn("distance {}", distance);
+        }
     }
 
+}
+double Membrane::calcDistance(std::array<double, 3> x1, std::array<double, 3> x2){
+    return std::sqrt((x1[0]-x2[0])*(x1[0]-x2[0])+(x1[1]-x2[1])*(x1[1]-x2[1])+(x1[2]-x2[2])*(x1[2]-x2[2]));
 }
 
 
 Membrane::Membrane(std::vector<Particle*> particles, double d, double fUp){
     distance = d;
     forceUpwards = fUp;
+
     double dist;
     std::array<double,3> x1;
     std::array<double,3> x2;
@@ -56,7 +64,7 @@ Membrane::Membrane(std::vector<Particle*> particles, double d, double fUp){
         }
         pairs.push_back(pair);
     }
-    getAveragePairSize();
+    //getAveragePairSize();
 };
 
 void Membrane::applyMovement(){
@@ -70,28 +78,26 @@ void Membrane::applyMovement(){
 };
 
 void Membrane::stabilizeMembrane(Calculations& calc){
-    std::array<double,3> f_ij;
+    std::vector<double> f_ij;
+    std::array<double, 3> f_ij_result;
     Particle* center;
-    std::array<double,3> centerForce;
-    std::array<double,3> otherForce;
-    int pair_count = 0;
+    std::array<double,3> centerF;
+    double r0 = 2.2;
+    double sqr0 = 2.2 * sqrt(2);
     for(auto pair: pairs){
         center = pair.getCenter();
-        centerForce = center->getF();
+        f_ij_result = center->getF();
         for(auto dir: pair.getDirect()){
-            otherForce = dir->getF();
-            f_ij = calc.calculateHarmonicForce(center, dir);
-            center->setF({centerForce[0]+f_ij[0], centerForce[1]+f_ij[1], centerForce[2]+f_ij[2]});
-            dir->setF({otherForce[0]-f_ij[0], otherForce[1]-f_ij[1], otherForce[2]-f_ij[2]});
+            f_ij = calc.calculateHarmonicForce(center, dir, r0);
+            f_ij_result = {f_ij_result[0] + f_ij[0], f_ij_result[1] + f_ij[1], f_ij_result[2] + f_ij[2]};
         }
         for(auto dia: pair.getDiagonal()){
-            otherForce = dia->getF();
-            f_ij = calc.calculateHarmonicForceDiagonal(center, dia);
-            center->setF({centerForce[0]+f_ij[0], centerForce[1]+f_ij[1], centerForce[2]+f_ij[2]});
-            dia->setF({otherForce[0]-f_ij[0], otherForce[1]-f_ij[1], otherForce[2]-f_ij[2]});
+            f_ij = calc.calculateHarmonicForce(center, dia, sqr0);
+            f_ij_result = {f_ij_result[0] + f_ij[0], f_ij_result[1] + f_ij[1], f_ij_result[2] + f_ij[2]};
         }
-        pair_count ++;
+        center->setF(f_ij_result);
     }
+    //getAveragePairSize();
 };
 
 void Membrane::setMovingParticles(std::vector<Particle*> movPart){

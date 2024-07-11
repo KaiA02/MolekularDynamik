@@ -17,6 +17,7 @@ class Membrane{
         void setMovingParticles(std::vector<Particle*> movPart);
         int getMovingParticleCount();
         void getAveragePairSize();
+        double calcDistance(std::array<double, 3> x1, std::array<double, 3> x2);
 
     private:
         std::vector<MembranePair> pairs;

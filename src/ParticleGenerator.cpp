@@ -37,14 +37,6 @@ void ParticleGenerator::generateCuboid(const Particle &start, int n1, int n2,
 
 std::vector<Particle>& ParticleGenerator::getAllParticles() { return allParticles; }
 
-std::vector<Particle*> ParticleGenerator::getAllParticlesPointers(){
-std::vector<Particle*> result{};
-for(auto& p: allParticles){
-    result.push_back(&p);
-}
-return result;
-}
-
 
 void ParticleGenerator::generateDisk(const Particle &center, int radius, double distance,
                                        double meanVelocity, int dimension, double temp_init) {

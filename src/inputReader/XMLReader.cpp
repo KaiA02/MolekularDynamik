@@ -101,7 +101,7 @@ void XMLReader::readXML_LC(LCParticleContainer &particleContainer) {
                         in.membrane()[i].meanVelocity(), 3, in.temp_init());
       particleContainer.addMultipleParticles(pg.getAllParticles());
       spdlog::debug("Reader: added the membrane to the container");
-      Membrane m(pg.getAllParticlesPointers(), in.membrane()[i].distance(), in.membrane()[i].forceUpwards());
+      Membrane m(particleContainer.getAllParticlePointers(), in.membrane()[i].distance(), in.membrane()[i].forceUpwards());
       int gridsize = (in.membrane()[i].n1()+in.membrane()[i].n2()+in.membrane()[i].n3()-1)/2;
       std::array<int, 2> id1 = {in.membrane()[i].id1a(), in.membrane()[i].id1b()};
       std::array<int, 2> id2 = {in.membrane()[i].id2a(), in.membrane()[i].id2b()};

@@ -66,7 +66,7 @@ public:
   /**
    * @brief handles the calculation of the Lennard-Jones force
    */
-void handleLJFCalculation() override;
+ void handleLJFCalculation() override;
 
   /**
    * @brief adds a vector of particles to the container

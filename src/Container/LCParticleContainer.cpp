@@ -66,7 +66,6 @@ Cell* LCParticleContainer::getCellById(const std::array<int, 3> id) {
 }
 
 void LCParticleContainer::realocateParticles() {
-  spdlog::debug("realocateP: realocateParticles()");
   //std::vector<std::vector<std::vector<Cell>>> newCells = std::vector<std::vector<std::vector<Cell>>>{};
   int x;
   int y;
@@ -200,9 +199,9 @@ void LCParticleContainer::generateCells(const int size_x, const int size_y, cons
 }
 
 void LCParticleContainer::handleLJFCalculation(Calculations& calc, int timestep) {
-  spdlog::debug("LCPartCon: will handleLJF");
+
   realocateParticles();
-  spdlog::debug("LCPartCon: realocated Particles");
+
   std::vector<Particle> neighbourhood;
   Cell* c = nullptr;
   for(std::vector<Cell>::size_type x = 0; x < cells.size() -1; x++){
@@ -216,18 +215,18 @@ void LCParticleContainer::handleLJFCalculation(Calculations& calc, int timestep)
         }
       }
     }
-  spdlog::debug("LCPartCon: calculated all neighbourhoods");
+  //spdlog::debug("LCPartCon: calculated all neighbourhoods");
   handleBoundaryAction();
-  spdlog::debug("LCPartCon: handled Boundaries");
+  //spdlog::debug("LCPartCon: handled Boundaries");
   applyGravitation();
-  spdlog::debug("LCPartCon: applied Gravity");
-  if(timestep <= 150){
-  spdlog::debug("LCPartCon: applied Movement");
+  //spdlog::debug("LCPartCon: applied Gravity");
+
+  //spdlog::debug("LCPartCon: applied Movement");
     membrane.applyMovement();
-    spdlog::debug("LCPartCon: applied Movement");
-  }
+
+
   membrane.stabilizeMembrane(calc);
-  spdlog::debug("LCPartCon: stabilized Membrane");
+  //spdlog::debug("LCPartCon: stabilized Membrane");
 
 }
 
@@ -524,4 +523,14 @@ std::vector<Particle*> LCParticleContainer::getMovingParticles(std::array<std::a
 	std::vector<Particle*> result = {p1, p2, p3, p4};
 	return result;
 };
+
+std::vector<Particle*> LCParticleContainer::getAllParticlePointers(){
+ std::vector<Particle*> result{};
+ for(auto& p: particles){
+    if(p.getType() == 0){
+      result.push_back(&p);
+    }
+ }
+ return result;
+}
 

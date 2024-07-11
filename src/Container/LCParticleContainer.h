@@ -166,6 +166,8 @@ public:
 
   std::vector<Particle*> getMovingParticles(std::array<std::array<int, 2>, 4> ids, int size);
 
+ std::vector<Particle*> getAllParticlePointers();
+
 private:
   std::vector<std::vector<std::vector<Cell>>> cells;
   std::array<double, 3> cell_size;
