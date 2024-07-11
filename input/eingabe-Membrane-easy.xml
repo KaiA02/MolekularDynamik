@@ -29,7 +29,7 @@
             <velocityX>0.0</velocityX>
             <velocityY>0.0</velocityY>
             <velocityZ>0.0</velocityZ>
-            <mass>1</mass>
+            <mass>0.5</mass>
             <epsilon>1</epsilon>
             <sigma>1</sigma>
         </particles>
@@ -39,7 +39,7 @@
             <n3>1</n3>
             <distance>2.2</distance>
             <meanVelocity>0.0</meanVelocity>
-            <forceUpwards>2.4</forceUpwards>
+            <forceUpwards>4.0</forceUpwards>
             <id1a>17</id1a>
             <id1b>24</id1b>
             <id2a>17</id2a>

@@ -222,7 +222,7 @@ void LCParticleContainer::handleLJFCalculation(Calculations& calc, int timestep)
   //spdlog::debug("LCPartCon: applied Gravity");
 
   //spdlog::debug("LCPartCon: applied Movement");
-    membrane.applyMovement();
+
 
 
   membrane.stabilizeMembrane(calc);
