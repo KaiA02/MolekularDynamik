@@ -50,8 +50,6 @@
                                         <xs:element name="distance" type="xs:double"/>
                                         <xs:element name="meanVelocity" type="xs:double"/>
                                         <xs:element name="dimension" type="xs:double"/>
-                                        <xs:element name="isMembrane" type="xs:string"/>
-                                        <xs:element name="forceUpwards" type="xs:double"/>
                                     </xs:sequence>
                                 </xs:complexType>
                             </xs:element>

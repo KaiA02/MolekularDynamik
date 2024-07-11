@@ -993,48 +993,6 @@ dimension (const dimension_type& x)
   this->dimension_.set (x);
 }
 
-const cuboids::isMembrane_type& cuboids::
-isMembrane () const
-{
-  return this->isMembrane_.get ();
-}
-
-cuboids::isMembrane_type& cuboids::
-isMembrane ()
-{
-  return this->isMembrane_.get ();
-}
-
-void cuboids::
-isMembrane (const isMembrane_type& x)
-{
-  this->isMembrane_.set (x);
-}
-
-void cuboids::
-isMembrane (::std::unique_ptr< isMembrane_type > x)
-{
-  this->isMembrane_.set (std::move (x));
-}
-
-const cuboids::forceUpwards_type& cuboids::
-forceUpwards () const
-{
-  return this->forceUpwards_.get ();
-}
-
-cuboids::forceUpwards_type& cuboids::
-forceUpwards ()
-{
-  return this->forceUpwards_.get ();
-}
-
-void cuboids::
-forceUpwards (const forceUpwards_type& x)
-{
-  this->forceUpwards_.set (x);
-}
-
 
 // disk
 // 
@@ -2666,18 +2624,14 @@ cuboids (const n1_type& n1,
          const n3_type& n3,
          const distance_type& distance,
          const meanVelocity_type& meanVelocity,
-         const dimension_type& dimension,
-         const isMembrane_type& isMembrane,
-         const forceUpwards_type& forceUpwards)
+         const dimension_type& dimension)
 : ::xml_schema::type (),
   n1_ (n1, this),
   n2_ (n2, this),
   n3_ (n3, this),
   distance_ (distance, this),
   meanVelocity_ (meanVelocity, this),
-  dimension_ (dimension, this),
-  isMembrane_ (isMembrane, this),
-  forceUpwards_ (forceUpwards, this)
+  dimension_ (dimension, this)
 {
 }
 
@@ -2691,9 +2645,7 @@ cuboids (const cuboids& x,
   n3_ (x.n3_, f, this),
   distance_ (x.distance_, f, this),
   meanVelocity_ (x.meanVelocity_, f, this),
-  dimension_ (x.dimension_, f, this),
-  isMembrane_ (x.isMembrane_, f, this),
-  forceUpwards_ (x.forceUpwards_, f, this)
+  dimension_ (x.dimension_, f, this)
 {
 }
 
@@ -2707,9 +2659,7 @@ cuboids (const ::xercesc::DOMElement& e,
   n3_ (this),
   distance_ (this),
   meanVelocity_ (this),
-  dimension_ (this),
-  isMembrane_ (this),
-  forceUpwards_ (this)
+  dimension_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -2794,31 +2744,6 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
-    // isMembrane
-    //
-    if (n.name () == "isMembrane" && n.namespace_ ().empty ())
-    {
-      ::std::unique_ptr< isMembrane_type > r (
-        isMembrane_traits::create (i, f, this));
-
-      if (!isMembrane_.present ())
-      {
-        this->isMembrane_.set (::std::move (r));
-        continue;
-      }
-    }
-
-    // forceUpwards
-    //
-    if (n.name () == "forceUpwards" && n.namespace_ ().empty ())
-    {
-      if (!forceUpwards_.present ())
-      {
-        this->forceUpwards_.set (forceUpwards_traits::create (i, f, this));
-        continue;
-      }
-    }
-
     break;
   }
 
@@ -2863,20 +2788,6 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "dimension",
       "");
   }
-
-  if (!isMembrane_.present ())
-  {
-    throw ::xsd::cxx::tree::expected_element< char > (
-      "isMembrane",
-      "");
-  }
-
-  if (!forceUpwards_.present ())
-  {
-    throw ::xsd::cxx::tree::expected_element< char > (
-      "forceUpwards",
-      "");
-  }
 }
 
 cuboids* cuboids::
@@ -2898,8 +2809,6 @@ operator= (const cuboids& x)
     this->distance_ = x.distance_;
     this->meanVelocity_ = x.meanVelocity_;
     this->dimension_ = x.dimension_;
-    this->isMembrane_ = x.isMembrane_;
-    this->forceUpwards_ = x.forceUpwards_;
   }
 
   return *this;
