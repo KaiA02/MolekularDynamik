@@ -114,9 +114,9 @@ int main(int argc, char *argsv[]) {
                "{}, outputType: {}, baseName: {}, "
                "logLevel: {}, performanceMeasurement: {}, {} "
                "particles, {} cuboids, {} disks ",
-               start_time, end_time, delta_t, temp_init, temp_target,
-               smoothLJ, outputType, baseName, logLevel,
-               performanceMeasurement, lcParticles.getParticles().size(),
+               start_time, end_time, delta_t, temp_init, temp_target, smoothLJ,
+               outputType, baseName, logLevel, performanceMeasurement,
+               lcParticles.getParticles().size(),
                xmlReader.getNumberOfCuboids(), xmlReader.getNumberOfDisks());
   auto start = std::chrono::high_resolution_clock::now();
   // for this loop, we assume: current x, current f and current v are known
@@ -161,13 +161,13 @@ int main(int argc, char *argsv[]) {
         molecule_updates += lcParticles.getParticles().size();
       }
       if (!performanceMeasurement) {
-        if (iteration % 10 == 0) {
-          if (iteration % 1000 == 0) {
-            diffusion.emplace_back(
-                calculateDiffusion(lcParticles.getParticles(), prevParticles),
-                iteration);
-            prevParticles = lcParticles.getParticles();
-          }
+        if (iteration % 10 == 0) { /**
+           if (iteration % 1000 == 0) {
+             diffusion.emplace_back(
+                 calculateDiffusion(lcParticles.getParticles(), prevParticles),
+                 iteration);
+             prevParticles = lcParticles.getParticles();
+           }**/
           if (thermostatOn == "YES") {
             spdlog::debug(
                 "current Temperature: {}",
@@ -191,12 +191,12 @@ int main(int argc, char *argsv[]) {
 
       if (!performanceMeasurement) {
         if (iteration % 10 == 0) {
-          if (iteration % 1000 == 0) {
+          /**if (iteration % 1000 == 0) {
             diffusion.emplace_back(
                 calculateDiffusion(lcParticles.getParticles(), prevParticles),
                 iteration);
             prevParticles = normParticles.getParticles();
-          }
+          }**/
           plotParticles(iteration, outputType, baseName, "../output",
                         normParticles);
         }
@@ -222,7 +222,7 @@ int main(int argc, char *argsv[]) {
     std::cout << "Diffusion at iteration " << diffusion[m].second << " is " <<
   diffusion[m].first << std::endl;
   }**/
-  outputDiffusionToFile(diffusion, "diffusion.txt", "../output/statistics");
+  // outputDiffusionToFile(diffusion, "diffusion.txt", "../output/statistics");
   return 0;
 }
 
