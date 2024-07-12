@@ -95,36 +95,3 @@ TEST(LCParticleContainerTest, ApplyGravitation) {
     EXPECT_DOUBLE_EQ(p.getF().at(2), 0.0);
   }
 }
-
-// TODO: fix the test so that the ci does not throw a stack-use-after-scope
-// error
-/**TEST(LCParticleContainerTest, AddParticle) {
-  LCParticleContainer container;
-  container.generateCells(3, 3, 3, 1.0); // Generate a 3x3x3 grid
-
-  // Add a particle within the bounds
-  Particle *p1 = new Particle({0.5, 0.5, 0.5}, {0.0, 0.0, 0.0}, 1,
-                              1); // Inside cell (0,0,0)
-  container.addParticle(*p1);
-  Cell cell = container.getCellById({0, 0, 0});
-  EXPECT_EQ(cell.getParticles().size(), 1);
-  EXPECT_EQ(cell.getParticles().at(0)->getX(), p1->getX());
-
-  // Add a particle out of bounds
-  Particle *p2 =
-      new Particle({3.5, 3.5, 3.5}, {0.0, 0.0, 0.0}, 1, 1); // Outside grid
-  container.addParticle(*p2);
-
-  // Check that no cell contains p2
-  for (int x = 0; x < 3; ++x) {
-    for (int y = 0; y < 3; ++y) {
-      for (int z = 0; z < 3; ++z) {
-        Cell c = container.getCellById({x, y, z});
-        for (const auto &particle : c.getParticles()) {
-          EXPECT_NE(particle->getX(), p2->getX());
-        }
-      }
-    }
-  }
-}*/
-

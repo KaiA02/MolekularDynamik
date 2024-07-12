@@ -175,6 +175,7 @@ private:
   std::array<int, 6> boundary_types;
   double r_cutoff;
   double g_grav;
+  bool LJORSmoothLJ;
   std::vector<EpsilonSigma> epsAndSigs;
   Membrane membrane;
 

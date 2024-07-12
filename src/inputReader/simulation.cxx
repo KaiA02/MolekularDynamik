@@ -173,28 +173,22 @@ deltaT (const deltaT_type& x)
   this->deltaT_.set (x);
 }
 
-const input::inputType_type& input::
-inputType () const
+const input::smoothLJ_type& input::
+smoothLJ () const
 {
-  return this->inputType_.get ();
+  return this->smoothLJ_.get ();
 }
 
-input::inputType_type& input::
-inputType ()
+input::smoothLJ_type& input::
+smoothLJ ()
 {
-  return this->inputType_.get ();
-}
-
-void input::
-inputType (const inputType_type& x)
-{
-  this->inputType_.set (x);
+  return this->smoothLJ_.get ();
 }
 
 void input::
-inputType (::std::unique_ptr< inputType_type > x)
+smoothLJ (const smoothLJ_type& x)
 {
-  this->inputType_.set (std::move (x));
+  this->smoothLJ_.set (x);
 }
 
 const input::particleContainerType_type& input::
@@ -237,6 +231,24 @@ void input::
 r_cutoff (const r_cutoff_type& x)
 {
   this->r_cutoff_.set (x);
+}
+
+const input::r_l_type& input::
+r_l () const
+{
+  return this->r_l_.get ();
+}
+
+input::r_l_type& input::
+r_l ()
+{
+  return this->r_l_.get ();
+}
+
+void input::
+r_l (const r_l_type& x)
+{
+  this->r_l_.set (x);
 }
 
 const input::domainSizeX_type& input::
@@ -1490,9 +1502,10 @@ input::
 input (const tStart_type& tStart,
        const tEnd_type& tEnd,
        const deltaT_type& deltaT,
-       const inputType_type& inputType,
+       const smoothLJ_type& smoothLJ,
        const particleContainerType_type& particleContainerType,
        const r_cutoff_type& r_cutoff,
+       const r_l_type& r_l,
        const domainSizeX_type& domainSizeX,
        const domainSizeY_type& domainSizeY,
        const domainSizeZ_type& domainSizeZ,
@@ -1512,9 +1525,10 @@ input (const tStart_type& tStart,
   tStart_ (tStart, this),
   tEnd_ (tEnd, this),
   deltaT_ (deltaT, this),
-  inputType_ (inputType, this),
+  smoothLJ_ (smoothLJ, this),
   particleContainerType_ (particleContainerType, this),
   r_cutoff_ (r_cutoff, this),
+  r_l_ (r_l, this),
   domainSizeX_ (domainSizeX, this),
   domainSizeY_ (domainSizeY, this),
   domainSizeZ_ (domainSizeZ, this),
@@ -1545,9 +1559,10 @@ input (const input& x,
   tStart_ (x.tStart_, f, this),
   tEnd_ (x.tEnd_, f, this),
   deltaT_ (x.deltaT_, f, this),
-  inputType_ (x.inputType_, f, this),
+  smoothLJ_ (x.smoothLJ_, f, this),
   particleContainerType_ (x.particleContainerType_, f, this),
   r_cutoff_ (x.r_cutoff_, f, this),
+  r_l_ (x.r_l_, f, this),
   domainSizeX_ (x.domainSizeX_, f, this),
   domainSizeY_ (x.domainSizeY_, f, this),
   domainSizeZ_ (x.domainSizeZ_, f, this),
@@ -1578,9 +1593,10 @@ input (const ::xercesc::DOMElement& e,
   tStart_ (this),
   tEnd_ (this),
   deltaT_ (this),
-  inputType_ (this),
+  smoothLJ_ (this),
   particleContainerType_ (this),
   r_cutoff_ (this),
+  r_l_ (this),
   domainSizeX_ (this),
   domainSizeY_ (this),
   domainSizeZ_ (this),
@@ -1651,16 +1667,13 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
-    // inputType
+    // smoothLJ
     //
-    if (n.name () == "inputType" && n.namespace_ ().empty ())
+    if (n.name () == "smoothLJ" && n.namespace_ ().empty ())
     {
-      ::std::unique_ptr< inputType_type > r (
-        inputType_traits::create (i, f, this));
-
-      if (!inputType_.present ())
+      if (!smoothLJ_.present ())
       {
-        this->inputType_.set (::std::move (r));
+        this->smoothLJ_.set (smoothLJ_traits::create (i, f, this));
         continue;
       }
     }
@@ -1686,6 +1699,17 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       if (!r_cutoff_.present ())
       {
         this->r_cutoff_.set (r_cutoff_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // r_l
+    //
+    if (n.name () == "r_l" && n.namespace_ ().empty ())
+    {
+      if (!r_l_.present ())
+      {
+        this->r_l_.set (r_l_traits::create (i, f, this));
         continue;
       }
     }
@@ -1926,10 +1950,10 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "");
   }
 
-  if (!inputType_.present ())
+  if (!smoothLJ_.present ())
   {
     throw ::xsd::cxx::tree::expected_element< char > (
-      "inputType",
+      "smoothLJ",
       "");
   }
 
@@ -1944,6 +1968,13 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
   {
     throw ::xsd::cxx::tree::expected_element< char > (
       "r_cutoff",
+      "");
+  }
+
+  if (!r_l_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "r_l",
       "");
   }
 
@@ -2069,9 +2100,10 @@ operator= (const input& x)
     this->tStart_ = x.tStart_;
     this->tEnd_ = x.tEnd_;
     this->deltaT_ = x.deltaT_;
-    this->inputType_ = x.inputType_;
+    this->smoothLJ_ = x.smoothLJ_;
     this->particleContainerType_ = x.particleContainerType_;
     this->r_cutoff_ = x.r_cutoff_;
+    this->r_l_ = x.r_l_;
     this->domainSizeX_ = x.domainSizeX_;
     this->domainSizeY_ = x.domainSizeY_;
     this->domainSizeZ_ = x.domainSizeZ_;

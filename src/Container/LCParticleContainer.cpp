@@ -70,23 +70,7 @@ void LCParticleContainer::realocateParticles() {
   int x;
   int y;
   int z;
-  //spdlog::debug("realocateP: starting to resize");
-  // cells size in x is set to cell_count in x plus 2(halo_cells)
-  //newCells.resize(cell_count[0]+2);
 
-  // cells size in y is set to cell_count in y plus 2(halo_cells)
-  //for (int i = 0; i < cell_count[0]+2; ++i) {
-  //  newCells[i].resize(cell_count[1]+2);
-  //}
-//
-  //// cells size in z is set to cell_count in z plus 2(halo_cells)
-  //for (int i = 0; i < cell_count[0]+2; ++i) {
-  //  for (int j = 0; j < cell_count[1]+2; ++j) {
-  //    newCells[i][j].resize(cell_count[2]+2);
-  //  }
-  //}
-  //spdlog::debug("realocateP: resized cells");
-  //cells = newCells;
   for(int i = 0; i < cell_count[0]+2; i++){
     for(int j = 0; j < cell_count[1]+2; j++){
       for(int k = 0; k < cell_count[2]+2; k++){
@@ -94,17 +78,27 @@ void LCParticleContainer::realocateParticles() {
       }
     }
   }
+double xx;
+double xy;
+double xz;
+std::array<double, 3> position;
   for (auto &p : particles) {
-    //spdlog::debug("RelaocateParticle: will realocate Particle");
-    x = floor(p.getX().at(0) / cell_size.at(0));
-    y = floor(p.getX().at(1) / cell_size.at(1));
-    z = floor(p.getX().at(2) / cell_size.at(2));
-    p.setF({0.0, 0.0, 0.0});
-    if (cellExists({x, y, z})) {
-      getCellById({x,y,z})->addParticle(&p);
-    } else { //Parking of deleted Particles
-      p.park();
-    }
+	position = p.getX();
+	xx = position[0];
+	xy = position[1];
+	xz = position[2];
+	if(xx != -50.0 && xy != -50.0){
+    	x = floor(xx / cell_size.at(0));
+    	y = floor(xy / cell_size.at(1));
+    	z = floor(xz / cell_size.at(2));
+    	p.setF({0.0, 0.0, 0.0});
+    	if (cellExists({x, y, z})) {
+      	getCellById({x,y,z})->addParticle(&p);
+    	} else { //Parking of deleted Particles
+			p.park();
+			spdlog::warn("parked with {} {} {} {} {} {}", xx, xy, xz, p.getV()[0], p.getV()[1], p.getV()[2]);
+    	}
+	}
   }
 }
 
@@ -138,20 +132,6 @@ void LCParticleContainer::generateCells(const int size_x, const int size_y, cons
         cell_size_z = r_cutoff;
       }
 
-      //// cells size in x is set to cell_count in x plus 2(halo_cells)
-      //newCells.resize(cell_count[0]+2);
-//
-      //// cells size in y is set to cell_count in y plus 2(halo_cells)
-      //for (int i = 0; i < cell_count[0]+2; ++i) {
-      //  newCells[i].resize(cell_count[1]+2);
-      //}
-//
-      //// cells size in z is set to cell_count in z plus 2(halo_cells)
-      //for (int i = 0; i < cell_count[0]+2; ++i) {
-      //  for (int j = 0; j < cell_count[1]+2; ++j) {
-      //    newCells[i][j].resize(cell_count[2]+2);
-      //  }
-      //}
 
       std::vector<std::vector<std::vector<Cell>>> vec1 {};
       for(int i = 0; i < cell_count[0]+2; i++){
@@ -220,12 +200,11 @@ void LCParticleContainer::handleLJFCalculation(Calculations& calc, int timestep)
   //spdlog::debug("LCPartCon: handled Boundaries");
   applyGravitation();
   //spdlog::debug("LCPartCon: applied Gravity");
-
+	if(timestep <= 150){
+		membrane.applyMovement();
+	}
   //spdlog::debug("LCPartCon: applied Movement");
-
-
-
-  membrane.stabilizeMembrane(calc);
+	membrane.stabilizeMembrane(calc);
   //spdlog::debug("LCPartCon: stabilized Membrane");
 
 }
