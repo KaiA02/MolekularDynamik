@@ -59,6 +59,6 @@
     </output>
     <config>
         <performanceMeasurement>false</performanceMeasurement>
-        <logLevel>debug</logLevel>
+        <logLevel>warn</logLevel>
     </config>
 </simulation>

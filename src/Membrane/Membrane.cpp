@@ -97,7 +97,6 @@ void Membrane::stabilizeMembrane(Calculations& calc){
         }
         center->setF(f_ij_result);
     }
-    //getAveragePairSize();
 };
 
 void Membrane::setMovingParticles(std::vector<Particle*> movPart){

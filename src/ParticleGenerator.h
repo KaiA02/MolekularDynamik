@@ -30,6 +30,8 @@ public:
    */
   void generateCuboid(const Particle &start, int n1, int n2, int n3,
                       double distance, double meanVelocity, int dimension, double temp_init);
+    void generateMembrane(const Particle &start, int n1, int n2, int n3,
+                      double distance, double meanVelocity, int dimension, double temp_init);
 
   std::vector<Particle>& getAllParticles();
 

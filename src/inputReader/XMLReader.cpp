@@ -98,7 +98,7 @@ void XMLReader::readXML_LC(LCParticleContainer &particleContainer) {
     } else if(i < in.membrane().size()){ //case its a membrane
       spdlog::debug("Reader: will generate a Membrane");
       particle.setType(0);
-      pg.generateCuboid(particle, in.membrane()[i].n1(), in.membrane()[i].n2(),
+      pg.generateMembrane(particle, in.membrane()[i].n1(), in.membrane()[i].n2(),
                         in.membrane()[i].n3(), in.membrane()[i].distance(),
                         in.membrane()[i].meanVelocity(), 3, in.temp_init());
       particleContainer.addMultipleParticles(pg.getAllParticles());

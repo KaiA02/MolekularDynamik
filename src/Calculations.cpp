@@ -111,26 +111,32 @@ void Calculations::LCcalculateLJF(std::vector<Particle*> &center, std::vector<Pa
   if (other.size() > 0) {
     for(auto pi : center){
       newForcei = pi->getF();
-      if(pi->getType() != 0){
       for(auto pj : other) {
-        if(pi->getType() != pj.getType()) {
-          for(auto entry : EAndS) {
-          if(entry.isRight(pi->getType(), pj.getType())) {
-            e = entry.getEpsilon();
-            s = entry.getSigma();
-            break;
+        if(pi->getType() == 0 && pj.getType() == 0){ //is Membrane
+          if(!pi->isNeighbour(&pj)){
+            f_ij = decideForceMethod(pi, &pj, pi->getEpsilon(), pi->getSigma());
+            newForcei = {newForcei.at(0) + f_ij.at(0), newForcei.at(1) + f_ij.at(1), newForcei.at(2) + f_ij.at(2)};
+            spdlog::debug("calculated Membrane LJF {} {} {}", f_ij[0], f_ij[1], f_ij[2]);
           }
-        }
         } else {
-          e = pi->getEpsilon();
-          s = pi->getSigma();
+          if(pi->getType() != pj.getType()) {
+            for(auto entry : EAndS) {
+              if(entry.isRight(pi->getType(), pj.getType())) {
+                e = entry.getEpsilon();
+                s = entry.getSigma();
+                break;
+              }
+            }
+          } else {
+            e = pi->getEpsilon();
+            s = pi->getSigma();
+          }
+          f_ij = decideForceMethod(pi, &pj, e, s);
+          newForcei = {newForcei.at(0) + f_ij.at(0), newForcei.at(1) + f_ij.at(1), newForcei.at(2) + f_ij.at(2)};
         }
-        f_ij = decideForceMethod(pi, &pj, e, s);
 
-        newForcei = {newForcei.at(0) + f_ij.at(0), newForcei.at(1) + f_ij.at(1), newForcei.at(2) + f_ij.at(2)};
       }
       pi->setF(newForcei);
-      }
     }
   }
 }
@@ -141,28 +147,36 @@ void Calculations::calculateLJFcenter(std::vector<Particle *> &center, const std
   std::array<double, 3> f_ij{};
   double e = 1;
   double s = 1;
-
+  Particle* pi;
+  Particle* pk;
   for (size_t i = 0; i < center.size() - 1; ++i) {
-    Particle *pi = center.at(i);
-    if(pi->getType() != 0){
+    pi = center.at(i);
     for (size_t j = i + 1; j < center.size(); ++j) {
-      Particle *pj = center.at(j);
-      if(pi->getType() != pj->getType()) {
-        for(auto entry : EAndS) {
-          if(entry.isRight(pi->getType(), pj->getType())) {
-            e = entry.getEpsilon();
-            s = entry.getSigma();
-            break;
-          }
-        }
+      pk = center.at(j);
+      if(pi->getType() == 0 && pk->getType() == 0) {
+        if(!pi->isNeighbour(pk)){
+          f_ij = decideForceMethod(pi, pk, pi->getEpsilon(), pi->getSigma());
+          pi->setF(pi->getF() + f_ij);
+          pk->setF(pk->getF() - f_ij);
+          spdlog::debug("calculated Membrane LJF {} {} {}", f_ij[0], f_ij[1], f_ij[2]);
+		}
       } else {
-        e = pi->getEpsilon();
-        s = pi->getSigma();
+        if(pi->getType() != pk->getType()) {
+          for(auto entry : EAndS) {
+            if(entry.isRight(pi->getType(), pk->getType())) {
+              e = entry.getEpsilon();
+              s = entry.getSigma();
+              break;
+            }
+          }
+        } else {
+          e = pi->getEpsilon();
+          s = pi->getSigma();
+        }
+        f_ij = decideForceMethod(pi, pk, e, s);
+        pi->setF(pi->getF() + f_ij);
+        pk->setF(pk->getF() - f_ij);
       }
-      f_ij = decideForceMethod(pi, pj, e, s);
-      pi->setF(pi->getF() + f_ij);
-      pj->setF(pj->getF() - f_ij);
-    }
     }
   }
 }
