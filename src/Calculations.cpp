@@ -33,45 +33,56 @@ void Calculations::setR_L(double R_L) {
 
 
 void Calculations::calculateX(double delta_t) {
-  std::array<double, 3>  newPosition{};
-  std::array<double, 3> X{};
-  std::array<double, 3> V{};
-  std::array<double, 3> F{};
-  double M = 0;
+  //#pragma omp parallel
+  //{
+    //std::array<double, 3> newPosition{};
+    //std::array<double, 3> X{};
+    //std::array<double, 3> V{};
+    //std::array<double, 3> F{};
+    //double M = 0;
 
-  #pragma omp parallel for private(newPosition, X, V, F, M) shared(particles)
-  for (auto &p : particles) {
-    X = p.getX();
-    V = p.getV();
-    F = p.getF();
-    M = p.getM();
+    #pragma omp parallel for
+    for (size_t i = 0; i < particles.size(); ++i) {
+      auto &p = particles.getParticles()[i];
+      std::array<double, 3> X = p.getX();
+      std::array<double, 3> V = p.getV();
+      std::array<double, 3>F = p.getF();
+      double M = p.getM();
 
-    newPosition = { X[0] + delta_t * V[0] + delta_t * delta_t * (F[0] / (2 * M)),
+      std::array<double, 3> newPosition = { X[0] + delta_t * V[0] + delta_t * delta_t * (F[0] / (2 * M)),
                       X[1] + delta_t * V[1] + delta_t * delta_t * (F[1] / (2 * M)),
                       X[2] + delta_t * V[2] + delta_t * delta_t * (F[2] / (2 * M))};
-    p.setX(newPosition);
-  }
+
+      p.setX(newPosition);
+    }
+  //}
 }
 
 
 void Calculations::calculateV(double delta_t) {
-  std::array<double, 3> newVelocity{};
-  std::array<double, 3> V{};
-  std::array<double, 3> F{};
-  std::array<double, 3> oldF{};
-  double M = 0;
-  #pragma omp parallel for private(newVelocity, V, F, oldF, M) shared(particles)
-  for (auto &p : particles) {
-    V = p.getV();
-    F = p.getF();
-    oldF = p.getOldF();
-    M = p.getM();
+  //#pragma omp parallel
+  //{
+    //std::array<double, 3> newVelocity{};
+    //std::array<double, 3> V{};
+    //std::array<double, 3> F{};
+    //std::array<double, 3> oldF{};
+    //double M = 0;
 
-    newVelocity = { V[0] + delta_t * (F[0] + oldF[0]) / (2 * M),
+    #pragma omp parallel for
+    for (size_t i = 0; i < particles.size(); ++i) {
+      auto &p = particles.getParticles()[i];
+      std::array<double, 3> V = p.getV();
+      std::array<double, 3> F = p.getF();
+      std::array<double, 3> oldF = p.getOldF();
+      double M = p.getM();
+
+      std::array<double, 3> newVelocity = { V[0] + delta_t * (F[0] + oldF[0]) / (2 * M),
                       V[1] + delta_t * (F[1] + oldF[1]) / (2 * M),
                       V[2] + delta_t * (F[2] + oldF[2]) / (2 * M)};
-    p.setV(newVelocity);
-  }
+
+      p.setV(newVelocity);
+    }
+  //}
 }
 
 void Calculations::calculateF() {
@@ -103,18 +114,19 @@ void Calculations::calculateF() {
 
 void Calculations::LCcalculateLJF(std::vector<Particle*> &center, std::vector<Particle> &other, std::vector<EpsilonSigma> EAndS) {
 
-  std::array<double, 3> f_ij;
-  std::array<double, 3> newForcei;
-  double e;
-  double s;
+
 
   if (center.size() > 1) {
     calculateLJFcenter(center, EAndS);
   }
   if (other.size() > 0) {
-    #pragma omp parallel for private(f_ij) shared(center, other, EAndS)
+    #pragma omp parallel for
     for(auto pi : center){
-      std::array<double, 3> newForcei = pi->getF();
+      std::array<double, 3> f_ij;
+      std::array<double, 3> newForcei;
+      double e;
+      double s;
+      newForcei = pi->getF();
       for(auto pj : other) {
         if(pi->getType() == 0 && pj.getType() == 0){ //is Membrane
           if(!pi->isNeighbour(&pj)){
@@ -136,21 +148,11 @@ void Calculations::LCcalculateLJF(std::vector<Particle*> &center, std::vector<Pa
             s = pi->getSigma();
           }
           f_ij = decideForceMethod(pi, &pj, e, s);
-          #pragma omp critical
-          //newForcei = {newForcei.at(0) + f_ij.at(0), newForcei.at(1) + f_ij.at(1), newForcei.at(2) + f_ij.at(2)};
-          #pragma omp atomic
-          newForcei[0] += f_ij[0];
-          #pragma omp atomic
-          newForcei[1] += f_ij[1];
-          #pragma omp atomic
-          newForcei[2] += f_ij[2];
+          newForcei = {newForcei.at(0) + f_ij.at(0), newForcei.at(1) + f_ij.at(1), newForcei.at(2) + f_ij.at(2)};
         }
 
       }
-      #pragma omp critical
-      {
-        pi->setF(newForcei);
-      }
+      pi->setF(newForcei);
     }
   }
 }
@@ -163,7 +165,6 @@ void Calculations::calculateLJFcenter(std::vector<Particle *> &center, const std
   double s = 1;
   Particle* pi;
   Particle* pk;
-  #pragma omp parallel for private(f_ij, e, s) shared(center, EAndS)
   for (size_t i = 0; i < center.size() - 1; ++i) {
     pi = center.at(i);
     for (size_t j = i + 1; j < center.size(); ++j) {
@@ -171,19 +172,9 @@ void Calculations::calculateLJFcenter(std::vector<Particle *> &center, const std
       if(pi->getType() == 0 && pk->getType() == 0) {
         if(!pi->isNeighbour(pk)){
           f_ij = decideForceMethod(pi, pk, pi->getEpsilon(), pi->getSigma());
-          #pragma omp atomic
-          pi->getF()[0] += f_ij[0];
-          #pragma omp atomic
-          pi->getF()[1] += f_ij[1];
-          #pragma omp atomic
-          pi->getF()[2] += f_ij[2];
-
-          #pragma omp critical
-          {
-            pk->getF()[0] -= f_ij[0];
-            pk->getF()[1] -= f_ij[1];
-            pk->getF()[2] -= f_ij[2];
-          };
+          pi->setF(pi->getF() + f_ij);
+          pk->setF(pk->getF() - f_ij);
+          spdlog::debug("calculated Membrane LJF {} {} {}", f_ij[0], f_ij[1], f_ij[2]);
 		}
       } else {
         if(pi->getType() != pk->getType()) {
@@ -199,42 +190,38 @@ void Calculations::calculateLJFcenter(std::vector<Particle *> &center, const std
           s = pi->getSigma();
         }
         f_ij = decideForceMethod(pi, pk, e, s);
-        #pragma omp atomic
-        pi->getF()[0] += f_ij[0];
-        #pragma omp atomic
-        pi->getF()[1] += f_ij[1];
-        #pragma omp atomic
-        pi->getF()[2] += f_ij[2];
-
-        #pragma omp critical
-        {
-          pk->getF()[0] -= f_ij[0];
-          pk->getF()[1] -= f_ij[1];
-          pk->getF()[2] -= f_ij[2];
-        }
+        pi->setF(pi->getF() + f_ij);
+        pk->setF(pk->getF() - f_ij);
       }
     }
   }
 }
 
+
 std::array<double, 3> Calculations::calculateLJF(Particle *p1, Particle *p2, double e, double s) {
-  std::array<double,3> x1 = p1->getX();
-  std::array<double,3> x2 = p2->getX();
+  std::array<double, 3> x1 = p1->getX();
+  std::array<double, 3> x2 = p2->getX();
   std::array<double, 3> f_ij{};
-  std::array<double, 3> displacement_vector = { x1[0] - x2[0], x1[1] - x2[1], x1[2] - x2[2]};
-  double distance = sqrt(displacement_vector[0] * displacement_vector[0]+
-                         displacement_vector[1] * displacement_vector[1] +
-                         displacement_vector[2] * displacement_vector[2]);
-if (distance <= r_cutoff) {
-  double forcefactor =
-      ((-24 * e) / pow(distance, 2)) *
-      (pow((s) / distance, 6) - 2 * pow((s) / distance, 12));
+  std::array<double, 3> displacement_vector = { x1[0] - x2[0], x1[1] - x2[1], x1[2] - x2[2] };
 
-  f_ij = {forcefactor * displacement_vector[0],
-          forcefactor * displacement_vector[1],
-          forcefactor * displacement_vector[2]};
+  double distance_squared = displacement_vector[0] * displacement_vector[0] +
+                            displacement_vector[1] * displacement_vector[1] +
+                            displacement_vector[2] * displacement_vector[2];
+  double distance = std::sqrt(distance_squared);
 
-}
+  if (distance <= r_cutoff) {
+    double s_over_d = s / distance;
+    double s_over_d2 = s_over_d * s_over_d;
+    double s_over_d6 = s_over_d2 * s_over_d2 * s_over_d2;
+    double s_over_d12 = s_over_d6 * s_over_d6;
+
+    double forcefactor = (-24 * e / distance_squared) * (s_over_d6 - 2 * s_over_d12);
+
+    f_ij = { forcefactor * displacement_vector[0],
+             forcefactor * displacement_vector[1],
+             forcefactor * displacement_vector[2] };
+  }
+
   return f_ij;
 }
 
@@ -305,10 +292,8 @@ std::vector<double> Calculations::calculateHarmonicForce(Particle *p1, Particle 
 
 
 double Calculations::calcDistance(std::array<double, 3> x1, std::array<double, 3> x2){
-  double distance = 0.0;
-  for (size_t i = 0; i < 3; ++i) {
-    distance += std::pow(x1[i]-x2[i], 2);
-  }
-  distance = std::sqrt(distance);
-  return distance;
+  double dx0 = x1[0] - x2[0];
+  double dx1 = x1[1] - x2[1];
+  double dx2 = x1[2] - x2[2];
+  return std::sqrt(dx0 * dx0 + dx1 * dx1 + dx2 * dx2);
 }

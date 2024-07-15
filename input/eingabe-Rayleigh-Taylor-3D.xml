@@ -2,7 +2,7 @@
             xsi:noNamespaceSchemaLocation="../src/inputReader/simulation.xsd">
     <input>
         <tStart>0.0</tStart>
-        <tEnd>100</tEnd>
+        <tEnd>0.1</tEnd>
         <deltaT>0.0005</deltaT>
         <smoothLJ>false</smoothLJ>
         <particleContainerType>LC</particleContainerType>
