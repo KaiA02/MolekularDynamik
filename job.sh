@@ -8,6 +8,6 @@
 #SBATCH --export=NONE
 #SBATCH --mail-user=kai_arenja@hotmail.de
 #SBATCH --mail-type=end
-#SBATCH --time=30:00:00
+#SBATCH --time=9:00:00
 
-./MolSim ../input/eingabe-Rayleigh-Taylor-3D.xml 
+OMP_NUM_THREADS=56 ./MolSim ../input/eingabe-Rayleigh-Taylor-3D.xml 
