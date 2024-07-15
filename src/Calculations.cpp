@@ -10,6 +10,7 @@
 #include "Container/ParticleContainer.h"
 #include "spdlog/spdlog.h"
 #include "utils/ArrayUtils.h"
+#include <omp.h>
 
 Calculations::Calculations(BaseParticleContainer &other) : particles(other) {
   r_cutoff = std::numeric_limits<double>::infinity();
@@ -38,6 +39,7 @@ void Calculations::calculateX(double delta_t) {
   std::array<double, 3> F{};
   double M = 0;
 
+  #pragma omp parallel for private(newPosition, X, V, F, M) shared(particles)
   for (auto &p : particles) {
     X = p.getX();
     V = p.getV();
@@ -58,6 +60,7 @@ void Calculations::calculateV(double delta_t) {
   std::array<double, 3> F{};
   std::array<double, 3> oldF{};
   double M = 0;
+  #pragma omp parallel for private(newVelocity, V, F, oldF, M) shared(particles)
   for (auto &p : particles) {
     V = p.getV();
     F = p.getF();
@@ -109,8 +112,9 @@ void Calculations::LCcalculateLJF(std::vector<Particle*> &center, std::vector<Pa
     calculateLJFcenter(center, EAndS);
   }
   if (other.size() > 0) {
+    #pragma omp parallel for private(f_ij) shared(center, other, EAndS)
     for(auto pi : center){
-      newForcei = pi->getF();
+      std::array<double, 3> newForcei = pi->getF();
       for(auto pj : other) {
         if(pi->getType() == 0 && pj.getType() == 0){ //is Membrane
           if(!pi->isNeighbour(&pj)){
@@ -132,11 +136,21 @@ void Calculations::LCcalculateLJF(std::vector<Particle*> &center, std::vector<Pa
             s = pi->getSigma();
           }
           f_ij = decideForceMethod(pi, &pj, e, s);
-          newForcei = {newForcei.at(0) + f_ij.at(0), newForcei.at(1) + f_ij.at(1), newForcei.at(2) + f_ij.at(2)};
+          #pragma omp critical
+          //newForcei = {newForcei.at(0) + f_ij.at(0), newForcei.at(1) + f_ij.at(1), newForcei.at(2) + f_ij.at(2)};
+          #pragma omp atomic
+          newForcei[0] += f_ij[0];
+          #pragma omp atomic
+          newForcei[1] += f_ij[1];
+          #pragma omp atomic
+          newForcei[2] += f_ij[2];
         }
 
       }
-      pi->setF(newForcei);
+      #pragma omp critical
+      {
+        pi->setF(newForcei);
+      }
     }
   }
 }
@@ -149,6 +163,7 @@ void Calculations::calculateLJFcenter(std::vector<Particle *> &center, const std
   double s = 1;
   Particle* pi;
   Particle* pk;
+  #pragma omp parallel for private(f_ij, e, s) shared(center, EAndS)
   for (size_t i = 0; i < center.size() - 1; ++i) {
     pi = center.at(i);
     for (size_t j = i + 1; j < center.size(); ++j) {
@@ -156,9 +171,19 @@ void Calculations::calculateLJFcenter(std::vector<Particle *> &center, const std
       if(pi->getType() == 0 && pk->getType() == 0) {
         if(!pi->isNeighbour(pk)){
           f_ij = decideForceMethod(pi, pk, pi->getEpsilon(), pi->getSigma());
-          pi->setF(pi->getF() + f_ij);
-          pk->setF(pk->getF() - f_ij);
-          spdlog::debug("calculated Membrane LJF {} {} {}", f_ij[0], f_ij[1], f_ij[2]);
+          #pragma omp atomic
+          pi->getF()[0] += f_ij[0];
+          #pragma omp atomic
+          pi->getF()[1] += f_ij[1];
+          #pragma omp atomic
+          pi->getF()[2] += f_ij[2];
+
+          #pragma omp critical
+          {
+            pk->getF()[0] -= f_ij[0];
+            pk->getF()[1] -= f_ij[1];
+            pk->getF()[2] -= f_ij[2];
+          };
 		}
       } else {
         if(pi->getType() != pk->getType()) {
@@ -174,8 +199,19 @@ void Calculations::calculateLJFcenter(std::vector<Particle *> &center, const std
           s = pi->getSigma();
         }
         f_ij = decideForceMethod(pi, pk, e, s);
-        pi->setF(pi->getF() + f_ij);
-        pk->setF(pk->getF() - f_ij);
+        #pragma omp atomic
+        pi->getF()[0] += f_ij[0];
+        #pragma omp atomic
+        pi->getF()[1] += f_ij[1];
+        #pragma omp atomic
+        pi->getF()[2] += f_ij[2];
+
+        #pragma omp critical
+        {
+          pk->getF()[0] -= f_ij[0];
+          pk->getF()[1] -= f_ij[1];
+          pk->getF()[2] -= f_ij[2];
+        }
       }
     }
   }
