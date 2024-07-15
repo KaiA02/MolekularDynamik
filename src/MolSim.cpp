@@ -118,9 +118,9 @@ int main(int argc, char *argsv[]) {
                "{}, outputType: {}, baseName: {}, "
                "logLevel: {}, performanceMeasurement: {}, {} "
                "particles, {} cuboids, {} disks ",
-               start_time, end_time, delta_t, temp_init, temp_target,
-               smoothLJ, outputType, baseName, logLevel,
-               performanceMeasurement, lcParticles.getParticles().size(),
+               start_time, end_time, delta_t, temp_init, temp_target, smoothLJ,
+               outputType, baseName, logLevel, performanceMeasurement,
+               lcParticles.getParticles().size(),
                xmlReader.getNumberOfCuboids(), xmlReader.getNumberOfDisks());
   auto start = std::chrono::high_resolution_clock::now();
   // for this loop, we assume: current x, current f and current v are known
@@ -137,22 +137,23 @@ int main(int argc, char *argsv[]) {
     }
     prevParticles = lcParticles.getParticles();
 
-    while(current_time < end_time) {
-        spdlog::trace("iteration: {}", iteration);
+    while (current_time < end_time) {
+      spdlog::trace("iteration: {}", iteration);
 
-      	lcCaluclations.calculateX(delta_t);
-        spdlog::trace("calculated X");
-      	molecule_updates += lcParticles.getParticles().size();
-      	lcParticles.handleLJFCalculation(lcCaluclations, int(current_time));
-        spdlog::trace("calculated LJF");
-      	molecule_updates += 5 * lcParticles.getParticles().size(); //only provisionally
-		    lcCaluclations.calculateV(delta_t);
-        spdlog::trace("calculated V");
-      	molecule_updates += lcParticles.getParticles().size();
+      lcCaluclations.calculateX(delta_t);
+      spdlog::trace("calculated X");
+      molecule_updates += lcParticles.getParticles().size();
+      lcParticles.handleLJFCalculation(lcCaluclations, int(current_time));
+      spdlog::trace("calculated LJF");
+      molecule_updates +=
+          5 * lcParticles.getParticles().size(); // only provisionally
+      lcCaluclations.calculateV(delta_t);
+      spdlog::trace("calculated V");
+      molecule_updates += lcParticles.getParticles().size();
       iteration++;
 
-      if(thermostatOn == "YES") {
-        if(n_thermostat == 0) {
+      if (thermostatOn == "YES") {
+        if (n_thermostat == 0) {
           thermostat.gradualScaling(lcParticles.getParticles());
         } else {
           if (iteration % n_thermostat == 0) {
@@ -167,20 +168,23 @@ int main(int argc, char *argsv[]) {
       }
       if (!performanceMeasurement) {
         if (iteration % 10 == 0) {
-          if (iteration % 1000 == 0) {
-            diffusion.emplace_back(
-                Calculations::calculateDiffusion(lcParticles.getParticles(),
-                                                 prevParticles),
-                iteration);
-            rdf.emplace_back(iteration,
-                             lcCaluclations.calculateLocalDensities(
-                                 lcParticles.getParticles(), rdfDeltaR));
-            for (const auto &particle : lcParticles.getParticles()) {
-              prevParticles.push_back(particle);
+          if (statisticsOn) {
+            if (iteration % 1000 == 0) {
+              diffusion.emplace_back(
+                  Calculations::calculateDiffusion(lcParticles.getParticles(),
+                                                   prevParticles),
+                  iteration);
+              rdf.emplace_back(iteration,
+                               lcCaluclations.calculateLocalDensities(
+                                   lcParticles.getParticles(), rdfDeltaR));
+              for (const auto &particle : lcParticles.getParticles()) {
+                prevParticles.push_back(particle);
+              }
             }
           }
           if (thermostatOn == "YES") {
-            //spdlog::debug("current Temperature: {}", thermostat.getCurrentTemp(lcParticles.getParticles()));
+            // spdlog::debug("current Temperature: {}",
+            // thermostat.getCurrentTemp(lcParticles.getParticles()));
           }
           plotParticlesLC(iteration, outputType, baseName, "../output",
                           lcParticles);
@@ -200,15 +204,19 @@ int main(int argc, char *argsv[]) {
 
       if (!performanceMeasurement) {
         if (iteration % 10 == 0) {
-          if (iteration % 1000 == 0) {
-            diffusion.emplace_back(
-                Calculations::calculateDiffusion(lcParticles.getParticles(),
-                                                 prevParticles),
-                iteration);
-            rdf.emplace_back(iteration,
-                             lcCaluclations.calculateLocalDensities(
-                                 lcParticles.getParticles(), rdfDeltaR));
-            prevParticles = lcParticles.getParticles();
+          if (statisticsOn) {
+            if (iteration % 1000 == 0) {
+              diffusion.emplace_back(
+                  Calculations::calculateDiffusion(lcParticles.getParticles(),
+                                                   prevParticles),
+                  iteration);
+              rdf.emplace_back(iteration,
+                               lcCaluclations.calculateLocalDensities(
+                                   lcParticles.getParticles(), rdfDeltaR));
+              for (const auto &particle : lcParticles.getParticles()) {
+                prevParticles.push_back(particle);
+              }
+            }
           }
           plotParticles(iteration, outputType, baseName, "../output",
                         normParticles);
@@ -235,8 +243,10 @@ int main(int argc, char *argsv[]) {
     std::cout << "Diffusion at iteration " << diffusion[m].second << " is " <<
   diffusion[m].first << std::endl;
   }**/
-  outputDiffusionToFile(diffusion, "diffusion.txt", "../output/statistics");
-  rdfOutput(rdf, "rdf.txt", "../output/statistics");
+  if (statisticsOn) {
+    outputDiffusionToFile(diffusion, "diffusion.txt", "../output/statistics");
+    rdfOutput(rdf, "rdf.txt", "../output/statistics");
+  }
   return 0;
 }
 
