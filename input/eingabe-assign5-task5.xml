@@ -4,22 +4,21 @@
         <tStart>0.0</tStart>
         <tEnd>150</tEnd>
         <deltaT>0.001</deltaT>
-        <smoothLJ>true</smoothLJ>
+        <inputType>LJF</inputType>
         <particleContainerType>LC</particleContainerType>
         <r_cutoff>2.3</r_cutoff>
-        <r_l>1.9</r_l>
-        <domainSizeX>9.2</domainSizeX>
-        <domainSizeY>9.2</domainSizeY>
-        <domainSizeZ>9.2</domainSizeZ>
-        <boundary1Type>2</boundary1Type>
-        <boundary2Type>2</boundary2Type>
-        <boundary3Type>2</boundary3Type>
-        <boundary4Type>2</boundary4Type>
-        <boundary5Type>2</boundary5Type>
-        <boundary6Type>2</boundary6Type>
+        <domainSizeX>10</domainSizeX>
+        <domainSizeY>10</domainSizeY>
+        <domainSizeZ>10</domainSizeZ>
+        <boundary1Type>3</boundary1Type>
+        <boundary2Type>3</boundary2Type>
+        <boundary3Type>3</boundary3Type>
+        <boundary4Type>3</boundary4Type>
+        <boundary5Type>3</boundary5Type>
+        <boundary6Type>3</boundary6Type>
         <thermostatON>YES</thermostatON>
         <temp_init>0.01</temp_init>
-        <n_thermostat>40</n_thermostat>
+        <n_thermostat>5</n_thermostat>
         <temp_target>3.0</temp_target>
         <delta_temp>0.001</delta_temp>
         <g_grav>0</g_grav>

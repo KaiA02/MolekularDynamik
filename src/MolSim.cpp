@@ -137,18 +137,18 @@ int main(int argc, char *argsv[]) {
     }
     prevParticles = lcParticles.getParticles();
 
-    while (current_time < end_time) {
+    while(current_time < end_time) {
+        spdlog::trace("iteration: {}", iteration);
 
-      lcCaluclations.calculateX(delta_t);
-
-      molecule_updates += lcParticles.getParticles().size();
-      lcParticles.handleLJFCalculation(lcCaluclations, int(current_time));
-
-      molecule_updates +=
-          5 * lcParticles.getParticles().size(); // only provisionally
-      lcCaluclations.calculateV(delta_t);
-
-      molecule_updates += lcParticles.getParticles().size();
+      	lcCaluclations.calculateX(delta_t);
+        spdlog::trace("calculated X");
+      	molecule_updates += lcParticles.getParticles().size();
+      	lcParticles.handleLJFCalculation(lcCaluclations, int(current_time));
+        spdlog::trace("calculated LJF");
+      	molecule_updates += 5 * lcParticles.getParticles().size(); //only provisionally
+		    lcCaluclations.calculateV(delta_t);
+        spdlog::trace("calculated V");
+      	molecule_updates += lcParticles.getParticles().size();
       iteration++;
 
       if (thermostatOn == "YES") {
@@ -181,9 +181,7 @@ int main(int argc, char *argsv[]) {
             }
           }
           if (thermostatOn == "YES") {
-            spdlog::debug(
-                "current Temperature: {}",
-                thermostat.getCurrentTemp(lcParticles.getParticles()));
+            //spdlog::debug("current Temperature: {}", thermostat.getCurrentTemp(lcParticles.getParticles()));
           }
           plotParticlesLC(iteration, outputType, baseName, "../output",
                           lcParticles);
