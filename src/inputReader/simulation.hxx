@@ -31,8 +31,8 @@
 // in the accompanying FLOSSE file.
 //
 
-#ifndef CXX_HOME_KAIARENJA_CLION_PROJECTS_MOLEKULAR_DYNAMIK_SRC_INPUT_READER_SIMULATION_HXX
-#define CXX_HOME_KAIARENJA_CLION_PROJECTS_MOLEKULAR_DYNAMIK_SRC_INPUT_READER_SIMULATION_HXX
+#ifndef CXX_MNT_C_USERS_JOSHU_CLION_PROJECTS_MOLEKULAR_DYNAMIK_SRC_INPUT_READER_SIMULATION_HXX
+#define CXX_MNT_C_USERS_JOSHU_CLION_PROJECTS_MOLEKULAR_DYNAMIK_SRC_INPUT_READER_SIMULATION_HXX
 
 #ifndef XSD_CXX11
 #define XSD_CXX11
@@ -859,6 +859,42 @@ class output: public ::xml_schema::type
   void
   outputType (::std::unique_ptr< outputType_type > p);
 
+  // statistics
+  //
+  typedef ::xml_schema::boolean statistics_type;
+  typedef ::xsd::cxx::tree::optional< statistics_type > statistics_optional;
+  typedef ::xsd::cxx::tree::traits< statistics_type, char > statistics_traits;
+
+  const statistics_optional&
+  statistics () const;
+
+  statistics_optional&
+  statistics ();
+
+  void
+  statistics (const statistics_type& x);
+
+  void
+  statistics (const statistics_optional& x);
+
+  // rdfIntervalSize
+  //
+  typedef ::xml_schema::double_ rdfIntervalSize_type;
+  typedef ::xsd::cxx::tree::optional< rdfIntervalSize_type > rdfIntervalSize_optional;
+  typedef ::xsd::cxx::tree::traits< rdfIntervalSize_type, char, ::xsd::cxx::tree::schema_type::double_ > rdfIntervalSize_traits;
+
+  const rdfIntervalSize_optional&
+  rdfIntervalSize () const;
+
+  rdfIntervalSize_optional&
+  rdfIntervalSize ();
+
+  void
+  rdfIntervalSize (const rdfIntervalSize_type& x);
+
+  void
+  rdfIntervalSize (const rdfIntervalSize_optional& x);
+
   // Constructors.
   //
   output (const baseName_type&,
@@ -894,6 +930,8 @@ class output: public ::xml_schema::type
   ::xsd::cxx::tree::one< baseName_type > baseName_;
   ::xsd::cxx::tree::one< writeFrequency_type > writeFrequency_;
   ::xsd::cxx::tree::one< outputType_type > outputType_;
+  statistics_optional statistics_;
+  rdfIntervalSize_optional rdfIntervalSize_;
 };
 
 class config: public ::xml_schema::type
@@ -1777,4 +1815,4 @@ simulation_ (::xml_schema::dom::unique_ptr< ::xercesc::DOMDocument > d,
 //
 // End epilogue.
 
-#endif // CXX_HOME_KAIARENJA_CLION_PROJECTS_MOLEKULAR_DYNAMIK_SRC_INPUT_READER_SIMULATION_HXX
+#endif // CXX_MNT_C_USERS_JOSHU_CLION_PROJECTS_MOLEKULAR_DYNAMIK_SRC_INPUT_READER_SIMULATION_HXX

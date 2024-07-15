@@ -273,3 +273,80 @@ double Calculations::calcDistance(std::array<double, 3> x1,
   distance = std::sqrt(distance);
   return distance;
 }
+
+double Calculations::calculateDistanceBetweenParticles(Particle *p1,
+                                                       Particle *p2) {
+  std::array<double, 3> x0 = p1->getX();
+  std::array<double, 3> x1 = p2->getX();
+  std::array<double, 3> distance =
+      ArrayUtils::elementWisePairOp(x0, x1, std::minus<>());
+  return ArrayUtils::L2Norm(distance);
+}
+
+double Calculations::calculateDiffusion(std::vector<Particle> particles,
+                                        std::vector<Particle> prevParticles) {
+  double diffusion = 0;
+  for (int i = 0; i < particles.size(); i++) {
+    Particle currentParticle = particles.at(i);
+    Particle prevParticle = prevParticles.at(i);
+    diffusion +=
+        calculateDistanceBetweenParticles(&currentParticle, &prevParticle);
+    ;
+  }
+  return diffusion / particles.size();
+}
+
+std::vector<std::vector<double>>
+Calculations::computeDistances(std::vector<Particle> particles) {
+  int numParticles = particles.size();
+
+  // Initialize a 2D vector to store distances
+  std::vector<std::vector<double>> distances(
+      numParticles, std::vector<double>(numParticles, 0.0));
+
+  // Calculate pairwise distances and store them
+  for (int i = 0; i < numParticles; ++i) {
+    for (int j = i + 1; j < numParticles; ++j) {
+      double distance =
+          calculateDistanceBetweenParticles(&particles[i], &particles[j]);
+      distances[i][j] = distance;
+      distances[j][i] = distance; // Symmetric matrix
+      if (distance > maxDistance) {
+        maxDistance = distance;
+      }
+    }
+  }
+  return distances;
+}
+
+std::map<double, double>
+Calculations::calculateLocalDensities(const std::vector<Particle> particles,
+                                      double deltaR) {
+  std::vector<std::vector<double>> distances = computeDistances(particles);
+  std::map<double, double> localDensities;
+  int numIntervals = static_cast<int>(std::ceil(maxDistance / deltaR));
+  std::vector<int> intervalCounts(numIntervals, 0);
+  double currentDistance = 0.0;
+
+  for (size_t i = 0; i < distances.size(); ++i) {
+    for (size_t j = i + 1; j < distances[i].size(); ++j) {
+      currentDistance = distances[i][j];
+      int intervalIndex = static_cast<int>(currentDistance / deltaR);
+      if (intervalIndex < numIntervals) {
+        intervalCounts[intervalIndex]++;
+      }
+    }
+  }
+
+  double ri = 0.0;
+  for (int m = 0; m < numIntervals; ++m) {
+    ri = m * deltaR;
+    double volume = (4.0 / 3.0) * M_PI * (pow(ri + deltaR, 3) - pow(ri, 3));
+    double rdf = static_cast<double>(intervalCounts[m]) / volume;
+
+    // store the local density for interval ri
+    localDensities[ri] = rdf;
+  }
+
+  return localDensities;
+}
