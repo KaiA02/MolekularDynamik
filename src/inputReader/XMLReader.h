@@ -35,10 +35,10 @@ public:
    */
   bool getSmoothLJ();
 
-    /**
-     * @return the r_L
-     */
-    double getR_L();
+  /**
+   * @return the r_L
+   */
+  double getR_L();
 
   /**
    * @return check if the thermostat is on or off
@@ -99,6 +99,7 @@ public:
    */
   xml_schema::boolean getPerformanceMeasurement();
 
+  double getRdfDeltaR();
   /**
    *
    * @return the log level
@@ -122,6 +123,8 @@ public:
    * @return the number of disks in the simulation
    */
   int getNumberOfDisks();
+
+  xml_schema::boolean getStatisticsOn();
 
 private:
   std::unique_ptr<simulation> sim;
