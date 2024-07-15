@@ -27,7 +27,7 @@
                             <xs:element name="temp_target" type="xs:double"/>
                             <xs:element name="delta_temp" type="xs:double"/>
                             <xs:element name="g_grav" type="xs:double"/>
-                            <xs:element name="particles" maxOccurs="unbounded" minOccurs="1">
+                            <xs:element name="particles" maxOccurs="unbounded" minOccurs="0">
                                 <xs:complexType>
                                     <xs:sequence>
                                         <xs:element name="x" type="xs:double"/>

@@ -95,8 +95,8 @@ std::array<double, 3> position;
     	if (cellExists({x, y, z})) {
       	getCellById({x,y,z})->addParticle(&p);
     	} else { //Parking of deleted Particles
-			p.park();
-			spdlog::warn("parked with {} {} {} {} {} {}", xx, xy, xz, p.getV()[0], p.getV()[1], p.getV()[2]);
+			//p.park();
+			//spdlog::warn("parked with {} {} {} {} {} {}", xx, xy, xz, p.getV()[0], p.getV()[1], p.getV()[2]);
     	}
 	}
   }
@@ -179,9 +179,9 @@ void LCParticleContainer::generateCells(const int size_x, const int size_y, cons
 }
 
 void LCParticleContainer::handleLJFCalculation(Calculations& calc, int timestep) {
-
+  spdlog::trace("LCPartCon: started handleLJF");
   realocateParticles();
-
+  spdlog::trace("LCPartCon: realocated Particles");
   std::vector<Particle> neighbourhood;
   Cell* c = nullptr;
   for(std::vector<Cell>::size_type x = 0; x < cells.size() -1; x++){
@@ -195,17 +195,17 @@ void LCParticleContainer::handleLJFCalculation(Calculations& calc, int timestep)
         }
       }
     }
-  //spdlog::debug("LCPartCon: calculated all neighbourhoods");
+  spdlog::trace("LCPartCon: itterated over all Cells");
   handleBoundaryAction();
-  //spdlog::debug("LCPartCon: handled Boundaries");
+  spdlog::trace("LCPartCon: handled Boundarys");
   applyGravitation();
-  //spdlog::debug("LCPartCon: applied Gravity");
-	if(timestep <= 150){
-		membrane.applyMovement();
-	}
-  //spdlog::debug("LCPartCon: applied Movement");
-	membrane.stabilizeMembrane(calc);
-  //spdlog::debug("LCPartCon: stabilized Membrane");
+  spdlog::trace("LCPartCon: applied Gravity");
+  if(timestep <= 150){
+	membrane.applyMovement();
+  }
+  spdlog::trace("LCPartCon: applied Movement");
+  membrane.stabilizeMembrane(calc);
+  spdlog::trace("LCPartCon: stabilized Membrane");
 
 }
 
@@ -331,7 +331,7 @@ void LCParticleContainer::handleBoundaryAction() {
             } // if(bounds.at(i) != -1.0 && bounds.at(i) <= (pow(2, 1/6)/2)){
           } //reflectiv
           else if(boundary_types[i] == 3) {
-            if(bounds.at(i+6) >= 0.0) {
+            if(bounds.at(i+6) > 0.0) {
               std::array<double,3> x = findOponentXYZ(p);
               p->setX(x);
             }
@@ -427,6 +427,7 @@ std::array<int, 3> LCParticleContainer::findOponentCellID(std::array<int, 3> ID)
   } else if(ID.at(2) >= cell_count.at(2)) {
     return_id.at(2) = 1;
   }
+  //spdlog::warn(" {} {} {}", return_id[0], return_id[1], return_id[2]);
   return return_id;
 }
 
