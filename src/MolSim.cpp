@@ -118,9 +118,9 @@ int main(int argc, char *argsv[]) {
                "{}, outputType: {}, baseName: {}, "
                "logLevel: {}, performanceMeasurement: {}, {} "
                "particles, {} cuboids, {} disks ",
-               start_time, end_time, delta_t, temp_init, temp_target, smoothLJ,
-               outputType, baseName, logLevel, performanceMeasurement,
-               lcParticles.getParticles().size(),
+               start_time, end_time, delta_t, temp_init, temp_target,
+               smoothLJ, outputType, baseName, logLevel,
+               performanceMeasurement, lcParticles.getParticles().size(),
                xmlReader.getNumberOfCuboids(), xmlReader.getNumberOfDisks());
   auto start = std::chrono::high_resolution_clock::now();
   // for this loop, we assume: current x, current f and current v are known
@@ -137,22 +137,22 @@ int main(int argc, char *argsv[]) {
     }
     prevParticles = lcParticles.getParticles();
 
-    while (current_time < end_time) {
+    while(current_time < end_time) {
+        spdlog::trace("iteration: {}", iteration);
 
-      lcCaluclations.calculateX(delta_t);
-
-      molecule_updates += lcParticles.getParticles().size();
-      lcParticles.handleLJFCalculation(lcCaluclations, int(current_time));
-
-      molecule_updates +=
-          5 * lcParticles.getParticles().size(); // only provisionally
-      lcCaluclations.calculateV(delta_t);
-
-      molecule_updates += lcParticles.getParticles().size();
+      	lcCaluclations.calculateX(delta_t);
+        spdlog::trace("calculated X");
+      	molecule_updates += lcParticles.getParticles().size();
+      	lcParticles.handleLJFCalculation(lcCaluclations, int(current_time));
+        spdlog::trace("calculated LJF");
+      	molecule_updates += 5 * lcParticles.getParticles().size(); //only provisionally
+		    lcCaluclations.calculateV(delta_t);
+        spdlog::trace("calculated V");
+      	molecule_updates += lcParticles.getParticles().size();
       iteration++;
 
-      if (thermostatOn == "YES") {
-        if (n_thermostat == 0) {
+      if(thermostatOn == "YES") {
+        if(n_thermostat == 0) {
           thermostat.gradualScaling(lcParticles.getParticles());
         } else {
           if (iteration % n_thermostat == 0) {
@@ -165,7 +165,6 @@ int main(int argc, char *argsv[]) {
         }
         molecule_updates += lcParticles.getParticles().size();
       }
-      spdlog::debug("MolSim: applied Thermostat");
       if (!performanceMeasurement) {
         if (iteration % 10 == 0) {
           if (iteration % 1000 == 0) {
@@ -181,9 +180,7 @@ int main(int argc, char *argsv[]) {
             }
           }
           if (thermostatOn == "YES") {
-            spdlog::debug(
-                "current Temperature: {}",
-                thermostat.getCurrentTemp(lcParticles.getParticles()));
+            //spdlog::debug("current Temperature: {}", thermostat.getCurrentTemp(lcParticles.getParticles()));
           }
           plotParticlesLC(iteration, outputType, baseName, "../output",
                           lcParticles);
