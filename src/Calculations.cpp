@@ -110,51 +110,62 @@ void Calculations::calculateF() {
   }
 }
 
-
+#pragma omp declare reduction(addArray : std::array<double, 3> : \
+omp_out[0] += omp_in[0], omp_out[1] += omp_in[1], omp_out[2] += omp_in[2]) \
+initializer(omp_priv = std::array<double, 3>{0, 0, 0})
 
 void Calculations::LCcalculateLJF(std::vector<Particle*> &center, std::vector<Particle> &other, std::vector<EpsilonSigma> EAndS) {
-
-
-
-  if (center.size() > 1) {
-    calculateLJFcenter(center, EAndS);
-  }
-  if (other.size() > 0) {
-    #pragma omp parallel for
-    for(auto pi : center){
-      std::array<double, 3> f_ij;
-      std::array<double, 3> newForcei;
-      double e;
-      double s;
-      newForcei = pi->getF();
-      for(auto pj : other) {
-        if(pi->getType() == 0 && pj.getType() == 0){ //is Membrane
-          if(!pi->isNeighbour(&pj)){
-            f_ij = decideForceMethod(pi, &pj, pi->getEpsilon(), pi->getSigma());
-            newForcei = {newForcei.at(0) + f_ij.at(0), newForcei.at(1) + f_ij.at(1), newForcei.at(2) + f_ij.at(2)};
-            spdlog::debug("calculated Membrane LJF {} {} {}", f_ij[0], f_ij[1], f_ij[2]);
-          }
-        } else {
-          if(pi->getType() != pj.getType()) {
-            for(auto entry : EAndS) {
-              if(entry.isRight(pi->getType(), pj.getType())) {
-                e = entry.getEpsilon();
-                s = entry.getSigma();
-                break;
-              }
-            }
-          } else {
-            e = pi->getEpsilon();
-            s = pi->getSigma();
-          }
-          f_ij = decideForceMethod(pi, &pj, e, s);
-          newForcei = {newForcei.at(0) + f_ij.at(0), newForcei.at(1) + f_ij.at(1), newForcei.at(2) + f_ij.at(2)};
-        }
-
-      }
-      pi->setF(newForcei);
+    if (center.size() > 1) {
+        calculateLJFcenter(center, EAndS);
     }
-  }
+
+    if (other.size() > 0) {
+        #pragma omp parallel
+        {
+            #pragma omp for nowait
+            for (size_t i = 0; i < center.size(); ++i) {
+                Particle* pi = center[i];
+                std::array<double, 3> newForcei = {0, 0, 0};
+
+                for (size_t j = 0; j < other.size(); ++j) {
+                    Particle& pj = other[j];
+                    std::array<double, 3> f_ij{};
+                    double e = pi->getEpsilon();
+                    double s = pi->getSigma();
+
+                    if (pi->getType() == 0 && pj.getType() == 0) { // is Membrane
+                        if (!pi->isNeighbour(&pj)) {
+                            f_ij = decideForceMethod(pi, &pj, e, s);
+                        }
+                    } else {
+                        if (pi->getType() != pj.getType()) {
+                            for (auto& entry : EAndS) {
+                                if (entry.isRight(pi->getType(), pj.getType())) {
+                                    e = entry.getEpsilon();
+                                    s = entry.getSigma();
+                                    break;
+                                }
+                            }
+                        }
+                        f_ij = decideForceMethod(pi, &pj, e, s);
+                    }
+
+                    newForcei[0] += f_ij[0];
+                    newForcei[1] += f_ij[1];
+                    newForcei[2] += f_ij[2];
+                }
+
+                #pragma omp critical
+                {
+                    auto force = pi->getF();
+                    force[0] += newForcei[0];
+                    force[1] += newForcei[1];
+                    force[2] += newForcei[2];
+                    pi->setF(force);
+                }
+            }
+        }
+    }
 }
 
 
