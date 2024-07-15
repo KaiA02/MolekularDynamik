@@ -13,7 +13,7 @@ if (NOT CMAKE_BUILD_TYPE)
 endif (NOT CMAKE_BUILD_TYPE)
 
 # Add the -pg flag for gprof profiling
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pg")
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pg")
 
 # collect all cpp files
 file(GLOB_RECURSE MY_SRC
