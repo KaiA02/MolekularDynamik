@@ -118,9 +118,9 @@ add_executable(
         src/Membrane/MembranePair.h
         src/Membrane/MembranePair.cpp
         src/Membrane/Membrane.cpp
-        src/Plots/Task5Diffusion.cpp
-        src/Plots/Task5RDF.cpp
-        src/Plots/Task2StrategiesSpeedUp.cpp
+        src/Plots/Ass5Task5Diffusion.cpp
+        src/Plots/Ass5Task5RDF.cpp
+        src/Plots/Ass5Task2StrategiesSpeedUp.cpp
 
 
 )
