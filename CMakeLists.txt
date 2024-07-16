@@ -105,7 +105,7 @@ add_executable(
         src/LinkedCell/Cell.h
         src/test/LCParticleContainerTest.cpp
         src/test/CellTest.cpp
-        src/RunTimeComparison/RTCAss3Task2.cpp
+        src/Plots/RTCAss3Task2.cpp
         src/Container/LCParticleContainer.cpp
         src/Container/LCParticleContainer.h
         src/Container/BaseParticleContainer.h
@@ -118,6 +118,9 @@ add_executable(
         src/Membrane/MembranePair.h
         src/Membrane/MembranePair.cpp
         src/Membrane/Membrane.cpp
+        src/Plots/Task5Diffusion.cpp
+        src/Plots/Task5RDF.cpp
+        src/Plots/Task2StrategiesSpeedUp.cpp
 
 
 )
