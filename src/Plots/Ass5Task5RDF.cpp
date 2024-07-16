@@ -39,10 +39,10 @@
  * @brief RDF Cooling
  * \image html RDFCooling.png width=800cm height=600cm
  */
-void rdfCooling();
+void RdfCooling();
 
 /**
  * @brief RDF SuperCooling
  * \image html RDFSuperCooling.png width=800cm height=600cm
  */
-void rdfSuperCooling();
+void RdfSuperCooling();
