@@ -37,4 +37,4 @@
  * @brief Diffusion Var(t)
  * \image html Diffusion.png width=800cm height=600cm
  */
- void diffusion()
+ void diffusion();
