@@ -50,11 +50,15 @@ target_include_directories(MolSim
 )
 
 find_package(XercesC 3.2 REQUIRED)
+find_package(OpenMP REQUIRED)
 
 include_directories(${XercesC_INCLUDE_DIR})
 
+if(OpenMP_CXX_FOUND)
+    target_link_libraries(MolSim PUBLIC OpenMP::OpenMP_CXX)
+endif()
+
 target_link_libraries(MolSim
-        # stuff that is used in headers and source files
         PUBLIC
         XercesC::XercesC
         spdlog::spdlog
@@ -113,14 +117,12 @@ add_executable(
         src/Thermostat.cpp
         src/Thermostat.h
         src/utils/EpsilonSigma.h
-        src/utils/EpsilonSigma.h
         src/Membrane/Membrane.h
         src/Membrane/MembranePair.h
         src/Membrane/MembranePair.cpp
         src/Membrane/Membrane.cpp
-
-
 )
+
 target_link_libraries(
         firstTest
         GTest::gtest_main
