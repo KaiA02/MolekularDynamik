@@ -1,6 +1,7 @@
 
 #include "Calculations.h"
 #include "Container/LCParticleContainer.h"
+#include "Particle.h"
 #include "inputReader/FileReader.h"
 #include "inputReader/XMLReader.h"
 #include "outputWriter/VTKWriter.h"
@@ -26,10 +27,10 @@ void displayProgressBar(int progress, int total,
 
 void saveState(std::vector<Particle> particles);
 
-double calculateDiffusion(std::vector<Particle> particles,
-                          std::vector<Particle> prevParticles);
 void outputDiffusionToFile(const std::vector<std::pair<double, int>> &diffusion,
                            const std::string &filename, std::string outputPath);
+void rdfOutput(std::vector<std::pair<int, std::map<double, double>>> rdf,
+               std::string filename, std::string outputPath);
 
 int main(int argc, char *argsv[]) {
 
@@ -54,9 +55,12 @@ int main(int argc, char *argsv[]) {
   int n_thermostat = xmlReader.getN_Thermostat();
   double temp_target = xmlReader.getTemp_Target();
   double delta_temp = xmlReader.getDelta_Temp();
+  bool statisticsOn = xmlReader.getStatisticsOn();
+  double rdfDeltaR = xmlReader.getRdfDeltaR();
   Thermostat thermostat(temp_init, n_thermostat, temp_target, delta_temp);
   std::vector<Particle> prevParticles;
   std::vector<std::pair<double, int>> diffusion;
+  std::vector<std::pair<int, std::map<double, double>>> rdf;
 
   // std::cout << "Hello from MolSim for PSE!" << std::endl;
   if (argc > 2) {
@@ -114,9 +118,9 @@ int main(int argc, char *argsv[]) {
                "{}, outputType: {}, baseName: {}, "
                "logLevel: {}, performanceMeasurement: {}, {} "
                "particles, {} cuboids, {} disks ",
-               start_time, end_time, delta_t, temp_init, temp_target,
-               smoothLJ, outputType, baseName, logLevel,
-               performanceMeasurement, lcParticles.getParticles().size(),
+               start_time, end_time, delta_t, temp_init, temp_target, smoothLJ,
+               outputType, baseName, logLevel, performanceMeasurement,
+               lcParticles.getParticles().size(),
                xmlReader.getNumberOfCuboids(), xmlReader.getNumberOfDisks());
   auto start = std::chrono::high_resolution_clock::now();
   // for this loop, we assume: current x, current f and current v are known
@@ -133,22 +137,23 @@ int main(int argc, char *argsv[]) {
     }
     prevParticles = lcParticles.getParticles();
 
-    while(current_time < end_time) {
-        spdlog::trace("iteration: {}", iteration);
+    while (current_time < end_time) {
+      spdlog::trace("iteration: {}", iteration);
 
-      	lcCaluclations.calculateX(delta_t);
-        spdlog::trace("calculated X");
-      	molecule_updates += lcParticles.getParticles().size();
-      	lcParticles.handleLJFCalculation(lcCaluclations, int(current_time));
-        spdlog::trace("calculated LJF");
-      	molecule_updates += 5 * lcParticles.getParticles().size(); //only provisionally
-		    lcCaluclations.calculateV(delta_t);
-        spdlog::trace("calculated V");
-      	molecule_updates += lcParticles.getParticles().size();
+      lcCaluclations.calculateX(delta_t);
+      spdlog::trace("calculated X");
+      molecule_updates += lcParticles.getParticles().size();
+      lcParticles.handleLJFCalculation(lcCaluclations, int(current_time));
+      spdlog::trace("calculated LJF");
+      molecule_updates +=
+          5 * lcParticles.getParticles().size(); // only provisionally
+      lcCaluclations.calculateV(delta_t);
+      spdlog::trace("calculated V");
+      molecule_updates += lcParticles.getParticles().size();
       iteration++;
 
-      if(thermostatOn == "YES") {
-        if(n_thermostat == 0) {
+      if (thermostatOn == "YES") {
+        if (n_thermostat == 0) {
           thermostat.gradualScaling(lcParticles.getParticles());
         } else {
           if (iteration % n_thermostat == 0) {
@@ -163,14 +168,23 @@ int main(int argc, char *argsv[]) {
       }
       if (!performanceMeasurement) {
         if (iteration % 10 == 0) {
-          if (iteration % 1000 == 0) {
-            diffusion.emplace_back(
-                calculateDiffusion(lcParticles.getParticles(), prevParticles),
-                iteration);
-            prevParticles = lcParticles.getParticles();
+          if (statisticsOn) {
+            if (iteration % 1000 == 0) {
+              diffusion.emplace_back(
+                  Calculations::calculateDiffusion(lcParticles.getParticles(),
+                                                   prevParticles),
+                  iteration);
+              rdf.emplace_back(iteration,
+                               lcCaluclations.calculateLocalDensities(
+                                   lcParticles.getParticles(), rdfDeltaR));
+              for (const auto &particle : lcParticles.getParticles()) {
+                prevParticles.push_back(particle);
+              }
+            }
           }
           if (thermostatOn == "YES") {
-            //spdlog::debug("current Temperature: {}", thermostat.getCurrentTemp(lcParticles.getParticles()));
+            // spdlog::debug("current Temperature: {}",
+            // thermostat.getCurrentTemp(lcParticles.getParticles()));
           }
           plotParticlesLC(iteration, outputType, baseName, "../output",
                           lcParticles);
@@ -190,11 +204,19 @@ int main(int argc, char *argsv[]) {
 
       if (!performanceMeasurement) {
         if (iteration % 10 == 0) {
-          if (iteration % 1000 == 0) {
-            diffusion.emplace_back(
-                calculateDiffusion(lcParticles.getParticles(), prevParticles),
-                iteration);
-            prevParticles = normParticles.getParticles();
+          if (statisticsOn) {
+            if (iteration % 1000 == 0) {
+              diffusion.emplace_back(
+                  Calculations::calculateDiffusion(lcParticles.getParticles(),
+                                                   prevParticles),
+                  iteration);
+              rdf.emplace_back(iteration,
+                               lcCaluclations.calculateLocalDensities(
+                                   lcParticles.getParticles(), rdfDeltaR));
+              for (const auto &particle : lcParticles.getParticles()) {
+                prevParticles.push_back(particle);
+              }
+            }
           }
           plotParticles(iteration, outputType, baseName, "../output",
                         normParticles);
@@ -221,7 +243,10 @@ int main(int argc, char *argsv[]) {
     std::cout << "Diffusion at iteration " << diffusion[m].second << " is " <<
   diffusion[m].first << std::endl;
   }**/
-  outputDiffusionToFile(diffusion, "diffusion.txt", "../output/statistics");
+  if (statisticsOn) {
+    outputDiffusionToFile(diffusion, "diffusion.txt", "../output/statistics");
+    rdfOutput(rdf, "rdf.txt", "../output/statistics");
+  }
   return 0;
 }
 
@@ -353,22 +378,27 @@ void saveState(std::vector<Particle> particles) {
   spdlog::warn("State is saved");
 }
 
-double calculateDiffusion(std::vector<Particle> particles,
-                          std::vector<Particle> prevParticles) {
-  double diffusion = 0;
-  for (int i = 0; i < particles.size(); i++) {
-    Particle currentParticle = particles.at(i);
-    Particle prevParticle = prevParticles.at(i);
-    std::array<double, 3> x0 = prevParticle.getX();
-    std::array<double, 3> x = currentParticle.getX();
-    std::array<double, 3> d = {x[0] - x0[0], x[1] - x0[1], x[2] - x0[2]};
-
-    // Calculate the squared L2 norm of d
-    double squaredL2Norm =
-        std::pow(d[0], 2) + std::pow(d[1], 2) + std::pow(d[2], 2);
-    diffusion += squaredL2Norm;
+void rdfOutput(std::vector<std::pair<int, std::map<double, double>>> rdf,
+               std::string filename, std::string outputPath) {
+  std::filesystem::path dir(outputPath);
+  if (!std::filesystem::exists(dir)) {
+    std::filesystem::create_directories(dir);
   }
-  return diffusion;
+  std::string out_name = outputPath + "/" + filename;
+  std::ofstream file(out_name);
+  if (!file.is_open()) {
+    std::cerr << "Failed to open file for writing: " << out_name << std::endl;
+    return;
+  }
+
+  for (const auto &pair : rdf) {
+    file << pair.first << " ";
+    for (const auto &innerPair : pair.second) {
+      file << innerPair.first << " " << innerPair.second << " ";
+    }
+    file << "\n";
+  }
+  file.close();
 }
 
 void outputDiffusionToFile(const std::vector<std::pair<double, int>> &diffusion,

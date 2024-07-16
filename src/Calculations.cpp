@@ -6,33 +6,26 @@
 
 #include <cmath>
 
-#include "Particle.h"
 #include "Container/ParticleContainer.h"
+#include "Particle.h"
 #include "spdlog/spdlog.h"
 #include "utils/ArrayUtils.h"
 #include <omp.h>
 
 Calculations::Calculations(BaseParticleContainer &other) : particles(other) {
   r_cutoff = std::numeric_limits<double>::infinity();
+  smoothLJ = false;
 }
 
-void Calculations::setR_cutoff(double r) {
-  r_cutoff = r;
-}
- void Calculations::setG_grav(double g) {
-   g_grav = g;
- }
+void Calculations::setR_cutoff(double r) { r_cutoff = r; }
+void Calculations::setG_grav(double g) { g_grav = g; }
 
-void Calculations::setSmoothLJ(bool SLJ) {
-  smoothLJ = SLJ;
-}
+void Calculations::setSmoothLJ(bool SLJ) { smoothLJ = SLJ; }
 
-void Calculations::setR_L(double R_L) {
-    r_l = R_L;
-}
-
+void Calculations::setR_L(double R_L) { r_l = R_L; }
 
 void Calculations::calculateX(double delta_t) {
+
   //#pragma omp parallel
   //{
     //std::array<double, 3> newPosition{};
@@ -56,10 +49,11 @@ void Calculations::calculateX(double delta_t) {
       p.setX(newPosition);
     }
   //}
+
 }
 
-
 void Calculations::calculateV(double delta_t) {
+
   //#pragma omp parallel
   //{
     //std::array<double, 3> newVelocity{};
@@ -83,6 +77,7 @@ void Calculations::calculateV(double delta_t) {
       p.setV(newVelocity);
     }
   //}
+
 }
 
 void Calculations::calculateF() {
@@ -101,14 +96,14 @@ void Calculations::calculateF() {
       if (&p1 != &p2) {
         distCubed = std::pow(ArrayUtils::L2Norm(x1 - x2), 3);
         prefactor = (p1.getM() * p2.getM()) / distCubed;
-        newForce = {prefactor * (x2[0] - x1[0]),
-                      prefactor * (x2[1] - x1[1]),
-                      prefactor * (x2[2] - x1[2])};
+        newForce = {prefactor * (x2[0] - x1[0]), prefactor * (x2[1] - x1[1]),
+                    prefactor * (x2[2] - x1[2])};
       }
     }
     p1.setF(newForce);
   }
 }
+
 
 #pragma omp declare reduction(addArray : std::array<double, 3> : \
 omp_out[0] += omp_in[0], omp_out[1] += omp_in[1], omp_out[2] += omp_in[2]) \
@@ -165,11 +160,12 @@ void Calculations::LCcalculateLJF(std::vector<Particle*> &center, std::vector<Pa
                 }
             }
         }
+
     }
 }
 
-
-void Calculations::calculateLJFcenter(std::vector<Particle *> &center, const std::vector<EpsilonSigma> EAndS) {
+void Calculations::calculateLJFcenter(std::vector<Particle *> &center,
+                                      const std::vector<EpsilonSigma> EAndS) {
 
   std::array<double, 3> f_ij{};
   double e = 1;
@@ -209,6 +205,7 @@ void Calculations::calculateLJFcenter(std::vector<Particle *> &center, const std
 }
 
 
+
 std::array<double, 3> Calculations::calculateLJF(Particle *p1, Particle *p2, double e, double s) {
   std::array<double, 3> x1 = p1->getX();
   std::array<double, 3> x2 = p2->getX();
@@ -236,38 +233,44 @@ std::array<double, 3> Calculations::calculateLJF(Particle *p1, Particle *p2, dou
   return f_ij;
 }
 
+std::array<double, 3> Calculations::calculateSmoothLJF(Particle *p1,
+                                                       Particle *p2, double e,
+                                                       double s) {
+  std::array<double, 3> x1 = p1->getX();
+  std::array<double, 3> x2 = p2->getX();
+  std::array<double, 3> f_ij{};
+  std::array<double, 3> displacement_vector = {x1[0] - x2[0], x1[1] - x2[1],
+                                               x1[2] - x2[2]};
+  double distance = sqrt(displacement_vector[0] * displacement_vector[0] +
+                         displacement_vector[1] * displacement_vector[1] +
+                         displacement_vector[2] * displacement_vector[2]);
 
-std::array<double, 3> Calculations::calculateSmoothLJF(Particle *p1, Particle *p2, double e, double s) {
-    std::array<double,3> x1 = p1->getX();
-    std::array<double,3> x2 = p2->getX();
-    std::array<double, 3> f_ij{};
-    std::array<double, 3> displacement_vector = { x1[0] - x2[0], x1[1] - x2[1], x1[2] - x2[2]};
-    double distance = sqrt(displacement_vector[0] * displacement_vector[0]+
-                           displacement_vector[1] * displacement_vector[1] +
-                           displacement_vector[2] * displacement_vector[2]);
+  double distance_exp2 = distance * distance;
+  double distance_exp6 = distance_exp2 * distance_exp2 * distance_exp2;
+  double distance_exp14 = distance_exp6 * distance_exp6 * distance_exp2;
+  double sigma_exp6 = pow(s, 6);
 
-    double distance_exp2 = distance * distance;
-    double distance_exp6 = distance_exp2 * distance_exp2 * distance_exp2;
-    double distance_exp14 = distance_exp6 * distance_exp6 * distance_exp2;
-    double sigma_exp6 = pow(s, 6);
+  double forcefactor1 =
+      -(24 * sigma_exp6 * e / (distance_exp14 * pow(r_cutoff - r_l, 3)) *
+        (r_cutoff - distance));
 
-    double forcefactor1 = -(24 * sigma_exp6 * e / (distance_exp14 * pow(r_cutoff - r_l, 3)) * (r_cutoff - distance));
+  double forcefactor2_1 =
+      r_cutoff * r_cutoff * (2 * sigma_exp6 - distance_exp6) +
+      r_cutoff * (3 * r_l - distance) * (distance_exp6 - 2 * sigma_exp6);
 
-    double forcefactor2_1 = r_cutoff * r_cutoff * (2 * sigma_exp6 - distance_exp6) +
-                            r_cutoff * (3 * r_l - distance) * (distance_exp6 - 2 * sigma_exp6);
+  double forcefactor2_2_1 = 5 * r_l * sigma_exp6 - 2 * r_l * distance_exp6 -
+                            3 * sigma_exp6 * distance +
+                            distance_exp6 * distance;
 
-    double forcefactor2_2_1 = 5 * r_l * sigma_exp6 - 2 * r_l * distance_exp6 -
-                              3 * sigma_exp6 * distance + distance_exp6 * distance;
+  double forcefactor2_2 = distance * forcefactor2_2_1;
 
-    double forcefactor2_2 = distance * forcefactor2_2_1;
+  double forcefactor = forcefactor1 * (forcefactor2_1 + forcefactor2_2);
 
-    double forcefactor = forcefactor1 * (forcefactor2_1 + forcefactor2_2);
+  f_ij = {forcefactor * -displacement_vector[0],
+          forcefactor * -displacement_vector[1],
+          forcefactor * -displacement_vector[2]};
 
-    f_ij = {forcefactor * -displacement_vector[0],
-            forcefactor * -displacement_vector[1],
-            forcefactor * -displacement_vector[2]};
-
-    return f_ij;
+  return f_ij;
 }
 
 std::array<double, 3> Calculations::decideForceMethod(Particle *p1, Particle *p2, double e, double s) {
@@ -287,19 +290,19 @@ std::array<double, 3> Calculations::decideForceMethod(Particle *p1, Particle *p2
     }
 }
 
-
-std::vector<double> Calculations::calculateHarmonicForce(Particle *p1, Particle *p2, double r0){
-  std::array<double,3> xi = p1->getX();
-  std::array<double,3> xj = p2->getX();
+std::vector<double>
+Calculations::calculateHarmonicForce(Particle *p1, Particle *p2, double r0) {
+  std::array<double, 3> xi = p1->getX();
+  std::array<double, 3> xj = p2->getX();
   std::vector<double> i_j = {xi[0] - xj[0], xi[1] - xj[1], xi[2] - xj[2]};
   double distance = calcDistance(xi, xj);
   double scalar = stiffness * (distance - r0);
   for (int i = 0; i < 3; ++i) {
-    i_j[i] = scalar * (xj[i]-xi[i]) / distance;
+    i_j[i] = scalar * (xj[i] - xi[i]) / distance;
   }
   return i_j;
-
 }
+
 
 
 double Calculations::calcDistance(std::array<double, 3> x1, std::array<double, 3> x2){
@@ -307,4 +310,81 @@ double Calculations::calcDistance(std::array<double, 3> x1, std::array<double, 3
   double dx1 = x1[1] - x2[1];
   double dx2 = x1[2] - x2[2];
   return std::sqrt(dx0 * dx0 + dx1 * dx1 + dx2 * dx2);
+
+
+
+double Calculations::calculateDistanceBetweenParticles(Particle *p1,
+                                                       Particle *p2) {
+  std::array<double, 3> x1 = p1->getX();
+  std::array<double, 3> x0 = p2->getX();
+  return calcDistance(x1, x2);
+}
+
+double Calculations::calculateDiffusion(std::vector<Particle> particles,
+                                        std::vector<Particle> prevParticles) {
+  double diffusion = 0;
+  for (int i = 0; i < particles.size(); i++) {
+    Particle currentParticle = particles.at(i);
+    Particle prevParticle = prevParticles.at(i);
+    diffusion +=
+        calculateDistanceBetweenParticles(&currentParticle, &prevParticle);
+    ;
+  }
+  return diffusion / particles.size();
+}
+
+std::vector<std::vector<double>>
+Calculations::computeDistances(std::vector<Particle> particles) {
+  int numParticles = particles.size();
+
+  // Initialize a 2D vector to store distances
+  std::vector<std::vector<double>> distances(
+      numParticles, std::vector<double>(numParticles, 0.0));
+
+  // Calculate pairwise distances and store them
+  for (int i = 0; i < numParticles; ++i) {
+    for (int j = i + 1; j < numParticles; ++j) {
+      double distance =
+          calculateDistanceBetweenParticles(&particles[i], &particles[j]);
+      distances[i][j] = distance;
+      distances[j][i] = distance; // Symmetric matrix
+      if (distance > maxDistance) {
+        maxDistance = distance;
+      }
+    }
+  }
+  return distances;
+}
+
+std::map<double, double>
+Calculations::calculateLocalDensities(const std::vector<Particle> particles,
+                                      double deltaR) {
+  std::vector<std::vector<double>> distances = computeDistances(particles);
+  std::map<double, double> localDensities;
+  int numIntervals = static_cast<int>(std::ceil(maxDistance / deltaR));
+  std::vector<int> intervalCounts(numIntervals, 0);
+  double currentDistance = 0.0;
+
+  for (size_t i = 0; i < distances.size(); ++i) {
+    for (size_t j = i + 1; j < distances[i].size(); ++j) {
+      currentDistance = distances[i][j];
+      int intervalIndex = static_cast<int>(currentDistance / deltaR);
+      if (intervalIndex < numIntervals) {
+        intervalCounts[intervalIndex]++;
+      }
+    }
+  }
+
+  double ri = 0.0;
+  for (int m = 0; m < numIntervals; ++m) {
+    ri = m * deltaR;
+    double volume = (4.0 / 3.0) * M_PI * (pow(ri + deltaR, 3) - pow(ri, 3));
+    double rdf = static_cast<double>(intervalCounts[m]) / volume;
+
+    // store the local density for interval ri
+    localDensities[ri] = rdf;
+  }
+
+  return localDensities;
+
 }

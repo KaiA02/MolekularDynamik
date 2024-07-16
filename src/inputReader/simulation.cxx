@@ -669,6 +669,54 @@ outputType (::std::unique_ptr< outputType_type > x)
   this->outputType_.set (std::move (x));
 }
 
+const output::statistics_optional& output::
+statistics () const
+{
+  return this->statistics_;
+}
+
+output::statistics_optional& output::
+statistics ()
+{
+  return this->statistics_;
+}
+
+void output::
+statistics (const statistics_type& x)
+{
+  this->statistics_.set (x);
+}
+
+void output::
+statistics (const statistics_optional& x)
+{
+  this->statistics_ = x;
+}
+
+const output::rdfIntervalSize_optional& output::
+rdfIntervalSize () const
+{
+  return this->rdfIntervalSize_;
+}
+
+output::rdfIntervalSize_optional& output::
+rdfIntervalSize ()
+{
+  return this->rdfIntervalSize_;
+}
+
+void output::
+rdfIntervalSize (const rdfIntervalSize_type& x)
+{
+  this->rdfIntervalSize_.set (x);
+}
+
+void output::
+rdfIntervalSize (const rdfIntervalSize_optional& x)
+{
+  this->rdfIntervalSize_ = x;
+}
+
 
 // config
 // 
@@ -2143,7 +2191,9 @@ output (const baseName_type& baseName,
 : ::xml_schema::type (),
   baseName_ (baseName, this),
   writeFrequency_ (writeFrequency, this),
-  outputType_ (outputType, this)
+  outputType_ (outputType, this),
+  statistics_ (this),
+  rdfIntervalSize_ (this)
 {
 }
 
@@ -2154,7 +2204,9 @@ output (const output& x,
 : ::xml_schema::type (x, f, c),
   baseName_ (x.baseName_, f, this),
   writeFrequency_ (x.writeFrequency_, f, this),
-  outputType_ (x.outputType_, f, this)
+  outputType_ (x.outputType_, f, this),
+  statistics_ (x.statistics_, f, this),
+  rdfIntervalSize_ (x.rdfIntervalSize_, f, this)
 {
 }
 
@@ -2165,7 +2217,9 @@ output (const ::xercesc::DOMElement& e,
 : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
   baseName_ (this),
   writeFrequency_ (this),
-  outputType_ (this)
+  outputType_ (this),
+  statistics_ (this),
+  rdfIntervalSize_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -2223,6 +2277,28 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // statistics
+    //
+    if (n.name () == "statistics" && n.namespace_ ().empty ())
+    {
+      if (!this->statistics_)
+      {
+        this->statistics_.set (statistics_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // rdfIntervalSize
+    //
+    if (n.name () == "rdfIntervalSize" && n.namespace_ ().empty ())
+    {
+      if (!this->rdfIntervalSize_)
+      {
+        this->rdfIntervalSize_.set (rdfIntervalSize_traits::create (i, f, this));
+        continue;
+      }
+    }
+
     break;
   }
 
@@ -2264,6 +2340,8 @@ operator= (const output& x)
     this->baseName_ = x.baseName_;
     this->writeFrequency_ = x.writeFrequency_;
     this->outputType_ = x.outputType_;
+    this->statistics_ = x.statistics_;
+    this->rdfIntervalSize_ = x.rdfIntervalSize_;
   }
 
   return *this;
