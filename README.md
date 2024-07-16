@@ -115,6 +115,6 @@ By Jannik Hoog, Joshua Vlajnic and Kai Arenja
 
 ## UML
 ![UML](images/UML.png)
-This is not a perfect UML diagramm, but maybe a rough overview
+This is not a perfect UML diagram, but maybe a rough overview
 
 
