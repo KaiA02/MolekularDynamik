@@ -21,6 +21,7 @@ private:
   double maxDistance = 0.0;
   double stiffness = 300;
   double avgBondLength = 2.2;
+  int ParallelStrategy = 0;
 
 public:
   Calculations();
@@ -57,6 +58,8 @@ public:
    * @param length is the avgBondLength
    */
   void setAvgBondLength(double length);
+
+  void setParallelStrategy(int strat);
 
   /**
    * @brief the following function calculates the gravitational force

@@ -198,3 +198,4 @@ int XMLReader::getNumberOfCuboids() { return sim->input().cuboids().size(); }
 
 int XMLReader::getNumberOfDisks() { return sim->input().disk().size(); }
 // int XMLReader::getNumberOfSpheres(){ return sim->input().spheres().size();}
+int XMLReader::getParallelStrategy() {return sim->input().ParallelStrategy();}

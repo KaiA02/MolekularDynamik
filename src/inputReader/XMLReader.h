@@ -126,6 +126,8 @@ public:
 
   xml_schema::boolean getStatisticsOn();
 
+  int getParallelStrategy();
+
 private:
   std::unique_ptr<simulation> sim;
 };
