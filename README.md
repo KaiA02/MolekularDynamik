@@ -104,7 +104,19 @@ xsdcxx cxx-tree --std c++11 /mnt/c/Users/jh/CLionProjects/Molekulardynamik/Assig
 
 ## explaination for realocateParticles in LCParticleContainer
 
-input: is an array of for integers that represent all 6 boundarys. each Integer can be 1(_outflow_ boundary) or 2(
-_refelcting_ boundary) or 3(_periodic_ boundary)
+
+## Parallel Strategies
+
+# Strategy 1: **OpenMP for Loops**
+  This strategy uses OpenMP to parallelize loops with #pragma omp parallel for. It is ideal for evenly distributed workloads, allowing multiple particles to be processed simultaneously, which enhances performance for large datasets.
+  Key Features:
+  -Simple implementation.
+  -Efficient for evenly distributed tasks.
+# Strategy 2: **OpenMP Task Parallelism**
+  This strategy employs OpenMP's task-based parallelism using #pragma omp task. It provides better load balancing and resource utilization, particularly for workloads that vary significantly.
+  Key Features:
+  -Handles uneven workloads efficiently.
+  -Uses dynamic task scheduling.
+  Set the ParallelStrategy variable in the Calculations class to switch between these strategies based on your simulation needs.
 
 

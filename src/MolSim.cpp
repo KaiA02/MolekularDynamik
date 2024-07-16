@@ -112,6 +112,7 @@ int main(int argc, char *argsv[]) {
   lcCaluclations.setG_grav(lcParticles.getG_grav());
   lcCaluclations.setSmoothLJ(smoothLJ);
   lcCaluclations.setR_L(r_l);
+  lcCaluclations.setParallelStrategy(xmlReader.getParallelStrategy());
   lcParticles.setUpEpsilonAndSigmas();
   spdlog::warn("Simulation started with parameters: start_time: {}, end_time: "
                "{}, delta_t: {}, temp_init: {}, temp_target: {}, smoothLJ: "

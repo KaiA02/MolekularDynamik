@@ -24,60 +24,148 @@ void Calculations::setSmoothLJ(bool SLJ) { smoothLJ = SLJ; }
 
 void Calculations::setR_L(double R_L) { r_l = R_L; }
 
+void Calculations::setParallelStrategy(int strat){ParallelStrategy = strat;}
+
 void Calculations::calculateX(double delta_t) {
+    switch (ParallelStrategy) {
+        case 0: // No parallel execution
+            for (size_t i = 0; i < particles.size(); ++i) {
+                auto &p = particles.getParticles()[i];
+                std::array<double, 3> X = p.getX();
+                std::array<double, 3> V = p.getV();
+                std::array<double, 3> F = p.getF();
+                double M = p.getM();
 
-  //#pragma omp parallel
-  //{
-    //std::array<double, 3> newPosition{};
-    //std::array<double, 3> X{};
-    //std::array<double, 3> V{};
-    //std::array<double, 3> F{};
-    //double M = 0;
+                std::array<double, 3> newPosition = {
+                    X[0] + delta_t * V[0] + delta_t * delta_t * (F[0] / (2 * M)),
+                    X[1] + delta_t * V[1] + delta_t * delta_t * (F[1] / (2 * M)),
+                    X[2] + delta_t * V[2] + delta_t * delta_t * (F[2] / (2 * M))
+                };
 
-    #pragma omp parallel for
-    for (size_t i = 0; i < particles.size(); ++i) {
-      auto &p = particles.getParticles()[i];
-      std::array<double, 3> X = p.getX();
-      std::array<double, 3> V = p.getV();
-      std::array<double, 3>F = p.getF();
-      double M = p.getM();
+                p.setX(newPosition);
+            }
+            break;
 
-      std::array<double, 3> newPosition = { X[0] + delta_t * V[0] + delta_t * delta_t * (F[0] / (2 * M)),
-                      X[1] + delta_t * V[1] + delta_t * delta_t * (F[1] / (2 * M)),
-                      X[2] + delta_t * V[2] + delta_t * delta_t * (F[2] / (2 * M))};
+        case 1: // Parallel execution using OpenMP for loops
+            #pragma omp parallel for
+            for (size_t i = 0; i < particles.size(); ++i) {
+                auto &p = particles.getParticles()[i];
+                std::array<double, 3> X = p.getX();
+                std::array<double, 3> V = p.getV();
+                std::array<double, 3> F = p.getF();
+                double M = p.getM();
 
-      p.setX(newPosition);
+                std::array<double, 3> newPosition = {
+                    X[0] + delta_t * V[0] + delta_t * delta_t * (F[0] / (2 * M)),
+                    X[1] + delta_t * V[1] + delta_t * delta_t * (F[1] / (2 * M)),
+                    X[2] + delta_t * V[2] + delta_t * delta_t * (F[2] / (2 * M))
+                };
+
+                p.setX(newPosition);
+            }
+            break;
+
+        case 2: // Parallel execution using OpenMP task parallelism
+            #pragma omp parallel
+            {
+                #pragma omp single
+                {
+                    for (size_t i = 0; i < particles.size(); ++i) {
+                        #pragma omp task firstprivate(i)
+                        {
+                            auto &p = particles.getParticles()[i];
+                            std::array<double, 3> X = p.getX();
+                            std::array<double, 3> V = p.getV();
+                            std::array<double, 3> F = p.getF();
+                            double M = p.getM();
+
+                            std::array<double, 3> newPosition = {
+                                X[0] + delta_t * V[0] + delta_t * delta_t * (F[0] / (2 * M)),
+                                X[1] + delta_t * V[1] + delta_t * delta_t * (F[1] / (2 * M)),
+                                X[2] + delta_t * V[2] + delta_t * delta_t * (F[2] / (2 * M))
+                            };
+
+                            p.setX(newPosition);
+                        }
+                    }
+                }
+            }
+            break;
+
+        default:
+            throw std::invalid_argument("Unknown parallel strategy");
     }
-  //}
-
 }
 
 void Calculations::calculateV(double delta_t) {
+    switch (ParallelStrategy) {
+        case 0: // No parallel execution
+            for (size_t i = 0; i < particles.size(); ++i) {
+                auto &p = particles.getParticles()[i];
+                std::array<double, 3> V = p.getV();
+                std::array<double, 3> F = p.getF();
+                std::array<double, 3> oldF = p.getOldF();
+                double M = p.getM();
 
-  //#pragma omp parallel
-  //{
-    //std::array<double, 3> newVelocity{};
-    //std::array<double, 3> V{};
-    //std::array<double, 3> F{};
-    //std::array<double, 3> oldF{};
-    //double M = 0;
+                std::array<double, 3> newVelocity = {
+                    V[0] + (delta_t / (2 * M)) * (F[0] + oldF[0]),
+                    V[1] + (delta_t / (2 * M)) * (F[1] + oldF[1]),
+                    V[2] + (delta_t / (2 * M)) * (F[2] + oldF[2])
+                };
 
-    #pragma omp parallel for
-    for (size_t i = 0; i < particles.size(); ++i) {
-      auto &p = particles.getParticles()[i];
-      std::array<double, 3> V = p.getV();
-      std::array<double, 3> F = p.getF();
-      std::array<double, 3> oldF = p.getOldF();
-      double M = p.getM();
+                p.setV(newVelocity);
+            }
+            break;
 
-      std::array<double, 3> newVelocity = { V[0] + delta_t * (F[0] + oldF[0]) / (2 * M),
-                      V[1] + delta_t * (F[1] + oldF[1]) / (2 * M),
-                      V[2] + delta_t * (F[2] + oldF[2]) / (2 * M)};
+        case 1: // Parallel execution using OpenMP for loops
+            #pragma omp parallel for
+            for (size_t i = 0; i < particles.size(); ++i) {
+                auto &p = particles.getParticles()[i];
+                std::array<double, 3> V = p.getV();
+                std::array<double, 3> F = p.getF();
+                std::array<double, 3> oldF = p.getOldF();
+                double M = p.getM();
 
-      p.setV(newVelocity);
+                std::array<double, 3> newVelocity = {
+                    V[0] + (delta_t / (2 * M)) * (F[0] + oldF[0]),
+                    V[1] + (delta_t / (2 * M)) * (F[1] + oldF[1]),
+                    V[2] + (delta_t / (2 * M)) * (F[2] + oldF[2])
+                };
+
+                p.setV(newVelocity);
+            }
+            break;
+
+        case 2: // Parallel execution using OpenMP task parallelism
+            #pragma omp parallel
+            {
+                #pragma omp single
+                {
+                    for (size_t i = 0; i < particles.size(); ++i) {
+                        #pragma omp task firstprivate(i)
+                        {
+                            auto &p = particles.getParticles()[i];
+                            std::array<double, 3> V = p.getV();
+                            std::array<double, 3> F = p.getF();
+                            std::array<double, 3> oldF = p.getOldF();
+                            double M = p.getM();
+
+                            std::array<double, 3> newVelocity = {
+                                V[0] + (delta_t / (2 * M)) * (F[0] + oldF[0]),
+                                V[1] + (delta_t / (2 * M)) * (F[1] + oldF[1]),
+                                V[2] + (delta_t / (2 * M)) * (F[2] + oldF[2])
+                            };
+
+                            p.setV(newVelocity);
+                        }
+                    }
+                }
+            }
+            break;
+
+        default:
+            throw std::invalid_argument("Unknown parallel strategy");
     }
-  //}
-
 }
 
 void Calculations::calculateF() {
@@ -105,64 +193,165 @@ void Calculations::calculateF() {
 }
 
 
-#pragma omp declare reduction(addArray : std::array<double, 3> : \
-omp_out[0] += omp_in[0], omp_out[1] += omp_in[1], omp_out[2] += omp_in[2]) \
-initializer(omp_priv = std::array<double, 3>{0, 0, 0})
-
 void Calculations::LCcalculateLJF(std::vector<Particle*> &center, std::vector<Particle> &other, std::vector<EpsilonSigma> EAndS) {
     if (center.size() > 1) {
         calculateLJFcenter(center, EAndS);
     }
 
     if (other.size() > 0) {
-        #pragma omp parallel
-        {
-            #pragma omp for nowait
-            for (size_t i = 0; i < center.size(); ++i) {
-                Particle* pi = center[i];
-                std::array<double, 3> newForcei = {0, 0, 0};
+        switch (ParallelStrategy) {
+            case 0: // No parallel execution
+                for (size_t i = 0; i < center.size(); ++i) {
+                    Particle* pi = center[i];
+                    std::array<double, 3> newForcei = {0, 0, 0};
 
-                for (size_t j = 0; j < other.size(); ++j) {
-                    Particle& pj = other[j];
-                    std::array<double, 3> f_ij{};
-                    double e = pi->getEpsilon();
-                    double s = pi->getSigma();
+                    for (size_t j = 0; j < other.size(); ++j) {
+                        Particle& pj = other[j];
+                        std::array<double, 3> f_ij{};
+                        double e = pi->getEpsilon();
+                        double s = pi->getSigma();
 
-                    if (pi->getType() == 0 && pj.getType() == 0) { // is Membrane
-                        if (!pi->isNeighbour(&pj)) {
-                            f_ij = decideForceMethod(pi, &pj, e, s);
-                        }
-                    } else {
-                        if (pi->getType() != pj.getType()) {
-                            for (auto& entry : EAndS) {
-                                if (entry.isRight(pi->getType(), pj.getType())) {
-                                    e = entry.getEpsilon();
-                                    s = entry.getSigma();
-                                    break;
+                        if (pi->getType() == 0 && pj.getType() == 0) { // is Membrane
+                            if (!pi->isNeighbour(&pj)) {
+                                f_ij = decideForceMethod(pi, &pj, e, s);
+                            }
+                        } else {
+                            if (pi->getType() != pj.getType()) {
+                                for (auto& entry : EAndS) {
+                                    if (entry.isRight(pi->getType(), pj.getType())) {
+                                        e = entry.getEpsilon();
+                                        s = entry.getSigma();
+                                        break;
+                                    }
                                 }
                             }
+                            f_ij = decideForceMethod(pi, &pj, e, s);
                         }
-                        f_ij = decideForceMethod(pi, &pj, e, s);
+
+                        newForcei[0] += f_ij[0];
+                        newForcei[1] += f_ij[1];
+                        newForcei[2] += f_ij[2];
                     }
 
-                    newForcei[0] += f_ij[0];
-                    newForcei[1] += f_ij[1];
-                    newForcei[2] += f_ij[2];
-                }
-
-                #pragma omp critical
-                {
                     auto force = pi->getF();
                     force[0] += newForcei[0];
                     force[1] += newForcei[1];
                     force[2] += newForcei[2];
                     pi->setF(force);
                 }
-            }
-        }
+                break;
 
+            case 1: // Parallel execution using OpenMP for loops
+                #pragma omp parallel
+                {
+                    #pragma omp for nowait
+                    for (size_t i = 0; i < center.size(); ++i) {
+                        Particle* pi = center[i];
+                        std::array<double, 3> newForcei = {0, 0, 0};
+
+                        for (size_t j = 0; j < other.size(); ++j) {
+                            Particle& pj = other[j];
+                            std::array<double, 3> f_ij{};
+                            double e = pi->getEpsilon();
+                            double s = pi->getSigma();
+
+                            if (pi->getType() == 0 && pj.getType() == 0) { // is Membrane
+                                if (!pi->isNeighbour(&pj)) {
+                                    f_ij = decideForceMethod(pi, &pj, e, s);
+                                }
+                            } else {
+                                if (pi->getType() != pj.getType()) {
+                                    for (auto& entry : EAndS) {
+                                        if (entry.isRight(pi->getType(), pj.getType())) {
+                                            e = entry.getEpsilon();
+                                            s = entry.getSigma();
+                                            break;
+                                        }
+                                    }
+                                }
+                                f_ij = decideForceMethod(pi, &pj, e, s);
+                            }
+
+                            newForcei[0] += f_ij[0];
+                            newForcei[1] += f_ij[1];
+                            newForcei[2] += f_ij[2];
+                        }
+
+                        #pragma omp critical
+                        {
+                            auto force = pi->getF();
+                            force[0] += newForcei[0];
+                            force[1] += newForcei[1];
+                            force[2] += newForcei[2];
+                            pi->setF(force);
+                        }
+                    }
+                }
+                break;
+
+            case 2: // Parallel execution using OpenMP task parallelism
+                #pragma omp parallel
+                {
+                    #pragma omp single
+                    {
+                        for (size_t i = 0; i < center.size(); ++i) {
+                            #pragma omp task firstprivate(i)
+                            {
+                                Particle* pi = center[i];
+                                std::array<double, 3> newForcei = {0, 0, 0};
+
+                                for (size_t j = 0; j < other.size(); ++j) {
+                                    Particle& pj = other[j];
+                                    std::array<double, 3> f_ij{};
+                                    double e = pi->getEpsilon();
+                                    double s = pi->getSigma();
+
+                                    if (pi->getType() == 0 && pj.getType() == 0) { // is Membrane
+                                        if (!pi->isNeighbour(&pj)) {
+                                            f_ij = decideForceMethod(pi, &pj, e, s);
+                                        }
+                                    } else {
+                                        if (pi->getType() != pj.getType()) {
+                                            for (auto& entry : EAndS) {
+                                                if (entry.isRight(pi->getType(), pj.getType())) {
+                                                    e = entry.getEpsilon();
+                                                    s = entry.getSigma();
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        f_ij = decideForceMethod(pi, &pj, e, s);
+                                    }
+
+                                    newForcei[0] += f_ij[0];
+                                    newForcei[1] += f_ij[1];
+                                    newForcei[2] += f_ij[2];
+                                }
+
+                                #pragma omp critical
+                                {
+                                    auto force = pi->getF();
+                                    force[0] += newForcei[0];
+                                    force[1] += newForcei[1];
+                                    force[2] += newForcei[2];
+                                    pi->setF(force);
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+
+            default:
+                throw std::invalid_argument("Unknown parallel strategy");
+        }
     }
 }
+
+
+
+
+
 
 void Calculations::calculateLJFcenter(std::vector<Particle *> &center,
                                       const std::vector<EpsilonSigma> EAndS) {
@@ -290,8 +479,7 @@ std::array<double, 3> Calculations::decideForceMethod(Particle *p1, Particle *p2
     }
 }
 
-std::vector<double>
-Calculations::calculateHarmonicForce(Particle *p1, Particle *p2, double r0) {
+std::vector<double> Calculations::calculateHarmonicForce(Particle *p1, Particle *p2, double r0) {
   std::array<double, 3> xi = p1->getX();
   std::array<double, 3> xj = p2->getX();
   std::vector<double> i_j = {xi[0] - xj[0], xi[1] - xj[1], xi[2] - xj[2]};
@@ -311,17 +499,18 @@ double Calculations::calcDistance(std::array<double, 3> x1, std::array<double, 3
   double dx2 = x1[2] - x2[2];
   return std::sqrt(dx0 * dx0 + dx1 * dx1 + dx2 * dx2);
 
-
-
-double Calculations::calculateDistanceBetweenParticles(Particle *p1,
-                                                       Particle *p2) {
-  std::array<double, 3> x1 = p1->getX();
-  std::array<double, 3> x0 = p2->getX();
-  return calcDistance(x1, x2);
 }
 
-double Calculations::calculateDiffusion(std::vector<Particle> particles,
-                                        std::vector<Particle> prevParticles) {
+double Calculations::calculateDistanceBetweenParticles(Particle *p1, Particle *p2) {
+  std::array<double, 3> x1 = p1->getX();
+  std::array<double, 3> x2 = p2->getX();
+  double dx0 = x1[0] - x2[0];
+  double dx1 = x1[1] - x2[1];
+  double dx2 = x1[2] - x2[2];
+  return std::sqrt(dx0 * dx0 + dx1 * dx1 + dx2 * dx2);
+}
+
+double Calculations::calculateDiffusion(std::vector<Particle> particles,std::vector<Particle> prevParticles) {
   double diffusion = 0;
   for (int i = 0; i < particles.size(); i++) {
     Particle currentParticle = particles.at(i);
@@ -333,8 +522,7 @@ double Calculations::calculateDiffusion(std::vector<Particle> particles,
   return diffusion / particles.size();
 }
 
-std::vector<std::vector<double>>
-Calculations::computeDistances(std::vector<Particle> particles) {
+std::vector<std::vector<double>> Calculations::computeDistances(std::vector<Particle> particles) {
   int numParticles = particles.size();
 
   // Initialize a 2D vector to store distances
@@ -356,9 +544,7 @@ Calculations::computeDistances(std::vector<Particle> particles) {
   return distances;
 }
 
-std::map<double, double>
-Calculations::calculateLocalDensities(const std::vector<Particle> particles,
-                                      double deltaR) {
+std::map<double, double> Calculations::calculateLocalDensities(const std::vector<Particle> particles, double deltaR) {
   std::vector<std::vector<double>> distances = computeDistances(particles);
   std::map<double, double> localDensities;
   int numIntervals = static_cast<int>(std::ceil(maxDistance / deltaR));

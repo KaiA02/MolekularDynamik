@@ -4,6 +4,7 @@
         <tStart>0.0</tStart>
         <tEnd>100</tEnd>
         <deltaT>0.0005</deltaT>
+        <ParallelStrategy>1</ParallelStrategy>
         <smoothLJ>false</smoothLJ>
         <particleContainerType>LC</particleContainerType>
         <r_cutoff>3.6</r_cutoff>

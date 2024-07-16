@@ -28,6 +28,8 @@
         <baseName>simulation_output</baseName>
         <writeFrequency>100</writeFrequency>
         <outputType>vtk</outputType>
+        <statistics>true</statistics>
+        <rdfIntervalSize>1</rdfIntervalSize>
     </output>
     <config>
         <performanceMeasurement>false</performanceMeasurement>
