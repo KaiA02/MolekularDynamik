@@ -96,29 +96,20 @@
   #-r für ganzen ordner  
   scp -r di57yey@lxlogin1.lrz.de:MolekularDynamik/output "zielquelle" (z.B. /Users/kaiarenja/Desktop/)
 
-# create new c++ classes from xsd file:
-
-xsdcxx cxx-tree --std c++11 /mnt/c/Users/joshu/CLionProjects/MolekularDynamik/src/inputReader/simulation.xsd
-xsdcxx cxx-tree --std c++11 /home/kaiarenja/CLionProjects/MolekularDynamik/src/inputReader/simulation.xsd  
-xsdcxx cxx-tree --std c++11 /mnt/c/Users/jh/CLionProjects/Molekulardynamik/Assignment5/src/inputReader/simulation.xsd
-
-## explaination for realocateParticles in LCParticleContainer
-
-
 ## Parallel Strategies
 
-# Strategy 1: **OpenMP for Loops**
+### Strategy 1: **OpenMP for Loops**
   This strategy uses OpenMP to parallelize loops with #pragma omp parallel for. It is ideal for evenly distributed workloads, allowing multiple particles to be processed simultaneously, which enhances performance for large datasets.
   Key Features:
   -Simple implementation.
   -Efficient for evenly distributed tasks.
-# Strategy 2: **OpenMP Task Parallelism**
+### Strategy 2: **OpenMP Task Parallelism**
   This strategy employs OpenMP's task-based parallelism using #pragma omp task. It provides better load balancing and resource utilization, particularly for workloads that vary significantly.
   Key Features:
   -Handles uneven workloads efficiently.
   -Uses dynamic task scheduling.
   Set the ParallelStrategy variable in the Calculations class to switch between these strategies based on your simulation needs.
-# HowToDo:
+### HowToDo:
   to use the Parallel Strategy you specify your Choice in the input in the ParallelStrategy Variable. 0 => no Strategy, 1 => Strategy1, 2 => Strategy2. After this you call for example: OMP_NUM_THREADS=14 ./MolSim ../input/eingabe-Rayleigh-Taylor-3D.xml
 
 
