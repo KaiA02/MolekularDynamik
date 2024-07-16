@@ -118,5 +118,8 @@ xsdcxx cxx-tree --std c++11 /mnt/c/Users/jh/CLionProjects/Molekulardynamik/Assig
   -Handles uneven workloads efficiently.
   -Uses dynamic task scheduling.
   Set the ParallelStrategy variable in the Calculations class to switch between these strategies based on your simulation needs.
+# to use the Parallel Strategy you specify your Choice in the input in the ParallelStrategy Variable. 0 => no Strategy, 1 => Strategy1, 2 => Strategy2. After this you call for example: OMP_NUM_THREADS=14 ./MolSim ../input/eingabe-Rayleigh-Taylor-3D.xml
+
+
 
 
