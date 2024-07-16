@@ -1,7 +1,8 @@
 # MolSim
 =========
 
-"GroupB"
+"GroupB"  
+By Jannik Hoog, Joshua Vlajnic and Kai Arenja
 
 ## Program Execution:
 
@@ -112,6 +113,8 @@
 ### HowToDo:
   to use the Parallel Strategy you specify your Choice in the input in the ParallelStrategy Variable. 0 => no Strategy, 1 => Strategy1, 2 => Strategy2. After this you call for example: OMP_NUM_THREADS=14 ./MolSim ../input/eingabe-Rayleigh-Taylor-3D.xml
 
-
+## UML
+![UML](images/UML.png)
+This is not a perfect UML diagramm, but maybe a rough overview
 
 
