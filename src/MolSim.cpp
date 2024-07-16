@@ -192,6 +192,9 @@ int main(int argc, char *argsv[]) {
           displayProgressBar(progress, totalIterations, start);
         }
       }
+      if (iteration % 10 == 0) {
+        displayProgressBar(progress, totalIterations, start);
+      }
       progress++;
       current_time += delta_t;
     }

@@ -2,7 +2,7 @@
             xsi:noNamespaceSchemaLocation="../src/inputReader/simulation.xsd">
     <input>
         <tStart>0.0</tStart>
-        <tEnd>100</tEnd>
+        <tEnd>0.1</tEnd>
         <deltaT>0.0005</deltaT>
         <ParallelStrategy>1</ParallelStrategy>
         <smoothLJ>false</smoothLJ>
@@ -71,7 +71,7 @@
         <outputType>vtk</outputType>
     </output>
     <config>
-        <performanceMeasurement>false</performanceMeasurement>
+        <performanceMeasurement>true</performanceMeasurement>
         <logLevel>warn</logLevel>
     </config>
 </simulation>
