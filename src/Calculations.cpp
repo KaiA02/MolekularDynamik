@@ -204,21 +204,21 @@ void Calculations::LCcalculateLJF(std::vector<Particle*> &center, std::vector<Pa
                 for (size_t i = 0; i < center.size(); ++i) {
                     Particle* pi = center[i];
                     std::array<double, 3> newForcei = {0, 0, 0};
-
+                    int typeI = pi->getType();
                     for (size_t j = 0; j < other.size(); ++j) {
                         Particle& pj = other[j];
                         std::array<double, 3> f_ij{};
                         double e = pi->getEpsilon();
                         double s = pi->getSigma();
-
-                        if (pi->getType() == 0 && pj.getType() == 0) { // is Membrane
+                        int typeJ = pj.getType();
+                        if (typeI == 0 && typeJ == 0) { // is Membrane
                             if (!pi->isNeighbour(&pj)) {
                                 f_ij = decideForceMethod(pi, &pj, e, s);
                             }
                         } else {
-                            if (pi->getType() != pj.getType()) {
+                            if (typeI != typeJ) {
                                 for (auto& entry : EAndS) {
-                                    if (entry.isRight(pi->getType(), pj.getType())) {
+                                    if (entry.isRight(typeI, typeJ)) {
                                         e = entry.getEpsilon();
                                         s = entry.getSigma();
                                         break;
@@ -248,21 +248,21 @@ void Calculations::LCcalculateLJF(std::vector<Particle*> &center, std::vector<Pa
                     for (size_t i = 0; i < center.size(); ++i) {
                         Particle* pi = center[i];
                         std::array<double, 3> newForcei = {0, 0, 0};
-
+                        int typeI = pi->getType();
                         for (size_t j = 0; j < other.size(); ++j) {
                             Particle& pj = other[j];
                             std::array<double, 3> f_ij{};
                             double e = pi->getEpsilon();
                             double s = pi->getSigma();
-
-                            if (pi->getType() == 0 && pj.getType() == 0) { // is Membrane
+                            int typeJ = pj.getType();
+                            if (typeI == 0 && typeJ == 0) { // is Membrane
                                 if (!pi->isNeighbour(&pj)) {
                                     f_ij = decideForceMethod(pi, &pj, e, s);
                                 }
                             } else {
-                                if (pi->getType() != pj.getType()) {
+                                if (typeI != typeJ) {
                                     for (auto& entry : EAndS) {
-                                        if (entry.isRight(pi->getType(), pj.getType())) {
+                                        if (entry.isRight(typeI, typeJ)) {
                                             e = entry.getEpsilon();
                                             s = entry.getSigma();
                                             break;
@@ -363,6 +363,7 @@ void Calculations::calculateLJFcenter(std::vector<Particle *> &center,
   Particle* pk;
   for (size_t i = 0; i < center.size() - 1; ++i) {
     pi = center.at(i);
+
     for (size_t j = i + 1; j < center.size(); ++j) {
       pk = center.at(j);
       if(pi->getType() == 0 && pk->getType() == 0) {
@@ -462,21 +463,21 @@ std::array<double, 3> Calculations::calculateSmoothLJF(Particle *p1,
   return f_ij;
 }
 
-std::array<double, 3> Calculations::decideForceMethod(Particle *p1, Particle *p2, double e, double s) {
-    if(smoothLJ) {
-        std::array<double,3> x1 = p1->getX();
-        std::array<double,3> x2 = p2->getX();
-        double distance = calcDistance(x1, x2);
-        if(distance <= r_l) {
-            return calculateLJF(p1, p2, e, s);
-        } else if(r_l <= distance && distance <= r_cutoff) {
-            return calculateSmoothLJF(p1, p2, e, s);
-        } else {
-            return {0.0,0.0,0.0};
-        }
-    }else {
+std::array<double, 3> Calculations::decideForceMethod(Particle* p1, Particle* p2, double e, double s) {
+    if (!smoothLJ) {
         return calculateLJF(p1, p2, e, s);
     }
+    const auto& x1 = p1->getX();
+    const auto& x2 = p2->getX();
+    double distance = calcDistance(x1, x2);
+
+    if (distance <= r_l) {
+        return calculateLJF(p1, p2, e, s);
+    } else if (distance <= r_cutoff) {
+        return calculateSmoothLJF(p1, p2, e, s);
+    }
+
+    return {0.0, 0.0, 0.0};
 }
 
 std::vector<double> Calculations::calculateHarmonicForce(Particle *p1, Particle *p2, double r0) {
