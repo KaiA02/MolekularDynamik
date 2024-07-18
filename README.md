@@ -16,6 +16,7 @@
 7. [Parallel Strategies](#parallel-strategies)
    - [Strategy 1](#strategy-1-openmp-for-loops)
    - [Strategy 2](#strategy-2-openmp-task-parallelism)
+   - [HowTo](#howto)
 8. [UML](#uml)
 
 ## Program Execution
@@ -68,7 +69,8 @@
 ## Checkpoints
 
 - after every simulation a new file Output.txt is created in the Input directory
-- in case you want to build your new Simulation on top of another simulation, you can also input this output.txt file at
+- in case you want to build your new Simulation on top of another simulation,  
+  you can also input this output.txt file at
   the end of your console input.
 - Step by step:
     - first call first simulation: **./MolSim ../input/eingabe-equilibrium.xml**
@@ -78,18 +80,29 @@
 ## Parallel Strategies
 
 ### Strategy 1: **OpenMP for Loops**
-  This strategy uses OpenMP to parallelize loops with #pragma omp parallel for. It is ideal for evenly distributed workloads, allowing multiple particles to be processed simultaneously, which enhances performance for large datasets.
-  Key Features:
-  -Simple implementation.
-  -Efficient for evenly distributed tasks.
+This strategy uses OpenMP to parallelize loops with #pragma omp parallel for.   
+It is ideal for evenly distributed workloads, allowing multiple particles to be processed simultaneously,  
+which enhances performance for large datasets. 
+  
+Key Features:    
+   - Simple implementation.  
+   - Efficient for evenly distributed tasks.      
 ### Strategy 2: **OpenMP Task Parallelism**
-  This strategy employs OpenMP's task-based parallelism using #pragma omp task. It provides better load balancing and resource utilization, particularly for workloads that vary significantly.
-  Key Features:
-  -Handles uneven workloads efficiently.
-  -Uses dynamic task scheduling.
-  Set the ParallelStrategy variable in the Calculations class to switch between these strategies based on your simulation needs.
-### HowToDo:
-  to use the Parallel Strategy you specify your Choice in the input in the ParallelStrategy Variable. 0 => no Strategy, 1 => Strategy1, 2 => Strategy2. After this you call for example: OMP_NUM_THREADS=14 ./MolSim ../input/eingabe-Rayleigh-Taylor-3D.xml
+This strategy employs OpenMP's task-based parallelism using #pragma omp task.   
+It provides better load balancing and resource utilization, particularly for workloads that vary significantly.  
+  
+Key Features:    
+   - Handles uneven workloads efficiently.  
+   - Uses dynamic task scheduling.
+### HowTo:
+Set the ParallelStrategy variable in the Calculations class to switch between these strategies based on your simulation needs  
+  
+to use the Parallel Strategy you specify your Choice in the input in the ParallelStrategy Variable.   
+0 => no Strategy,  
+1 => Strategy1,   
+2 => Strategy2.   
+  
+After this you call for example: OMP_NUM_THREADS=14 ./MolSim ../input/eingabe-Rayleigh-Taylor-3D.xml
 
 ## UML
 ![UML](images/UML.png)
