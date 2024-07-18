@@ -175,3 +175,61 @@ TEST(CalculationsTest, TestCalculateHarmonicForceNormal) {
         EXPECT_NEAR(pc.getParticles().at(1).getF()[i], f1[i], tolerance);
     }
 }
+
+TEST(CalculationsTest, CalculateLocalDensitiesWithTwoCloseParticlesReturnsCorrectDensity) {
+    std::vector<Particle> particles = {Particle({0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, 0, 0), Particle({1.0, 1.0, 1.0}, {0.0, 0.0, 0.0}, 0, 0)};
+    ParticleContainer container; // Corrected class name
+    Calculations calc(container);
+    double deltaR = 2.0;
+    auto densities = calc.calculateLocalDensities(particles, deltaR);
+    ASSERT_NEAR(densities.begin()->second, 0.029,0.001);
+}
+
+TEST(CalculationsTest, CalculateLocalDensitiesWithParticlesFarApartReturnsZeroDensity) {
+    std::vector<Particle> particles = {Particle({0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, 0, 0), Particle({100.0, 100.0, 100.0}, {0.0, 0.0, 0.0}, 0, 0)};
+    ParticleContainer container;
+    Calculations calc(container);
+    double deltaR = 1.0;
+    auto densities = calc.calculateLocalDensities(particles, deltaR);
+    ASSERT_EQ(densities.begin()->second, 0);
+}
+
+TEST(CalculationsTest, CalculateDiffusionWithIdenticalParticlePositionsReturnsZero) {
+    std::vector<Particle> currentParticles = {
+        Particle({0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, 0, 0),
+        Particle({1.0, 1.0, 1.0}, {0.0, 0.0, 0.0}, 0, 0)
+    };
+    std::vector<Particle> previousParticles = {
+        Particle({0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, 0, 0),
+        Particle({1.0, 1.0, 1.0}, {0.0, 0.0, 0.0}, 0, 0)
+    };
+    double diffusion = Calculations::calculateDiffusion(currentParticles, previousParticles);
+    EXPECT_EQ(diffusion, 0.0);
+}
+
+TEST(CalculationsTest, CalculateDiffusionWithDifferentParticlePositionsReturnsNonZero) {
+    std::vector<Particle> currentParticles = {
+        Particle({0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, 0, 0),
+        Particle({1.0, 1.0, 1.0}, {0.0, 0.0, 0.0}, 0, 0)
+    };
+    std::vector<Particle> previousParticles = {
+        Particle({1.0, 1.0, 1.0}, {0.0, 0.0, 0.0}, 0, 0),
+        Particle({3.0, 3.0, 3.0}, {0.0, 0.0, 0.0}, 0, 0)
+    };
+    double diffusion = Calculations::calculateDiffusion(currentParticles, previousParticles);
+    EXPECT_NEAR(diffusion, 2.59, 0.01);
+}
+
+TEST(CalculationsTest, CalculateDistanceBetweenParticlesWithIdenticalPositionsReturnsZero) {
+    Particle p1({0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, 0, 0);
+    Particle p2({0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, 0, 0);
+    double distance = Calculations::calculateDistanceBetweenParticles(&p1, &p2);
+    EXPECT_DOUBLE_EQ(distance, 0.0);
+}
+
+TEST(CalculationsTest, CalculateDistanceBetweenParticlesWithDifferentPositionsReturnsCorrectValue) {
+    Particle p1({0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, 0, 0);
+    Particle p2({3.0, 4.0, 0.0}, {0.0, 0.0, 0.0}, 0, 0);
+    double distance = Calculations::calculateDistanceBetweenParticles(&p1, &p2);
+    EXPECT_NEAR(distance, 5.0, 0.0001);
+}

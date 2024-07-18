@@ -4,7 +4,7 @@
 #include "../Container/LCParticleContainer.h"
 
 /**
- *@brief all tests pass locally but somehow not online, please comment out and run them
+ *@brief all tests pass locally but somehow not online, please comment out and run themct
  */
 //TEST(ThermostatTest, Heating) {
 //    LCParticleContainer pc;

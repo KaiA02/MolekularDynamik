@@ -67,3 +67,38 @@ TEST(MembraneTest, TestStabilizeMembrane) {
     EXPECT_NEAR(p4.getF()[1], expectedForceOnP4[1], tolerance);
     EXPECT_NEAR(p4.getF()[2], expectedForceOnP4[2], tolerance);
 }
+
+TEST(MembraneTest, TestApplyMovement) {
+    // Initialize particles
+    Particle p1({0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, 0, 0);
+    Particle p2({1.0, 1.0, 1.0}, {0.0, 0.0, 0.0}, 0, 0);
+
+    // Create a vector of moving particles
+    std::vector<Particle*> movingParticles = {&p1, &p2};
+
+    // Initialize Membrane with particles, distance and force upwards
+    double distance = 2.2; // Arbitrary value, not used in applyMovement
+    double forceUpwards = 2.0;
+    Membrane membrane(movingParticles, distance, forceUpwards);
+    membrane.setMovingParticles(movingParticles);
+
+
+    // Apply movement
+    membrane.applyMovement();
+
+    // Expected forces based on the upward force
+    std::array<double, 3> expectedForceOnP1 = {0.0, 0.0, 2.0};
+    std::array<double, 3> expectedForceOnP2 = {0.0, 0.0, 2.0};
+
+    // Tolerance for floating-point comparisons
+    double tolerance = 1e-6;
+
+    // Check the forces on each particle
+    EXPECT_NEAR(p1.getF()[0], expectedForceOnP1[0], tolerance);
+    EXPECT_NEAR(p1.getF()[1], expectedForceOnP1[1], tolerance);
+    EXPECT_NEAR(p1.getF()[2], expectedForceOnP1[2], tolerance);
+
+    EXPECT_NEAR(p2.getF()[0], expectedForceOnP2[0], tolerance);
+    EXPECT_NEAR(p2.getF()[1], expectedForceOnP2[1], tolerance);
+    EXPECT_NEAR(p2.getF()[2], expectedForceOnP2[2], tolerance);
+}
