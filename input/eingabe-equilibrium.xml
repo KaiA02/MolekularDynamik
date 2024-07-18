@@ -4,6 +4,7 @@
         <tStart>0.0</tStart>
         <tEnd>1.0</tEnd>
         <deltaT>0.0005</deltaT>
+        <ParallelStrategy>0</ParallelStrategy>
         <smoothLJ>false</smoothLJ>
         <particleContainerType>LC</particleContainerType>
         <r_cutoff>3</r_cutoff>
@@ -42,7 +43,6 @@
             <distance>1.2</distance>
             <meanVelocity>0.1</meanVelocity>
             <dimension>3</dimension>
-            <isMembrane>NO</isMembrane>
         </cuboids>
 
     </input>

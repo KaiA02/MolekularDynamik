@@ -4,6 +4,7 @@
         <tStart>0.0</tStart>
         <tEnd>50</tEnd>
         <deltaT>0.01</deltaT>
+        <ParallelStrategy>0</ParallelStrategy>
         <smoothLJ>false</smoothLJ>
         <particleContainerType>LC</particleContainerType>
         <r_cutoff>4.0</r_cutoff>
@@ -45,6 +46,14 @@
             <epsilon>1</epsilon>
             <sigma>1</sigma>
         </particles>
+        <cuboids>
+            <n1>8</n1>
+            <n2>8</n2>
+            <n3>8</n3>
+            <distance>1.15</distance>
+            <meanVelocity>0.1</meanVelocity>
+            <dimension>3</dimension>
+        </cuboids>
         <membrane>
             <n1>50</n1>
             <n2>50</n2>
@@ -61,14 +70,6 @@
             <id4a>18</id4a>
             <id4b>25</id4b>
         </membrane>
-        <cuboids>
-            <n1>8</n1>
-            <n2>8</n2>
-            <n3>8</n3>
-            <distance>1.15</distance>
-            <meanVelocity>0.1</meanVelocity>
-            <dimension>3</dimension>
-        </cuboids>
 
     </input>
     <output>

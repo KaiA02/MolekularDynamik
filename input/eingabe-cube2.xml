@@ -4,6 +4,7 @@
         <tStart>0.0</tStart>
         <tEnd>5.0</tEnd>
         <deltaT>0.005</deltaT>
+        <ParallelStrategy>0</ParallelStrategy>
         <smoothLJ>false</smoothLJ>
         <particleContainerType>LC</particleContainerType>
         <r_cutoff>3.0</r_cutoff>
@@ -45,7 +46,6 @@
             <epsilon>1</epsilon>
             <sigma>1</sigma>
 
-            <!-- Add more particle elements as needed -->
         </particles>
         <cuboids>
 
@@ -66,7 +66,6 @@
             <meanVelocity>0.1</meanVelocity>
             <dimension>3.0</dimension>
 
-            <!-- Add more cuboid elements as needed -->
         </cuboids>
     </input>
     <output>

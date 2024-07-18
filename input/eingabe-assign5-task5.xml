@@ -4,9 +4,11 @@
         <tStart>0.0</tStart>
         <tEnd>150</tEnd>
         <deltaT>0.001</deltaT>
-        <inputType>LJF</inputType>
+        <ParallelStrategy>0</ParallelStrategy>
+        <smoothLJ>false</smoothLJ>
         <particleContainerType>LC</particleContainerType>
         <r_cutoff>2.3</r_cutoff>
+        <r_l>0</r_l>
         <domainSizeX>10</domainSizeX>
         <domainSizeY>10</domainSizeY>
         <domainSizeZ>10</domainSizeZ>
