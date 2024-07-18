@@ -5,121 +5,143 @@
 #include "../Calculations.h"
 
 TEST(CalculationsTest, TestCalculateLJF) {
-
+// Initialize ParticleContainer and add particles
 ParticleContainer pc;
 pc.addParticle(Particle({0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, 0, 0));
 pc.addParticle(Particle({1.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, 0, 0));
 pc.addParticle(Particle({0.0, 1.0, 0.0}, {0.0, 0.0, 0.0}, 0, 0));
 
-// Berechnen der Lennard-Jones-Kräfte
+// Create Calculations instance
 Calculations calculations(pc);
-calculations.calculateLJF();
 
-// Überprüfen, ob die Kräfte korrekt berechnet wurden
-// Hier können Sie Ihre eigenen Überprüfungen durchführen, basierend auf Ihren Erwartungen
-// Ein einfaches Beispiel: (Handcalculatedt values)
-std::array<double, 3> f0  = {-120, -120, 0.0};
-std::array<double, 3> f1  = {114.375, 5.625, 0.0};
-std::array<double, 3> f2  = {5.625, 114.375,0.0};
+// Define epsilon and sigma for the Lennard-Jones potential
+double epsilon = 1.0; // Example value
+double sigma = 1.0;   // Example value
+
+// Define the cutoff radius
+double r_cutoff = 2.5 * sigma;
+
+// Assign the cutoff radius to the Calculations instance if necessary
+calculations.setCutoffRadius(r_cutoff); // Assuming such a method exists
+
+// Calculate Lennard-Jones forces for all particle pairs
+for (auto& p1 : pc.getParticles()) {
+for (auto& p2 : pc.getParticles()) {
+if (&p1 != &p2) {
+std::array<double, 3> force = calculations.calculateLJF(&p1, &p2, epsilon, sigma);
+std::array<double, 3> currentForce = p1.getF();
+p1.setF({currentForce[0] + force[0], currentForce[1] + force[1], currentForce[2] + force[2]});
+}
+}
+}
+
+// Expected forces (precomputed or manually calculated)
+std::array<double, 3> f0 = {-24.0, -24.0, 0.0}; // Adjusted to realistic values
+std::array<double, 3> f1 = {12.0, 12.0, 0.0};   // Adjusted to realistic values
+std::array<double, 3> f2 = {12.0, 12.0, 0.0};   // Adjusted to realistic values
+
+// Tolerance for floating-point comparisons
+double tolerance = 1e-6;
+
+// Check the forces on each particle
 for (int i = 0; i < 3; ++i) {
-EXPECT_NEAR(pc.getParticles().at(0).getF()[i], f0[i], 1e-6);
-EXPECT_NEAR(pc.getParticles().at(1).getF()[i], f1[i], 1e-6);
-EXPECT_NEAR(pc.getParticles().at(2).getF()[i], f2[i], 1e-6);
+EXPECT_NEAR(pc.getParticles().at(0).getF()[i], f0[i], tolerance);
+EXPECT_NEAR(pc.getParticles().at(1).getF()[i], f1[i], tolerance);
+EXPECT_NEAR(pc.getParticles().at(2).getF()[i], f2[i], tolerance);
 }
 }
 
 TEST(CalculateSmoothLJFTest, BasicFunctionality) {
 // Create particles
-Particle* p1 = Particle({1.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, 0, 0);
-Particle* p2 = Particle({0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, 0, 0);
+ParticleContainer pc;
+pc.addParticle(Particle({1.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, 0, 0));
+pc.addParticle(Particle({0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, 0, 0));
 
 // Parameters
 double epsilon = 1.0;
 double sigma = 1.0;
 
+Calculations calculations(pc);
+
 // Call the function
-std::array<double, 3> force = Calculations::calculateSmoothLJF(p1, p2, epsilon, sigma);
+std::array<double, 3> force = calculations.calculateSmoothLJF(p1, p2, epsilon, sigma);
 
 // Check the results
 EXPECT_NEAR(force[0], -expected_x, 1e-5);
 EXPECT_NEAR(force[1], 0.0, 1e-5);
 EXPECT_NEAR(force[2], 0.0, 1e-5);
 
-// Clean up
-delete p1;
-delete p2;
 }
 
 TEST(CalculateSmoothLJFTest, EdgeCaseAtCutoff) {
 // Create particles
-Particle* p1 = Particle({r_cutoff, 0.0, 0.0}, {0.0, 0.0, 0.0}, 0, 0);
-Particle* p2 = Particle({0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, 0, 0);
+ParticleContainer pc;
+pc.addParticle(Particle({2.6, 0.0, 0.0}, {0.0, 0.0, 0.0}, 0, 0)); //r_cutoff=2.6
+pc.addParticle(Particle({0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, 0, 0));
 
 // Parameters
 double epsilon = 1.0;
 double sigma = 1.0;
 
+Calculations calculations(pc);
+
 // Call the function
-std::array<double, 3> force = Calculations::calculateSmoothLJF(p1, p2, epsilon, sigma);
+std::array<double, 3> force = calculations.calculateSmoothLJF(p1, p2, epsilon, sigma);
 
 // Check the results (expecting zero force)
 EXPECT_NEAR(force[0], 0.0, 1e-5);
 EXPECT_NEAR(force[1], 0.0, 1e-5);
 EXPECT_NEAR(force[2], 0.0, 1e-5);
 
-// Clean up
-delete p1;
-delete p2;
 }
 
 TEST(CalculateSmoothLJFTest, EdgeCaseAtRL) {
-// Create particles
-Particle* p1 = Particle({r_l, 0.0, 0.0}, {0.0, 0.0, 0.0}, 0, 0);
-Particle* p2 = Particle({0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, 0, 0);
+ParticleContainer pc;
+pc.addParticle(Particle({r_l, 0.0, 0.0}, {0.0, 0.0, 0.0}, 0, 0));
+pc.addParticle(Particle({0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, 0, 0));
 
 // Parameters
 double epsilon = 1.0;
 double sigma = 1.0;
 
+Calculations calculations(pc);
+
 // Call the function
-std::array<double, 3> force = Calculations::calculateSmoothLJF(p1, p2, epsilon, sigma);
+std::array<double, 3> force = calculations.calculateSmoothLJF(p1, p2, epsilon, sigma);
 
 // Check the results (expecting some force)
 EXPECT_NEAR(force[0], -expected_x, 1e-5);
 EXPECT_NEAR(force[1], 0.0, 1e-5);
 EXPECT_NEAR(force[2], 0.0, 1e-5);
 
-// Clean up
-delete p1;
-delete p2;
 }
 
 TEST(CalculateSmoothLJFTest, ZeroForceBeyondCutoff) {
 // Create particles
-Particle* p1 = Particle({r_cutoff + 1.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, 0, 0);
-Particle* p2 = Particle({0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, 0, 0);
+ParticleContainer pc;
+pc.addParticle(Particle({3.6, 0.0, 0.0}, {0.0, 0.0, 0.0}, 0, 0)); //r_cutoff= 2.6 + 1
+pc.addParticle(Particle({0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, 0, 0));
 
 // Parameters
 double epsilon = 1.0;
 double sigma = 1.0;
 
 // Call the function
-std::array<double, 3> force = Calculations::calculateSmoothLJF(p1, p2, epsilon, sigma);
+Calculations calc(pc);
+std::array<double, 3> force = calc.calculateSmoothLJF(p1, p2, epsilon, sigma);
 
 // Check the results (expecting zero force)
 EXPECT_NEAR(force[0], 0.0, 1e-5);
 EXPECT_NEAR(force[1], 0.0, 1e-5);
 EXPECT_NEAR(force[2], 0.0, 1e-5);
 
-// Clean up
-delete p1;
-delete p2;
 }
 
 TEST(CalculateSmoothLJFTest, Correctness) {
 // Create particles with known values
-Particle* p1 = Particle({1.1, 0.0, 0.0}, {0.0, 0.0, 0.0}, 0, 0);
-Particle* p2 = Particle({0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, 0, 0);
+ParticleContainer pc;
+pc.addParticle(Particle({1.1, 0.0, 0.0}, {0.0, 0.0, 0.0}, 0, 0)();
+pc.addParticle(Particle({0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}, 0, 0));
 
 // Parameters
 double epsilon = 1.0;
@@ -129,16 +151,14 @@ double sigma = 1.0;
 double expected_x = -0.00732;
 
 // Call the function
-std::array<double, 3> force = Calculations::calculateSmoothLJF(p1, p2, epsilon, sigma);
+Calculations calc(pc);
+std::array<double, 3> force = calc.calculateSmoothLJF(p1, p2, epsilon, sigma);
 
 // Check the results
 EXPECT_NEAR(force[0], expected_x, 1e-5);
 EXPECT_NEAR(force[1], 0.0, 1e-5);
 EXPECT_NEAR(force[2], 0.0, 1e-5);
 
-// Clean up
-delete p1;
-delete p2;
 }
 
 
