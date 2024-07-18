@@ -4,6 +4,7 @@
         <tStart>0.0</tStart>
         <tEnd>100</tEnd>
         <deltaT>0.001</deltaT>
+        <ParallelStrategy>0</ParallelStrategy>
         <smoothLJ>true</smoothLJ>
         <particleContainerType>LC</particleContainerType>
         <r_cutoff>2.3</r_cutoff>
@@ -28,6 +29,8 @@
         <baseName>simulation_output</baseName>
         <writeFrequency>100</writeFrequency>
         <outputType>vtk</outputType>
+        <statistics>true</statistics>
+        <rdfIntervalSize>1</rdfIntervalSize>
     </output>
     <config>
         <performanceMeasurement>false</performanceMeasurement>
