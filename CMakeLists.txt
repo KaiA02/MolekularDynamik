@@ -124,6 +124,7 @@ add_executable(
         src/Plots/Ass5Task5Diffusion.cpp
         src/Plots/Ass5Task5RDF.cpp
         src/Plots/Ass5Task2StrategiesSpeedUp.cpp
+        src/test/MembraneTest.cpp
 )
 
 target_link_libraries(
