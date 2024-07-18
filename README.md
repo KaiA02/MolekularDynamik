@@ -14,8 +14,8 @@
 5. [Membrane](#membrane)
 6. [Checkpoints](#checkpoints)
 7. [Parallel Strategies](#parallel-strategies)
-   - [Strategy 1](#strategy-1)
-   - [Strategy 2](#strategy-2)
+   - [Strategy 1](#strategy-1-openmp-for-loops)
+   - [Strategy 2](#strategy-2-openmp-task-parallelism)
 8. [UML](#uml)
 
 ## Program Execution
