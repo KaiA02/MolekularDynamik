@@ -2,9 +2,21 @@
 =========
 
 "GroupB"  
-By Jannik Hoog, Joshua Vlajnic and Kai Arenja
+- [Jannik Hoog](https://github.com/JannikHoog)
+- [Joshua Vjalnic](https://github.com/joshtheflash)
+- [Kai Arenja](https://github.com/KaiA02)
 
-## Program Execution:
+## Table of Contents
+- [Program Execution](#program-execution)
+- [XML input-file](#xml-input-file)
+- [Quick start guide](#quick-start-guide)
+- [Thermostat](#thermostat)
+- [Membrane](#membrane)
+- [Checkpoints](#checkpoints)
+- [Parallel Strategies](#parallel-strategies)
+- [UML](#uml)
+
+## Program Execution
 
 1. **mkdir build && cd $_**
 2. **cmake ..**
@@ -15,7 +27,7 @@ By Jannik Hoog, Joshua Vlajnic and Kai Arenja
 7. **gprof MolSim gmon.out > analysis.txt** (for profiling. Uncomment this in cmakeList.txt: set(CMAKE_CXX_FLAGS "
    ${CMAKE_CXX_FLAGS} -pg") )
 
-## XML input-file consists of:
+## XML input-file
 
 1. Start_time as Double
 2. End_Time as Double
@@ -27,7 +39,7 @@ By Jannik Hoog, Joshua Vlajnic and Kai Arenja
 7. (optional) performance measurement: true or false
 8. (optional) log level: "off", "error", "warn", "info", "debug", "trace"
 
-## Quick start guide:
+## Quick start guide
 
 1. adapt inputFile to your need
 2. follow Steps described in Program Execution
@@ -35,7 +47,7 @@ By Jannik Hoog, Joshua Vlajnic and Kai Arenja
 4. open generated outputFiles in Paraview and add a Glyph to the Data
 5. run Simulation
 
-## Thermostat:
+## Thermostat
 
 - First set the **thermostatON** option in xml on **YES**
 - In the beginning the system is set to the initial temperature.
@@ -45,13 +57,13 @@ By Jannik Hoog, Joshua Vlajnic and Kai Arenja
 - If no **delta_temp** is given, then we see declare the **delta_temp** as 0 in xml file, but see it as infinity
 - If **n_thermostat** = 0, then the thermostat is applied directly.
 
-## Membrane:
+## Membrane
 
 - **n1**, **n2**, **n3** are count of Particles in Membrane in x, y and z direction
 - **distance** is distance between Particles in Membrane
 - Particles in Membrane are always of **type 0** so they can be identified more easy.
 
-## using Checkpoints (saving the state after simulation)
+## Checkpoints
 
 - after every simulation a new file Output.txt is created in the Input directory
 - in case you want to build your new Simulation on top of another simulation, you can also input this output.txt file at
@@ -60,42 +72,6 @@ By Jannik Hoog, Joshua Vlajnic and Kai Arenja
     - first call first simulation: **./MolSim ../input/eingabe-equilibrium.xml**
       (here you generate the input/output.txt file)
     - then call second simulation on top of first: **./MolSim ../input/eingabe-sphere.xml ../input/output.txt**
-
-## Linux cluster
-
-1. Login on "ssh -CX di57yey@lxlogin1.lrz.de"
-2. Steps
-
-- projekt clonen:  
-  rm -rf MolekularDynamik  
-  #main branch (falls spezifische branch gewünscht ist "-b branchName" anhängen)  
-  git clone https://github.com/KaiA02/MolekularDynamik
-
-- in projekt module laden und cmake/make ausführen  
-  cd MolekularDynamik  
-  module load xerces-c  
-  module load cmake/3.21.4  
-  module load gcc/11  
-  mkdir build && cd build  
-  cmake ..  
-  make -j 5
-
-- script ausführen  
-  salloc --partition=cm2_inter -t 10   (10min is time (max 2h))   
-  ./MolSim ../input/"name".xml
-
-- oder so script ausführen  
-  cd ..  
-  sbatch job.sh
-
-
-- status prüfen  
-  squeue --clusters=cm2_tiny --start
-
-- output ordner auf pc laden (im normalen terminal machen)  
-  #zielquelle individuell einstellen     
-  #-r für ganzen ordner  
-  scp -r di57yey@lxlogin1.lrz.de:MolekularDynamik/output "zielquelle" (z.B. /Users/kaiarenja/Desktop/)
 
 ## Parallel Strategies
 
