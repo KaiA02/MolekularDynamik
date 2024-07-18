@@ -24,6 +24,10 @@ void Calculations::setSmoothLJ(bool SLJ) { smoothLJ = SLJ; }
 
 void Calculations::setR_L(double R_L) { r_l = R_L; }
 
+void Calculations::setStiffness(double stif) {
+    stiffness = stif;
+}
+
 void Calculations::setParallelStrategy(int strat){ParallelStrategy = strat;}
 
 void Calculations::calculateX(double delta_t) {
