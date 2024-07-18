@@ -7,14 +7,16 @@
 - [Kai Arenja](https://github.com/KaiA02)
 
 ## Table of Contents
-- [Program Execution](#program-execution)
-- [XML input-file](#xml-input-file)
-- [Quick start guide](#quick-start-guide)
-- [Thermostat](#thermostat)
-- [Membrane](#membrane)
-- [Checkpoints](#checkpoints)
-- [Parallel Strategies](#parallel-strategies)
-- [UML](#uml)
+1. [Program Execution](#program-execution)
+2. [XML input-file](#xml-input-file)
+3. [Quick start guide](#quick-start-guide)
+4. [Thermostat](#thermostat)
+5. [Membrane](#membrane)
+6. [Checkpoints](#checkpoints)
+7. [Parallel Strategies](#parallel-strategies)
+   - [Strategy 1](#strategy-1)
+   - [Strategy 2](#strategy-2)
+8. [UML](#uml)
 
 ## Program Execution
 
