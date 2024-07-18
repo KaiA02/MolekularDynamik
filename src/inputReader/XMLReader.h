@@ -124,8 +124,16 @@ public:
    */
   int getNumberOfDisks();
 
+  /**
+   *
+   * @return check if thermodynamical statistics should be written
+   */
   xml_schema::boolean getStatisticsOn();
 
+  /**
+   *
+   * @return the strategy for parallelization
+   */
   int getParallelStrategy();
 
 private:

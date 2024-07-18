@@ -82,7 +82,7 @@ public:
 
   double getM() const;
 
- int getType() const;
+  int getType() const;
 
   /**
    *
@@ -133,9 +133,17 @@ public:
    */
   bool getIsHalo();
 
+  /**
+   *
+   * @return the id of the particle
+   */
   std::array<int, 3> getID();
 
-  void setID(std::array<int,3> id);
+  /**
+   * @brief sets the id of the particle
+   * @param id the id of the particle
+   */
+  void setID(std::array<int, 3> id);
 
   bool operator==(const Particle &other) const;
 
@@ -144,7 +152,12 @@ public:
    */
   void park();
 
-  bool isNeighbour(Particle* n);
+  /**
+   * @brief checks if the particle n is a neighbour of this particle
+   * @param n the particle to check if it is a neighbour
+   * @return true if n is a neighbour of this particle, false otherwise
+   */
+  bool isNeighbour(Particle *n);
 };
 
 std::ostream &operator<<(std::ostream &stream, Particle &p);

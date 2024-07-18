@@ -109,26 +109,82 @@ public:
   std::array<double, 3> calculateLJF(Particle *p1, Particle *p2, double e,
                                      double s);
 
+  /**
+   * calculates the smoothed Lennard-Jones-Force between two particles
+   * @param p1 the first particle
+   * @param p2 the second particle
+   * @param e the epsilon value
+   * @param s the sigma value
+   * @return the smoothed Lennard-Jones-Force between two particles
+   */
   std::array<double, 3> calculateSmoothLJF(Particle *p1, Particle *p2, double e,
                                            double s);
 
+  /**
+   * @brief decides which force method to use and returns the force between two
+   * particles
+   * @param p1 the first particle
+   * @param p2 the second particle
+   * @param e the epsilon value
+   * @param s the sigma value
+   * @return the force between two particles
+   */
   std::array<double, 3> decideForceMethod(Particle *p1, Particle *p2, double e,
                                           double s);
 
+  /**
+   * @brief calculates the harmonic force between two particles which is used
+   * for the membrane
+   * @param p1 the first particle
+   * @param p2 the second particle
+   * @param r0 average bond length
+   * @return the harmonic force between two particles
+   */
   std::vector<double> calculateHarmonicForce(Particle *p1, Particle *p2,
                                              double r0);
 
+  /**
+   *@brief calculates the distance between two particles
+   * @param x1 the position of the first particle
+   * @param x2 the position of the second particle
+   * @return the distance between the two particles
+   */
   double calcDistance(std::array<double, 3> x1, std::array<double, 3> x2);
 
+  /**
+   * @brief calculates the local densities of the particles with respect to the
+   * interval size deltaR, for the RDF plot
+   * @param particles the particles for which the local densities are calculated
+   * @param deltaR the interval size
+   * @return a map with the interval mapped to the respective local density
+   */
   std::map<double, double>
   calculateLocalDensities(const std::vector<Particle> particles, double deltaR);
 
+  /**
+   * @brief calculates the distances between all particle pairs
+   * @param particles the vector of particles
+   * @return a 2D vector with the distances between all particle pairs
+   */
   std::vector<std::vector<double>>
   computeDistances(std::vector<Particle> particles);
 
+  /**
+   * @brief calculates the diffusion of the particles with respect to the
+   * previous particles
+   * @param particles the vector of particles
+   * @param prevParticles the vector of previous particles
+   * @return the diffusion of the particles
+   */
   static double calculateDiffusion(std::vector<Particle> particles,
                                    std::vector<Particle> prevParticles);
 
+  /**
+   * @brief calculates the distance between two particles
+   * @param p1 the first particle
+   * @param p2 the second particle
+   * @return the distance between the two particles
+   */
   static double calculateDistanceBetweenParticles(Particle *p1, Particle *p2);
 };
 
