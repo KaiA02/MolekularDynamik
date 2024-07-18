@@ -3,7 +3,7 @@
 
 "GroupB"  
 - [Jannik Hoog](https://github.com/JannikHoog)
-- [Joshua Vjalnic](https://github.com/joshtheflash)
+- [Joshua Vlajnic](https://github.com/joshtheflash)
 - [Kai Arenja](https://github.com/KaiA02)
 
 ## Table of Contents
