@@ -25,12 +25,12 @@ double r_cutoff = 2.5 * sigma;
 calculations.setCutoffRadius(r_cutoff); // Assuming such a method exists
 
 // Calculate Lennard-Jones forces for all particle pairs
-for (auto& p1 : pc.getParticles()) {
-for (auto& p2 : pc.getParticles()) {
-if (&p1 != &p2) {
-std::array<double, 3> force = calculations.calculateLJF(&p1, &p2, epsilon, sigma);
-std::array<double, 3> currentForce = p1.getF();
-p1.setF({currentForce[0] + force[0], currentForce[1] + force[1], currentForce[2] + force[2]});
+for (auto& pc.getParticles()[0] : pc.getParticles()) {
+for (auto& pc.getParticles()[1] : pc.getParticles()) {
+if (&pc.getParticles()[0] != &pc.getParticles()[1]) {
+std::array<double, 3> force = calculations.calculateLJF(&pc.getParticles()[0], &pc.getParticles()[1], epsilon, sigma);
+std::array<double, 3> currentForce = pc.getParticles()[0].getF();
+pc.getParticles()[0].setF({currentForce[0] + force[0], currentForce[1] + force[1], currentForce[2] + force[2]});
 }
 }
 }
@@ -64,7 +64,7 @@ double sigma = 1.0;
 Calculations calculations(pc);
 
 // Call the function
-std::array<double, 3> force = calculations.calculateSmoothLJF(p1, p2, epsilon, sigma);
+std::array<double, 3> force = calculations.calculateSmoothLJF(pc.getParticles()[0], pc.getParticles()[1], epsilon, sigma);
 
 // Check the results
 EXPECT_NEAR(force[0], -expected_x, 1e-5);
@@ -86,7 +86,7 @@ double sigma = 1.0;
 Calculations calculations(pc);
 
 // Call the function
-std::array<double, 3> force = calculations.calculateSmoothLJF(p1, p2, epsilon, sigma);
+std::array<double, 3> force = calculations.calculateSmoothLJF(pc.getParticles()[0], pc.getParticles()[1], epsilon, sigma);
 
 // Check the results (expecting zero force)
 EXPECT_NEAR(force[0], 0.0, 1e-5);
@@ -107,7 +107,7 @@ double sigma = 1.0;
 Calculations calculations(pc);
 
 // Call the function
-std::array<double, 3> force = calculations.calculateSmoothLJF(p1, p2, epsilon, sigma);
+std::array<double, 3> force = calculations.calculateSmoothLJF(pc.getParticles()[0], pc.getParticles()[1], epsilon, sigma);
 
 // Check the results (expecting some force)
 EXPECT_NEAR(force[0], -expected_x, 1e-5);
@@ -128,7 +128,7 @@ double sigma = 1.0;
 
 // Call the function
 Calculations calc(pc);
-std::array<double, 3> force = calc.calculateSmoothLJF(p1, p2, epsilon, sigma);
+std::array<double, 3> force = calc.calculateSmoothLJF(pc.getParticles()[0], pc.getParticles()[1], epsilon, sigma);
 
 // Check the results (expecting zero force)
 EXPECT_NEAR(force[0], 0.0, 1e-5);
@@ -152,7 +152,7 @@ double expected_x = -0.00732;
 
 // Call the function
 Calculations calc(pc);
-std::array<double, 3> force = calc.calculateSmoothLJF(p1, p2, epsilon, sigma);
+std::array<double, 3> force = calc.calculateSmoothLJF(pc.getParticles()[0], pc.getParticles()[1], epsilon, sigma);
 
 // Check the results
 EXPECT_NEAR(force[0], expected_x, 1e-5);
