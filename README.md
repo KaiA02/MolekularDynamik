@@ -35,12 +35,15 @@
 1. Start_time as Double
 2. End_Time as Double
 3. Time_Step as Double
-4. SmoothLJ as boolean (true for smoothLJ and false for normal LJ)
-4. Output type: "xyz" or "vtk"
-5. Input type: "cube" or "sonne"
+4. ParallelStrategy as int
+5. SmoothLJ as boolean (true for smoothLJ and false for normal LJ)
 6. ... see xsd file
-7. (optional) performance measurement: true or false
-8. (optional) log level: "off", "error", "warn", "info", "debug", "trace"
+7. Output type: "xyz" or "vtk"
+8. ... see xsd file
+9. (optional) performance measurement: true or false
+10. (optional) log level: "off", "error", "warn", "info", "debug", "trace"
+
+see example:  input/eingabe-assign5-task5-xml  
 
 ## Quick start guide
 
@@ -86,17 +89,17 @@ which enhances performance for large datasets.
   
 Key Features:    
    - Simple implementation.  
-   - Efficient for evenly distributed tasks.      
+   - Efficient for evenly distributed tasks.
+  
 ### Strategy 2: **OpenMP Task Parallelism**
 This strategy employs OpenMP's task-based parallelism using #pragma omp task.   
 It provides better load balancing and resource utilization, particularly for workloads that vary significantly.  
-  
-Key Features:    
+
+  Key Features:
    - Handles uneven workloads efficiently.  
    - Uses dynamic task scheduling.
+
 ### HowTo:
-Set the ParallelStrategy variable in the Calculations class to switch between these strategies based on your simulation needs  
-  
 to use the Parallel Strategy you specify your Choice in the input in the ParallelStrategy Variable.   
 0 => no Strategy,  
 1 => Strategy1,   
