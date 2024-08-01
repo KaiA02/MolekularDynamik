@@ -31,10 +31,14 @@ public:
   std::string getParticleContainerType();
 
   /**
-   *
-   * @return the type of the input
+   * @return 0 if we want to have LJF or 1 if we want to have Smooth LJF
    */
-  std::string getInputType();
+  bool getSmoothLJ();
+
+  /**
+   * @return the r_L
+   */
+  double getR_L();
 
   /**
    * @return check if the thermostat is on or off
@@ -95,6 +99,7 @@ public:
    */
   xml_schema::boolean getPerformanceMeasurement();
 
+  double getRdfDeltaR();
   /**
    *
    * @return the log level
@@ -118,6 +123,18 @@ public:
    * @return the number of disks in the simulation
    */
   int getNumberOfDisks();
+
+  /**
+   *
+   * @return check if thermodynamical statistics should be written
+   */
+  xml_schema::boolean getStatisticsOn();
+
+  /**
+   *
+   * @return the strategy for parallelization
+   */
+  int getParallelStrategy();
 
 private:
   std::unique_ptr<simulation> sim;

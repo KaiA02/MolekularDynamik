@@ -5,8 +5,9 @@
 #ifndef LCPARTICLECONTAINER_H
 #define LCPARTICLECONTAINER_H
 #include "../Calculations.h"
-#include "ParticleContainer.h"
+#include "../Membrane/Membrane.h"
 #include "../utils/EpsilonSigma.h"
+#include "ParticleContainer.h"
 
 /**
  * @brief The LCParticleContainer class
@@ -14,24 +15,24 @@
  */
 class LCParticleContainer : public ParticleContainer {
 public:
- /**
- * @brief sets the cutoff
- */
+  /**
+   * @brief sets the cutoff
+   */
   void setR_cutoff(double r_cutoff);
 
- /**
-  * @brief sets the g_grav
-  */
+  /**
+   * @brief sets the g_grav
+   */
   void setG_grav(double g);
 
- /**
-  * @brief getter for r_cutoff
-  */
+  /**
+   * @brief getter for r_cutoff
+   */
   double getR_cutoff();
 
- /**
-  * @brief getter for g_grav
-  */
+  /**
+   * @brief getter for g_grav
+   */
   double getG_grav();
 
   /**
@@ -77,7 +78,7 @@ public:
   /**
    *@brief calls realocateParticle() and calculates LJF for all cells
    */
-  void handleLJFCalculation(Calculations &calc);
+  void handleLJFCalculation(Calculations &calc, int timestep);
   /**
    *@brief adds the particle to all particles
    *and calls addParticleToCell(p)
@@ -103,7 +104,7 @@ public:
   /**
    * @return all cells
    */
-  std::vector<Cell> getCells();
+  // std::vector<std::vector<std::vector<Cell>>> getCells();
 
   /**
    *@brief checks if the cell exists
@@ -157,17 +158,50 @@ public:
    */
   void applyGravitation();
 
+  /**
+   * @brief sets the Epsilon and Sigma values for the Lennard-Jones potential
+   */
   void setUpEpsilonAndSigmas();
 
+  /**
+   * sets the membrane of the container-> there can only be one membrane per
+   * container
+   * @param m The membrane
+   */
+  void setMembrane(Membrane m);
+
+  /**
+   *
+   * @return Membrane
+   */
+  Membrane getMembrane();
+
+  /**
+   * @brief returns the 4 particles that are "pulling" the membrane
+   * @param ids the ids of the particles
+   * @param size
+   * @return a vector of pointers to the particles that are "pulling" the
+   * membrane
+   */
+  std::vector<Particle *>
+  getMovingParticles(std::array<std::array<int, 2>, 4> ids, int size);
+
+  /**
+   * returns all particles in the container as pointers
+   * @return a vector of pointers to all particles
+   */
+  std::vector<Particle *> getAllParticlePointers();
+
 private:
-  std::vector<Cell> cells;
+  std::vector<std::vector<std::vector<Cell>>> cells;
   std::array<double, 3> cell_size;
   std::array<int, 3> cell_count;
   std::array<int, 6> boundary_types;
   double r_cutoff;
   double g_grav;
+  bool LJORSmoothLJ;
   std::vector<EpsilonSigma> epsAndSigs;
-
+  Membrane membrane;
 };
 
 #endif // LCPARTICLECONTAINER_H

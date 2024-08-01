@@ -35,7 +35,32 @@ void ParticleGenerator::generateCuboid(const Particle &start, int n1, int n2,
   }
 }
 
+void ParticleGenerator::generateMembrane(const Particle &start, int n1, int n2,
+                                       int n3, double distance,
+                                       double meanVelocity, int dimension, double temp_init) {
+
+    //maxwellVelocity and factor of temperature
+    double factor = std::sqrt(temp_init / start.getM());
+    std::array<double, 3> addedVelocity = maxwellBoltzmannDistributedVelocity(meanVelocity, dimension);
+    addedVelocity = {addedVelocity.at(2) * factor + start.getV()[0], addedVelocity.at(0) * factor + start.getV()[1], addedVelocity.at(1) * factor + start.getV()[2]};
+
+    for (int x = 0; x < n1; x++) {
+        for (int y = 0; y < n2; y++) {
+            for (int z = 0; z < n3; z++) {
+                Particle p({start.getX()[0] + x * distance,
+                    start.getX()[1] + y * distance,
+                    start.getX()[2] + z * distance},
+                   addedVelocity, start.getM(), start.getType(),
+                   start.getEpsilon(), start.getSigma());
+                   p.setID({x, y, z});
+                allParticles.push_back(p);
+            }
+        }
+    }
+}
+
 std::vector<Particle>& ParticleGenerator::getAllParticles() { return allParticles; }
+
 
 void ParticleGenerator::generateDisk(const Particle &center, int radius, double distance,
                                        double meanVelocity, int dimension, double temp_init) {
@@ -122,3 +147,5 @@ void ParticleGenerator::generateDisk(const Particle &center, int radius, double 
         throw std::invalid_argument("Dimension must be 2 or 3");
     }
 }
+
+

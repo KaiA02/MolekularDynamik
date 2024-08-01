@@ -2,46 +2,49 @@
             xsi:noNamespaceSchemaLocation="../src/inputReader/simulation.xsd">
     <input>
         <tStart>0.0</tStart>
-        <tEnd>2.0</tEnd>
-        <deltaT>0.0002</deltaT>
+        <tEnd>150</tEnd>
+        <deltaT>0.001</deltaT>
         <ParallelStrategy>0</ParallelStrategy>
         <smoothLJ>false</smoothLJ>
         <particleContainerType>LC</particleContainerType>
-        <r_cutoff>2.0</r_cutoff>
+        <r_cutoff>2.3</r_cutoff>
         <r_l>0</r_l>
-        <domainSizeX>20</domainSizeX>
-        <domainSizeY>20</domainSizeY>
-        <domainSizeZ>20</domainSizeZ>
-        <boundary1Type>2</boundary1Type>
-        <boundary2Type>2</boundary2Type>
-        <boundary3Type>2</boundary3Type>
-        <boundary4Type>2</boundary4Type>
-        <boundary5Type>2</boundary5Type>
-        <boundary6Type>2</boundary6Type>
+        <domainSizeX>10</domainSizeX>
+        <domainSizeY>10</domainSizeY>
+        <domainSizeZ>10</domainSizeZ>
+        <boundary1Type>3</boundary1Type>
+        <boundary2Type>3</boundary2Type>
+        <boundary3Type>3</boundary3Type>
+        <boundary4Type>3</boundary4Type>
+        <boundary5Type>3</boundary5Type>
+        <boundary6Type>3</boundary6Type>
         <thermostatON>YES</thermostatON>
-        <temp_init>40</temp_init>
-        <n_thermostat>40</n_thermostat>
-        <temp_target>40</temp_target>
-        <delta_temp>0.01</delta_temp>
+        <temp_init>0.01</temp_init>
+        <n_thermostat>5</n_thermostat>
+        <temp_target>3.0</temp_target>
+        <delta_temp>0.001</delta_temp>
         <g_grav>0</g_grav>
 
         <particles>
-            <x>10.0</x>
-            <y>10.0</y>
-            <z>10.0</z>
+            <x>0.575</x>
+            <y>0.575</y>
+            <z>0.575</z>
             <velocityX>0.0</velocityX>
             <velocityY>0.0</velocityY>
-            <velocityZ>-10.0</velocityZ>
+            <velocityZ>0.0</velocityZ>
             <mass>1</mass>
             <epsilon>1</epsilon>
             <sigma>1</sigma>
         </particles>
-        <disk>
-            <radius>5</radius>
-            <distance>1.1225</distance>
+        <cuboids>
+            <n1>8</n1>
+            <n2>8</n2>
+            <n3>8</n3>
+            <distance>1.15</distance>
             <meanVelocity>0.1</meanVelocity>
             <dimension>3</dimension>
-        </disk>
+        </cuboids>
+
     </input>
     <output>
         <baseName>simulation_output</baseName>
@@ -50,6 +53,6 @@
     </output>
     <config>
         <performanceMeasurement>false</performanceMeasurement>
-        <logLevel>info</logLevel>
+        <logLevel>warn</logLevel>
     </config>
 </simulation>

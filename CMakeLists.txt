@@ -13,7 +13,7 @@ if (NOT CMAKE_BUILD_TYPE)
 endif (NOT CMAKE_BUILD_TYPE)
 
 # Add the -pg flag for gprof profiling
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pg")
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pg")
 
 # collect all cpp files
 file(GLOB_RECURSE MY_SRC
@@ -50,11 +50,15 @@ target_include_directories(MolSim
 )
 
 find_package(XercesC 3.2 REQUIRED)
+find_package(OpenMP REQUIRED)
 
 include_directories(${XercesC_INCLUDE_DIR})
 
+if(OpenMP_CXX_FOUND)
+    target_link_libraries(MolSim PUBLIC OpenMP::OpenMP_CXX)
+endif()
+
 target_link_libraries(MolSim
-        # stuff that is used in headers and source files
         PUBLIC
         XercesC::XercesC
         spdlog::spdlog
@@ -105,7 +109,7 @@ add_executable(
         src/LinkedCell/Cell.h
         src/test/LCParticleContainerTest.cpp
         src/test/CellTest.cpp
-        src/RunTimeComparison/RTCAss3Task2.cpp
+        src/Plots/RTCAss3Task2.cpp
         src/Container/LCParticleContainer.cpp
         src/Container/LCParticleContainer.h
         src/Container/BaseParticleContainer.h
@@ -113,10 +117,16 @@ add_executable(
         src/Thermostat.cpp
         src/Thermostat.h
         src/utils/EpsilonSigma.h
-        src/utils/EpsilonSigma.h
-
-
+        src/Membrane/Membrane.h
+        src/Membrane/MembranePair.h
+        src/Membrane/MembranePair.cpp
+        src/Membrane/Membrane.cpp
+        src/Plots/Ass5Task5Diffusion.cpp
+        src/Plots/Ass5Task5RDF.cpp
+        src/Plots/Ass5Task2StrategiesSpeedUp.cpp
+        src/test/MembraneTest.cpp
 )
+
 target_link_libraries(
         firstTest
         GTest::gtest_main

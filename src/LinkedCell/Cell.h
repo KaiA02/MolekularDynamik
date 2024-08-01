@@ -14,6 +14,7 @@ private:
   bool halo_cell;
 
 public:
+ Cell();
   Cell(std::array<int, 3> id, bool halo);
 
   /**

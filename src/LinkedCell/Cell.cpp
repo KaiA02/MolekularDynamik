@@ -4,7 +4,7 @@
 
 #include "Cell.h"
 #include "spdlog/spdlog.h"
-
+Cell::Cell(){};
 Cell::Cell(std::array<int, 3> init_id, bool halo) {
     id = init_id;
     halo_cell = halo;

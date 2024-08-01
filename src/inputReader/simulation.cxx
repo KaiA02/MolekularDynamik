@@ -173,28 +173,40 @@ deltaT (const deltaT_type& x)
   this->deltaT_.set (x);
 }
 
-const input::inputType_type& input::
-inputType () const
+const input::ParallelStrategy_type& input::
+ParallelStrategy () const
 {
-  return this->inputType_.get ();
+  return this->ParallelStrategy_.get ();
 }
 
-input::inputType_type& input::
-inputType ()
+input::ParallelStrategy_type& input::
+ParallelStrategy ()
 {
-  return this->inputType_.get ();
-}
-
-void input::
-inputType (const inputType_type& x)
-{
-  this->inputType_.set (x);
+  return this->ParallelStrategy_.get ();
 }
 
 void input::
-inputType (::std::unique_ptr< inputType_type > x)
+ParallelStrategy (const ParallelStrategy_type& x)
 {
-  this->inputType_.set (std::move (x));
+  this->ParallelStrategy_.set (x);
+}
+
+const input::smoothLJ_type& input::
+smoothLJ () const
+{
+  return this->smoothLJ_.get ();
+}
+
+input::smoothLJ_type& input::
+smoothLJ ()
+{
+  return this->smoothLJ_.get ();
+}
+
+void input::
+smoothLJ (const smoothLJ_type& x)
+{
+  this->smoothLJ_.set (x);
 }
 
 const input::particleContainerType_type& input::
@@ -237,6 +249,24 @@ void input::
 r_cutoff (const r_cutoff_type& x)
 {
   this->r_cutoff_.set (x);
+}
+
+const input::r_l_type& input::
+r_l () const
+{
+  return this->r_l_.get ();
+}
+
+input::r_l_type& input::
+r_l ()
+{
+  return this->r_l_.get ();
+}
+
+void input::
+r_l (const r_l_type& x)
+{
+  this->r_l_.set (x);
 }
 
 const input::domainSizeX_type& input::
@@ -569,6 +599,24 @@ disk (const disk_sequence& s)
   this->disk_ = s;
 }
 
+const input::membrane_sequence& input::
+membrane () const
+{
+  return this->membrane_;
+}
+
+input::membrane_sequence& input::
+membrane ()
+{
+  return this->membrane_;
+}
+
+void input::
+membrane (const membrane_sequence& s)
+{
+  this->membrane_ = s;
+}
+
 
 // output
 // 
@@ -637,6 +685,54 @@ void output::
 outputType (::std::unique_ptr< outputType_type > x)
 {
   this->outputType_.set (std::move (x));
+}
+
+const output::statistics_optional& output::
+statistics () const
+{
+  return this->statistics_;
+}
+
+output::statistics_optional& output::
+statistics ()
+{
+  return this->statistics_;
+}
+
+void output::
+statistics (const statistics_type& x)
+{
+  this->statistics_.set (x);
+}
+
+void output::
+statistics (const statistics_optional& x)
+{
+  this->statistics_ = x;
+}
+
+const output::rdfIntervalSize_optional& output::
+rdfIntervalSize () const
+{
+  return this->rdfIntervalSize_;
+}
+
+output::rdfIntervalSize_optional& output::
+rdfIntervalSize ()
+{
+  return this->rdfIntervalSize_;
+}
+
+void output::
+rdfIntervalSize (const rdfIntervalSize_type& x)
+{
+  this->rdfIntervalSize_.set (x);
+}
+
+void output::
+rdfIntervalSize (const rdfIntervalSize_optional& x)
+{
+  this->rdfIntervalSize_ = x;
 }
 
 
@@ -1052,6 +1148,262 @@ dimension (const dimension_type& x)
 }
 
 
+// membrane
+// 
+
+const membrane::n1_type& membrane::
+n1 () const
+{
+  return this->n1_.get ();
+}
+
+membrane::n1_type& membrane::
+n1 ()
+{
+  return this->n1_.get ();
+}
+
+void membrane::
+n1 (const n1_type& x)
+{
+  this->n1_.set (x);
+}
+
+const membrane::n2_type& membrane::
+n2 () const
+{
+  return this->n2_.get ();
+}
+
+membrane::n2_type& membrane::
+n2 ()
+{
+  return this->n2_.get ();
+}
+
+void membrane::
+n2 (const n2_type& x)
+{
+  this->n2_.set (x);
+}
+
+const membrane::n3_type& membrane::
+n3 () const
+{
+  return this->n3_.get ();
+}
+
+membrane::n3_type& membrane::
+n3 ()
+{
+  return this->n3_.get ();
+}
+
+void membrane::
+n3 (const n3_type& x)
+{
+  this->n3_.set (x);
+}
+
+const membrane::distance_type& membrane::
+distance () const
+{
+  return this->distance_.get ();
+}
+
+membrane::distance_type& membrane::
+distance ()
+{
+  return this->distance_.get ();
+}
+
+void membrane::
+distance (const distance_type& x)
+{
+  this->distance_.set (x);
+}
+
+const membrane::meanVelocity_type& membrane::
+meanVelocity () const
+{
+  return this->meanVelocity_.get ();
+}
+
+membrane::meanVelocity_type& membrane::
+meanVelocity ()
+{
+  return this->meanVelocity_.get ();
+}
+
+void membrane::
+meanVelocity (const meanVelocity_type& x)
+{
+  this->meanVelocity_.set (x);
+}
+
+const membrane::forceUpwards_type& membrane::
+forceUpwards () const
+{
+  return this->forceUpwards_.get ();
+}
+
+membrane::forceUpwards_type& membrane::
+forceUpwards ()
+{
+  return this->forceUpwards_.get ();
+}
+
+void membrane::
+forceUpwards (const forceUpwards_type& x)
+{
+  this->forceUpwards_.set (x);
+}
+
+const membrane::id1a_type& membrane::
+id1a () const
+{
+  return this->id1a_.get ();
+}
+
+membrane::id1a_type& membrane::
+id1a ()
+{
+  return this->id1a_.get ();
+}
+
+void membrane::
+id1a (const id1a_type& x)
+{
+  this->id1a_.set (x);
+}
+
+const membrane::id1b_type& membrane::
+id1b () const
+{
+  return this->id1b_.get ();
+}
+
+membrane::id1b_type& membrane::
+id1b ()
+{
+  return this->id1b_.get ();
+}
+
+void membrane::
+id1b (const id1b_type& x)
+{
+  this->id1b_.set (x);
+}
+
+const membrane::id2a_type& membrane::
+id2a () const
+{
+  return this->id2a_.get ();
+}
+
+membrane::id2a_type& membrane::
+id2a ()
+{
+  return this->id2a_.get ();
+}
+
+void membrane::
+id2a (const id2a_type& x)
+{
+  this->id2a_.set (x);
+}
+
+const membrane::id2b_type& membrane::
+id2b () const
+{
+  return this->id2b_.get ();
+}
+
+membrane::id2b_type& membrane::
+id2b ()
+{
+  return this->id2b_.get ();
+}
+
+void membrane::
+id2b (const id2b_type& x)
+{
+  this->id2b_.set (x);
+}
+
+const membrane::id3a_type& membrane::
+id3a () const
+{
+  return this->id3a_.get ();
+}
+
+membrane::id3a_type& membrane::
+id3a ()
+{
+  return this->id3a_.get ();
+}
+
+void membrane::
+id3a (const id3a_type& x)
+{
+  this->id3a_.set (x);
+}
+
+const membrane::id3b_type& membrane::
+id3b () const
+{
+  return this->id3b_.get ();
+}
+
+membrane::id3b_type& membrane::
+id3b ()
+{
+  return this->id3b_.get ();
+}
+
+void membrane::
+id3b (const id3b_type& x)
+{
+  this->id3b_.set (x);
+}
+
+const membrane::id4a_type& membrane::
+id4a () const
+{
+  return this->id4a_.get ();
+}
+
+membrane::id4a_type& membrane::
+id4a ()
+{
+  return this->id4a_.get ();
+}
+
+void membrane::
+id4a (const id4a_type& x)
+{
+  this->id4a_.set (x);
+}
+
+const membrane::id4b_type& membrane::
+id4b () const
+{
+  return this->id4b_.get ();
+}
+
+membrane::id4b_type& membrane::
+id4b ()
+{
+  return this->id4b_.get ();
+}
+
+void membrane::
+id4b (const id4b_type& x)
+{
+  this->id4b_.set (x);
+}
+
+
 #include <xsd/cxx/xml/dom/parsing-source.hxx>
 
 // simulation
@@ -1216,9 +1568,11 @@ input::
 input (const tStart_type& tStart,
        const tEnd_type& tEnd,
        const deltaT_type& deltaT,
-       const inputType_type& inputType,
+       const ParallelStrategy_type& ParallelStrategy,
+       const smoothLJ_type& smoothLJ,
        const particleContainerType_type& particleContainerType,
        const r_cutoff_type& r_cutoff,
+       const r_l_type& r_l,
        const domainSizeX_type& domainSizeX,
        const domainSizeY_type& domainSizeY,
        const domainSizeZ_type& domainSizeZ,
@@ -1238,9 +1592,11 @@ input (const tStart_type& tStart,
   tStart_ (tStart, this),
   tEnd_ (tEnd, this),
   deltaT_ (deltaT, this),
-  inputType_ (inputType, this),
+  ParallelStrategy_ (ParallelStrategy, this),
+  smoothLJ_ (smoothLJ, this),
   particleContainerType_ (particleContainerType, this),
   r_cutoff_ (r_cutoff, this),
+  r_l_ (r_l, this),
   domainSizeX_ (domainSizeX, this),
   domainSizeY_ (domainSizeY, this),
   domainSizeZ_ (domainSizeZ, this),
@@ -1258,7 +1614,8 @@ input (const tStart_type& tStart,
   g_grav_ (g_grav, this),
   particles_ (this),
   cuboids_ (this),
-  disk_ (this)
+  disk_ (this),
+  membrane_ (this)
 {
 }
 
@@ -1270,9 +1627,11 @@ input (const input& x,
   tStart_ (x.tStart_, f, this),
   tEnd_ (x.tEnd_, f, this),
   deltaT_ (x.deltaT_, f, this),
-  inputType_ (x.inputType_, f, this),
+  ParallelStrategy_ (x.ParallelStrategy_, f, this),
+  smoothLJ_ (x.smoothLJ_, f, this),
   particleContainerType_ (x.particleContainerType_, f, this),
   r_cutoff_ (x.r_cutoff_, f, this),
+  r_l_ (x.r_l_, f, this),
   domainSizeX_ (x.domainSizeX_, f, this),
   domainSizeY_ (x.domainSizeY_, f, this),
   domainSizeZ_ (x.domainSizeZ_, f, this),
@@ -1290,7 +1649,8 @@ input (const input& x,
   g_grav_ (x.g_grav_, f, this),
   particles_ (x.particles_, f, this),
   cuboids_ (x.cuboids_, f, this),
-  disk_ (x.disk_, f, this)
+  disk_ (x.disk_, f, this),
+  membrane_ (x.membrane_, f, this)
 {
 }
 
@@ -1302,9 +1662,11 @@ input (const ::xercesc::DOMElement& e,
   tStart_ (this),
   tEnd_ (this),
   deltaT_ (this),
-  inputType_ (this),
+  ParallelStrategy_ (this),
+  smoothLJ_ (this),
   particleContainerType_ (this),
   r_cutoff_ (this),
+  r_l_ (this),
   domainSizeX_ (this),
   domainSizeY_ (this),
   domainSizeZ_ (this),
@@ -1322,7 +1684,8 @@ input (const ::xercesc::DOMElement& e,
   g_grav_ (this),
   particles_ (this),
   cuboids_ (this),
-  disk_ (this)
+  disk_ (this),
+  membrane_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -1374,16 +1737,24 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
-    // inputType
+    // ParallelStrategy
     //
-    if (n.name () == "inputType" && n.namespace_ ().empty ())
+    if (n.name () == "ParallelStrategy" && n.namespace_ ().empty ())
     {
-      ::std::unique_ptr< inputType_type > r (
-        inputType_traits::create (i, f, this));
-
-      if (!inputType_.present ())
+      if (!ParallelStrategy_.present ())
       {
-        this->inputType_.set (::std::move (r));
+        this->ParallelStrategy_.set (ParallelStrategy_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // smoothLJ
+    //
+    if (n.name () == "smoothLJ" && n.namespace_ ().empty ())
+    {
+      if (!smoothLJ_.present ())
+      {
+        this->smoothLJ_.set (smoothLJ_traits::create (i, f, this));
         continue;
       }
     }
@@ -1409,6 +1780,17 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       if (!r_cutoff_.present ())
       {
         this->r_cutoff_.set (r_cutoff_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // r_l
+    //
+    if (n.name () == "r_l" && n.namespace_ ().empty ())
+    {
+      if (!r_l_.present ())
+      {
+        this->r_l_.set (r_l_traits::create (i, f, this));
         continue;
       }
     }
@@ -1614,6 +1996,17 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       continue;
     }
 
+    // membrane
+    //
+    if (n.name () == "membrane" && n.namespace_ ().empty ())
+    {
+      ::std::unique_ptr< membrane_type > r (
+        membrane_traits::create (i, f, this));
+
+      this->membrane_.push_back (::std::move (r));
+      continue;
+    }
+
     break;
   }
 
@@ -1638,10 +2031,17 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       "");
   }
 
-  if (!inputType_.present ())
+  if (!ParallelStrategy_.present ())
   {
     throw ::xsd::cxx::tree::expected_element< char > (
-      "inputType",
+      "ParallelStrategy",
+      "");
+  }
+
+  if (!smoothLJ_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "smoothLJ",
       "");
   }
 
@@ -1656,6 +2056,13 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
   {
     throw ::xsd::cxx::tree::expected_element< char > (
       "r_cutoff",
+      "");
+  }
+
+  if (!r_l_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "r_l",
       "");
   }
 
@@ -1781,9 +2188,11 @@ operator= (const input& x)
     this->tStart_ = x.tStart_;
     this->tEnd_ = x.tEnd_;
     this->deltaT_ = x.deltaT_;
-    this->inputType_ = x.inputType_;
+    this->ParallelStrategy_ = x.ParallelStrategy_;
+    this->smoothLJ_ = x.smoothLJ_;
     this->particleContainerType_ = x.particleContainerType_;
     this->r_cutoff_ = x.r_cutoff_;
+    this->r_l_ = x.r_l_;
     this->domainSizeX_ = x.domainSizeX_;
     this->domainSizeY_ = x.domainSizeY_;
     this->domainSizeZ_ = x.domainSizeZ_;
@@ -1802,6 +2211,7 @@ operator= (const input& x)
     this->particles_ = x.particles_;
     this->cuboids_ = x.cuboids_;
     this->disk_ = x.disk_;
+    this->membrane_ = x.membrane_;
   }
 
   return *this;
@@ -1822,7 +2232,9 @@ output (const baseName_type& baseName,
 : ::xml_schema::type (),
   baseName_ (baseName, this),
   writeFrequency_ (writeFrequency, this),
-  outputType_ (outputType, this)
+  outputType_ (outputType, this),
+  statistics_ (this),
+  rdfIntervalSize_ (this)
 {
 }
 
@@ -1833,7 +2245,9 @@ output (const output& x,
 : ::xml_schema::type (x, f, c),
   baseName_ (x.baseName_, f, this),
   writeFrequency_ (x.writeFrequency_, f, this),
-  outputType_ (x.outputType_, f, this)
+  outputType_ (x.outputType_, f, this),
+  statistics_ (x.statistics_, f, this),
+  rdfIntervalSize_ (x.rdfIntervalSize_, f, this)
 {
 }
 
@@ -1844,7 +2258,9 @@ output (const ::xercesc::DOMElement& e,
 : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
   baseName_ (this),
   writeFrequency_ (this),
-  outputType_ (this)
+  outputType_ (this),
+  statistics_ (this),
+  rdfIntervalSize_ (this)
 {
   if ((f & ::xml_schema::flags::base) == 0)
   {
@@ -1902,6 +2318,28 @@ parse (::xsd::cxx::xml::dom::parser< char >& p,
       }
     }
 
+    // statistics
+    //
+    if (n.name () == "statistics" && n.namespace_ ().empty ())
+    {
+      if (!this->statistics_)
+      {
+        this->statistics_.set (statistics_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // rdfIntervalSize
+    //
+    if (n.name () == "rdfIntervalSize" && n.namespace_ ().empty ())
+    {
+      if (!this->rdfIntervalSize_)
+      {
+        this->rdfIntervalSize_.set (rdfIntervalSize_traits::create (i, f, this));
+        continue;
+      }
+    }
+
     break;
   }
 
@@ -1943,6 +2381,8 @@ operator= (const output& x)
     this->baseName_ = x.baseName_;
     this->writeFrequency_ = x.writeFrequency_;
     this->outputType_ = x.outputType_;
+    this->statistics_ = x.statistics_;
+    this->rdfIntervalSize_ = x.rdfIntervalSize_;
   }
 
   return *this;
@@ -2685,6 +3125,394 @@ operator= (const disk& x)
 
 disk::
 ~disk ()
+{
+}
+
+// membrane
+//
+
+membrane::
+membrane (const n1_type& n1,
+          const n2_type& n2,
+          const n3_type& n3,
+          const distance_type& distance,
+          const meanVelocity_type& meanVelocity,
+          const forceUpwards_type& forceUpwards,
+          const id1a_type& id1a,
+          const id1b_type& id1b,
+          const id2a_type& id2a,
+          const id2b_type& id2b,
+          const id3a_type& id3a,
+          const id3b_type& id3b,
+          const id4a_type& id4a,
+          const id4b_type& id4b)
+: ::xml_schema::type (),
+  n1_ (n1, this),
+  n2_ (n2, this),
+  n3_ (n3, this),
+  distance_ (distance, this),
+  meanVelocity_ (meanVelocity, this),
+  forceUpwards_ (forceUpwards, this),
+  id1a_ (id1a, this),
+  id1b_ (id1b, this),
+  id2a_ (id2a, this),
+  id2b_ (id2b, this),
+  id3a_ (id3a, this),
+  id3b_ (id3b, this),
+  id4a_ (id4a, this),
+  id4b_ (id4b, this)
+{
+}
+
+membrane::
+membrane (const membrane& x,
+          ::xml_schema::flags f,
+          ::xml_schema::container* c)
+: ::xml_schema::type (x, f, c),
+  n1_ (x.n1_, f, this),
+  n2_ (x.n2_, f, this),
+  n3_ (x.n3_, f, this),
+  distance_ (x.distance_, f, this),
+  meanVelocity_ (x.meanVelocity_, f, this),
+  forceUpwards_ (x.forceUpwards_, f, this),
+  id1a_ (x.id1a_, f, this),
+  id1b_ (x.id1b_, f, this),
+  id2a_ (x.id2a_, f, this),
+  id2b_ (x.id2b_, f, this),
+  id3a_ (x.id3a_, f, this),
+  id3b_ (x.id3b_, f, this),
+  id4a_ (x.id4a_, f, this),
+  id4b_ (x.id4b_, f, this)
+{
+}
+
+membrane::
+membrane (const ::xercesc::DOMElement& e,
+          ::xml_schema::flags f,
+          ::xml_schema::container* c)
+: ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
+  n1_ (this),
+  n2_ (this),
+  n3_ (this),
+  distance_ (this),
+  meanVelocity_ (this),
+  forceUpwards_ (this),
+  id1a_ (this),
+  id1b_ (this),
+  id2a_ (this),
+  id2b_ (this),
+  id3a_ (this),
+  id3b_ (this),
+  id4a_ (this),
+  id4b_ (this)
+{
+  if ((f & ::xml_schema::flags::base) == 0)
+  {
+    ::xsd::cxx::xml::dom::parser< char > p (e, true, false, false);
+    this->parse (p, f);
+  }
+}
+
+void membrane::
+parse (::xsd::cxx::xml::dom::parser< char >& p,
+       ::xml_schema::flags f)
+{
+  for (; p.more_content (); p.next_content (false))
+  {
+    const ::xercesc::DOMElement& i (p.cur_element ());
+    const ::xsd::cxx::xml::qualified_name< char > n (
+      ::xsd::cxx::xml::dom::name< char > (i));
+
+    // n1
+    //
+    if (n.name () == "n1" && n.namespace_ ().empty ())
+    {
+      if (!n1_.present ())
+      {
+        this->n1_.set (n1_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // n2
+    //
+    if (n.name () == "n2" && n.namespace_ ().empty ())
+    {
+      if (!n2_.present ())
+      {
+        this->n2_.set (n2_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // n3
+    //
+    if (n.name () == "n3" && n.namespace_ ().empty ())
+    {
+      if (!n3_.present ())
+      {
+        this->n3_.set (n3_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // distance
+    //
+    if (n.name () == "distance" && n.namespace_ ().empty ())
+    {
+      if (!distance_.present ())
+      {
+        this->distance_.set (distance_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // meanVelocity
+    //
+    if (n.name () == "meanVelocity" && n.namespace_ ().empty ())
+    {
+      if (!meanVelocity_.present ())
+      {
+        this->meanVelocity_.set (meanVelocity_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // forceUpwards
+    //
+    if (n.name () == "forceUpwards" && n.namespace_ ().empty ())
+    {
+      if (!forceUpwards_.present ())
+      {
+        this->forceUpwards_.set (forceUpwards_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // id1a
+    //
+    if (n.name () == "id1a" && n.namespace_ ().empty ())
+    {
+      if (!id1a_.present ())
+      {
+        this->id1a_.set (id1a_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // id1b
+    //
+    if (n.name () == "id1b" && n.namespace_ ().empty ())
+    {
+      if (!id1b_.present ())
+      {
+        this->id1b_.set (id1b_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // id2a
+    //
+    if (n.name () == "id2a" && n.namespace_ ().empty ())
+    {
+      if (!id2a_.present ())
+      {
+        this->id2a_.set (id2a_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // id2b
+    //
+    if (n.name () == "id2b" && n.namespace_ ().empty ())
+    {
+      if (!id2b_.present ())
+      {
+        this->id2b_.set (id2b_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // id3a
+    //
+    if (n.name () == "id3a" && n.namespace_ ().empty ())
+    {
+      if (!id3a_.present ())
+      {
+        this->id3a_.set (id3a_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // id3b
+    //
+    if (n.name () == "id3b" && n.namespace_ ().empty ())
+    {
+      if (!id3b_.present ())
+      {
+        this->id3b_.set (id3b_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // id4a
+    //
+    if (n.name () == "id4a" && n.namespace_ ().empty ())
+    {
+      if (!id4a_.present ())
+      {
+        this->id4a_.set (id4a_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    // id4b
+    //
+    if (n.name () == "id4b" && n.namespace_ ().empty ())
+    {
+      if (!id4b_.present ())
+      {
+        this->id4b_.set (id4b_traits::create (i, f, this));
+        continue;
+      }
+    }
+
+    break;
+  }
+
+  if (!n1_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "n1",
+      "");
+  }
+
+  if (!n2_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "n2",
+      "");
+  }
+
+  if (!n3_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "n3",
+      "");
+  }
+
+  if (!distance_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "distance",
+      "");
+  }
+
+  if (!meanVelocity_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "meanVelocity",
+      "");
+  }
+
+  if (!forceUpwards_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "forceUpwards",
+      "");
+  }
+
+  if (!id1a_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "id1a",
+      "");
+  }
+
+  if (!id1b_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "id1b",
+      "");
+  }
+
+  if (!id2a_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "id2a",
+      "");
+  }
+
+  if (!id2b_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "id2b",
+      "");
+  }
+
+  if (!id3a_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "id3a",
+      "");
+  }
+
+  if (!id3b_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "id3b",
+      "");
+  }
+
+  if (!id4a_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "id4a",
+      "");
+  }
+
+  if (!id4b_.present ())
+  {
+    throw ::xsd::cxx::tree::expected_element< char > (
+      "id4b",
+      "");
+  }
+}
+
+membrane* membrane::
+_clone (::xml_schema::flags f,
+        ::xml_schema::container* c) const
+{
+  return new class membrane (*this, f, c);
+}
+
+membrane& membrane::
+operator= (const membrane& x)
+{
+  if (this != &x)
+  {
+    static_cast< ::xml_schema::type& > (*this) = x;
+    this->n1_ = x.n1_;
+    this->n2_ = x.n2_;
+    this->n3_ = x.n3_;
+    this->distance_ = x.distance_;
+    this->meanVelocity_ = x.meanVelocity_;
+    this->forceUpwards_ = x.forceUpwards_;
+    this->id1a_ = x.id1a_;
+    this->id1b_ = x.id1b_;
+    this->id2a_ = x.id2a_;
+    this->id2b_ = x.id2b_;
+    this->id3a_ = x.id3a_;
+    this->id3b_ = x.id3b_;
+    this->id4a_ = x.id4a_;
+    this->id4b_ = x.id4b_;
+  }
+
+  return *this;
+}
+
+membrane::
+~membrane ()
 {
 }
 

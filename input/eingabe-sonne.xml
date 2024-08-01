@@ -4,9 +4,10 @@
         <tStart>0.0</tStart>
         <tEnd>500.0</tEnd>
         <deltaT>0.014</deltaT>
-        <inputType>SF</inputType>
+        <smoothLJ>false</smoothLJ>
         <particleContainerType>no</particleContainerType>
         <r_cutoff>0</r_cutoff>
+        <r_l>0</r_l>
         <domainSizeX>0</domainSizeX>
         <domainSizeY>0</domainSizeY>
         <domainSizeZ>0</domainSizeZ>

@@ -2,68 +2,74 @@
             xsi:noNamespaceSchemaLocation="../src/inputReader/simulation.xsd">
     <input>
         <tStart>0.0</tStart>
-        <tEnd>25.0</tEnd>
-        <deltaT>0.0005</deltaT>
+        <tEnd>50</tEnd>
+        <deltaT>0.01</deltaT>
         <ParallelStrategy>0</ParallelStrategy>
         <smoothLJ>false</smoothLJ>
         <particleContainerType>LC</particleContainerType>
-        <r_cutoff>2.5</r_cutoff>
+        <r_cutoff>4.0</r_cutoff>
         <r_l>0</r_l>
-        <domainSizeX>63</domainSizeX>
-        <domainSizeY>36</domainSizeY>
-        <domainSizeZ>1</domainSizeZ>
+        <domainSizeX>148</domainSizeX>
+        <domainSizeY>148</domainSizeY>
+        <domainSizeZ>148</domainSizeZ>
         <boundary1Type>2</boundary1Type>
         <boundary2Type>2</boundary2Type>
         <boundary3Type>2</boundary3Type>
         <boundary4Type>2</boundary4Type>
         <boundary5Type>2</boundary5Type>
         <boundary6Type>2</boundary6Type>
-        <thermostatON>YES</thermostatON>
+        <thermostatON>NO</thermostatON>
         <temp_init>40</temp_init>
-        <n_thermostat>100</n_thermostat>
+        <n_thermostat>1</n_thermostat>
         <temp_target>40</temp_target>
         <delta_temp>0</delta_temp>
-        <g_grav>-12.44</g_grav>
-
+        <g_grav>-0.001</g_grav>
         <particles>
-            <x>0.6</x>
-            <y>2</y>
-            <z>0.5</z>
+            <x>15.0</x>
+            <y>15.0</y>
+            <z>1.5</z>
             <velocityX>0.0</velocityX>
             <velocityY>0.0</velocityY>
             <velocityZ>0.0</velocityZ>
-            <mass>1</mass>
+            <mass>0.5</mass>
             <epsilon>1</epsilon>
-            <sigma>1.0</sigma>
+            <sigma>1</sigma>
         </particles>
         <particles>
-            <x>0.6</x>
-            <y>19</y>
-            <z>0.5</z>
+            <x>50.0</x>
+            <y>50.0</y>
+            <z>30</z>
             <velocityX>0.0</velocityX>
             <velocityY>0.0</velocityY>
-            <velocityZ>0.0</velocityZ>
-            <mass>2</mass>
+            <velocityZ>-5.0</velocityZ>
+            <mass>0.5</mass>
             <epsilon>1</epsilon>
-            <sigma>0.9412</sigma>
+            <sigma>1</sigma>
         </particles>
         <cuboids>
-            <n1>50</n1>
-            <n2>14</n2>
-            <n3>1</n3>
-            <distance>1.2</distance>
+            <n1>8</n1>
+            <n2>8</n2>
+            <n3>8</n3>
+            <distance>1.15</distance>
             <meanVelocity>0.1</meanVelocity>
             <dimension>3</dimension>
         </cuboids>
-        <cuboids>
+        <membrane>
             <n1>50</n1>
-            <n2>14</n2>
+            <n2>50</n2>
             <n3>1</n3>
-            <distance>1.2</distance>
-            <meanVelocity>0.1</meanVelocity>
-            <dimension>3</dimension>
-
-        </cuboids>
+            <distance>2.2</distance>
+            <meanVelocity>0.0</meanVelocity>
+            <forceUpwards>16.0</forceUpwards>
+            <id1a>17</id1a>
+            <id1b>24</id1b>
+            <id2a>17</id2a>
+            <id2b>25</id2b>
+            <id3a>18</id3a>
+            <id3b>24</id3b>
+            <id4a>18</id4a>
+            <id4b>25</id4b>
+        </membrane>
 
     </input>
     <output>

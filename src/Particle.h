@@ -55,6 +55,7 @@ private:
   double sigma;
 
   bool isHalo;
+  std::array<int, 3> ID;
 
 public:
   explicit Particle(int type = 0);
@@ -81,7 +82,7 @@ public:
 
   double getM() const;
 
- int getType() const;
+  int getType() const;
 
   /**
    *
@@ -132,12 +133,31 @@ public:
    */
   bool getIsHalo();
 
+  /**
+   *
+   * @return the id of the particle
+   */
+  std::array<int, 3> getID();
+
+  /**
+   * @brief sets the id of the particle
+   * @param id the id of the particle
+   */
+  void setID(std::array<int, 3> id);
+
   bool operator==(const Particle &other) const;
 
   /**
    * @brief parks the particle at position -50 -50 -50 with velocity and force 0
    */
   void park();
+
+  /**
+   * @brief checks if the particle n is a neighbour of this particle
+   * @param n the particle to check if it is a neighbour
+   * @return true if n is a neighbour of this particle, false otherwise
+   */
+  bool isNeighbour(Particle *n);
 };
 
 std::ostream &operator<<(std::ostream &stream, Particle &p);

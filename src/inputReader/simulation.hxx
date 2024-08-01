@@ -233,6 +233,7 @@ class config;
 class particles;
 class cuboids;
 class disk;
+class membrane;
 
 #include <memory>    // ::std::unique_ptr
 #include <limits>    // std::numeric_limits
@@ -388,22 +389,33 @@ class input: public ::xml_schema::type
   void
   deltaT (const deltaT_type& x);
 
-  // inputType
+  // ParallelStrategy
   //
-  typedef ::xml_schema::string inputType_type;
-  typedef ::xsd::cxx::tree::traits< inputType_type, char > inputType_traits;
+  typedef ::xml_schema::int_ ParallelStrategy_type;
+  typedef ::xsd::cxx::tree::traits< ParallelStrategy_type, char > ParallelStrategy_traits;
 
-  const inputType_type&
-  inputType () const;
+  const ParallelStrategy_type&
+  ParallelStrategy () const;
 
-  inputType_type&
-  inputType ();
-
-  void
-  inputType (const inputType_type& x);
+  ParallelStrategy_type&
+  ParallelStrategy ();
 
   void
-  inputType (::std::unique_ptr< inputType_type > p);
+  ParallelStrategy (const ParallelStrategy_type& x);
+
+  // smoothLJ
+  //
+  typedef ::xml_schema::boolean smoothLJ_type;
+  typedef ::xsd::cxx::tree::traits< smoothLJ_type, char > smoothLJ_traits;
+
+  const smoothLJ_type&
+  smoothLJ () const;
+
+  smoothLJ_type&
+  smoothLJ ();
+
+  void
+  smoothLJ (const smoothLJ_type& x);
 
   // particleContainerType
   //
@@ -436,10 +448,24 @@ class input: public ::xml_schema::type
   void
   r_cutoff (const r_cutoff_type& x);
 
+  // r_l
+  //
+  typedef ::xml_schema::double_ r_l_type;
+  typedef ::xsd::cxx::tree::traits< r_l_type, char, ::xsd::cxx::tree::schema_type::double_ > r_l_traits;
+
+  const r_l_type&
+  r_l () const;
+
+  r_l_type&
+  r_l ();
+
+  void
+  r_l (const r_l_type& x);
+
   // domainSizeX
   //
-  typedef ::xml_schema::int_ domainSizeX_type;
-  typedef ::xsd::cxx::tree::traits< domainSizeX_type, char > domainSizeX_traits;
+  typedef ::xml_schema::double_ domainSizeX_type;
+  typedef ::xsd::cxx::tree::traits< domainSizeX_type, char, ::xsd::cxx::tree::schema_type::double_ > domainSizeX_traits;
 
   const domainSizeX_type&
   domainSizeX () const;
@@ -452,8 +478,8 @@ class input: public ::xml_schema::type
 
   // domainSizeY
   //
-  typedef ::xml_schema::int_ domainSizeY_type;
-  typedef ::xsd::cxx::tree::traits< domainSizeY_type, char > domainSizeY_traits;
+  typedef ::xml_schema::double_ domainSizeY_type;
+  typedef ::xsd::cxx::tree::traits< domainSizeY_type, char, ::xsd::cxx::tree::schema_type::double_ > domainSizeY_traits;
 
   const domainSizeY_type&
   domainSizeY () const;
@@ -466,8 +492,8 @@ class input: public ::xml_schema::type
 
   // domainSizeZ
   //
-  typedef ::xml_schema::int_ domainSizeZ_type;
-  typedef ::xsd::cxx::tree::traits< domainSizeZ_type, char > domainSizeZ_traits;
+  typedef ::xml_schema::double_ domainSizeZ_type;
+  typedef ::xsd::cxx::tree::traits< domainSizeZ_type, char, ::xsd::cxx::tree::schema_type::double_ > domainSizeZ_traits;
 
   const domainSizeZ_type&
   domainSizeZ () const;
@@ -700,14 +726,33 @@ class input: public ::xml_schema::type
   void
   disk (const disk_sequence& s);
 
+  // membrane
+  //
+  typedef ::membrane membrane_type;
+  typedef ::xsd::cxx::tree::sequence< membrane_type > membrane_sequence;
+  typedef membrane_sequence::iterator membrane_iterator;
+  typedef membrane_sequence::const_iterator membrane_const_iterator;
+  typedef ::xsd::cxx::tree::traits< membrane_type, char > membrane_traits;
+
+  const membrane_sequence&
+  membrane () const;
+
+  membrane_sequence&
+  membrane ();
+
+  void
+  membrane (const membrane_sequence& s);
+
   // Constructors.
   //
   input (const tStart_type&,
          const tEnd_type&,
          const deltaT_type&,
-         const inputType_type&,
+         const ParallelStrategy_type&,
+         const smoothLJ_type&,
          const particleContainerType_type&,
          const r_cutoff_type&,
+         const r_l_type&,
          const domainSizeX_type&,
          const domainSizeY_type&,
          const domainSizeZ_type&,
@@ -753,9 +798,11 @@ class input: public ::xml_schema::type
   ::xsd::cxx::tree::one< tStart_type > tStart_;
   ::xsd::cxx::tree::one< tEnd_type > tEnd_;
   ::xsd::cxx::tree::one< deltaT_type > deltaT_;
-  ::xsd::cxx::tree::one< inputType_type > inputType_;
+  ::xsd::cxx::tree::one< ParallelStrategy_type > ParallelStrategy_;
+  ::xsd::cxx::tree::one< smoothLJ_type > smoothLJ_;
   ::xsd::cxx::tree::one< particleContainerType_type > particleContainerType_;
   ::xsd::cxx::tree::one< r_cutoff_type > r_cutoff_;
+  ::xsd::cxx::tree::one< r_l_type > r_l_;
   ::xsd::cxx::tree::one< domainSizeX_type > domainSizeX_;
   ::xsd::cxx::tree::one< domainSizeY_type > domainSizeY_;
   ::xsd::cxx::tree::one< domainSizeZ_type > domainSizeZ_;
@@ -774,6 +821,7 @@ class input: public ::xml_schema::type
   particles_sequence particles_;
   cuboids_sequence cuboids_;
   disk_sequence disk_;
+  membrane_sequence membrane_;
 };
 
 class output: public ::xml_schema::type
@@ -827,6 +875,42 @@ class output: public ::xml_schema::type
   void
   outputType (::std::unique_ptr< outputType_type > p);
 
+  // statistics
+  //
+  typedef ::xml_schema::boolean statistics_type;
+  typedef ::xsd::cxx::tree::optional< statistics_type > statistics_optional;
+  typedef ::xsd::cxx::tree::traits< statistics_type, char > statistics_traits;
+
+  const statistics_optional&
+  statistics () const;
+
+  statistics_optional&
+  statistics ();
+
+  void
+  statistics (const statistics_type& x);
+
+  void
+  statistics (const statistics_optional& x);
+
+  // rdfIntervalSize
+  //
+  typedef ::xml_schema::double_ rdfIntervalSize_type;
+  typedef ::xsd::cxx::tree::optional< rdfIntervalSize_type > rdfIntervalSize_optional;
+  typedef ::xsd::cxx::tree::traits< rdfIntervalSize_type, char, ::xsd::cxx::tree::schema_type::double_ > rdfIntervalSize_traits;
+
+  const rdfIntervalSize_optional&
+  rdfIntervalSize () const;
+
+  rdfIntervalSize_optional&
+  rdfIntervalSize ();
+
+  void
+  rdfIntervalSize (const rdfIntervalSize_type& x);
+
+  void
+  rdfIntervalSize (const rdfIntervalSize_optional& x);
+
   // Constructors.
   //
   output (const baseName_type&,
@@ -862,6 +946,8 @@ class output: public ::xml_schema::type
   ::xsd::cxx::tree::one< baseName_type > baseName_;
   ::xsd::cxx::tree::one< writeFrequency_type > writeFrequency_;
   ::xsd::cxx::tree::one< outputType_type > outputType_;
+  statistics_optional statistics_;
+  rdfIntervalSize_optional rdfIntervalSize_;
 };
 
 class config: public ::xml_schema::type
@@ -1344,6 +1430,264 @@ class disk: public ::xml_schema::type
   ::xsd::cxx::tree::one< distance_type > distance_;
   ::xsd::cxx::tree::one< meanVelocity_type > meanVelocity_;
   ::xsd::cxx::tree::one< dimension_type > dimension_;
+};
+
+class membrane: public ::xml_schema::type
+{
+  public:
+  // n1
+  //
+  typedef ::xml_schema::double_ n1_type;
+  typedef ::xsd::cxx::tree::traits< n1_type, char, ::xsd::cxx::tree::schema_type::double_ > n1_traits;
+
+  const n1_type&
+  n1 () const;
+
+  n1_type&
+  n1 ();
+
+  void
+  n1 (const n1_type& x);
+
+  // n2
+  //
+  typedef ::xml_schema::double_ n2_type;
+  typedef ::xsd::cxx::tree::traits< n2_type, char, ::xsd::cxx::tree::schema_type::double_ > n2_traits;
+
+  const n2_type&
+  n2 () const;
+
+  n2_type&
+  n2 ();
+
+  void
+  n2 (const n2_type& x);
+
+  // n3
+  //
+  typedef ::xml_schema::double_ n3_type;
+  typedef ::xsd::cxx::tree::traits< n3_type, char, ::xsd::cxx::tree::schema_type::double_ > n3_traits;
+
+  const n3_type&
+  n3 () const;
+
+  n3_type&
+  n3 ();
+
+  void
+  n3 (const n3_type& x);
+
+  // distance
+  //
+  typedef ::xml_schema::double_ distance_type;
+  typedef ::xsd::cxx::tree::traits< distance_type, char, ::xsd::cxx::tree::schema_type::double_ > distance_traits;
+
+  const distance_type&
+  distance () const;
+
+  distance_type&
+  distance ();
+
+  void
+  distance (const distance_type& x);
+
+  // meanVelocity
+  //
+  typedef ::xml_schema::double_ meanVelocity_type;
+  typedef ::xsd::cxx::tree::traits< meanVelocity_type, char, ::xsd::cxx::tree::schema_type::double_ > meanVelocity_traits;
+
+  const meanVelocity_type&
+  meanVelocity () const;
+
+  meanVelocity_type&
+  meanVelocity ();
+
+  void
+  meanVelocity (const meanVelocity_type& x);
+
+  // forceUpwards
+  //
+  typedef ::xml_schema::double_ forceUpwards_type;
+  typedef ::xsd::cxx::tree::traits< forceUpwards_type, char, ::xsd::cxx::tree::schema_type::double_ > forceUpwards_traits;
+
+  const forceUpwards_type&
+  forceUpwards () const;
+
+  forceUpwards_type&
+  forceUpwards ();
+
+  void
+  forceUpwards (const forceUpwards_type& x);
+
+  // id1a
+  //
+  typedef ::xml_schema::int_ id1a_type;
+  typedef ::xsd::cxx::tree::traits< id1a_type, char > id1a_traits;
+
+  const id1a_type&
+  id1a () const;
+
+  id1a_type&
+  id1a ();
+
+  void
+  id1a (const id1a_type& x);
+
+  // id1b
+  //
+  typedef ::xml_schema::int_ id1b_type;
+  typedef ::xsd::cxx::tree::traits< id1b_type, char > id1b_traits;
+
+  const id1b_type&
+  id1b () const;
+
+  id1b_type&
+  id1b ();
+
+  void
+  id1b (const id1b_type& x);
+
+  // id2a
+  //
+  typedef ::xml_schema::int_ id2a_type;
+  typedef ::xsd::cxx::tree::traits< id2a_type, char > id2a_traits;
+
+  const id2a_type&
+  id2a () const;
+
+  id2a_type&
+  id2a ();
+
+  void
+  id2a (const id2a_type& x);
+
+  // id2b
+  //
+  typedef ::xml_schema::int_ id2b_type;
+  typedef ::xsd::cxx::tree::traits< id2b_type, char > id2b_traits;
+
+  const id2b_type&
+  id2b () const;
+
+  id2b_type&
+  id2b ();
+
+  void
+  id2b (const id2b_type& x);
+
+  // id3a
+  //
+  typedef ::xml_schema::int_ id3a_type;
+  typedef ::xsd::cxx::tree::traits< id3a_type, char > id3a_traits;
+
+  const id3a_type&
+  id3a () const;
+
+  id3a_type&
+  id3a ();
+
+  void
+  id3a (const id3a_type& x);
+
+  // id3b
+  //
+  typedef ::xml_schema::int_ id3b_type;
+  typedef ::xsd::cxx::tree::traits< id3b_type, char > id3b_traits;
+
+  const id3b_type&
+  id3b () const;
+
+  id3b_type&
+  id3b ();
+
+  void
+  id3b (const id3b_type& x);
+
+  // id4a
+  //
+  typedef ::xml_schema::int_ id4a_type;
+  typedef ::xsd::cxx::tree::traits< id4a_type, char > id4a_traits;
+
+  const id4a_type&
+  id4a () const;
+
+  id4a_type&
+  id4a ();
+
+  void
+  id4a (const id4a_type& x);
+
+  // id4b
+  //
+  typedef ::xml_schema::int_ id4b_type;
+  typedef ::xsd::cxx::tree::traits< id4b_type, char > id4b_traits;
+
+  const id4b_type&
+  id4b () const;
+
+  id4b_type&
+  id4b ();
+
+  void
+  id4b (const id4b_type& x);
+
+  // Constructors.
+  //
+  membrane (const n1_type&,
+            const n2_type&,
+            const n3_type&,
+            const distance_type&,
+            const meanVelocity_type&,
+            const forceUpwards_type&,
+            const id1a_type&,
+            const id1b_type&,
+            const id2a_type&,
+            const id2b_type&,
+            const id3a_type&,
+            const id3b_type&,
+            const id4a_type&,
+            const id4b_type&);
+
+  membrane (const ::xercesc::DOMElement& e,
+            ::xml_schema::flags f = 0,
+            ::xml_schema::container* c = 0);
+
+  membrane (const membrane& x,
+            ::xml_schema::flags f = 0,
+            ::xml_schema::container* c = 0);
+
+  virtual membrane*
+  _clone (::xml_schema::flags f = 0,
+          ::xml_schema::container* c = 0) const;
+
+  membrane&
+  operator= (const membrane& x);
+
+  virtual 
+  ~membrane ();
+
+  // Implementation.
+  //
+  protected:
+  void
+  parse (::xsd::cxx::xml::dom::parser< char >&,
+         ::xml_schema::flags);
+
+  protected:
+  ::xsd::cxx::tree::one< n1_type > n1_;
+  ::xsd::cxx::tree::one< n2_type > n2_;
+  ::xsd::cxx::tree::one< n3_type > n3_;
+  ::xsd::cxx::tree::one< distance_type > distance_;
+  ::xsd::cxx::tree::one< meanVelocity_type > meanVelocity_;
+  ::xsd::cxx::tree::one< forceUpwards_type > forceUpwards_;
+  ::xsd::cxx::tree::one< id1a_type > id1a_;
+  ::xsd::cxx::tree::one< id1b_type > id1b_;
+  ::xsd::cxx::tree::one< id2a_type > id2a_;
+  ::xsd::cxx::tree::one< id2b_type > id2b_;
+  ::xsd::cxx::tree::one< id3a_type > id3a_;
+  ::xsd::cxx::tree::one< id3b_type > id3b_;
+  ::xsd::cxx::tree::one< id4a_type > id4a_;
+  ::xsd::cxx::tree::one< id4b_type > id4b_;
 };
 
 #include <iosfwd>
